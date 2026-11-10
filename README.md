@@ -27,6 +27,7 @@ Solvers draw your own spot (Lj-style red arrows with a white outline) and the bo
 | `[Monitor]`, `[Face]` | P3 Oversampled Wave Cannon spots by sign marker, monitor facing |
 | `[Delta]`, `[Sigma]`, `[Omega]`, `[Worlds]` | P5 Run: Dynamis Delta, Sigma and Omega spots, clone AoE predraws, Hello World |
 | `[UWC]`, `[Exa]`, `[Clock Spot]` | P6 Wave Cannon / exaflare arrows, Cosmo Arrow safe area, clock spots and Flare |
+| `[Boss AoE]` | Boss attack predraws from the game's own AoE data: P2 Optical Laser and Sagittarius Arrow, P4 Wave Cannon lines, P5 Delta laser and fist puddles, P5 Sigma Rear Lasers (each with an on/off row) |
 | `[Mit]` | DPS mitigation (Feint, Addle, party mitigation, Dismantle) from the NA mit sheet |
 
 **Strat presets:** the options window has a Preset line with **NA** (default), **Elemental**, **OCE**, **LDPU** and **Mana**. NA is complete; the other presets are converted phase by phase, and phases not yet converted fall back to NA. A **Mitigation** line turns the `[Mit]` reactions on (NA) or Off. Settings are saved to `LuaMods\TensorReactions\TopLooperSettings.lua`.
