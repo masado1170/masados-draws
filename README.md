@@ -1,6 +1,6 @@
 # TensorReactions draws and mitigation
 
-My own TensorReactions timeline profiles: a full set of solver draws for The Omega Protocol (TOP), NAUR DPS mitigation for The Epic of Alexander (TEA), and NAUR draws for TEA and The Weapon's Refrain (UWU), adapted from [Jacob5800/UltimateDraws](https://github.com/Jacob5800/UltimateDraws). Every profile is standalone: they inherit nothing, and store modules and other authors' profiles are not included.
+My own TensorReactions timeline profiles: a full set of solver draws for The Omega Protocol (TOP), NAUR DPS mitigation for The Epic of Alexander (TEA), and NAUR draws for TEA, The Unending Coil of Bahamut (UCOB) and The Weapon's Refrain (UWU), adapted from [Jacob5800/UltimateDraws](https://github.com/Jacob5800/UltimateDraws). Every profile is standalone: they inherit nothing, and store modules and other authors' profiles are not included.
 
 > **Disclaimer:** these reactions use Anyone's Party Roster function (AnyoneCore), so AnyoneCore with a filled-in Party Roster is needed for them to work.
 
@@ -11,6 +11,7 @@ My own TensorReactions timeline profiles: a full set of solver draws for The Ome
 | `TimelineReactions/Masado1170/TOP Draws.lua` | TOP (`top` 1.0.3) | Solver draws for every phase plus `[Mit]` DPS mitigation, with an in-game options window |
 | `TimelineReactions/Masado1170/TEA NAUR DPS Mitigation.lua` | TEA (`tea` 1.0.2) | 96 `[Mit]` DPS mitigation reactions from the NAUR TEA Mit+Heal sheet |
 | `TimelineReactions/Masado1170/TEA NAUR Draws.lua` | TEA (`tea` 1.0.2) | NAUR solver draws for every phase (untested, see below) |
+| `TimelineReactions/Masado1170/UCOB NAUR Draws.lua` | UCOB (`ucob` 1.0.3) | NAUR solver draws (untested, see below) |
 | `TimelineReactions/Masado1170/UWU NAUR Draws.lua` | UWU (`uwu` 1.0.2) | NAUR solver draws for Garuda, Ifrit, Titan and Ultima (untested, see below) |
 
 Each file is a live profile in TensorReactions' own save format.
@@ -38,9 +39,9 @@ Solvers draw your own spot and the boss's attacks for each mechanic:
 
 DPS mitigation following the NAUR TEA Mit+Heal sheet: Feint, Addle, party mitigation, Dismantle, Troubadour/Minne and Mantra, by party slot (M1, M2, phys ranged, caster). Each row has a use reaction and a `(reset)` reaction.
 
-### TEA and UWU NAUR Draws
+### TEA, UCOB and UWU NAUR Draws
 
-Adapted from [Jacob5800/UltimateDraws](https://github.com/Jacob5800/UltimateDraws) (their LPDU draws for TEA and UWU) and converted to the NAUR strat. Big thanks to them for the original work.
+Adapted from [Jacob5800/UltimateDraws](https://github.com/Jacob5800/UltimateDraws) (their LPDU draws for TEA, UCOB and UWU) and converted to the NAUR strat. Big thanks to them for the original work.
 
 > **Untested:** these draws have not been checked in real pulls yet. If you run them, please send me your Duty Recorder replay (the `.dat` file from `Documents\My Games\FINAL FANTASY XIV - A Realm Reborn\replay`) by [opening a GitHub issue](https://github.com/masado1170/masados-draws/issues) on this repo. Attach the file or a link to it, and say your role/slot and which phase looked wrong.
 
@@ -67,7 +68,7 @@ The LPDU UWU profile also inherited Anyone's `store\anyone\uwu` modules. They ar
 1. In game, open AnyoneCore and go to the Third Party screen.
 2. Add this repository's URL as a source (branch `main`).
 3. AnyoneCore copies the `TimelineReactions/Masado1170` folder into your TensorReactions folder and checks GitHub for new commits itself.
-4. In TensorReactions, select the profile for the fight, e.g. `Masado1170\TOP Draws`, `Masado1170\TEA NAUR Draws`, `Masado1170\UWU NAUR Draws` or `Masado1170\TEA NAUR DPS Mitigation`.
+4. In TensorReactions, select the profile for the fight, e.g. `Masado1170\TOP Draws`, `Masado1170\TEA NAUR Draws`, `Masado1170\UCOB NAUR Draws`, `Masado1170\UWU NAUR Draws` or `Masado1170\TEA NAUR DPS Mitigation`.
 
 Updates replace files in the `Masado1170` folder. To customise a profile, copy it outside that folder first.
 

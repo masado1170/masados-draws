@@ -45,6 +45,60 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
+							actionLua = "local garuda = eventArgs and TensorCore.mGetEntity(eventArgs.entityID)\nif not garuda or not garuda.pos then self.used = true return end\nlocal ms = math.max(500, math.floor((eventArgs.channelTimeMax or 3) * 1000))\nlocal d = TensorCore.getCachedDrawer(0x140000FF, 0x280000FF, 0x550000FF, 0x880000FF, 1.5)\nd:addTimedCircle(ms, garuda.pos.x, garuda.pos.y, garuda.pos.z, 8, 0, false, true)\nself.used = true\n",
+							conditions = 
+							{
+								
+								{
+									"bebfe3d5-a0f1-4a99-bd3d-e6ba74ed5c06",
+									true,
+								},
+							},
+							name = "8y circle on Garuda",
+							uuid = "11230b17-d118-4b69-856d-b6e79ae658fe",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.spellID == 11086 or eventArgs.spellID == 11087",
+							dequeueIfLuaFalse = true,
+							name = "Wicked Wheel cast",
+							uuid = "bebfe3d5-a0f1-4a99-bd3d-e6ba74ed5c06",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Garuda",
+				eventType = 3,
+				loop = true,
+				mechanicTime = 9,
+				name = "[Draw][Splatoon] Garuda Wicked Wheel",
+				timeRange = true,
+				timelineIndex = 2,
+				timerEndOffset = 1600,
+				timerStartOffset = -9,
+				uuid = "7febebf6-fe26-4529-af1c-c3e68dd171bb",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
 							actionLua = "local player = TensorCore.mGetPlayer()\nif not player or not player.pos then\n    return\nend\n\nlocal boss = TensorCore.getEntityByGroup(\"ContentID\", {contentid = 1644})\nif not boss or not boss.pos then\n    return\nend\n\nlocal slot = AnyoneCore.Roster.mySlot()\nlocal isMT = slot == \"T1\"\nlocal isTank = slot == \"T1\" or slot == \"T2\"\n\nif isMT then\n    local sideColor = 0xFFFFB347\n    local sideX = boss.pos.x + 5.0\n    local destination = {\n        x = sideX,\n        y = player.pos.y,\n        z = player.pos.z\n    }\n\n    local distance = TensorCore.getDistance2d(player.pos, destination)\n    if distance > 0.25 then\n        local heading = TensorCore.getHeadingToTarget(player.pos, destination)\n        local tipLength = math.min(2.5, distance * 0.35)\n        local baseLength = math.max(0.1, distance - tipLength)\n        local drawer = TensorCore.getCachedDrawer(\n            sideColor, sideColor, 0xFFFFFFFF, 0xFF000000, 3\n        )\n        drawer:addTimedArrow(\n            9000,\n            player.pos.x, player.pos.y, player.pos.z,\n            heading,\n            baseLength, 1.4, tipLength, 2.8,\n            0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n        )\n    end\n\n    AnyoneCore.addTimedWorldText(\n        9000,\n        \"MT EAST\",\n        {x = destination.x, y = player.pos.y + 1.5, z = destination.z},\n        sideColor,\n        true,\n        1.35\n    )\nend\n\nif isTank then\n    -- C is around z=110 in this pull; keep the tank outside the AOE.\n    local southTarget = {\n        x = boss.pos.x,\n        y = boss.pos.y,\n        z = 111.0\n    }\n    local southHeading = TensorCore.getHeadingToTarget(player.pos, southTarget)\n    local southDistance = TensorCore.getDistance2d(player.pos, southTarget)\n    local southTipLength = math.min(2.8, southDistance * 0.2)\n    local southBaseLength = math.max(0.1, southDistance - southTipLength)\n    local southDrawer = TensorCore.getCachedDrawer(\n        0xFFFFD27D, 0xFFFFA31A, 0xFFFFFFFF, 0xFF000000, 3\n    )\n    southDrawer:addTimedArrow(\n        9000,\n        player.pos.x, player.pos.y, player.pos.z,\n        southHeading,\n        southBaseLength, 1.1, southTipLength, 2.8,\n        0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n    )\n\n    AnyoneCore.addTimedWorldText(\n        9000,\n        \"FACE SOUTH\",\n        {x = southTarget.x, y = southTarget.y + 1.5, z = southTarget.z},\n        0xFFFFD27D,\n        true,\n        1.2\n    )\nend\n\nself.used = true",
 							name = "MT East / Tank Face South",
 							uuid = "12efbc70-3403-001e-94a1-23a1107459b0",
@@ -10300,7 +10354,7 @@ local tbl =
 				},
 				displayPath = "Draws - Titan NAUR",
 				eventType = 12,
-				execute = "local player = TensorCore.mGetPlayer()\nif not player or not player.pos then return end\nlocal titan\nfor _, e in pairs(TensorCore.getEntityGroupList(\"ContentID\", 1801) or {}) do\n if e and e.pos then titan = e break end\nend\nif not titan then return end\nlocal L = data.uwu_upheaval_landing\nlocal sx, sz\nif L and L.x and L.z then sx, sz = L.x, L.z else sx, sz = 200 - titan.pos.x, 200 - titan.pos.z end\nlocal tx, tz = titan.pos.x, titan.pos.z\nlocal ux, uz = sx - tx, sz - tz\nlocal len = math.sqrt(ux * ux + uz * uz)\nif len < 1 then return end\nux, uz = ux / len, uz / len\nlocal y = player.pos.y\nlocal m = player.marker or 0\nlocal dest, label\nif m >= 1 and m <= 3 then\n local f = ({0.30, 0.55, 0.80})[m]\n dest = {x = tx + ux * len * f, y = y, z = tz + uz * len * f}\n label = \"GAOL \" .. m\nelse\n -- party dodges to the side away from the safe spot (left in the cheat sheet)\n local cx, cz = 100 - tx, 100 - tz\n local side = cx * (sz - tz) - cz * (sx - tx)\n local px, pz = -uz, ux\n if side > 0 then px, pz = uz, -ux end\n dest = {x = tx + ux * len * 0.41 + px * len * 0.31, y = y, z = tz + uz * len * 0.41 + pz * len * 0.31}\n label = \"PARTY\"\nend\nlocal d = TensorCore.getStaticDrawer(0xFF30E080, 2)\nd:addCircle(dest.x, dest.y + 0.05, dest.z, 1.0, false)\nlocal dist = TensorCore.getDistance2d(player.pos, dest)\nlocal scale = math.min(1, dist / 15)\nlocal tip = math.max(2, 3 * scale)\nif dist - tip > 1 then\n local a = TensorCore.getCachedDrawer(0xFF00FFFF, 0xFF0088FF, 0xFF0000FF, 0xFFFFFFFF, 2)\n a:addArrow(player.pos.x, player.pos.y, player.pos.z, TensorCore.getHeadingToTarget(player.pos, dest),\n  dist - tip, math.max(0.5, scale), tip, math.max(1.5, 3 * scale), 0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nself.used = true\n",
+				execute = "local player = TensorCore.mGetPlayer()\nif not player or not player.pos then return end\nlocal titan\nfor _, e in pairs(TensorCore.getEntityGroupList(\"ContentID\", 1801) or {}) do\n if e and e.pos then titan = e break end\nend\nif not titan then return end\nlocal L = data.uwu_upheaval_landing\nlocal sx, sz\nif L and L.x and L.z then sx, sz = L.x, L.z else sx, sz = 200 - titan.pos.x, 200 - titan.pos.z end\nlocal tx, tz = titan.pos.x, titan.pos.z\n-- Splatoon's measured back gaol (hit by the first rock): 6.3y past centre away from Titan, 2y to the safe side.\nlocal ax, az = 100 - tx, 100 - tz\nlocal alen = math.sqrt(ax * ax + az * az)\nif alen < 1 then return end\nax, az = ax / alen, az / alen\nlocal qx, qz = -az, ax\nif (sx - tx) * qx + (sz - tz) * qz < 0 then qx, qz = -qx, -qz end -- q points to the safe side\nlocal gx, gz = 100 + ax * 6.3 + qx * 2, 100 + az * 6.3 + qz * 2\nlocal ux, uz = gx - tx, gz - tz\nlocal len = math.sqrt(ux * ux + uz * uz)\nux, uz = ux / len, uz / len\nlocal y = player.pos.y\nlocal m = player.marker or 0\nlocal dest, label\nif m >= 1 and m <= 3 then\n local f = ({0.33, 0.66, 1.0})[m]\n dest = {x = tx + ux * len * f, y = y, z = tz + uz * len * f}\n label = \"GAOL \" .. m\nelse\n -- party dodges to the side away from the safe spot (left in the cheat sheet)\n dest = {x = tx + ax * alen * 0.9 - qx * 9, y = y, z = tz + az * alen * 0.9 - qz * 9}\n label = \"PARTY\"\nend\nlocal d = TensorCore.getStaticDrawer(0xFF30E080, 2)\nd:addCircle(dest.x, dest.y + 0.05, dest.z, 1.0, false)\nlocal dist = TensorCore.getDistance2d(player.pos, dest)\nlocal scale = math.min(1, dist / 15)\nlocal tip = math.max(2, 3 * scale)\nif dist - tip > 1 then\n local a = TensorCore.getCachedDrawer(0xFF00FFFF, 0xFF0088FF, 0xFF0000FF, 0xFFFFFFFF, 2)\n a:addArrow(player.pos.x, player.pos.y, player.pos.z, TensorCore.getHeadingToTarget(player.pos, dest),\n  dist - tip, math.max(0.5, scale), tip, math.max(1.5, 3 * scale), 0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nself.used = true\n",
 				executeType = 2,
 				loop = true,
 				mechanicTime = 639,
@@ -22394,10 +22448,6 @@ local tbl =
 	},
 	inheritedProfiles = 
 	{
-		"store\\anyone\\uwu\\modules\\core",
-		"store\\anyone\\uwu\\modules\\draws",
-		"store\\anyone\\uwu\\modules\\mitigation",
-		"store\\anyone\\uwu\\modules\\optimization",
 	},
 	timelineName = "uwu",
 	version = "1.0.2",
