@@ -2,6 +2,7 @@
 
 ## 2026-11-11
 
+- TEA, UCOB and UWU: "Voice callouts (TTS)" toggle and an "Open Party Roster" button in the settings window + minor bugfixes
 - Added UCOB draws + minor bugfix
 
 New profiles:

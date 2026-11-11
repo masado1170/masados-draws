@@ -245,7 +245,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local function isFarthest()\n local R=AnyoneCore and AnyoneCore.Roster\n local p=TensorCore.mGetPlayer()\n if not R or not R.current() or not R.isReady() or not p or p.hp.current<=0 then return false end\n local b=TensorCore.mGetEntity(p.targetid)\n if not b or b.contentid~=1482 or Argus.getEntityModel(b)~=8159 then\n  b=data.ucobLHActualTwin and TensorCore.mGetEntity(data.ucobLHActualTwin)\n end\n if not b or b.contentid~=1482 or Argus.getEntityModel(b)~=8159 then return false end\n local d=(p.pos.x-b.pos.x)^2+(p.pos.z-b.pos.z)^2\n for _,slot in ipairs({'T1','T2','H1','H2','M1','M2','R1','R2'}) do\n  local e=R.entOf(slot)\n  if e and e.id~=p.id and e.hp.current>0 and (e.pos.x-b.pos.x)^2+(e.pos.z-b.pos.z)^2>d+.01 then return false end\n end\n return true\nend\ndata.ucobLHActualTwin=eventArgs.entityID\nif eventArgs.castPosX==nil or eventArgs.castPosZ==nil then self.used=true return end\nlocal now=Now()\nlocal s=data.ucobLiquidAlert\nif not s or now-s.last>2500 then s={count=0,last=now,puddles={},own=false};data.ucobLiquidAlert=s end\nif now-s.last<150 and s.count>0 then self.used=true return end\ns.count=s.count+1;s.last=now\ns.puddles[#s.puddles+1]={x=eventArgs.castPosX,z=eventArgs.castPosZ,expires=now+30000}\nlocal R=AnyoneCore and AnyoneCore.Roster\nlocal p=TensorCore.mGetPlayer()\nif p and (p.pos.x-eventArgs.castPosX)^2+(p.pos.z-eventArgs.castPosZ)^2<36 then s.own=true end\nlocal alertEligible\nif not data.ucobP1LHEnded then alertEligible=isFarthest() else alertEligible=R and R.current() and R.mySlot()=='R1' end\nif alertEligible then\n if s.count==1 then AnyoneCore.Shotcall('Liquid Hell, keep moving',true,4,false)\n elseif s.count==5 then AnyoneCore.Shotcall('Last puddle, move clear',true,3,false) end\nend\nself.used=true",
+							actionLua = "local function isFarthest()\n local R=AnyoneCore and AnyoneCore.Roster\n local p=TensorCore.mGetPlayer()\n if not R or not R.current() or not R.isReady() or not p or p.hp.current<=0 then return false end\n local b=TensorCore.mGetEntity(p.targetid)\n if not b or b.contentid~=1482 or Argus.getEntityModel(b)~=8159 then\n  b=data.ucobLHActualTwin and TensorCore.mGetEntity(data.ucobLHActualTwin)\n end\n if not b or b.contentid~=1482 or Argus.getEntityModel(b)~=8159 then return false end\n local d=(p.pos.x-b.pos.x)^2+(p.pos.z-b.pos.z)^2\n for _,slot in ipairs({'T1','T2','H1','H2','M1','M2','R1','R2'}) do\n  local e=R.entOf(slot)\n  if e and e.id~=p.id and e.hp.current>0 and (e.pos.x-b.pos.x)^2+(e.pos.z-b.pos.z)^2>d+.01 then return false end\n end\n return true\nend\ndata.ucobLHActualTwin=eventArgs.entityID\nif eventArgs.castPosX==nil or eventArgs.castPosZ==nil then self.used=true return end\nlocal now=Now()\nlocal s=data.ucobLiquidAlert\nif not s or now-s.last>2500 then s={count=0,last=now,puddles={},own=false};data.ucobLiquidAlert=s end\nif now-s.last<150 and s.count>0 then self.used=true return end\ns.count=s.count+1;s.last=now\ns.puddles[#s.puddles+1]={x=eventArgs.castPosX,z=eventArgs.castPosZ,expires=now+30000}\nlocal R=AnyoneCore and AnyoneCore.Roster\nlocal p=TensorCore.mGetPlayer()\nif p and (p.pos.x-eventArgs.castPosX)^2+(p.pos.z-eventArgs.castPosZ)^2<36 then s.own=true end\nlocal alertEligible\nif not data.ucobP1LHEnded then alertEligible=isFarthest() else alertEligible=R and R.current() and R.mySlot()=='R1' end\nif alertEligible then\n if s.count==1 then AnyoneCore.Shotcall('Liquid Hell, keep moving', not (NAUR_TTS and NAUR_TTS.enabled==false),4,false)\n elseif s.count==5 then AnyoneCore.Shotcall('Last puddle, move clear', not (NAUR_TTS and NAUR_TTS.enabled==false),3,false) end\nend\nself.used=true",
 							conditions = 
 							{
 								
@@ -456,7 +456,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local pending=data.ucobBeamTiming\nif not pending or Now()>=pending.expires or pending.seq[pending.step]~=9917 or pending.timerStep==pending.step or Now()>=pending.nextAt then self.used=true return end\nif Now()<(pending.nextTimerCheck or 0) then self.used=true return end\npending.nextTimerCheck=Now()+100\nlocal s=data.ucobBeamTiming\nlocal p=TensorCore.mGetPlayer()\nlocal dives=data.ucobNAURDives\nlocal order=p and dives and dives.order[p.id]\nif s and s.dive and dives and Now()<dives.expires and order and order>dives.locked then self.used=true return end\nif s and p and Now()<s.expires and s.seq[s.step]==9917 and s.timerStep~=s.step and Now()<s.nextAt then\n local id=p.id\n AnyoneCore.addWorldTextCountdown(s.nextAt-Now(),setmetatable({entityID=id},{__index=function(t,k) local e=TensorCore.mGetEntity(t.entityID);if not e then return 0 end;if k=='x' then return e.pos.x elseif k=='y' then return e.pos.y+1.8 elseif k=='z' then return e.pos.z end end}),0xFFFFFFFF,true,.9)\n AnyoneCore.addTimedWorldTextOnEnt(s.nextAt-Now(),'Stack',id,0xFFFFFFFF,true,.8,2.5)\n if s.dive then AnyoneCore.Shotcall('Stack now',true,3,false) end\n s.timerStep=s.step\nend\nself.used=true",
+							actionLua = "local pending=data.ucobBeamTiming\nif not pending or Now()>=pending.expires or pending.seq[pending.step]~=9917 or pending.timerStep==pending.step or Now()>=pending.nextAt then self.used=true return end\nif Now()<(pending.nextTimerCheck or 0) then self.used=true return end\npending.nextTimerCheck=Now()+100\nlocal s=data.ucobBeamTiming\nlocal p=TensorCore.mGetPlayer()\nlocal dives=data.ucobNAURDives\nlocal order=p and dives and dives.order[p.id]\nif s and s.dive and dives and Now()<dives.expires and order and order>dives.locked then self.used=true return end\nif s and p and Now()<s.expires and s.seq[s.step]==9917 and s.timerStep~=s.step and Now()<s.nextAt then\n local id=p.id\n AnyoneCore.addWorldTextCountdown(s.nextAt-Now(),setmetatable({entityID=id},{__index=function(t,k) local e=TensorCore.mGetEntity(t.entityID);if not e then return 0 end;if k=='x' then return e.pos.x elseif k=='y' then return e.pos.y+1.8 elseif k=='z' then return e.pos.z end end}),0xFFFFFFFF,true,.9)\n AnyoneCore.addTimedWorldTextOnEnt(s.nextAt-Now(),'Stack',id,0xFFFFFFFF,true,.8,2.5)\n if s.dive then AnyoneCore.Shotcall('Stack now', not (NAUR_TTS and NAUR_TTS.enabled==false),3,false) end\n s.timerStep=s.step\nend\nself.used=true",
 							name = "Thermionic Beam - Personal continuous stack timer",
 							uuid = "25885782-4aff-8811-8b76-8f81b14fb1e7",
 							version = 2.1,
@@ -980,7 +980,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- Profile-owned preferences; no dependency on Minion's settings subsystem.\nlocal profileStore=_G.NAUR_UCOB_SettingsStore\nif not profileStore or profileStore.fileApiVersion~=1 then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UCOB-NAUR.lua]]\n local values=profileStore and profileStore.values or {}\n if not profileStore and FileExists(path) then\n  local saved=FileLoad(path)\n  if type(saved)==\"table\" then values=saved end\n end\n profileStore=profileStore or {values=values}\n profileStore.path=path\n function profileStore.encode()\n  local lines={}\n  local function encode(s)return (s:gsub('[%%\\t\\r\\n]',function(c)return string.format('%%%02X',string.byte(c))end))end\n  local function visit(values,path)\n   local keys={};for key in pairs(values)do if type(key)=='string' and key:match('^[%w_]+$')then keys[#keys+1]=key end end;table.sort(keys)\n   for _,key in ipairs(keys)do\n    local value=values[key];local full=path=='' and key or path..'.'..key;local kind=type(value)\n    if kind=='table' then visit(value,full)\n    elseif kind=='string' then lines[#lines+1]=full..'\\ts\\t'..encode(value)\n    elseif kind=='number' then lines[#lines+1]=full..'\\tn\\t'..tostring(value)\n    elseif kind=='boolean' then lines[#lines+1]=full..'\\tb\\t'..tostring(value)end\n   end\n  end\n  visit(profileStore.values,'');return table.concat(lines,'\\n')..'\\n'\n end\n function profileStore.save()\n  local text=profileStore.encode()\n  if text==profileStore.saved then return true end\n  if text==profileStore.failedContent then return false end\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local ok,why=pcall(FileSave,path,profileStore.values)\n  if not ok then profileStore.error=tostring(why);profileStore.failedContent=text;return false end\n  profileStore.saved=text;profileStore.error=nil;profileStore.failedContent=nil;return true\n end\n profileStore.fileApiVersion=1\n _G.NAUR_UCOB_SettingsStore=profileStore\nend\n\nlocal rootSettings=profileStore or (_G and profileStore)\nlocal settings=rootSettings and rootSettings.values\nif not settings then return end\nif not data.ucobAssignmentGuiOptions then\n data.ucobAssignmentGuiOptions={healer={\"Unassigned\",\"In\",\"Out\"},tower={\"Unassigned\",\"Close\",\"Far\"}}\nend\nlocal options=data.ucobAssignmentGuiOptions\nlocal healer=settings.NAUR_UCOB_FirstFireballHealer or \"Unassigned\"\nlocal R=AnyoneCore and AnyoneCore.Roster\nlocal slot=R and R.current() and R.mySlot() or nil\nlocal defaultTower=(slot==\"M1\" or slot==\"M2\") and \"Close\" or (slot==\"R1\" or slot==\"R2\") and \"Far\" or nil\noptions.tower[1]=\"Auto: any (NAUR)\"\nlocal tower=settings.NAUR_UCOB_BlackfireTower or \"Unassigned\"\nlocal hi=healer==\"In\" and 2 or healer==\"Out\" and 3 or 1\nlocal ti=tower==\"Close\" and 2 or tower==\"Far\" and 3 or 1\nlocal visible=GUI:Begin(\"[NAUR] UCOB - Assignments\",true,GUI.WindowFlags_AlwaysAutoResize)\nif visible then\n settings.NAUR_UCOB_AutoTarget=GUI:Checkbox(\"Automatic targeting##UCOBAutoTarget\",settings.NAUR_UCOB_AutoTarget~=false)\n if GUI:IsItemHovered()then GUI:SetTooltip(\"Target attackable enemies at the existing phase/return windows. Automatically yields when the UCOB AutoSim profile owns targeting. This does not disable draws, assignments, potions or mitigation.\")end\n if (data.ucobRPRAutoSim or data.ucobBRDAutoSim or data.ucobBLMAutoSim) then GUI:Text(\"Targeting managed by AutoSim\")end\n GUI:PushItemWidth(150)\n GUI:Text(\"P1 Healer Fireball - DPS targeted\")\n if GUI:IsItemHovered() then\n  GUI:SetTooltip(\"First Fireball only.\\nDPS targeted: use your chosen In/Out assignment.\\nHealer targeted: that healer goes in; the other stays out automatically.\\nUnassigned: agree which healer stays out.\\nBoth tanks stay out.\")\n end\n GUI:SameLine(255)\n local newH,changedH=GUI:Combo(\"##NAURFirstFireballHealer\",hi,options.healer)\n if newH~=hi and options.healer[newH] then settings.NAUR_UCOB_FirstFireballHealer=options.healer[newH] end\n GUI:Text(\"P3 Blackfire DPS Tower\")\n if GUI:IsItemHovered() then GUI:SetTooltip(\"NAUR: any priority for DPS towers; Auto marks both DPS towers.\\nChoose Close/Far for a personal arrow.\") end\n GUI:SameLine(255)\n local newT,changedT=GUI:Combo(\"##NAURBlackfireTower\",ti,options.tower)\n if newT~=ti and options.tower[newT] then settings.NAUR_UCOB_BlackfireTower=newT==1 and \"Unassigned\" or options.tower[newT] end\n if GUI:CollapsingHeader(\"Potions##UCOBPotionsSection\") then\n settings.NAUR_UCOB_PotionsEnabled=GUI:Checkbox(\"Enable NAUR potion schedule##UCOBPots\",settings.NAUR_UCOB_PotionsEnabled~=false)\n if GUI:IsItemHovered() then local route=settings.NAUR_UCOB_PotionSecond or \"Late Nael\"\n local secondTimes={['Late Nael']='5:40.3 (340.3s)', ['Delayed Nael']='6:08.9 (368.9s)', ['Bahamut opener']='8:32.0 (512.0s)', ['After Blackfire']='9:51.3 (591.3s)'}\n local opener=settings.NAUR_UCOB_PotionOpener~=false and \"Opener: 0:03.3 (3.3s)\" or \"Opener: disabled\"\n local secondText=secondTimes[route] and (\"Second: \"..route..\" - \"..secondTimes[route]) or \"Second: disabled / manual\"\n GUI:SetTooltip(opener..\"\\n\"..secondText..\"\\nAdds opener: 14:05.8 (845.8s)\\nLate Golden: 22:46.6 (1366.6s)\\nSynced timeline times, not elapsed pull/replay time.\\nEach window lasts 3 seconds; normal weave rules apply.\\nUnavailable items or potion cooldown can skip a window.\\nDisable duplicate potion automation in your job profile.\") end\n settings.NAUR_UCOB_PotionOpener=GUI:Checkbox(\"Opener potion##UCOBPotOpener\",settings.NAUR_UCOB_PotionOpener~=false)\n if GUI:IsItemHovered() then GUI:SetTooltip(\"Disable for a three-potion route. Default opener: timeline 3.3s.\") end\n if not data.ucobPotionSecondOptions then data.ucobPotionSecondOptions={\"Late Nael\",\"Delayed Nael\",\"Bahamut opener\",\"After Blackfire\",\"Disabled / manual\"} end\n local potOptions=data.ucobPotionSecondOptions\n local second=settings.NAUR_UCOB_PotionSecond or \"Late Nael\"\n local secondIndex=1\n for i=1,#potOptions do if potOptions[i]==second then secondIndex=i break end end\n GUI:Text(\"Second potion window\")\n GUI:SameLine(255)\n local newSecond=GUI:Combo(\"##UCOBSecondPotion\",secondIndex,potOptions)\n if newSecond~=secondIndex and potOptions[newSecond] then settings.NAUR_UCOB_PotionSecond=potOptions[newSecond] end\n if GUI:IsItemHovered() then GUI:SetTooltip(\"Alternatives, not extra potions.\\nLate Nael 340.3 / Delayed Nael 368.9 / Bahamut opener 512.0 / After Blackfire 591.3.\\nAdds opener 845.8 and Late Golden 1366.6 remain enabled.\\nTimes are synced timeline coordinates, not seconds since pull.\\nReal cooldown or missing items can cause a window to be skipped.\") end\n end\n GUI:PopItemWidth()\nend\nif profileStore.error then\n GUI:Text('Could not save preferences: '..profileStore.error)\n if GUI:Button('Retry saving preferences')then profileStore.failedContent=nil;profileStore.save()end\nend\nGUI:End();profileStore.save()\nself.used=true",
+							actionLua = "if not NAUR_TTS then\n local path=GetLuaModsPath()..[[TensorReactions\\Settings\\NAUR-TTS.lua]]\n local v=FileExists(path) and FileLoad(path)\n NAUR_TTS={enabled=not (type(v)==\"table\" and v.enabled==false),path=path}\n function NAUR_TTS.save()\n  local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n  if not FolderExists(folder) then FolderCreate(folder) end\n  FileSave(NAUR_TTS.path,{enabled=NAUR_TTS.enabled})\n end\nend\n-- Profile-owned preferences; no dependency on Minion's settings subsystem.\nlocal profileStore=_G.NAUR_UCOB_SettingsStore\nif not profileStore or profileStore.fileApiVersion~=1 then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UCOB-NAUR.lua]]\n local values=profileStore and profileStore.values or {}\n if not profileStore and FileExists(path) then\n  local saved=FileLoad(path)\n  if type(saved)==\"table\" then values=saved end\n end\n profileStore=profileStore or {values=values}\n profileStore.path=path\n function profileStore.encode()\n  local lines={}\n  local function encode(s)return (s:gsub('[%%\\t\\r\\n]',function(c)return string.format('%%%02X',string.byte(c))end))end\n  local function visit(values,path)\n   local keys={};for key in pairs(values)do if type(key)=='string' and key:match('^[%w_]+$')then keys[#keys+1]=key end end;table.sort(keys)\n   for _,key in ipairs(keys)do\n    local value=values[key];local full=path=='' and key or path..'.'..key;local kind=type(value)\n    if kind=='table' then visit(value,full)\n    elseif kind=='string' then lines[#lines+1]=full..'\\ts\\t'..encode(value)\n    elseif kind=='number' then lines[#lines+1]=full..'\\tn\\t'..tostring(value)\n    elseif kind=='boolean' then lines[#lines+1]=full..'\\tb\\t'..tostring(value)end\n   end\n  end\n  visit(profileStore.values,'');return table.concat(lines,'\\n')..'\\n'\n end\n function profileStore.save()\n  local text=profileStore.encode()\n  if text==profileStore.saved then return true end\n  if text==profileStore.failedContent then return false end\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local ok,why=pcall(FileSave,path,profileStore.values)\n  if not ok then profileStore.error=tostring(why);profileStore.failedContent=text;return false end\n  profileStore.saved=text;profileStore.error=nil;profileStore.failedContent=nil;return true\n end\n profileStore.fileApiVersion=1\n _G.NAUR_UCOB_SettingsStore=profileStore\nend\n\nlocal rootSettings=profileStore or (_G and profileStore)\nlocal settings=rootSettings and rootSettings.values\nif not settings then return end\nif not data.ucobAssignmentGuiOptions then\n data.ucobAssignmentGuiOptions={healer={\"Unassigned\",\"In\",\"Out\"},tower={\"Unassigned\",\"Close\",\"Far\"}}\nend\nlocal options=data.ucobAssignmentGuiOptions\nlocal healer=settings.NAUR_UCOB_FirstFireballHealer or \"Unassigned\"\nlocal R=AnyoneCore and AnyoneCore.Roster\nlocal slot=R and R.current() and R.mySlot() or nil\nlocal defaultTower=(slot==\"M1\" or slot==\"M2\") and \"Close\" or (slot==\"R1\" or slot==\"R2\") and \"Far\" or nil\noptions.tower[1]=\"Auto: any (NAUR)\"\nlocal tower=settings.NAUR_UCOB_BlackfireTower or \"Unassigned\"\nlocal hi=healer==\"In\" and 2 or healer==\"Out\" and 3 or 1\nlocal ti=tower==\"Close\" and 2 or tower==\"Far\" and 3 or 1\nlocal visible=GUI:Begin(\"[NAUR] UCOB - Assignments\",true,GUI.WindowFlags_AlwaysAutoResize)\nif visible then\n local naurTTS=GUI:Checkbox(\"Voice callouts (TTS)##NAURTTS\",NAUR_TTS.enabled)\n if naurTTS~=NAUR_TTS.enabled then NAUR_TTS.enabled=naurTTS;NAUR_TTS.save() end\n if GUI:IsItemHovered() then GUI:SetTooltip(\"Shared by the TEA, UCOB and UWU NAUR draws. Off: callouts stay on screen, no voice.\") end\n if GUI:Button(\"Open Party Roster##NAURRoster\") then\n  if AnyoneCore and AnyoneCore.RosterPopup and AnyoneCore.RosterPopup.openManual then AnyoneCore.RosterPopup.openManual() end\n end\n if GUI:IsItemHovered() then GUI:SetTooltip(\"Opens Anyone's Party Roster to set or check your slot.\") end\n settings.NAUR_UCOB_AutoTarget=GUI:Checkbox(\"Automatic targeting##UCOBAutoTarget\",settings.NAUR_UCOB_AutoTarget~=false)\n if GUI:IsItemHovered()then GUI:SetTooltip(\"Target attackable enemies at the existing phase/return windows. Automatically yields when the UCOB AutoSim profile owns targeting. This does not disable draws, assignments, potions or mitigation.\")end\n if (data.ucobRPRAutoSim or data.ucobBRDAutoSim or data.ucobBLMAutoSim) then GUI:Text(\"Targeting managed by AutoSim\")end\n GUI:PushItemWidth(150)\n GUI:Text(\"P1 Healer Fireball - DPS targeted\")\n if GUI:IsItemHovered() then\n  GUI:SetTooltip(\"First Fireball only.\\nDPS targeted: use your chosen In/Out assignment.\\nHealer targeted: that healer goes in; the other stays out automatically.\\nUnassigned: agree which healer stays out.\\nBoth tanks stay out.\")\n end\n GUI:SameLine(255)\n local newH,changedH=GUI:Combo(\"##NAURFirstFireballHealer\",hi,options.healer)\n if newH~=hi and options.healer[newH] then settings.NAUR_UCOB_FirstFireballHealer=options.healer[newH] end\n GUI:Text(\"P3 Blackfire DPS Tower\")\n if GUI:IsItemHovered() then GUI:SetTooltip(\"NAUR: any priority for DPS towers; Auto marks both DPS towers.\\nChoose Close/Far for a personal arrow.\") end\n GUI:SameLine(255)\n local newT,changedT=GUI:Combo(\"##NAURBlackfireTower\",ti,options.tower)\n if newT~=ti and options.tower[newT] then settings.NAUR_UCOB_BlackfireTower=newT==1 and \"Unassigned\" or options.tower[newT] end\n if GUI:CollapsingHeader(\"Potions##UCOBPotionsSection\") then\n settings.NAUR_UCOB_PotionsEnabled=GUI:Checkbox(\"Enable NAUR potion schedule##UCOBPots\",settings.NAUR_UCOB_PotionsEnabled~=false)\n if GUI:IsItemHovered() then local route=settings.NAUR_UCOB_PotionSecond or \"Late Nael\"\n local secondTimes={['Late Nael']='5:40.3 (340.3s)', ['Delayed Nael']='6:08.9 (368.9s)', ['Bahamut opener']='8:32.0 (512.0s)', ['After Blackfire']='9:51.3 (591.3s)'}\n local opener=settings.NAUR_UCOB_PotionOpener~=false and \"Opener: 0:03.3 (3.3s)\" or \"Opener: disabled\"\n local secondText=secondTimes[route] and (\"Second: \"..route..\" - \"..secondTimes[route]) or \"Second: disabled / manual\"\n GUI:SetTooltip(opener..\"\\n\"..secondText..\"\\nAdds opener: 14:05.8 (845.8s)\\nLate Golden: 22:46.6 (1366.6s)\\nSynced timeline times, not elapsed pull/replay time.\\nEach window lasts 3 seconds; normal weave rules apply.\\nUnavailable items or potion cooldown can skip a window.\\nDisable duplicate potion automation in your job profile.\") end\n settings.NAUR_UCOB_PotionOpener=GUI:Checkbox(\"Opener potion##UCOBPotOpener\",settings.NAUR_UCOB_PotionOpener~=false)\n if GUI:IsItemHovered() then GUI:SetTooltip(\"Disable for a three-potion route. Default opener: timeline 3.3s.\") end\n if not data.ucobPotionSecondOptions then data.ucobPotionSecondOptions={\"Late Nael\",\"Delayed Nael\",\"Bahamut opener\",\"After Blackfire\",\"Disabled / manual\"} end\n local potOptions=data.ucobPotionSecondOptions\n local second=settings.NAUR_UCOB_PotionSecond or \"Late Nael\"\n local secondIndex=1\n for i=1,#potOptions do if potOptions[i]==second then secondIndex=i break end end\n GUI:Text(\"Second potion window\")\n GUI:SameLine(255)\n local newSecond=GUI:Combo(\"##UCOBSecondPotion\",secondIndex,potOptions)\n if newSecond~=secondIndex and potOptions[newSecond] then settings.NAUR_UCOB_PotionSecond=potOptions[newSecond] end\n if GUI:IsItemHovered() then GUI:SetTooltip(\"Alternatives, not extra potions.\\nLate Nael 340.3 / Delayed Nael 368.9 / Bahamut opener 512.0 / After Blackfire 591.3.\\nAdds opener 845.8 and Late Golden 1366.6 remain enabled.\\nTimes are synced timeline coordinates, not seconds since pull.\\nReal cooldown or missing items can cause a window to be skipped.\") end\n end\n GUI:PopItemWidth()\nend\nif profileStore.error then\n GUI:Text('Could not save preferences: '..profileStore.error)\n if GUI:Button('Retry saving preferences')then profileStore.failedContent=nil;profileStore.save()end\nend\nGUI:End();profileStore.save()\nself.used=true",
 							name = "Assignment and potion settings",
 							uuid = "a7689b1f-29f6-541f-a839-c69ff7957246",
 							version = 2.1,
@@ -1208,10 +1208,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(4500,\"Liquid Hell, bait edge\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Liquid Hell, bait edge\",100) end\nself.used=true\n",
 							alertDuration = 4500,
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "Liquid Hell, bait edge",
 							conditions = 
 							{
@@ -1286,7 +1286,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local function isFarthest()\n local R=AnyoneCore and AnyoneCore.Roster\n local p=TensorCore.mGetPlayer()\n if not R or not R.current() or not R.isReady() or not p or p.hp.current<=0 then return false end\n local b=TensorCore.mGetEntity(p.targetid)\n if not b or b.contentid~=1482 or Argus.getEntityModel(b)~=8159 then\n  b=data.ucobLHActualTwin and TensorCore.mGetEntity(data.ucobLHActualTwin)\n end\n if not b or b.contentid~=1482 or Argus.getEntityModel(b)~=8159 then return false end\n local d=(p.pos.x-b.pos.x)^2+(p.pos.z-b.pos.z)^2\n for _,slot in ipairs({'T1','T2','H1','H2','M1','M2','R1','R2'}) do\n  local e=R.entOf(slot)\n  if e and e.id~=p.id and e.hp.current>0 and (e.pos.x-b.pos.x)^2+(e.pos.z-b.pos.z)^2>d+.01 then return false end\n end\n return true\nend\nif not data.ucobLHBaitWarn8 and isFarthest() then AnyoneCore.Shotcall('Liquid Hell, bait edge',true,3,false);data.ucobLHBaitWarn8=true end\nlocal R=AnyoneCore and AnyoneCore.Roster\nif not R or not R.current() or not R.isReady() or R.mySlot()~=\"R1\" then self.used=true return end\nlocal p=TensorCore.mGetPlayer()\nlocal distance=math.sqrt(p.pos.x*p.pos.x+p.pos.z*p.pos.z)\nif distance<0.5 then self.used=true return end\nlocal dest={x=p.pos.x/distance*21,y=0,z=p.pos.z/distance*21}\nlocal p=TensorCore.mGetPlayer()\nif not p then self.used=true return end\nlocal dx,dz=dest.x-p.pos.x,dest.z-p.pos.z\nlocal distance=math.sqrt(dx*dx+dz*dz)\nlocal drawer=TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(0.15,1,0.2,0.65),2)\nlocal flags=Argus2.RenderFlags.FLAG_RENDER_OVERLAY\nif distance>0.8 then\n local tip=math.min(1.5,distance*0.35)\n  do local sc=math.min(1,distance/15) local tl=math.max(2,3*sc) if distance-tl>1 then TensorCore.getCachedDrawer(0xFF00FFFF,0xFF0088FF,0xFF0000FF,0xFFFFFFFF,2):addArrow(p.pos.x,p.pos.y,p.pos.z,TensorCore.getHeadingToTarget(p.pos,dest),distance-tl,math.max(0.5,sc),tl,math.max(1.5,3*sc),false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) end end \nend\nTensorCore.getCachedDrawer(nil,nil,0xFFFF0000,0xFFFF0000,2):addCircle(dest.x,dest.y,dest.z,0.4,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) Argus.addCircleFilled(dest.x,dest.y,dest.z,0.15,32,0xFF00FF00,nil,0,0,0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nself.used=true",
+							actionLua = "local function isFarthest()\n local R=AnyoneCore and AnyoneCore.Roster\n local p=TensorCore.mGetPlayer()\n if not R or not R.current() or not R.isReady() or not p or p.hp.current<=0 then return false end\n local b=TensorCore.mGetEntity(p.targetid)\n if not b or b.contentid~=1482 or Argus.getEntityModel(b)~=8159 then\n  b=data.ucobLHActualTwin and TensorCore.mGetEntity(data.ucobLHActualTwin)\n end\n if not b or b.contentid~=1482 or Argus.getEntityModel(b)~=8159 then return false end\n local d=(p.pos.x-b.pos.x)^2+(p.pos.z-b.pos.z)^2\n for _,slot in ipairs({'T1','T2','H1','H2','M1','M2','R1','R2'}) do\n  local e=R.entOf(slot)\n  if e and e.id~=p.id and e.hp.current>0 and (e.pos.x-b.pos.x)^2+(e.pos.z-b.pos.z)^2>d+.01 then return false end\n end\n return true\nend\nif not data.ucobLHBaitWarn8 and isFarthest() then AnyoneCore.Shotcall('Liquid Hell, bait edge', not (NAUR_TTS and NAUR_TTS.enabled==false),3,false);data.ucobLHBaitWarn8=true end\nlocal R=AnyoneCore and AnyoneCore.Roster\nif not R or not R.current() or not R.isReady() or R.mySlot()~=\"R1\" then self.used=true return end\nlocal p=TensorCore.mGetPlayer()\nlocal distance=math.sqrt(p.pos.x*p.pos.x+p.pos.z*p.pos.z)\nif distance<0.5 then self.used=true return end\nlocal dest={x=p.pos.x/distance*21,y=0,z=p.pos.z/distance*21}\nlocal p=TensorCore.mGetPlayer()\nif not p then self.used=true return end\nlocal dx,dz=dest.x-p.pos.x,dest.z-p.pos.z\nlocal distance=math.sqrt(dx*dx+dz*dz)\nlocal drawer=TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(0.15,1,0.2,0.65),2)\nlocal flags=Argus2.RenderFlags.FLAG_RENDER_OVERLAY\nif distance>0.8 then\n local tip=math.min(1.5,distance*0.35)\n  do local sc=math.min(1,distance/15) local tl=math.max(2,3*sc) if distance-tl>1 then TensorCore.getCachedDrawer(0xFF00FFFF,0xFF0088FF,0xFF0000FF,0xFFFFFFFF,2):addArrow(p.pos.x,p.pos.y,p.pos.z,TensorCore.getHeadingToTarget(p.pos,dest),distance-tl,math.max(0.5,sc),tl,math.max(1.5,3*sc),false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) end end \nend\nTensorCore.getCachedDrawer(nil,nil,0xFFFF0000,0xFFFF0000,2):addCircle(dest.x,dest.y,dest.z,0.4,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) Argus.addCircleFilled(dest.x,dest.y,dest.z,0.15,32,0xFF00FF00,nil,0,0,0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nself.used=true",
 							name = "L4 first post-Fireball Liquid Hell edge bait",
 							uuid = "ecfccc92-48f8-8ea9-b8c2-b5af1119d7d4",
 							version = 2.1,
@@ -1344,7 +1344,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local function isFarthest()\n local R=AnyoneCore and AnyoneCore.Roster\n local p=TensorCore.mGetPlayer()\n if not R or not R.current() or not R.isReady() or not p or p.hp.current<=0 then return false end\n local b=TensorCore.mGetEntity(p.targetid)\n if not b or b.contentid~=1482 or Argus.getEntityModel(b)~=8159 then\n  b=data.ucobLHActualTwin and TensorCore.mGetEntity(data.ucobLHActualTwin)\n end\n if not b or b.contentid~=1482 or Argus.getEntityModel(b)~=8159 then return false end\n local d=(p.pos.x-b.pos.x)^2+(p.pos.z-b.pos.z)^2\n for _,slot in ipairs({'T1','T2','H1','H2','M1','M2','R1','R2'}) do\n  local e=R.entOf(slot)\n  if e and e.id~=p.id and e.hp.current>0 and (e.pos.x-b.pos.x)^2+(e.pos.z-b.pos.z)^2>d+.01 then return false end\n end\n return true\nend\nif not data.ucobLHBaitWarn10 and isFarthest() then AnyoneCore.Shotcall('Liquid Hell, bait edge',true,3,false);data.ucobLHBaitWarn10=true end\nlocal R=AnyoneCore and AnyoneCore.Roster\nif not R or not R.current() or not R.isReady() or R.mySlot()~=\"R1\" then self.used=true return end\nlocal p=TensorCore.mGetPlayer()\nlocal distance=math.sqrt(p.pos.x*p.pos.x+p.pos.z*p.pos.z)\nif distance<0.5 then self.used=true return end\nlocal dest={x=p.pos.x/distance*21,y=0,z=p.pos.z/distance*21}\nlocal p=TensorCore.mGetPlayer()\nif not p then self.used=true return end\nlocal dx,dz=dest.x-p.pos.x,dest.z-p.pos.z\nlocal distance=math.sqrt(dx*dx+dz*dz)\nlocal drawer=TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(0.15,1,0.2,0.65),2)\nlocal flags=Argus2.RenderFlags.FLAG_RENDER_OVERLAY\nif distance>0.8 then\n local tip=math.min(1.5,distance*0.35)\n  do local sc=math.min(1,distance/15) local tl=math.max(2,3*sc) if distance-tl>1 then TensorCore.getCachedDrawer(0xFF00FFFF,0xFF0088FF,0xFF0000FF,0xFFFFFFFF,2):addArrow(p.pos.x,p.pos.y,p.pos.z,TensorCore.getHeadingToTarget(p.pos,dest),distance-tl,math.max(0.5,sc),tl,math.max(1.5,3*sc),false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) end end \nend\nTensorCore.getCachedDrawer(nil,nil,0xFFFF0000,0xFFFF0000,2):addCircle(dest.x,dest.y,dest.z,0.4,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) Argus.addCircleFilled(dest.x,dest.y,dest.z,0.15,32,0xFF00FF00,nil,0,0,0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nself.used=true",
+							actionLua = "local function isFarthest()\n local R=AnyoneCore and AnyoneCore.Roster\n local p=TensorCore.mGetPlayer()\n if not R or not R.current() or not R.isReady() or not p or p.hp.current<=0 then return false end\n local b=TensorCore.mGetEntity(p.targetid)\n if not b or b.contentid~=1482 or Argus.getEntityModel(b)~=8159 then\n  b=data.ucobLHActualTwin and TensorCore.mGetEntity(data.ucobLHActualTwin)\n end\n if not b or b.contentid~=1482 or Argus.getEntityModel(b)~=8159 then return false end\n local d=(p.pos.x-b.pos.x)^2+(p.pos.z-b.pos.z)^2\n for _,slot in ipairs({'T1','T2','H1','H2','M1','M2','R1','R2'}) do\n  local e=R.entOf(slot)\n  if e and e.id~=p.id and e.hp.current>0 and (e.pos.x-b.pos.x)^2+(e.pos.z-b.pos.z)^2>d+.01 then return false end\n end\n return true\nend\nif not data.ucobLHBaitWarn10 and isFarthest() then AnyoneCore.Shotcall('Liquid Hell, bait edge', not (NAUR_TTS and NAUR_TTS.enabled==false),3,false);data.ucobLHBaitWarn10=true end\nlocal R=AnyoneCore and AnyoneCore.Roster\nif not R or not R.current() or not R.isReady() or R.mySlot()~=\"R1\" then self.used=true return end\nlocal p=TensorCore.mGetPlayer()\nlocal distance=math.sqrt(p.pos.x*p.pos.x+p.pos.z*p.pos.z)\nif distance<0.5 then self.used=true return end\nlocal dest={x=p.pos.x/distance*21,y=0,z=p.pos.z/distance*21}\nlocal p=TensorCore.mGetPlayer()\nif not p then self.used=true return end\nlocal dx,dz=dest.x-p.pos.x,dest.z-p.pos.z\nlocal distance=math.sqrt(dx*dx+dz*dz)\nlocal drawer=TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(0.15,1,0.2,0.65),2)\nlocal flags=Argus2.RenderFlags.FLAG_RENDER_OVERLAY\nif distance>0.8 then\n local tip=math.min(1.5,distance*0.35)\n  do local sc=math.min(1,distance/15) local tl=math.max(2,3*sc) if distance-tl>1 then TensorCore.getCachedDrawer(0xFF00FFFF,0xFF0088FF,0xFF0000FF,0xFFFFFFFF,2):addArrow(p.pos.x,p.pos.y,p.pos.z,TensorCore.getHeadingToTarget(p.pos,dest),distance-tl,math.max(0.5,sc),tl,math.max(1.5,3*sc),false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) end end \nend\nTensorCore.getCachedDrawer(nil,nil,0xFFFF0000,0xFFFF0000,2):addCircle(dest.x,dest.y,dest.z,0.4,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) Argus.addCircleFilled(dest.x,dest.y,dest.z,0.15,32,0xFF00FF00,nil,0,0,0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nself.used=true",
 							name = "L4 early Liquid Hell edge bait",
 							uuid = "ac0cb3f0-15bf-f712-9212-a5efa2f16405",
 							version = 2.1,
@@ -1420,9 +1420,9 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"Ranged targeted, intercept\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Ranged targeted, intercept\",100) end\nself.used=true\n",
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "Ranged targeted, intercept",
 							conditions = 
 							{
@@ -1461,7 +1461,7 @@ local tbl =
 						data = 
 						{
 							category = "Lua",
-							conditionLua = "local R=AnyoneCore and AnyoneCore.Roster\nreturn R and R.current() and R.mySlot()==\"R2\" and eventArgs.entityID==R.idOf(\"R1\")",
+							conditionLua = "local R=AnyoneCore and AnyoneCore.Roster\nreturn R and R.current() and R.mySlot()==\"R2\" and eventArgs.entityID==R.idOf(\"R1\") and (function() local lh=data.ucobLiquidAlert return lh~=nil and Now()-lh.last<2500 and lh.count<5 end)()",
 							dequeueIfLuaFalse = true,
 							name = "Caster intercepts marked physical ranged",
 							uuid = "666e65b8-e98b-636b-9dfe-cc57a7ffd318",
@@ -1585,7 +1585,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local R=AnyoneCore and AnyoneCore.Roster\nlocal p=TensorCore.mGetPlayer()\nif not R or not R.current() or not R.isReady() or not p or eventArgs.entityID~=p.id then self.used=true return end\ndata.ucobSingleHatch12=nil\n-- Keep the existing physical-ranged/caster interception assignment.\nif p.id==R.idOf(\"R1\") then self.used=true return end\nlocal count,link=0,nil\nfor _,e in pairs(EntityList(\"\")) do\n if e.contentid==2001151 then count=count+1 link={x=e.pos.x,y=e.pos.y,z=e.pos.z} end\nend\nif count==1 then data.ucobSingleHatch12={target=p.id,dest=link,ready=true,expires=Now()+12000} end\nself.used=true",
+							actionLua = "local R=AnyoneCore and AnyoneCore.Roster\nlocal p=TensorCore.mGetPlayer()\nif not R or not R.current() or not R.isReady() or not p or eventArgs.entityID~=p.id then self.used=true return end\ndata.ucobSingleHatch12=nil\n-- Keep the existing physical-ranged/caster interception assignment.\nif p.id==R.idOf(\"R1\") then local lh=data.ucobLiquidAlert if lh and Now()-lh.last<2500 and lh.count<5 then self.used=true return end end\nlocal count,link=0,nil\nfor _,e in pairs(EntityList(\"\")) do\n if e.contentid==2001151 then count=count+1 link={x=e.pos.x,y=e.pos.y,z=e.pos.z} end\nend\nif count==1 then data.ucobSingleHatch12={target=p.id,dest=link,ready=true,expires=Now()+12000} end\nself.used=true",
 							conditions = 
 							{
 								
@@ -1730,10 +1730,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(4500,\"Step into Neurolink\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Step into Neurolink\",100) end\nself.used=true\n",
 							alertDuration = 4500,
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "Step into Neurolink",
 							conditions = 
 							{
@@ -1804,10 +1804,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(4500,\"Step into Neurolink\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Step into Neurolink\",100) end\nself.used=true\n",
 							alertDuration = 4500,
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "Step into Neurolink",
 							conditions = 
 							{
@@ -1904,7 +1904,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local function isFarthest()\n local R=AnyoneCore and AnyoneCore.Roster\n local p=TensorCore.mGetPlayer()\n if not R or not R.current() or not R.isReady() or not p or p.hp.current<=0 then return false end\n local b=TensorCore.mGetEntity(p.targetid)\n if not b or b.contentid~=1482 or Argus.getEntityModel(b)~=8159 then\n  b=data.ucobLHActualTwin and TensorCore.mGetEntity(data.ucobLHActualTwin)\n end\n if not b or b.contentid~=1482 or Argus.getEntityModel(b)~=8159 then return false end\n local d=(p.pos.x-b.pos.x)^2+(p.pos.z-b.pos.z)^2\n for _,slot in ipairs({'T1','T2','H1','H2','M1','M2','R1','R2'}) do\n  local e=R.entOf(slot)\n  if e and e.id~=p.id and e.hp.current>0 and (e.pos.x-b.pos.x)^2+(e.pos.z-b.pos.z)^2>d+.01 then return false end\n end\n return true\nend\nif not data.ucobLHBaitWarn13 and isFarthest() then AnyoneCore.Shotcall('Liquid Hell, bait edge',true,3,false);data.ucobLHBaitWarn13=true end\nlocal R=AnyoneCore and AnyoneCore.Roster\nif not R or not R.current() or not R.isReady() or R.mySlot()~=\"R1\" then self.used=true return end\nlocal p=TensorCore.mGetPlayer()\nlocal distance=math.sqrt(p.pos.x*p.pos.x+p.pos.z*p.pos.z)\nif distance<0.5 then self.used=true return end\nlocal dest={x=p.pos.x/distance*21,y=0,z=p.pos.z/distance*21}\nlocal p=TensorCore.mGetPlayer()\nif not p then self.used=true return end\nlocal dx,dz=dest.x-p.pos.x,dest.z-p.pos.z\nlocal distance=math.sqrt(dx*dx+dz*dz)\nlocal drawer=TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(0.15,1,0.2,0.65),2)\nlocal flags=Argus2.RenderFlags.FLAG_RENDER_OVERLAY\nif distance>0.8 then\n local tip=math.min(1.5,distance*0.35)\n  do local sc=math.min(1,distance/15) local tl=math.max(2,3*sc) if distance-tl>1 then TensorCore.getCachedDrawer(0xFF00FFFF,0xFF0088FF,0xFF0000FF,0xFFFFFFFF,2):addArrow(p.pos.x,p.pos.y,p.pos.z,TensorCore.getHeadingToTarget(p.pos,dest),distance-tl,math.max(0.5,sc),tl,math.max(1.5,3*sc),false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) end end \nend\nTensorCore.getCachedDrawer(nil,nil,0xFFFF0000,0xFFFF0000,2):addCircle(dest.x,dest.y,dest.z,0.4,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) Argus.addCircleFilled(dest.x,dest.y,dest.z,0.15,32,0xFF00FF00,nil,0,0,0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nself.used=true",
+							actionLua = "local function isFarthest()\n local R=AnyoneCore and AnyoneCore.Roster\n local p=TensorCore.mGetPlayer()\n if not R or not R.current() or not R.isReady() or not p or p.hp.current<=0 then return false end\n local b=TensorCore.mGetEntity(p.targetid)\n if not b or b.contentid~=1482 or Argus.getEntityModel(b)~=8159 then\n  b=data.ucobLHActualTwin and TensorCore.mGetEntity(data.ucobLHActualTwin)\n end\n if not b or b.contentid~=1482 or Argus.getEntityModel(b)~=8159 then return false end\n local d=(p.pos.x-b.pos.x)^2+(p.pos.z-b.pos.z)^2\n for _,slot in ipairs({'T1','T2','H1','H2','M1','M2','R1','R2'}) do\n  local e=R.entOf(slot)\n  if e and e.id~=p.id and e.hp.current>0 and (e.pos.x-b.pos.x)^2+(e.pos.z-b.pos.z)^2>d+.01 then return false end\n end\n return true\nend\nif not data.ucobLHBaitWarn13 and isFarthest() then AnyoneCore.Shotcall('Liquid Hell, bait edge', not (NAUR_TTS and NAUR_TTS.enabled==false),3,false);data.ucobLHBaitWarn13=true end\nlocal R=AnyoneCore and AnyoneCore.Roster\nif not R or not R.current() or not R.isReady() or R.mySlot()~=\"R1\" then self.used=true return end\nlocal p=TensorCore.mGetPlayer()\nlocal distance=math.sqrt(p.pos.x*p.pos.x+p.pos.z*p.pos.z)\nif distance<0.5 then self.used=true return end\nlocal dest={x=p.pos.x/distance*21,y=0,z=p.pos.z/distance*21}\nlocal p=TensorCore.mGetPlayer()\nif not p then self.used=true return end\nlocal dx,dz=dest.x-p.pos.x,dest.z-p.pos.z\nlocal distance=math.sqrt(dx*dx+dz*dz)\nlocal drawer=TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(0.15,1,0.2,0.65),2)\nlocal flags=Argus2.RenderFlags.FLAG_RENDER_OVERLAY\nif distance>0.8 then\n local tip=math.min(1.5,distance*0.35)\n  do local sc=math.min(1,distance/15) local tl=math.max(2,3*sc) if distance-tl>1 then TensorCore.getCachedDrawer(0xFF00FFFF,0xFF0088FF,0xFF0000FF,0xFFFFFFFF,2):addArrow(p.pos.x,p.pos.y,p.pos.z,TensorCore.getHeadingToTarget(p.pos,dest),distance-tl,math.max(0.5,sc),tl,math.max(1.5,3*sc),false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) end end \nend\nTensorCore.getCachedDrawer(nil,nil,0xFFFF0000,0xFFFF0000,2):addCircle(dest.x,dest.y,dest.z,0.4,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) Argus.addCircleFilled(dest.x,dest.y,dest.z,0.15,32,0xFF00FF00,nil,0,0,0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nself.used=true",
 							name = "L4 early Liquid Hell edge bait",
 							uuid = "475f5ccc-8ab2-fa0f-a16b-a6ba34f048e0",
 							version = 2.1,
@@ -1930,6 +1930,50 @@ local tbl =
 	},
 	[15] = 
 	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws",
+				uuid = "fd611aa2-80ad-0ec2-9de0-d74789658255",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local s=data.ucobSingleHatch15\nlocal i=data.ucobSecondIntercept\nif (not s or s.ready) and (not i or i.ready) then return end\nlocal st=data.ucobHatch15Gen\nif not st or Now()-st.created>30000 then st={created=Now()};data.ucobHatch15Gen=st end\nfor _,e in pairs(TensorCore.getEntityGroupList(\"ContentID\",1482) or {}) do\n local ci=e.castinginfo\n local id=ci and ((ci.channelingid~=0 and ci.channelingid) or ci.castingid) or 0\n if id==9902 then st.casting=true elseif st.casting and not st.doneAt then st.doneAt=Now() end\n if id==9898 then st.twister=true end\nend\n-- Twister normally starts 1.0-1.1s after Generate; with none by 1.6s, go in now.\nif st.doneAt and not st.twister and Now()-st.doneAt>=1600 then\n if s then s.ready=true end\n if i then i.ready=true end\nend\n",
+							name = "Release entry if no Twister",
+							uuid = "042b8a9a-d848-4287-b518-cbd630c25c79",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "Draws",
+				eventType = 12,
+				loop = true,
+				mechanicTime = 77.6,
+				name = "[NAUR] P1 Second Hatch - Go in without Twister",
+				timeRange = true,
+				timelineIndex = 15,
+				timerEndOffset = 12,
+				timerStartOffset = -8,
+				uuid = "9784a5cd-eef6-404a-9638-7e072e74fa8b",
+				version = 2,
+			},
+		},
 		
 		{
 			data = 
@@ -2061,9 +2105,9 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"Ranged targeted, intercept\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Ranged targeted, intercept\",100) end\nself.used=true\n",
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "Ranged targeted, intercept",
 							conditions = 
 							{
@@ -2102,7 +2146,7 @@ local tbl =
 						data = 
 						{
 							category = "Lua",
-							conditionLua = "local R=AnyoneCore and AnyoneCore.Roster\nreturn R and R.current() and R.mySlot()==\"R2\" and eventArgs.entityID==R.idOf(\"R1\")",
+							conditionLua = "local R=AnyoneCore and AnyoneCore.Roster\nreturn R and R.current() and R.mySlot()==\"R2\" and eventArgs.entityID==R.idOf(\"R1\") and (function() local lh=data.ucobLiquidAlert return lh~=nil and Now()-lh.last<2500 and lh.count<5 end)()",
 							dequeueIfLuaFalse = true,
 							name = "Caster intercepts marked physical ranged",
 							uuid = "aea31b40-9edc-637a-901a-0f9b0760c6a7",
@@ -2191,7 +2235,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local R=AnyoneCore and AnyoneCore.Roster\nlocal p=TensorCore.mGetPlayer()\nif not R or not R.current() or not R.isReady() or not p or eventArgs.entityID~=p.id then self.used=true return end\ndata.ucobSingleHatch15=nil\n-- Keep the existing physical-ranged/caster interception assignment.\nif p.id==R.idOf(\"R1\") then self.used=true return end\nlocal count,link=0,nil\nfor _,e in pairs(EntityList(\"\")) do\n if e.contentid==2001151 then count=count+1 link={x=e.pos.x,y=e.pos.y,z=e.pos.z} end\nend\nif count==1 then data.ucobSingleHatch15={target=p.id,dest=link,ready=false,expires=Now()+12000} end\nself.used=true",
+							actionLua = "local R=AnyoneCore and AnyoneCore.Roster\nlocal p=TensorCore.mGetPlayer()\nif not R or not R.current() or not R.isReady() or not p or eventArgs.entityID~=p.id then self.used=true return end\ndata.ucobSingleHatch15=nil\n-- Keep the existing physical-ranged/caster interception assignment.\nif p.id==R.idOf(\"R1\") then local lh=data.ucobLiquidAlert if lh and Now()-lh.last<2500 and lh.count<5 then self.used=true return end end\nlocal count,link=0,nil\nfor _,e in pairs(EntityList(\"\")) do\n if e.contentid==2001151 then count=count+1 link={x=e.pos.x,y=e.pos.y,z=e.pos.z} end\nend\nif count==1 then data.ucobSingleHatch15={target=p.id,dest=link,ready=false,expires=Now()+12000} end\nself.used=true",
 							conditions = 
 							{
 								
@@ -2336,10 +2380,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(4500,\"Step into Neurolink\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Step into Neurolink\",100) end\nself.used=true\n",
 							alertDuration = 4500,
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "Step into Neurolink",
 							conditions = 
 							{
@@ -2410,10 +2454,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(4500,\"Step into Neurolink\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Step into Neurolink\",100) end\nself.used=true\n",
 							alertDuration = 4500,
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "Step into Neurolink",
 							conditions = 
 							{
@@ -2556,7 +2600,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local function isFarthest()\n local R=AnyoneCore and AnyoneCore.Roster\n local p=TensorCore.mGetPlayer()\n if not R or not R.current() or not R.isReady() or not p or p.hp.current<=0 then return false end\n local b=TensorCore.mGetEntity(p.targetid)\n if not b or b.contentid~=1482 or Argus.getEntityModel(b)~=8159 then\n  b=data.ucobLHActualTwin and TensorCore.mGetEntity(data.ucobLHActualTwin)\n end\n if not b or b.contentid~=1482 or Argus.getEntityModel(b)~=8159 then return false end\n local d=(p.pos.x-b.pos.x)^2+(p.pos.z-b.pos.z)^2\n for _,slot in ipairs({'T1','T2','H1','H2','M1','M2','R1','R2'}) do\n  local e=R.entOf(slot)\n  if e and e.id~=p.id and e.hp.current>0 and (e.pos.x-b.pos.x)^2+(e.pos.z-b.pos.z)^2>d+.01 then return false end\n end\n return true\nend\nif not data.ucobLHBaitWarn18 and isFarthest() then AnyoneCore.Shotcall('Liquid Hell, bait edge',true,3,false);data.ucobLHBaitWarn18=true end\nlocal R=AnyoneCore and AnyoneCore.Roster\nif not R or not R.current() or not R.isReady() or R.mySlot()~=\"R1\" then self.used=true return end\nlocal p=TensorCore.mGetPlayer()\nlocal distance=math.sqrt(p.pos.x*p.pos.x+p.pos.z*p.pos.z)\nif distance<0.5 then self.used=true return end\nlocal dest={x=p.pos.x/distance*21,y=0,z=p.pos.z/distance*21}\nlocal p=TensorCore.mGetPlayer()\nif not p then self.used=true return end\nlocal dx,dz=dest.x-p.pos.x,dest.z-p.pos.z\nlocal distance=math.sqrt(dx*dx+dz*dz)\nlocal drawer=TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(0.15,1,0.2,0.65),2)\nlocal flags=Argus2.RenderFlags.FLAG_RENDER_OVERLAY\nif distance>0.8 then\n local tip=math.min(1.5,distance*0.35)\n  do local sc=math.min(1,distance/15) local tl=math.max(2,3*sc) if distance-tl>1 then TensorCore.getCachedDrawer(0xFF00FFFF,0xFF0088FF,0xFF0000FF,0xFFFFFFFF,2):addArrow(p.pos.x,p.pos.y,p.pos.z,TensorCore.getHeadingToTarget(p.pos,dest),distance-tl,math.max(0.5,sc),tl,math.max(1.5,3*sc),false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) end end \nend\nTensorCore.getCachedDrawer(nil,nil,0xFFFF0000,0xFFFF0000,2):addCircle(dest.x,dest.y,dest.z,0.4,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) Argus.addCircleFilled(dest.x,dest.y,dest.z,0.15,32,0xFF00FF00,nil,0,0,0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nself.used=true",
+							actionLua = "local function isFarthest()\n local R=AnyoneCore and AnyoneCore.Roster\n local p=TensorCore.mGetPlayer()\n if not R or not R.current() or not R.isReady() or not p or p.hp.current<=0 then return false end\n local b=TensorCore.mGetEntity(p.targetid)\n if not b or b.contentid~=1482 or Argus.getEntityModel(b)~=8159 then\n  b=data.ucobLHActualTwin and TensorCore.mGetEntity(data.ucobLHActualTwin)\n end\n if not b or b.contentid~=1482 or Argus.getEntityModel(b)~=8159 then return false end\n local d=(p.pos.x-b.pos.x)^2+(p.pos.z-b.pos.z)^2\n for _,slot in ipairs({'T1','T2','H1','H2','M1','M2','R1','R2'}) do\n  local e=R.entOf(slot)\n  if e and e.id~=p.id and e.hp.current>0 and (e.pos.x-b.pos.x)^2+(e.pos.z-b.pos.z)^2>d+.01 then return false end\n end\n return true\nend\nif not data.ucobLHBaitWarn18 and isFarthest() then AnyoneCore.Shotcall('Liquid Hell, bait edge', not (NAUR_TTS and NAUR_TTS.enabled==false),3,false);data.ucobLHBaitWarn18=true end\nlocal R=AnyoneCore and AnyoneCore.Roster\nif not R or not R.current() or not R.isReady() or R.mySlot()~=\"R1\" then self.used=true return end\nlocal p=TensorCore.mGetPlayer()\nlocal distance=math.sqrt(p.pos.x*p.pos.x+p.pos.z*p.pos.z)\nif distance<0.5 then self.used=true return end\nlocal dest={x=p.pos.x/distance*21,y=0,z=p.pos.z/distance*21}\nlocal p=TensorCore.mGetPlayer()\nif not p then self.used=true return end\nlocal dx,dz=dest.x-p.pos.x,dest.z-p.pos.z\nlocal distance=math.sqrt(dx*dx+dz*dz)\nlocal drawer=TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(0.15,1,0.2,0.65),2)\nlocal flags=Argus2.RenderFlags.FLAG_RENDER_OVERLAY\nif distance>0.8 then\n local tip=math.min(1.5,distance*0.35)\n  do local sc=math.min(1,distance/15) local tl=math.max(2,3*sc) if distance-tl>1 then TensorCore.getCachedDrawer(0xFF00FFFF,0xFF0088FF,0xFF0000FF,0xFFFFFFFF,2):addArrow(p.pos.x,p.pos.y,p.pos.z,TensorCore.getHeadingToTarget(p.pos,dest),distance-tl,math.max(0.5,sc),tl,math.max(1.5,3*sc),false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) end end \nend\nTensorCore.getCachedDrawer(nil,nil,0xFFFF0000,0xFFFF0000,2):addCircle(dest.x,dest.y,dest.z,0.4,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) Argus.addCircleFilled(dest.x,dest.y,dest.z,0.15,32,0xFF00FF00,nil,0,0,0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nself.used=true",
 							name = "L4 early Liquid Hell edge bait",
 							uuid = "b40e522c-85f7-8550-93dd-291aa812bf4e",
 							version = 2.1,
@@ -2614,7 +2658,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local function isFarthest()\n local R=AnyoneCore and AnyoneCore.Roster\n local p=TensorCore.mGetPlayer()\n if not R or not R.current() or not R.isReady() or not p or p.hp.current<=0 then return false end\n local b=TensorCore.mGetEntity(p.targetid)\n if not b or b.contentid~=1482 or Argus.getEntityModel(b)~=8159 then\n  b=data.ucobLHActualTwin and TensorCore.mGetEntity(data.ucobLHActualTwin)\n end\n if not b or b.contentid~=1482 or Argus.getEntityModel(b)~=8159 then return false end\n local d=(p.pos.x-b.pos.x)^2+(p.pos.z-b.pos.z)^2\n for _,slot in ipairs({'T1','T2','H1','H2','M1','M2','R1','R2'}) do\n  local e=R.entOf(slot)\n  if e and e.id~=p.id and e.hp.current>0 and (e.pos.x-b.pos.x)^2+(e.pos.z-b.pos.z)^2>d+.01 then return false end\n end\n return true\nend\nif not data.ucobLHBaitWarn20 and isFarthest() then AnyoneCore.Shotcall('Liquid Hell, bait edge',true,3,false);data.ucobLHBaitWarn20=true end\nlocal R=AnyoneCore and AnyoneCore.Roster\nif not R or not R.current() or not R.isReady() or R.mySlot()~=\"R1\" then self.used=true return end\nlocal p=TensorCore.mGetPlayer()\nlocal distance=math.sqrt(p.pos.x*p.pos.x+p.pos.z*p.pos.z)\nif distance<0.5 then self.used=true return end\nlocal dest={x=p.pos.x/distance*21,y=0,z=p.pos.z/distance*21}\nlocal p=TensorCore.mGetPlayer()\nif not p then self.used=true return end\nlocal dx,dz=dest.x-p.pos.x,dest.z-p.pos.z\nlocal distance=math.sqrt(dx*dx+dz*dz)\nlocal drawer=TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(0.15,1,0.2,0.65),2)\nlocal flags=Argus2.RenderFlags.FLAG_RENDER_OVERLAY\nif distance>0.8 then\n local tip=math.min(1.5,distance*0.35)\n  do local sc=math.min(1,distance/15) local tl=math.max(2,3*sc) if distance-tl>1 then TensorCore.getCachedDrawer(0xFF00FFFF,0xFF0088FF,0xFF0000FF,0xFFFFFFFF,2):addArrow(p.pos.x,p.pos.y,p.pos.z,TensorCore.getHeadingToTarget(p.pos,dest),distance-tl,math.max(0.5,sc),tl,math.max(1.5,3*sc),false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) end end \nend\nTensorCore.getCachedDrawer(nil,nil,0xFFFF0000,0xFFFF0000,2):addCircle(dest.x,dest.y,dest.z,0.4,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) Argus.addCircleFilled(dest.x,dest.y,dest.z,0.15,32,0xFF00FF00,nil,0,0,0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nself.used=true",
+							actionLua = "local function isFarthest()\n local R=AnyoneCore and AnyoneCore.Roster\n local p=TensorCore.mGetPlayer()\n if not R or not R.current() or not R.isReady() or not p or p.hp.current<=0 then return false end\n local b=TensorCore.mGetEntity(p.targetid)\n if not b or b.contentid~=1482 or Argus.getEntityModel(b)~=8159 then\n  b=data.ucobLHActualTwin and TensorCore.mGetEntity(data.ucobLHActualTwin)\n end\n if not b or b.contentid~=1482 or Argus.getEntityModel(b)~=8159 then return false end\n local d=(p.pos.x-b.pos.x)^2+(p.pos.z-b.pos.z)^2\n for _,slot in ipairs({'T1','T2','H1','H2','M1','M2','R1','R2'}) do\n  local e=R.entOf(slot)\n  if e and e.id~=p.id and e.hp.current>0 and (e.pos.x-b.pos.x)^2+(e.pos.z-b.pos.z)^2>d+.01 then return false end\n end\n return true\nend\nif not data.ucobLHBaitWarn20 and isFarthest() then AnyoneCore.Shotcall('Liquid Hell, bait edge', not (NAUR_TTS and NAUR_TTS.enabled==false),3,false);data.ucobLHBaitWarn20=true end\nlocal R=AnyoneCore and AnyoneCore.Roster\nif not R or not R.current() or not R.isReady() or R.mySlot()~=\"R1\" then self.used=true return end\nlocal p=TensorCore.mGetPlayer()\nlocal distance=math.sqrt(p.pos.x*p.pos.x+p.pos.z*p.pos.z)\nif distance<0.5 then self.used=true return end\nlocal dest={x=p.pos.x/distance*21,y=0,z=p.pos.z/distance*21}\nlocal p=TensorCore.mGetPlayer()\nif not p then self.used=true return end\nlocal dx,dz=dest.x-p.pos.x,dest.z-p.pos.z\nlocal distance=math.sqrt(dx*dx+dz*dz)\nlocal drawer=TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(0.15,1,0.2,0.65),2)\nlocal flags=Argus2.RenderFlags.FLAG_RENDER_OVERLAY\nif distance>0.8 then\n local tip=math.min(1.5,distance*0.35)\n  do local sc=math.min(1,distance/15) local tl=math.max(2,3*sc) if distance-tl>1 then TensorCore.getCachedDrawer(0xFF00FFFF,0xFF0088FF,0xFF0000FF,0xFFFFFFFF,2):addArrow(p.pos.x,p.pos.y,p.pos.z,TensorCore.getHeadingToTarget(p.pos,dest),distance-tl,math.max(0.5,sc),tl,math.max(1.5,3*sc),false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) end end \nend\nTensorCore.getCachedDrawer(nil,nil,0xFFFF0000,0xFFFF0000,2):addCircle(dest.x,dest.y,dest.z,0.4,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) Argus.addCircleFilled(dest.x,dest.y,dest.z,0.15,32,0xFF00FF00,nil,0,0,0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nself.used=true",
 							name = "L4 early Liquid Hell edge bait",
 							uuid = "5f76c91e-5795-bfef-8a10-0efee6cd43d0",
 							version = 2.1,
@@ -2802,10 +2846,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(4500,\"Step into Neurolink\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Step into Neurolink\",100) end\nself.used=true\n",
 							alertDuration = 4500,
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "Step into Neurolink",
 							conditions = 
 							{
@@ -3149,10 +3193,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(4500,\"Step into Neurolink\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Step into Neurolink\",100) end\nself.used=true\n",
 							alertDuration = 4500,
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "Step into Neurolink",
 							conditions = 
 							{
@@ -3294,7 +3338,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local function isFarthest()\n local R=AnyoneCore and AnyoneCore.Roster\n local p=TensorCore.mGetPlayer()\n if not R or not R.current() or not R.isReady() or not p or p.hp.current<=0 then return false end\n local b=TensorCore.mGetEntity(p.targetid)\n if not b or b.contentid~=1482 or Argus.getEntityModel(b)~=8159 then\n  b=data.ucobLHActualTwin and TensorCore.mGetEntity(data.ucobLHActualTwin)\n end\n if not b or b.contentid~=1482 or Argus.getEntityModel(b)~=8159 then return false end\n local d=(p.pos.x-b.pos.x)^2+(p.pos.z-b.pos.z)^2\n for _,slot in ipairs({'T1','T2','H1','H2','M1','M2','R1','R2'}) do\n  local e=R.entOf(slot)\n  if e and e.id~=p.id and e.hp.current>0 and (e.pos.x-b.pos.x)^2+(e.pos.z-b.pos.z)^2>d+.01 then return false end\n end\n return true\nend\nif not data.ucobLHBaitWarn30 and isFarthest() then AnyoneCore.Shotcall('Liquid Hell, bait edge',true,3,false);data.ucobLHBaitWarn30=true end\nlocal R=AnyoneCore and AnyoneCore.Roster\nif not R or not R.current() or not R.isReady() or R.mySlot()~=\"R1\" then self.used=true return end\nlocal p=TensorCore.mGetPlayer()\nlocal distance=math.sqrt(p.pos.x*p.pos.x+p.pos.z*p.pos.z)\nif distance<0.5 then self.used=true return end\nlocal dest={x=p.pos.x/distance*21,y=0,z=p.pos.z/distance*21}\nlocal p=TensorCore.mGetPlayer()\nif not p then self.used=true return end\nlocal dx,dz=dest.x-p.pos.x,dest.z-p.pos.z\nlocal distance=math.sqrt(dx*dx+dz*dz)\nlocal drawer=TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(0.15,1,0.2,0.65),2)\nlocal flags=Argus2.RenderFlags.FLAG_RENDER_OVERLAY\nif distance>0.8 then\n local tip=math.min(1.5,distance*0.35)\n  do local sc=math.min(1,distance/15) local tl=math.max(2,3*sc) if distance-tl>1 then TensorCore.getCachedDrawer(0xFF00FFFF,0xFF0088FF,0xFF0000FF,0xFFFFFFFF,2):addArrow(p.pos.x,p.pos.y,p.pos.z,TensorCore.getHeadingToTarget(p.pos,dest),distance-tl,math.max(0.5,sc),tl,math.max(1.5,3*sc),false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) end end \nend\nTensorCore.getCachedDrawer(nil,nil,0xFFFF0000,0xFFFF0000,2):addCircle(dest.x,dest.y,dest.z,0.4,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) Argus.addCircleFilled(dest.x,dest.y,dest.z,0.15,32,0xFF00FF00,nil,0,0,0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nself.used=true",
+							actionLua = "local function isFarthest()\n local R=AnyoneCore and AnyoneCore.Roster\n local p=TensorCore.mGetPlayer()\n if not R or not R.current() or not R.isReady() or not p or p.hp.current<=0 then return false end\n local b=TensorCore.mGetEntity(p.targetid)\n if not b or b.contentid~=1482 or Argus.getEntityModel(b)~=8159 then\n  b=data.ucobLHActualTwin and TensorCore.mGetEntity(data.ucobLHActualTwin)\n end\n if not b or b.contentid~=1482 or Argus.getEntityModel(b)~=8159 then return false end\n local d=(p.pos.x-b.pos.x)^2+(p.pos.z-b.pos.z)^2\n for _,slot in ipairs({'T1','T2','H1','H2','M1','M2','R1','R2'}) do\n  local e=R.entOf(slot)\n  if e and e.id~=p.id and e.hp.current>0 and (e.pos.x-b.pos.x)^2+(e.pos.z-b.pos.z)^2>d+.01 then return false end\n end\n return true\nend\nif not data.ucobLHBaitWarn30 and isFarthest() then AnyoneCore.Shotcall('Liquid Hell, bait edge', not (NAUR_TTS and NAUR_TTS.enabled==false),3,false);data.ucobLHBaitWarn30=true end\nlocal R=AnyoneCore and AnyoneCore.Roster\nif not R or not R.current() or not R.isReady() or R.mySlot()~=\"R1\" then self.used=true return end\nlocal p=TensorCore.mGetPlayer()\nlocal distance=math.sqrt(p.pos.x*p.pos.x+p.pos.z*p.pos.z)\nif distance<0.5 then self.used=true return end\nlocal dest={x=p.pos.x/distance*21,y=0,z=p.pos.z/distance*21}\nlocal p=TensorCore.mGetPlayer()\nif not p then self.used=true return end\nlocal dx,dz=dest.x-p.pos.x,dest.z-p.pos.z\nlocal distance=math.sqrt(dx*dx+dz*dz)\nlocal drawer=TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(0.15,1,0.2,0.65),2)\nlocal flags=Argus2.RenderFlags.FLAG_RENDER_OVERLAY\nif distance>0.8 then\n local tip=math.min(1.5,distance*0.35)\n  do local sc=math.min(1,distance/15) local tl=math.max(2,3*sc) if distance-tl>1 then TensorCore.getCachedDrawer(0xFF00FFFF,0xFF0088FF,0xFF0000FF,0xFFFFFFFF,2):addArrow(p.pos.x,p.pos.y,p.pos.z,TensorCore.getHeadingToTarget(p.pos,dest),distance-tl,math.max(0.5,sc),tl,math.max(1.5,3*sc),false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) end end \nend\nTensorCore.getCachedDrawer(nil,nil,0xFFFF0000,0xFFFF0000,2):addCircle(dest.x,dest.y,dest.z,0.4,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) Argus.addCircleFilled(dest.x,dest.y,dest.z,0.15,32,0xFF00FF00,nil,0,0,0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nself.used=true",
 							name = "L4 early Liquid Hell edge bait",
 							uuid = "a0637816-c94d-c0ca-ba92-9e4975738293",
 							version = 2.1,
@@ -3482,10 +3526,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(4500,\"Step into Neurolink\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Step into Neurolink\",100) end\nself.used=true\n",
 							alertDuration = 4500,
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "Step into Neurolink",
 							conditions = 
 							{
@@ -3829,10 +3873,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(4500,\"Step into Neurolink\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Step into Neurolink\",100) end\nself.used=true\n",
 							alertDuration = 4500,
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "Step into Neurolink",
 							conditions = 
 							{
@@ -4019,7 +4063,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local s=data.ucobP1Transition\nif not s or Now()>=s.expires then self.used=true return end\n-- NAUR: stack on D for the knockback (D's NAUR spot 0,9 if the waymark is not placed).\nlocal x,y,z,active=Argus.getWaymarkInfo(4)\nlocal dest=active and {x=x,y=y,z=z} or {x=0,y=0,z=9}\nlocal p=TensorCore.mGetPlayer()\nif not p then self.used=true return end\nlocal dx,dz=dest.x-p.pos.x,dest.z-p.pos.z\nlocal distance=math.sqrt(dx*dx+dz*dz)\nlocal drawer=TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(0.15,1,0.2,0.65),2)\nlocal flags=Argus2.RenderFlags.FLAG_RENDER_OVERLAY\nif distance>0.8 then\n local tip=math.min(1.5,distance*0.35)\n  do local sc=math.min(1,distance/15) local tl=math.max(2,3*sc) if distance-tl>1 then TensorCore.getCachedDrawer(0xFF00FFFF,0xFF0088FF,0xFF0000FF,0xFFFFFFFF,2):addArrow(p.pos.x,p.pos.y,p.pos.z,TensorCore.getHeadingToTarget(p.pos,dest),distance-tl,math.max(0.5,sc),tl,math.max(1.5,3*sc),false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) end end \nend\nTensorCore.getCachedDrawer(nil,nil,0xFFFF0000,0xFFFF0000,2):addCircle(dest.x,dest.y,dest.z,0.4,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) Argus.addCircleFilled(dest.x,dest.y,dest.z,0.15,32,0xFF00FF00,nil,0,0,0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nself.used=true",
+							actionLua = "local s=data.ucobP1Transition\nif not s or Now()>=s.expires then self.used=true return end\nlocal p=TensorCore.mGetPlayer()\nif not p then self.used=true return end\n-- Stack with the party: point at the most clustered group of party members (not me): the member with\n-- the most others within 6y, then the average position of that group.\nlocal R=AnyoneCore and AnyoneCore.Roster\nlocal pts={}\nif R and R.current() and R.isReady() then\n for _,slot in ipairs({'T1','T2','H1','H2','M1','M2','R1','R2'}) do\n  local e=R.entOf(slot)\n  if e and e.pos and e.id~=p.id and (not e.hp or e.hp.current>0) then pts[#pts+1]=e.pos end\n end\nelse\n for _,e in pairs(TensorCore.getEntityGroupList(\"Party\") or {}) do\n  if e and e.pos and e.id~=p.id and (not e.hp or e.hp.current>0) then pts[#pts+1]=e.pos end\n end\nend\nif #pts==0 then self.used=true return end\nlocal best,bestN=nil,-1\nfor i=1,#pts do\n local n=0\n for j=1,#pts do\n  local dx,dz=pts[i].x-pts[j].x,pts[i].z-pts[j].z\n  if dx*dx+dz*dz<=36 then n=n+1 end\n end\n if n>bestN then best,bestN=pts[i],n end\nend\nlocal sx,sz,c=0,0,0\nfor j=1,#pts do\n local dx,dz=best.x-pts[j].x,best.z-pts[j].z\n if dx*dx+dz*dz<=36 then sx,sz,c=sx+pts[j].x,sz+pts[j].z,c+1 end\nend\nlocal dest={x=sx/c,y=p.pos.y,z=sz/c}\nlocal dx,dz=dest.x-p.pos.x,dest.z-p.pos.z\nlocal distance=math.sqrt(dx*dx+dz*dz)\nif distance>0.8 then\n  do local sc=math.min(1,distance/15) local tl=math.max(2,3*sc) if distance-tl>1 then TensorCore.getCachedDrawer(0xFF00FFFF,0xFF0088FF,0xFF0000FF,0xFFFFFFFF,2):addArrow(p.pos.x,p.pos.y,p.pos.z,TensorCore.getHeadingToTarget(p.pos,dest),distance-tl,math.max(0.5,sc),tl,math.max(1.5,3*sc),false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) end end\nend\nTensorCore.getCachedDrawer(nil,nil,0xFFFF0000,0xFFFF0000,2):addCircle(dest.x,dest.y,dest.z,0.4,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) Argus.addCircleFilled(dest.x,dest.y,dest.z,0.15,32,0xFF00FF00,nil,0,0,0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nself.used=true\n",
 							name = "P1 transition D marker arrow",
 							uuid = "b29e4918-c647-c932-977e-112eb7dbbb92",
 							version = 2.1,
@@ -4033,7 +4077,7 @@ local tbl =
 				eventType = 12,
 				loop = true,
 				mechanicTime = 200,
-				name = "P1 transition regroup at D",
+				name = "P1 transition regroup with party",
 				timeRange = true,
 				timelineIndex = 39,
 				timerEndOffset = 2,
@@ -5207,10 +5251,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(4000,\"Dodge clockwise around boss\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Dodge clockwise around boss\",100) end\nself.used=true\n",
 							alertDuration = 4000,
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "Dodge clockwise around boss",
 							conditions = 
 							{
@@ -5397,10 +5441,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(2500,\"Cleanse doom\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Cleanse doom\",100) end\nself.used=true\n",
 							alertDuration = 2500,
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "Cleanse doom",
 							conditions = 
 							{
@@ -5777,9 +5821,9 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(4000,\"Lightning on you, spread!\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Lightning on you, spread!\",100) end\nself.used=true\n",
 							alertDuration = 4000,
-							alertTTS = true,
 							alertText = "Lightning on you, spread!",
 							conditions = 
 							{
@@ -5956,11 +6000,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"In\",1.2,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"In\",100) end\nself.used=true\n",
 							alertDuration = 3000,
 							alertPriority = 2,
 							alertScale = 1.2,
-							alertTTS = true,
 							alertText = "In",
 							conditions = 
 							{
@@ -5984,11 +6028,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"Out\",1.2,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Out\",100) end\nself.used=true\n",
 							alertDuration = 3000,
 							alertPriority = 2,
 							alertScale = 1.2,
-							alertTTS = true,
 							alertText = "Out",
 							conditions = 
 							{
@@ -6012,11 +6056,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"Stack\",1.2,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Stack\",100) end\nself.used=true\n",
 							alertDuration = 3000,
 							alertPriority = 2,
 							alertScale = 1.2,
-							alertTTS = true,
 							alertText = "Stack",
 							conditions = 
 							{
@@ -6040,11 +6084,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"Spread\",1.2,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Spread\",100) end\nself.used=true\n",
 							alertDuration = 3000,
 							alertPriority = 2,
 							alertScale = 1.2,
-							alertTTS = true,
 							alertText = "Spread",
 							conditions = 
 							{
@@ -6068,11 +6112,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"Spread\",1.2,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Spread\",100) end\nself.used=true\n",
 							alertDuration = 3000,
 							alertPriority = 2,
 							alertScale = 1.2,
-							alertTTS = true,
 							alertText = "Spread",
 							conditions = 
 							{
@@ -6281,11 +6325,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"In\",1.2000000476837,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"In\",100) end\nself.used=true\n",
 							alertDuration = 3000,
 							alertPriority = 2,
 							alertScale = 1.2000000476837,
-							alertTTS = true,
 							alertText = "In",
 							conditions = 
 							{
@@ -6309,11 +6353,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"Out\",1.2000000476837,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Out\",100) end\nself.used=true\n",
 							alertDuration = 3000,
 							alertPriority = 2,
 							alertScale = 1.2000000476837,
-							alertTTS = true,
 							alertText = "Out",
 							conditions = 
 							{
@@ -6337,11 +6381,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"Stack\",1.2000000476837,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Stack\",100) end\nself.used=true\n",
 							alertDuration = 3000,
 							alertPriority = 2,
 							alertScale = 1.2000000476837,
-							alertTTS = true,
 							alertText = "Stack",
 							conditions = 
 							{
@@ -6365,11 +6409,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"Spread\",1.2000000476837,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Spread\",100) end\nself.used=true\n",
 							alertDuration = 3000,
 							alertPriority = 2,
 							alertScale = 1.2000000476837,
-							alertTTS = true,
 							alertText = "Spread",
 							conditions = 
 							{
@@ -6393,11 +6437,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"Spread\",1.2000000476837,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Spread\",100) end\nself.used=true\n",
 							alertDuration = 3000,
 							alertPriority = 2,
 							alertScale = 1.2000000476837,
-							alertTTS = true,
 							alertText = "Spread",
 							conditions = 
 							{
@@ -8322,8 +8366,8 @@ local tbl =
 				name = "[Draw][Splatoon] Bahamut Megaflare Dive",
 				timeRange = true,
 				timelineIndex = 68,
-				timerEndOffset = 326.5,
-				timerStartOffset = -13.5,
+				timerEndOffset = 496.5,
+				timerStartOffset = 186.5,
 				uuid = "b85217ad-a5ef-443e-b301-e6e31d323562",
 				version = 2,
 			},
@@ -8898,7 +8942,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local R=AnyoneCore and AnyoneCore.Roster\nlocal p=TensorCore.mGetPlayer()\nlocal s=data.ucobEraTransition\nif not p or not s or s.knockbackAt or Now()>=s.expires then self.used=true return end\nlocal marks={}\nfor i=1,3 do\n local x,y,z,active=Argus.getWaymarkInfo(i)\n if active then marks[i]={x=x,y=y,z=z} end\nend\nlocal now=Now()\nif not s.stackScanAt or now>=s.stackScanAt then\n s.stackScanAt=now+100\n local winner=nil\n if R and R.current() and R.isReady() then\n  local counts={0,0,0}\n  for _,slot in ipairs({'T1','T2','H1','H2','M1','M2','R1','R2'}) do\n   local e=R.entOf(slot)\n   if e then\n    local nearest,best=nil,36\n    for i=1,3 do\n     local m=marks[i]\n     if m then\n      local dx,dz=e.pos.x-m.x,e.pos.z-m.z\n      local dist=dx*dx+dz*dz\n      if dist<best then nearest,best=i,dist end\n     end\n    end\n    if nearest then counts[nearest]=counts[nearest]+1 end\n   end\n  end\n  for i=1,3 do if counts[i]>=5 then winner=i end end\n end\n if winner and winner~=s.stackMarker then\n  if s.stackCandidate~=winner then s.stackCandidate=winner;s.stackCandidateAt=now\n  elseif now-s.stackCandidateAt>=500 then s.stackMarker=winner;s.stackCandidate=nil end\n else s.stackCandidate=nil end\nend\nlocal dest=marks[s.stackMarker or 1]\nif not dest then dest=marks[1] end\nif not dest then self.used=true return end\nlocal dx,dz=dest.x-p.pos.x,dest.z-p.pos.z\nlocal distance=math.sqrt(dx*dx+dz*dz)\nlocal drawer=TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(0.15,1,0.2,0.65),2)\nlocal flags=Argus2.RenderFlags.FLAG_RENDER_OVERLAY\nif distance>0.8 then\n local tip=math.min(1.5,distance*0.35)\n  do local sc=math.min(1,distance/15) local tl=math.max(2,3*sc) if distance-tl>1 then TensorCore.getCachedDrawer(0xFF00FFFF,0xFF0088FF,0xFF0000FF,0xFFFFFFFF,2):addArrow(p.pos.x,p.pos.y,p.pos.z,TensorCore.getHeadingToTarget(p.pos,dest),distance-tl,math.max(0.5,sc),tl,math.max(1.5,3*sc),false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) end end \nend\nTensorCore.getCachedDrawer(nil,nil,0xFFFF0000,0xFFFF0000,2):addCircle(dest.x,dest.y,dest.z,0.4,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) Argus.addCircleFilled(dest.x,dest.y,dest.z,0.15,32,0xFF00FF00,nil,0,0,0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nself.used=true",
+							actionLua = "local R=AnyoneCore and AnyoneCore.Roster\nlocal p=TensorCore.mGetPlayer()\nlocal s=data.ucobEraTransition\nif not p or not s or s.knockbackAt or Now()>=s.expires then self.used=true return end\n-- Point at the most clustered group of party members (not me): the member with the most others\n-- within 6y, then the average position of that group.\nlocal pts={}\nif R and R.current() and R.isReady() then\n for _,slot in ipairs({'T1','T2','H1','H2','M1','M2','R1','R2'}) do\n  local e=R.entOf(slot)\n  if e and e.pos and e.id~=p.id and (not e.hp or e.hp.current>0) then pts[#pts+1]=e.pos end\n end\nelse\n for _,e in pairs(TensorCore.getEntityGroupList(\"Party\") or {}) do\n  if e and e.pos and e.id~=p.id and (not e.hp or e.hp.current>0) then pts[#pts+1]=e.pos end\n end\nend\nif #pts==0 then self.used=true return end\nlocal best,bestN=nil,-1\nfor i=1,#pts do\n local n=0\n for j=1,#pts do\n  local dx,dz=pts[i].x-pts[j].x,pts[i].z-pts[j].z\n  if dx*dx+dz*dz<=36 then n=n+1 end\n end\n if n>bestN then best,bestN=pts[i],n end\nend\nlocal sx,sz,c=0,0,0\nfor j=1,#pts do\n local dx,dz=best.x-pts[j].x,best.z-pts[j].z\n if dx*dx+dz*dz<=36 then sx,sz,c=sx+pts[j].x,sz+pts[j].z,c+1 end\nend\nlocal dest={x=sx/c,y=p.pos.y,z=sz/c}\nlocal dx,dz=dest.x-p.pos.x,dest.z-p.pos.z\nlocal distance=math.sqrt(dx*dx+dz*dz)\nif distance>0.8 then\n  do local sc=math.min(1,distance/15) local tl=math.max(2,3*sc) if distance-tl>1 then TensorCore.getCachedDrawer(0xFF00FFFF,0xFF0088FF,0xFF0000FF,0xFFFFFFFF,2):addArrow(p.pos.x,p.pos.y,p.pos.z,TensorCore.getHeadingToTarget(p.pos,dest),distance-tl,math.max(0.5,sc),tl,math.max(1.5,3*sc),false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) end end\nend\nTensorCore.getCachedDrawer(nil,nil,0xFFFF0000,0xFFFF0000,2):addCircle(dest.x,dest.y,dest.z,0.4,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) Argus.addCircleFilled(dest.x,dest.y,dest.z,0.15,32,0xFF00FF00,nil,0,0,0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nself.used=true\n",
 							name = "Party Knockback Position Arrow",
 							uuid = "e2a5a8ea-19d9-f502-bb68-b29ff1f40d56",
 							version = 2.1,
@@ -9286,7 +9330,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local p=TensorCore.mGetPlayer()\nif not p then self.used=true return end\nlocal dest={x=0,y=p.pos.y,z=0}\nif not data.ucobQuickmarchMiddleCalled then AnyoneCore.Shotcall('Stack middle',true,3,false);data.ucobQuickmarchMiddleCalled=true end\nlocal dx,dz=dest.x-p.pos.x,dest.z-p.pos.z\nlocal distance=math.sqrt(dx*dx+dz*dz)\nlocal drawer=TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(0.15,1,0.2,0.65),2)\nlocal flags=Argus2.RenderFlags.FLAG_RENDER_OVERLAY\nif distance>0.8 then\n local tip=math.min(1.5,distance*0.35)\n  do local sc=math.min(1,distance/15) local tl=math.max(2,3*sc) if distance-tl>1 then TensorCore.getCachedDrawer(0xFF00FFFF,0xFF0088FF,0xFF0000FF,0xFFFFFFFF,2):addArrow(p.pos.x,p.pos.y,p.pos.z,TensorCore.getHeadingToTarget(p.pos,dest),distance-tl,math.max(0.5,sc),tl,math.max(1.5,3*sc),false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) end end \nend\nTensorCore.getCachedDrawer(nil,nil,0xFFFF0000,0xFFFF0000,2):addCircle(dest.x,dest.y,dest.z,0.4,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) Argus.addCircleFilled(dest.x,dest.y,dest.z,0.15,32,0xFF00FF00,nil,0,0,0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nself.used=true",
+							actionLua = "local p=TensorCore.mGetPlayer()\nif not p then self.used=true return end\nlocal dest={x=0,y=p.pos.y,z=0}\nif not data.ucobQuickmarchMiddleCalled then AnyoneCore.Shotcall('Stack middle', not (NAUR_TTS and NAUR_TTS.enabled==false),3,false);data.ucobQuickmarchMiddleCalled=true end\nlocal dx,dz=dest.x-p.pos.x,dest.z-p.pos.z\nlocal distance=math.sqrt(dx*dx+dz*dz)\nlocal drawer=TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(0.15,1,0.2,0.65),2)\nlocal flags=Argus2.RenderFlags.FLAG_RENDER_OVERLAY\nif distance>0.8 then\n local tip=math.min(1.5,distance*0.35)\n  do local sc=math.min(1,distance/15) local tl=math.max(2,3*sc) if distance-tl>1 then TensorCore.getCachedDrawer(0xFF00FFFF,0xFF0088FF,0xFF0000FF,0xFFFFFFFF,2):addArrow(p.pos.x,p.pos.y,p.pos.z,TensorCore.getHeadingToTarget(p.pos,dest),distance-tl,math.max(0.5,sc),tl,math.max(1.5,3*sc),false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) end end \nend\nTensorCore.getCachedDrawer(nil,nil,0xFFFF0000,0xFFFF0000,2):addCircle(dest.x,dest.y,dest.z,0.4,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) Argus.addCircleFilled(dest.x,dest.y,dest.z,0.15,32,0xFF00FF00,nil,0,0,0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nself.used=true",
 							name = "P3 Quickmarch - Regroup middle before dive",
 							uuid = "d22a883a-9b79-fff1-87ff-6e2eda0852ea",
 							version = 2.1,
@@ -9391,11 +9435,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(2500,\"Move for Twister\",1.2,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Move for Twister\",100) end\nself.used=true\n",
 							alertDuration = 2500,
 							alertPriority = 2,
 							alertScale = 1.2,
-							alertTTS = true,
 							alertText = "Move for Twister",
 							endIfUsed = true,
 							uuid = "ab1f58e0-1d42-95b9-b324-1efaa06e5529",
@@ -10190,10 +10234,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(4500,\"Stack middle\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Stack middle\",100) end\nself.used=true\n",
 							alertDuration = 4500,
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "Stack middle",
 							conditions = 
 							{
@@ -10509,7 +10553,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local s=data.ucobBlackfireTowerChoice\nif s then\n s.hyper=s.hyper+1\n if s.nx and s.marked[eventArgs.targetID] then\n  local r=math.min(21,8+s.hyper*4)\n  s.stackDest={x=-s.nx*r,y=0,z=-s.nz*r}\n  s.stackRetreat=true\n  local p=TensorCore.mGetPlayer()\n  if p and s.marked[p.id] then AnyoneCore.Shotcall('Back to wall',true,3,false) end\n end\nend\nself.used=true",
+							actionLua = "local s=data.ucobBlackfireTowerChoice\nif s then\n s.hyper=s.hyper+1\n if s.nx and s.marked[eventArgs.targetID] then\n  local r=math.min(21,8+s.hyper*4)\n  s.stackDest={x=-s.nx*r,y=0,z=-s.nz*r}\n  s.stackRetreat=true\n  local p=TensorCore.mGetPlayer()\n  if p and s.marked[p.id] then AnyoneCore.Shotcall('Back to wall', not (NAUR_TTS and NAUR_TTS.enabled==false),3,false) end\n end\nend\nself.used=true",
 							conditions = 
 							{
 								
@@ -10683,7 +10727,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- Profile-owned preferences; no dependency on Minion's settings subsystem.\nlocal profileStore=_G.NAUR_UCOB_SettingsStore\nif not profileStore or profileStore.fileApiVersion~=1 then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UCOB-NAUR.lua]]\n local values=profileStore and profileStore.values or {}\n if not profileStore and FileExists(path) then\n  local saved=FileLoad(path)\n  if type(saved)==\"table\" then values=saved end\n end\n profileStore=profileStore or {values=values}\n profileStore.path=path\n function profileStore.encode()\n  local lines={}\n  local function encode(s)return (s:gsub('[%%\\t\\r\\n]',function(c)return string.format('%%%02X',string.byte(c))end))end\n  local function visit(values,path)\n   local keys={};for key in pairs(values)do if type(key)=='string' and key:match('^[%w_]+$')then keys[#keys+1]=key end end;table.sort(keys)\n   for _,key in ipairs(keys)do\n    local value=values[key];local full=path=='' and key or path..'.'..key;local kind=type(value)\n    if kind=='table' then visit(value,full)\n    elseif kind=='string' then lines[#lines+1]=full..'\\ts\\t'..encode(value)\n    elseif kind=='number' then lines[#lines+1]=full..'\\tn\\t'..tostring(value)\n    elseif kind=='boolean' then lines[#lines+1]=full..'\\tb\\t'..tostring(value)end\n   end\n  end\n  visit(profileStore.values,'');return table.concat(lines,'\\n')..'\\n'\n end\n function profileStore.save()\n  local text=profileStore.encode()\n  if text==profileStore.saved then return true end\n  if text==profileStore.failedContent then return false end\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local ok,why=pcall(FileSave,path,profileStore.values)\n  if not ok then profileStore.error=tostring(why);profileStore.failedContent=text;return false end\n  profileStore.saved=text;profileStore.error=nil;profileStore.failedContent=nil;return true\n end\n profileStore.fileApiVersion=1\n _G.NAUR_UCOB_SettingsStore=profileStore\nend\n\nlocal rootSettings=profileStore or (_G and profileStore)\nlocal ucobSettings=rootSettings and rootSettings.values\nif not ucobSettings then return end\nlocal s=data.ucobBlackfireTowerChoice\nlocal R=AnyoneCore and AnyoneCore.Roster\nif not s or Now()>=s.expires or not s.nx or s.markerCount~=4 or not R or not R.current() or not R.isReady() then self.used=true return end\nlocal slot=R.mySlot()\nif slot~=\"M1\" and slot~=\"M2\" and slot~=\"R1\" and slot~=\"R2\" then self.used=true return end\nlocal p=TensorCore.mGetPlayer()\nif not p then self.used=true return end\nlocal choice=ucobSettings.NAUR_UCOB_BlackfireTower\nlocal dest=nil\nif s.marked[p.id] then\n if s.stackDone and not s.stackRetreat then self.used=true return end\n s.stackDest=s.stackDest or {x=-s.nx*8,y=0,z=-s.nz*8}\n dest=s.stackDest\nelse\n if choice~=\"Close\" and choice~=\"Far\" then\n  -- NAUR: any priority for DPS towers, so mark both DPS-side (CCW) towers.\n  if s.hyper>=2 then\n   local ring=TensorCore.getCachedDrawer(nil,nil,0xFF00FF00,0xFF00FF00,2)\n   for _,t in pairs(s.towers) do if t.x*s.nz-t.z*s.nx>0 then ring:addCircle(t.x,t.y,t.z,1,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) end end\n  end\n  self.used=true return\n end\n if s.choice~=choice then\n  local selected=nil local score=nil local count=0\n  -- Facing Nael: NAUR DPS left, supports right.\n  for _,t in pairs(s.towers) do\n   if t.x*s.nz-t.z*s.nx>0 then\n    count=count+1\n    local n=t.x*s.nx+t.z*s.nz\n    if not score or (choice==\"Close\" and n>score) or (choice==\"Far\" and n<score) then selected=t score=n end\n   end\n  end\n  if count~=2 or not selected then self.used=true return end\n  s.choice=choice s.selected=selected\n  local r=math.sqrt(selected.x^2+selected.z^2)\n  s.stage={x=selected.x/r*(r+4),y=selected.y,z=selected.z/r*(r+4)}\n end\n dest=s.hyper>=2 and s.selected or s.stage\n local phase=s.hyper>=2 and 'Soak tower' or 'Wait outside'\n if s.stageLabel~=phase then\n  AnyoneCore.addTimedWorldText(math.max(1,s.expires-Now()),phase,{x=dest.x,y=dest.y+1,z=dest.z},0xFFFFFFFF,true,1)\n  AnyoneCore.Shotcall(phase,true,2,false)\n  s.stageLabel=phase\n end\nend\nlocal p=TensorCore.mGetPlayer()\nif not p then self.used=true return end\nlocal dx,dz=dest.x-p.pos.x,dest.z-p.pos.z\nlocal distance=math.sqrt(dx*dx+dz*dz)\nlocal drawer=TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(0.15,1,0.2,0.65),2)\nlocal flags=Argus2.RenderFlags.FLAG_RENDER_OVERLAY\nif distance>0.8 then\n local tip=math.min(1.5,distance*0.35)\n  do local sc=math.min(1,distance/15) local tl=math.max(2,3*sc) if distance-tl>1 then TensorCore.getCachedDrawer(0xFF00FFFF,0xFF0088FF,0xFF0000FF,0xFFFFFFFF,2):addArrow(p.pos.x,p.pos.y,p.pos.z,TensorCore.getHeadingToTarget(p.pos,dest),distance-tl,math.max(0.5,sc),tl,math.max(1.5,3*sc),false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) end end \nend\nTensorCore.getCachedDrawer(nil,nil,0xFFFF0000,0xFFFF0000,2):addCircle(dest.x,dest.y,dest.z,0.4,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) Argus.addCircleFilled(dest.x,dest.y,dest.z,0.15,32,0xFF00FF00,nil,0,0,0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nself.used=true",
+							actionLua = "-- Profile-owned preferences; no dependency on Minion's settings subsystem.\nlocal profileStore=_G.NAUR_UCOB_SettingsStore\nif not profileStore or profileStore.fileApiVersion~=1 then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UCOB-NAUR.lua]]\n local values=profileStore and profileStore.values or {}\n if not profileStore and FileExists(path) then\n  local saved=FileLoad(path)\n  if type(saved)==\"table\" then values=saved end\n end\n profileStore=profileStore or {values=values}\n profileStore.path=path\n function profileStore.encode()\n  local lines={}\n  local function encode(s)return (s:gsub('[%%\\t\\r\\n]',function(c)return string.format('%%%02X',string.byte(c))end))end\n  local function visit(values,path)\n   local keys={};for key in pairs(values)do if type(key)=='string' and key:match('^[%w_]+$')then keys[#keys+1]=key end end;table.sort(keys)\n   for _,key in ipairs(keys)do\n    local value=values[key];local full=path=='' and key or path..'.'..key;local kind=type(value)\n    if kind=='table' then visit(value,full)\n    elseif kind=='string' then lines[#lines+1]=full..'\\ts\\t'..encode(value)\n    elseif kind=='number' then lines[#lines+1]=full..'\\tn\\t'..tostring(value)\n    elseif kind=='boolean' then lines[#lines+1]=full..'\\tb\\t'..tostring(value)end\n   end\n  end\n  visit(profileStore.values,'');return table.concat(lines,'\\n')..'\\n'\n end\n function profileStore.save()\n  local text=profileStore.encode()\n  if text==profileStore.saved then return true end\n  if text==profileStore.failedContent then return false end\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local ok,why=pcall(FileSave,path,profileStore.values)\n  if not ok then profileStore.error=tostring(why);profileStore.failedContent=text;return false end\n  profileStore.saved=text;profileStore.error=nil;profileStore.failedContent=nil;return true\n end\n profileStore.fileApiVersion=1\n _G.NAUR_UCOB_SettingsStore=profileStore\nend\n\nlocal rootSettings=profileStore or (_G and profileStore)\nlocal ucobSettings=rootSettings and rootSettings.values\nif not ucobSettings then return end\nlocal s=data.ucobBlackfireTowerChoice\nlocal R=AnyoneCore and AnyoneCore.Roster\nif not s or Now()>=s.expires or not s.nx or s.markerCount~=4 or not R or not R.current() or not R.isReady() then self.used=true return end\nlocal slot=R.mySlot()\nif slot~=\"M1\" and slot~=\"M2\" and slot~=\"R1\" and slot~=\"R2\" then self.used=true return end\nlocal p=TensorCore.mGetPlayer()\nif not p then self.used=true return end\nlocal choice=ucobSettings.NAUR_UCOB_BlackfireTower\nlocal dest=nil\nif s.marked[p.id] then\n if s.stackDone and not s.stackRetreat then self.used=true return end\n s.stackDest=s.stackDest or {x=-s.nx*8,y=0,z=-s.nz*8}\n dest=s.stackDest\nelse\n if choice~=\"Close\" and choice~=\"Far\" then\n  -- NAUR: any priority for DPS towers, so mark both DPS-side (CCW) towers.\n  if s.hyper>=2 then\n   local ring=TensorCore.getCachedDrawer(nil,nil,0xFF00FF00,0xFF00FF00,2)\n   for _,t in pairs(s.towers) do if t.x*s.nz-t.z*s.nx>0 then ring:addCircle(t.x,t.y,t.z,1,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) end end\n  end\n  self.used=true return\n end\n if s.choice~=choice then\n  local selected=nil local score=nil local count=0\n  -- Facing Nael: NAUR DPS left, supports right.\n  for _,t in pairs(s.towers) do\n   if t.x*s.nz-t.z*s.nx>0 then\n    count=count+1\n    local n=t.x*s.nx+t.z*s.nz\n    if not score or (choice==\"Close\" and n>score) or (choice==\"Far\" and n<score) then selected=t score=n end\n   end\n  end\n  if count~=2 or not selected then self.used=true return end\n  s.choice=choice s.selected=selected\n  local r=math.sqrt(selected.x^2+selected.z^2)\n  s.stage={x=selected.x/r*(r+4),y=selected.y,z=selected.z/r*(r+4)}\n end\n dest=s.hyper>=2 and s.selected or s.stage\n local phase=s.hyper>=2 and 'Soak tower' or 'Wait outside'\n if s.stageLabel~=phase then\n  AnyoneCore.addTimedWorldText(math.max(1,s.expires-Now()),phase,{x=dest.x,y=dest.y+1,z=dest.z},0xFFFFFFFF,true,1)\n  AnyoneCore.Shotcall(phase, not (NAUR_TTS and NAUR_TTS.enabled==false),2,false)\n  s.stageLabel=phase\n end\nend\nlocal p=TensorCore.mGetPlayer()\nif not p then self.used=true return end\nlocal dx,dz=dest.x-p.pos.x,dest.z-p.pos.z\nlocal distance=math.sqrt(dx*dx+dz*dz)\nlocal drawer=TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(0.15,1,0.2,0.65),2)\nlocal flags=Argus2.RenderFlags.FLAG_RENDER_OVERLAY\nif distance>0.8 then\n local tip=math.min(1.5,distance*0.35)\n  do local sc=math.min(1,distance/15) local tl=math.max(2,3*sc) if distance-tl>1 then TensorCore.getCachedDrawer(0xFF00FFFF,0xFF0088FF,0xFF0000FF,0xFFFFFFFF,2):addArrow(p.pos.x,p.pos.y,p.pos.z,TensorCore.getHeadingToTarget(p.pos,dest),distance-tl,math.max(0.5,sc),tl,math.max(1.5,3*sc),false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) end end \nend\nTensorCore.getCachedDrawer(nil,nil,0xFFFF0000,0xFFFF0000,2):addCircle(dest.x,dest.y,dest.z,0.4,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) Argus.addCircleFilled(dest.x,dest.y,dest.z,0.15,32,0xFF00FF00,nil,0,0,0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nself.used=true",
 							name = "Close-Far Personal Arrow",
 							uuid = "6d1dfcec-1baa-eedf-97ef-c38a75752e92",
 							version = 2.1,
@@ -11177,7 +11221,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local s=data.ucobFellruinGuide\nif not s or Now()>=s.expires then self.used=true return end\nif s.seq[s.step]==eventArgs.spellID then s.step=s.step+1;s.nextAt=Now()+3100;s.timerStep=nil end\nif eventArgs.spellID==9905 and not s.profDone then\n s.profDone=true;s.nextAt=Now()+3100;s.timerStep=nil\n data.ucobFellruinLinks=nil\n AnyoneCore.Shotcall('Out of link, spread!',true,3,false)\n s.lastCall='Out of link, spread!'\nend\nif eventArgs.spellID==9920 then data.ucobFellruinGuide=nil end\nself.used=true",
+							actionLua = "local s=data.ucobFellruinGuide\nif not s or Now()>=s.expires then self.used=true return end\nif s.seq[s.step]==eventArgs.spellID then s.step=s.step+1;s.nextAt=Now()+3100;s.timerStep=nil end\nif eventArgs.spellID==9905 and not s.profDone then\n s.profDone=true;s.nextAt=Now()+3100;s.timerStep=nil\n data.ucobFellruinLinks=nil\n AnyoneCore.Shotcall('Out of link, spread!', not (NAUR_TTS and NAUR_TTS.enabled==false),3,false)\n s.lastCall='Out of link, spread!'\nend\nif eventArgs.spellID==9920 then data.ucobFellruinGuide=nil end\nself.used=true",
 							conditions = 
 							{
 								
@@ -11238,7 +11282,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local R=AnyoneCore and AnyoneCore.Roster\nlocal p=TensorCore.mGetPlayer()\nlocal s=data.ucobFellruinGuide\nif not R or not R.current() or not R.isReady() or not p or not s or Now()>=s.expires or not s.nael then self.used=true return end\nlocal slot=R.mySlot()\nlocal nael=TensorCore.mGetEntity(s.nael)\nif not slot or (not nael and not s.profDone) then self.used=true return end\nlocal nextSpell=s.seq[s.step]\nlocal spread=nextSpell==9918 or s.profDone\nlocal links=data.ucobFellruinLinks\nif links and Now()<links.expires and not (nextSpell==9918 and not s.profDone) then self.used=true return end\nif spread then\n local radius=s.profDone and 4 or 3\n local clear=true\n for _,other in ipairs({'T1','T2','H1','H2','M1','M2','R1','R2'}) do\n  local e=R.entOf(other)\n  if e and e.id~=p.id and e.hp.current>0 and (p.pos.x-e.pos.x)^2+(p.pos.z-e.pos.z)^2<radius^2 then clear=false;break end\n end\n local color=clear and GUI:ColorConvertFloat4ToU32(.15,1,.2,.7) or GUI:ColorConvertFloat4ToU32(1,.15,.15,.7)\n local d=TensorCore.getStaticDrawer(color,2)\n d:addCircle(p.pos.x,p.pos.y,p.pos.z,radius,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\n if s.nextAt and Now()<s.nextAt and s.timerStep~=s.step then\n  AnyoneCore.addWorldTextCountdown(s.nextAt-Now(),setmetatable({entityID=p.id},{__index=function(t,k) local e=TensorCore.mGetEntity(t.entityID);if not e then return 0 end;if k=='x' then return e.pos.x elseif k=='y' then return e.pos.y+1.8 elseif k=='z' then return e.pos.z end end}),0xFFFFFFFF,true,.9)\n  s.timerStep=s.step\n end\n local call=s.profDone and 'Out of link, spread!' or 'Spread for dive'\n if s.lastCall~=call then AnyoneCore.Shotcall(call,true,3,false);s.lastCall=call end\n self.used=true return\nend\nif nextSpell~=9916 then self.used=true return end\nlocal np=nael.pos\nlocal dest=nil\nif slot=='T1' or slot=='T2' then\n local b=nil\n for _,e in pairs(TensorCore.entityList('')) do if e.contentid==3210 and Argus.getEntityModel(e)==8168 then b=e.pos;break end end\n if not b then self.used=true return end\n local dx,dz=b.x-np.x,b.z-np.z;local r=math.sqrt(dx*dx+dz*dz)\n if r<1 then self.used=true return end\n dest={x=np.x+dx/r*2,y=np.y,z=np.z+dz/r*2}\nelse\n local best,score=nil,math.huge\n for _,e in pairs(TensorCore.entityList('')) do\n  if e.contentid==2001151 then\n   local r=(e.pos.x-np.x)^2+(e.pos.z-np.z)^2\n   if r<score then best=e.pos;score=r end\n  end\n end\n if not best or score>36 then self.used=true return end\n dest={x=best.x,y=best.y,z=best.z}\nend\nif s.lastCall~='Under Nael' then AnyoneCore.Shotcall('Under Nael',true,3,false);s.lastCall='Under Nael' end\nlocal dx,dz=dest.x-p.pos.x,dest.z-p.pos.z\nlocal distance=math.sqrt(dx*dx+dz*dz)\nlocal drawer=TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(0.15,1,0.2,0.65),2)\nlocal flags=Argus2.RenderFlags.FLAG_RENDER_OVERLAY\nif distance>0.8 then\n local tip=math.min(1.5,distance*0.35)\n  do local sc=math.min(1,distance/15) local tl=math.max(2,3*sc) if distance-tl>1 then TensorCore.getCachedDrawer(0xFF00FFFF,0xFF0088FF,0xFF0000FF,0xFFFFFFFF,2):addArrow(p.pos.x,p.pos.y,p.pos.z,TensorCore.getHeadingToTarget(p.pos,dest),distance-tl,math.max(0.5,sc),tl,math.max(1.5,3*sc),false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) end end \nend\nTensorCore.getCachedDrawer(nil,nil,0xFFFF0000,0xFFFF0000,2):addCircle(dest.x,dest.y,dest.z,0.4,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) Argus.addCircleFilled(dest.x,dest.y,dest.z,0.15,32,0xFF00FF00,nil,0,0,0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nself.used=true",
+							actionLua = "local R=AnyoneCore and AnyoneCore.Roster\nlocal p=TensorCore.mGetPlayer()\nlocal s=data.ucobFellruinGuide\nif not R or not R.current() or not R.isReady() or not p or not s or Now()>=s.expires or not s.nael then self.used=true return end\nlocal slot=R.mySlot()\nlocal nael=TensorCore.mGetEntity(s.nael)\nif not slot or (not nael and not s.profDone) then self.used=true return end\nlocal nextSpell=s.seq[s.step]\nlocal spread=nextSpell==9918 or s.profDone\nlocal links=data.ucobFellruinLinks\nif links and Now()<links.expires and not (nextSpell==9918 and not s.profDone) then self.used=true return end\nif spread then\n local radius=s.profDone and 4 or 3\n local clear=true\n for _,other in ipairs({'T1','T2','H1','H2','M1','M2','R1','R2'}) do\n  local e=R.entOf(other)\n  if e and e.id~=p.id and e.hp.current>0 and (p.pos.x-e.pos.x)^2+(p.pos.z-e.pos.z)^2<radius^2 then clear=false;break end\n end\n local color=clear and GUI:ColorConvertFloat4ToU32(.15,1,.2,.7) or GUI:ColorConvertFloat4ToU32(1,.15,.15,.7)\n local d=TensorCore.getStaticDrawer(color,2)\n d:addCircle(p.pos.x,p.pos.y,p.pos.z,radius,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\n if s.nextAt and Now()<s.nextAt and s.timerStep~=s.step then\n  AnyoneCore.addWorldTextCountdown(s.nextAt-Now(),setmetatable({entityID=p.id},{__index=function(t,k) local e=TensorCore.mGetEntity(t.entityID);if not e then return 0 end;if k=='x' then return e.pos.x elseif k=='y' then return e.pos.y+1.8 elseif k=='z' then return e.pos.z end end}),0xFFFFFFFF,true,.9)\n  s.timerStep=s.step\n end\n local call=s.profDone and 'Out of link, spread!' or 'Spread for dive'\n if s.lastCall~=call then AnyoneCore.Shotcall(call, not (NAUR_TTS and NAUR_TTS.enabled==false),3,false);s.lastCall=call end\n self.used=true return\nend\nif nextSpell~=9916 then self.used=true return end\nlocal np=nael.pos\nlocal dest=nil\nif slot=='T1' or slot=='T2' then\n local b=nil\n for _,e in pairs(TensorCore.entityList('')) do if e.contentid==3210 and Argus.getEntityModel(e)==8168 then b=e.pos;break end end\n if not b then self.used=true return end\n local dx,dz=b.x-np.x,b.z-np.z;local r=math.sqrt(dx*dx+dz*dz)\n if r<1 then self.used=true return end\n dest={x=np.x+dx/r*2,y=np.y,z=np.z+dz/r*2}\nelse\n local best,score=nil,math.huge\n for _,e in pairs(TensorCore.entityList('')) do\n  if e.contentid==2001151 then\n   local r=(e.pos.x-np.x)^2+(e.pos.z-np.z)^2\n   if r<score then best=e.pos;score=r end\n  end\n end\n if not best or score>36 then self.used=true return end\n dest={x=best.x,y=best.y,z=best.z}\nend\nif s.lastCall~='Under Nael' then AnyoneCore.Shotcall('Under Nael', not (NAUR_TTS and NAUR_TTS.enabled==false),3,false);s.lastCall='Under Nael' end\nlocal dx,dz=dest.x-p.pos.x,dest.z-p.pos.z\nlocal distance=math.sqrt(dx*dx+dz*dz)\nlocal drawer=TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(0.15,1,0.2,0.65),2)\nlocal flags=Argus2.RenderFlags.FLAG_RENDER_OVERLAY\nif distance>0.8 then\n local tip=math.min(1.5,distance*0.35)\n  do local sc=math.min(1,distance/15) local tl=math.max(2,3*sc) if distance-tl>1 then TensorCore.getCachedDrawer(0xFF00FFFF,0xFF0088FF,0xFF0000FF,0xFFFFFFFF,2):addArrow(p.pos.x,p.pos.y,p.pos.z,TensorCore.getHeadingToTarget(p.pos,dest),distance-tl,math.max(0.5,sc),tl,math.max(1.5,3*sc),false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) end end \nend\nTensorCore.getCachedDrawer(nil,nil,0xFFFF0000,0xFFFF0000,2):addCircle(dest.x,dest.y,dest.z,0.4,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) Argus.addCircleFilled(dest.x,dest.y,dest.z,0.15,32,0xFF00FF00,nil,0,0,0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nself.used=true",
 							name = "Fellruin - Quickmarch Spread and Dynamo",
 							uuid = "c5660c77-9c28-4d54-b0a1-5e1a54686e7f",
 							version = 2.1,
@@ -11296,7 +11340,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local links={}\n-- NAUR: the party takes the Neurolink opposite Bahamut; facing Bahamut, T1 takes the left one, T2 the right one.\n-- Bahamut (3210/8168) sits mid-arena until about 3.7s into Aetheric Profusion (log 2026-08-27 15:18), so when it is\n-- not out yet, use the Nael+Twin midpoint: the bosses are 120 degrees apart, so Bahamut is opposite that midpoint.\nlocal baha,nael,twin=nil,nil,nil\nfor _,e in pairs(EntityList(\"\")) do\n if e.contentid==3210 and Argus.getEntityModel(e)==8168 then baha=e.pos\n elseif e.contentid==2612 then nael=e.pos\n elseif e.contentid==1482 then twin=e.pos end\n if e.contentid==2001151 then links[#links+1]={x=e.pos.x,y=e.pos.y,z=e.pos.z} end\nend\nlocal fx,fz=nil,nil\nif baha and baha.x^2+baha.z^2>9 then fx,fz=baha.x,baha.z\nelseif nael and twin then fx,fz=-(nael.x+twin.x),-(nael.z+twin.z) end\nlocal r=fx and math.sqrt(fx*fx+fz*fz) or 0\nif r>1 and #links==3 then\n fx,fz=fx/r,fz/r\n table.sort(links,function(a,b) return a.x*fx+a.z*fz<b.x*fx+b.z*fz end)\n do\n  local lx,lz=fz,-fx\n  if links[2].x*lx+links[2].z*lz<links[3].x*lx+links[3].z*lz then links[2],links[3]=links[3],links[2] end\n  data.ucobFellruinLinks={party=links[1],T1=links[2],T2=links[3],expires=Now()+eventArgs.channelTimeMax*1000+1000}\n local R=AnyoneCore and AnyoneCore.Roster\n if R and R.current() then\n  local slot=R.mySlot()\n  local guide=data.ucobFellruinGuide\n  if slot=='T1' or slot=='T2' then\n   AnyoneCore.Shotcall(slot=='T1' and 'Left Neurolink, face Bahamut' or 'Right Neurolink, face Bahamut',true,4,false)\n  elseif not guide or guide.seq[guide.step]~=9918 then\n   if not guide or guide.lastCall~='Under Nael' then AnyoneCore.Shotcall('Under Nael',true,3,false) end\n   if guide then guide.lastCall='Under Nael' end\n  end\n end\n end\nend\nself.used=true",
+							actionLua = "local links={}\n-- NAUR: the party takes the Neurolink opposite Bahamut; facing Bahamut, T1 takes the left one, T2 the right one.\n-- Bahamut (3210/8168) sits mid-arena until about 3.7s into Aetheric Profusion (log 2026-08-27 15:18), so when it is\n-- not out yet, use the Nael+Twin midpoint: the bosses are 120 degrees apart, so Bahamut is opposite that midpoint.\nlocal baha,nael,twin=nil,nil,nil\nfor _,e in pairs(EntityList(\"\")) do\n if e.contentid==3210 and Argus.getEntityModel(e)==8168 then baha=e.pos\n elseif e.contentid==2612 then nael=e.pos\n elseif e.contentid==1482 then twin=e.pos end\n if e.contentid==2001151 then links[#links+1]={x=e.pos.x,y=e.pos.y,z=e.pos.z} end\nend\nlocal fx,fz=nil,nil\nif baha and baha.x^2+baha.z^2>9 then fx,fz=baha.x,baha.z\nelseif nael and twin then fx,fz=-(nael.x+twin.x),-(nael.z+twin.z) end\nlocal r=fx and math.sqrt(fx*fx+fz*fz) or 0\nif r>1 and #links==3 then\n fx,fz=fx/r,fz/r\n table.sort(links,function(a,b) return a.x*fx+a.z*fz<b.x*fx+b.z*fz end)\n do\n  local lx,lz=fz,-fx\n  if links[2].x*lx+links[2].z*lz<links[3].x*lx+links[3].z*lz then links[2],links[3]=links[3],links[2] end\n  data.ucobFellruinLinks={party=links[1],T1=links[2],T2=links[3],expires=Now()+eventArgs.channelTimeMax*1000+1000}\n local R=AnyoneCore and AnyoneCore.Roster\n if R and R.current() then\n  local slot=R.mySlot()\n  local guide=data.ucobFellruinGuide\n  if slot=='T1' or slot=='T2' then\n   AnyoneCore.Shotcall(slot=='T1' and 'Left Neurolink, face Bahamut' or 'Right Neurolink, face Bahamut', not (NAUR_TTS and NAUR_TTS.enabled==false),4,false)\n  elseif not guide or guide.seq[guide.step]~=9918 then\n   if not guide or guide.lastCall~='Under Nael' then AnyoneCore.Shotcall('Under Nael', not (NAUR_TTS and NAUR_TTS.enabled==false),3,false) end\n   if guide then guide.lastCall='Under Nael' end\n  end\n end\n end\nend\nself.used=true",
 							conditions = 
 							{
 								
@@ -11354,7 +11398,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local R=AnyoneCore and AnyoneCore.Roster\nif not R or not R.current() or not R.isReady() then self.used=true return end\nlocal slot=R.mySlot()\nif not slot then self.used=true return end\nlocal guide=data.ucobFellruinGuide\nif guide and (guide.profDone or guide.seq[guide.step]==9918) then self.used=true return end\nlocal s=data.ucobFellruinLinks\nif not s or Now()>s.expires then self.used=true return end\nlocal dest=s[slot] or s.party\nlocal p=TensorCore.mGetPlayer()\nif not p then self.used=true return end\nif guide and not guide.profDone then\n local nextSpell=guide.seq[guide.step]\n local call=nil\n if nextSpell==9916 and slot~='T1' and slot~='T2' then call='Under Nael'\n elseif not nextSpell then call='Stay in your link' end\n if call and guide.lastCall~=call then AnyoneCore.Shotcall(call,true,3,false);guide.lastCall=call end\nend\nlocal dx,dz=dest.x-p.pos.x,dest.z-p.pos.z\nlocal distance=math.sqrt(dx*dx+dz*dz)\nlocal drawer=TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(0.15,1,0.2,0.65),2)\nlocal flags=Argus2.RenderFlags.FLAG_RENDER_OVERLAY\nif distance>0.8 then\n local tip=math.min(1.5,distance*0.35)\n  do local sc=math.min(1,distance/15) local tl=math.max(2,3*sc) if distance-tl>1 then TensorCore.getCachedDrawer(0xFF00FFFF,0xFF0088FF,0xFF0000FF,0xFFFFFFFF,2):addArrow(p.pos.x,p.pos.y,p.pos.z,TensorCore.getHeadingToTarget(p.pos,dest),distance-tl,math.max(0.5,sc),tl,math.max(1.5,3*sc),false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) end end \nend\nTensorCore.getCachedDrawer(nil,nil,0xFFFF0000,0xFFFF0000,2):addCircle(dest.x,dest.y,dest.z,0.4,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) Argus.addCircleFilled(dest.x,dest.y,dest.z,0.15,32,0xFF00FF00,nil,0,0,0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nself.used=true",
+							actionLua = "local R=AnyoneCore and AnyoneCore.Roster\nif not R or not R.current() or not R.isReady() then self.used=true return end\nlocal slot=R.mySlot()\nif not slot then self.used=true return end\nlocal guide=data.ucobFellruinGuide\nif guide and (guide.profDone or guide.seq[guide.step]==9918) then self.used=true return end\nlocal s=data.ucobFellruinLinks\nif not s or Now()>s.expires then self.used=true return end\nlocal dest=s[slot] or s.party\nlocal p=TensorCore.mGetPlayer()\nif not p then self.used=true return end\nif guide and not guide.profDone then\n local nextSpell=guide.seq[guide.step]\n local call=nil\n if nextSpell==9916 and slot~='T1' and slot~='T2' then call='Under Nael'\n elseif not nextSpell then call='Stay in your link' end\n if call and guide.lastCall~=call then AnyoneCore.Shotcall(call, not (NAUR_TTS and NAUR_TTS.enabled==false),3,false);guide.lastCall=call end\nend\nlocal dx,dz=dest.x-p.pos.x,dest.z-p.pos.z\nlocal distance=math.sqrt(dx*dx+dz*dz)\nlocal drawer=TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(0.15,1,0.2,0.65),2)\nlocal flags=Argus2.RenderFlags.FLAG_RENDER_OVERLAY\nif distance>0.8 then\n local tip=math.min(1.5,distance*0.35)\n  do local sc=math.min(1,distance/15) local tl=math.max(2,3*sc) if distance-tl>1 then TensorCore.getCachedDrawer(0xFF00FFFF,0xFF0088FF,0xFF0000FF,0xFFFFFFFF,2):addArrow(p.pos.x,p.pos.y,p.pos.z,TensorCore.getHeadingToTarget(p.pos,dest),distance-tl,math.max(0.5,sc),tl,math.max(1.5,3*sc),false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) end end \nend\nTensorCore.getCachedDrawer(nil,nil,0xFFFF0000,0xFFFF0000,2):addCircle(dest.x,dest.y,dest.z,0.4,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) Argus.addCircleFilled(dest.x,dest.y,dest.z,0.15,32,0xFF00FF00,nil,0,0,0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nself.used=true",
 							name = "Fellruin Aetheric Profusion - Assigned Neurolink",
 							uuid = "fb3b20b0-c8e6-f7e1-a67d-d0e59699e9ad",
 							version = 2.1,
@@ -12191,11 +12235,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(2500,\"Move for Twister\",1.2,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Move for Twister\",100) end\nself.used=true\n",
 							alertDuration = 2500,
 							alertPriority = 2,
 							alertScale = 1.2,
-							alertTTS = true,
 							alertText = "Move for Twister",
 							endIfUsed = true,
 							uuid = "b119e4f8-040d-9e81-be68-e37bf9bc06b6",
@@ -12660,7 +12704,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local R=AnyoneCore and AnyoneCore.Roster\nlocal p=TensorCore.mGetPlayer()\nif not R or not R.current() or not R.isReady() or not p then self.used=true return end\nlocal slot=R.mySlot()\nif not slot then self.used=true return end\nlocal s=data.ucobHFGuide\nif not s or not s.conesDone or s.done or Now()>=s.expires then self.used=true return end\nlocal boss=nil\nfor _,e in pairs(TensorCore.entityList('')) do\n if e.contentid==3210 and Argus.getEntityModel(e)==8168 and Argus.isEntityVisible(e) then boss=e;break end\nend\nif not boss then self.used=true return end\nlocal dest={x=boss.pos.x-math.sin(boss.pos.h)*3,y=boss.pos.y,z=boss.pos.z-math.cos(boss.pos.h)*3}\nif not s.fireballCall then AnyoneCore.Shotcall('Stack behind Bahamut',true,4,false);s.fireballCall=true end\nlocal dx,dz=dest.x-p.pos.x,dest.z-p.pos.z\nlocal distance=math.sqrt(dx*dx+dz*dz)\nlocal drawer=TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(0.15,1,0.2,0.65),2)\nlocal flags=Argus2.RenderFlags.FLAG_RENDER_OVERLAY\nif distance>0.8 then\n local tip=math.min(1.5,distance*0.35)\n  do local sc=math.min(1,distance/15) local tl=math.max(2,3*sc) if distance-tl>1 then TensorCore.getCachedDrawer(0xFF00FFFF,0xFF0088FF,0xFF0000FF,0xFFFFFFFF,2):addArrow(p.pos.x,p.pos.y,p.pos.z,TensorCore.getHeadingToTarget(p.pos,dest),distance-tl,math.max(0.5,sc),tl,math.max(1.5,3*sc),false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) end end \nend\nTensorCore.getCachedDrawer(nil,nil,0xFFFF0000,0xFFFF0000,2):addCircle(dest.x,dest.y,dest.z,0.4,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) Argus.addCircleFilled(dest.x,dest.y,dest.z,0.15,32,0xFF00FF00,nil,0,0,0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nself.used=true",
+							actionLua = "local R=AnyoneCore and AnyoneCore.Roster\nlocal p=TensorCore.mGetPlayer()\nif not R or not R.current() or not R.isReady() or not p then self.used=true return end\nlocal slot=R.mySlot()\nif not slot then self.used=true return end\nlocal s=data.ucobHFGuide\nif not s or not s.conesDone or s.done or Now()>=s.expires then self.used=true return end\nlocal boss=nil\nfor _,e in pairs(TensorCore.entityList('')) do\n if e.contentid==3210 and Argus.getEntityModel(e)==8168 and Argus.isEntityVisible(e) then boss=e;break end\nend\nif not boss then self.used=true return end\nlocal dest={x=boss.pos.x-math.sin(boss.pos.h)*3,y=boss.pos.y,z=boss.pos.z-math.cos(boss.pos.h)*3}\nif not s.fireballCall then AnyoneCore.Shotcall('Stack behind Bahamut', not (NAUR_TTS and NAUR_TTS.enabled==false),4,false);s.fireballCall=true end\nlocal dx,dz=dest.x-p.pos.x,dest.z-p.pos.z\nlocal distance=math.sqrt(dx*dx+dz*dz)\nlocal drawer=TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(0.15,1,0.2,0.65),2)\nlocal flags=Argus2.RenderFlags.FLAG_RENDER_OVERLAY\nif distance>0.8 then\n local tip=math.min(1.5,distance*0.35)\n  do local sc=math.min(1,distance/15) local tl=math.max(2,3*sc) if distance-tl>1 then TensorCore.getCachedDrawer(0xFF00FFFF,0xFF0088FF,0xFF0000FF,0xFFFFFFFF,2):addArrow(p.pos.x,p.pos.y,p.pos.z,TensorCore.getHeadingToTarget(p.pos,dest),distance-tl,math.max(0.5,sc),tl,math.max(1.5,3*sc),false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) end end \nend\nTensorCore.getCachedDrawer(nil,nil,0xFFFF0000,0xFFFF0000,2):addCircle(dest.x,dest.y,dest.z,0.4,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY) Argus.addCircleFilled(dest.x,dest.y,dest.z,0.15,32,0xFF00FF00,nil,0,0,0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nself.used=true",
 							name = "Heavensfall - Middle Fireball Regroup",
 							uuid = "7b41c570-91f4-79ee-b0ff-9793b2265418",
 							version = 2.1,
@@ -13290,10 +13334,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"Hatch on you - into your link\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Hatch on you - into your link\",100) end\nself.used=true\n",
 							alertDuration = 3000,
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "Hatch on you - into your link",
 							conditions = 
 							{
@@ -13316,10 +13360,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"First soaked—move out\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"First soaked—move out\",100) end\nself.used=true\n",
 							alertDuration = 3000,
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "First soaked—move out",
 							conditions = 
 							{
@@ -13342,10 +13386,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"Your turn - soak your link\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Your turn - soak your link\",100) end\nself.used=true\n",
 							alertDuration = 3000,
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "Your turn - soak your link",
 							conditions = 
 							{
@@ -13576,9 +13620,9 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"No Hatch - stay spread\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"No Hatch - stay spread\",100) end\nself.used=true\n",
 							alertDuration = 3000,
-							alertTTS = true,
 							alertText = "No Hatch - stay spread",
 							conditions = 
 							{
@@ -13649,9 +13693,9 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3500,\"Spread - wait for Hatch markers\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Spread - wait for Hatch markers\",100) end\nself.used=true\n",
 							alertDuration = 3500,
-							alertTTS = true,
 							alertText = "Spread - wait for Hatch markers",
 							conditions = 
 							{
@@ -13859,10 +13903,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3500,\"Middle—stack\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Middle—stack\",100) end\nself.used=true\n",
 							alertDuration = 3500,
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "Middle—stack",
 							conditions = 
 							{
@@ -13959,10 +14003,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(4500,\"Earthshaker on you—spread away from 1\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Earthshaker on you—spread away from 1\",100) end\nself.used=true\n",
 							alertDuration = 4500,
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "Earthshaker on you—spread away from 1",
 							conditions = 
 							{
@@ -15295,10 +15339,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(4500,\"Step into Neurolink\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Step into Neurolink\",100) end\nself.used=true\n",
 							alertDuration = 4500,
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "Step into Neurolink",
 							conditions = 
 							{
@@ -16420,10 +16464,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(4500,\"Step into Neurolink\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Step into Neurolink\",100) end\nself.used=true\n",
 							alertDuration = 4500,
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "Step into Neurolink",
 							conditions = 
 							{

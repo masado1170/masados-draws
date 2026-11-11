@@ -6,6 +6,17 @@ local tbl =
 		{
 			data = 
 			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "b4f56922-0f01-2926-6476-619426c00e72",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
 				actions = 
 				{
 					
@@ -137,6 +148,17 @@ local tbl =
 	},
 	[3] = 
 	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "f9105e5f-d93c-d113-2f12-ade9d6366d6f",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
 		
 		{
 			data = 
@@ -376,6 +398,17 @@ local tbl =
 		{
 			data = 
 			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "066ad369-d1a6-4f8d-21b8-38dfb6aa2bb9",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
 				actions = 
 				{
 					
@@ -383,7 +416,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "--AnyoneCore.Shotcall(\"Grab Jagd Doll\", false, 5, false)\nTensorCore.showRaidWarning(\"Grab Jagd Doll\", 0, 3.5)\nTensorCore.sendTTS(\"Grab Jagd Doll\",75)\nself.used = true",
+							actionLua = "--AnyoneCore.Shotcall(\"Grab Jagd Doll\", false, 5, false)\nTensorCore.showRaidWarning(\"Grab Jagd Doll\", 0, 3.5)\npcall((not (NAUR_TTS and NAUR_TTS.enabled==false)) and TensorCore.sendTTS or tostring,\"Grab Jagd Doll\",75)\nself.used = true",
 							conditions = 
 							{
 								
@@ -570,6 +603,20 @@ local tbl =
 			},
 		},
 	},
+	[10] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "6e51dde7-43d5-6843-2317-30497d572277",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+	},
 	[11] = 
 	{
 		
@@ -583,7 +630,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "--AnyoneCore.Shotcall(\"Feed Doll to Living Liquid\", false, 5, false)\nTensorCore.showRaidWarning(\"Feed Doll to Living Liquid\", 0, 3.5)\nTensorCore.sendTTS(\"Feed Doll to Living Liquid\",75)\nself.used = true",
+							actionLua = "--AnyoneCore.Shotcall(\"Feed Doll to Living Liquid\", false, 5, false)\nTensorCore.showRaidWarning(\"Feed Doll to Living Liquid\", 0, 3.5)\npcall((not (NAUR_TTS and NAUR_TTS.enabled==false)) and TensorCore.sendTTS or tostring,\"Feed Doll to Living Liquid\",75)\nself.used = true",
 							conditions = 
 							{
 								
@@ -690,6 +737,17 @@ local tbl =
 		{
 			data = 
 			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "05801b89-6b21-f285-279f-a1a7f38bc499",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
 				actions = 
 				{
 					
@@ -719,6 +777,17 @@ local tbl =
 	},
 	[13] = 
 	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "eb0d9534-915a-9780-c858-0eea3bd87104",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
 		
 		{
 			data = 
@@ -842,7 +911,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local s=data.tea_lpdu_protean_moves\nif not s then s={};data.tea_lpdu_protean_moves=s end\nif not s[\"move67\"] then\n s[\"move67\"] = true\n AnyoneCore.Shotcall(\"Move\",true,2,false)\n TensorCore.timelineLogToFile(\"[TEA protean] move67 AOE-created, move cue\\n\")\nend\nself.used=true",
+							actionLua = "local s=data.tea_lpdu_protean_moves\nif not s then s={};data.tea_lpdu_protean_moves=s end\nif not s[\"move67\"] then\n s[\"move67\"] = true\n AnyoneCore.Shotcall(\"Move\", not (NAUR_TTS and NAUR_TTS.enabled==false),2,false)\n TensorCore.timelineLogToFile(\"[TEA protean] move67 AOE-created, move cue\\n\")\nend\nself.used=true",
 							conditions = 
 							{
 								
@@ -1028,8 +1097,33 @@ local tbl =
 			},
 		},
 	},
+	[20] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "de994d82-a4e1-8f4e-4834-00b086163212",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+	},
 	[21] = 
 	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "32f527bf-5390-261b-e750-aef5582f8c8f",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
 		
 		{
 			data = 
@@ -1065,6 +1159,17 @@ local tbl =
 	},
 	[23] = 
 	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "f5e5f341-114f-443d-5015-67f3831b6bd1",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
 		
 		{
 			data = 
@@ -1407,7 +1512,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local s=data.tea_lpdu_protean_moves\nif not s then s={};data.tea_lpdu_protean_moves=s end\nif not s[\"move104\"] then\n s[\"move104\"] = true\n AnyoneCore.Shotcall(\"Move\",true,2,false)\n TensorCore.timelineLogToFile(\"[TEA protean] move104 AOE-created, move cue\\n\")\nend\nself.used=true",
+							actionLua = "local s=data.tea_lpdu_protean_moves\nif not s then s={};data.tea_lpdu_protean_moves=s end\nif not s[\"move104\"] then\n s[\"move104\"] = true\n AnyoneCore.Shotcall(\"Move\", not (NAUR_TTS and NAUR_TTS.enabled==false),2,false)\n TensorCore.timelineLogToFile(\"[TEA protean] move104 AOE-created, move cue\\n\")\nend\nself.used=true",
 							conditions = 
 							{
 								
@@ -1733,7 +1838,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local R=AnyoneCore.Roster\nif not R or not R.current() then return end\nlocal slot=R.mySlot()\nif not slot then return end\n-- LPDU second-protean tornado baiters: both melees and off-tank.\nif slot==\"M1\" or slot==\"M2\" or slot==\"T2\" then\n AnyoneCore.Shotcall(\"Bait tornado protean\",true,2,false)\nend\nself.used=true",
+							actionLua = "local R=AnyoneCore.Roster\nif not R or not R.current() then return end\nlocal slot=R.mySlot()\nif not slot then return end\n-- LPDU second-protean tornado baiters: both melees and off-tank.\nif slot==\"M1\" or slot==\"M2\" or slot==\"T2\" then\n AnyoneCore.Shotcall(\"Bait tornado protean\", not (NAUR_TTS and NAUR_TTS.enabled==false),2,false)\nend\nself.used=true",
 							name = "Tornado protean - Assigned bait reminder",
 							uuid = "f996786f-3795-02d3-bbc6-9e865abec42b",
 							version = 2.1,
@@ -1800,8 +1905,47 @@ local tbl =
 			},
 		},
 	},
+	[32] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "f4f60fef-8cac-e68b-fbd8-6a6150fab2ff",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+	},
+	[37] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "3fef113e-c9d3-85f2-3bc0-7a980735828e",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+	},
 	[39] = 
 	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "69e7d0a4-eb59-b930-1b13-d18ae7e0dfb4",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
 		
 		{
 			data = 
@@ -1942,7 +2086,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "AnyoneCore.Shotcall(\"1\", true, 5, false)\nself.used = true",
+							actionLua = "AnyoneCore.Shotcall(\"1\", not (NAUR_TTS and NAUR_TTS.enabled==false), 5, false)\nself.used = true",
 							conditions = 
 							{
 								
@@ -1966,7 +2110,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "AnyoneCore.Shotcall(\"2\", true, 5, false)\nself.used = true",
+							actionLua = "AnyoneCore.Shotcall(\"2\", not (NAUR_TTS and NAUR_TTS.enabled==false), 5, false)\nself.used = true",
 							conditions = 
 							{
 								
@@ -1990,7 +2134,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "AnyoneCore.Shotcall(\"3\", true, 5, false)\nself.used = true",
+							actionLua = "AnyoneCore.Shotcall(\"3\", not (NAUR_TTS and NAUR_TTS.enabled==false), 5, false)\nself.used = true",
 							conditions = 
 							{
 								
@@ -2014,7 +2158,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "AnyoneCore.Shotcall(\"4\", true, 5, false)\nself.used = true",
+							actionLua = "AnyoneCore.Shotcall(\"4\", not (NAUR_TTS and NAUR_TTS.enabled==false), 5, false)\nself.used = true",
 							conditions = 
 							{
 								
@@ -2038,7 +2182,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "AnyoneCore.Shotcall(\"5\", true, 5, false)\nself.used = true",
+							actionLua = "AnyoneCore.Shotcall(\"5\", not (NAUR_TTS and NAUR_TTS.enabled==false), 5, false)\nself.used = true",
 							conditions = 
 							{
 								
@@ -2062,7 +2206,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "AnyoneCore.Shotcall(\"6\", true, 5, false)\nself.used = true",
+							actionLua = "AnyoneCore.Shotcall(\"6\", not (NAUR_TTS and NAUR_TTS.enabled==false), 5, false)\nself.used = true",
 							conditions = 
 							{
 								
@@ -2086,7 +2230,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "AnyoneCore.Shotcall(\"7\", true, 5, false)\nself.used = true",
+							actionLua = "AnyoneCore.Shotcall(\"7\", not (NAUR_TTS and NAUR_TTS.enabled==false), 5, false)\nself.used = true",
 							conditions = 
 							{
 								
@@ -2110,7 +2254,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "AnyoneCore.Shotcall(\"8\", true, 5, false)\nself.used = true",
+							actionLua = "AnyoneCore.Shotcall(\"8\", not (NAUR_TTS and NAUR_TTS.enabled==false), 5, false)\nself.used = true",
 							conditions = 
 							{
 								
@@ -2138,7 +2282,6 @@ local tbl =
 						{
 							category = "Party",
 							conditionType = 10,
-							dequeueIfLuaFalse = true,
 							name = "Marker on Self",
 							partyTargetType = "Event Entity",
 							uuid = "b3df2d6e-2233-b8fa-af00-2f428f738284",
@@ -2150,7 +2293,6 @@ local tbl =
 						data = 
 						{
 							category = "Event",
-							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventMarkerID = 79,
 							name = "Marker 1",
@@ -2163,7 +2305,6 @@ local tbl =
 						data = 
 						{
 							category = "Event",
-							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventMarkerID = 80,
 							name = "Marker 2",
@@ -2176,7 +2317,6 @@ local tbl =
 						data = 
 						{
 							category = "Event",
-							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventMarkerID = 81,
 							name = "Marker 3",
@@ -2189,7 +2329,6 @@ local tbl =
 						data = 
 						{
 							category = "Event",
-							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventMarkerID = 82,
 							name = "Marker 4",
@@ -2202,7 +2341,6 @@ local tbl =
 						data = 
 						{
 							category = "Event",
-							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventMarkerID = 83,
 							name = "Marker 5",
@@ -2215,7 +2353,6 @@ local tbl =
 						data = 
 						{
 							category = "Event",
-							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventMarkerID = 84,
 							name = "Marker 6",
@@ -2228,7 +2365,6 @@ local tbl =
 						data = 
 						{
 							category = "Event",
-							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventMarkerID = 85,
 							name = "Marker 7",
@@ -2241,7 +2377,6 @@ local tbl =
 						data = 
 						{
 							category = "Event",
-							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventMarkerID = 86,
 							name = "Marker 8",
@@ -2330,7 +2465,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local state = data.teaLimitCut\n\nif not state then\n    self.used = true\n    return\nend\n\nstate.baitPairIndex = (state.baitPairIndex or 0) + 1\nlocal pairIndex = state.baitPairIndex\nlocal oddNumber = (pairIndex * 2) - 1\nlocal evenNumber = pairIndex * 2\nlocal myNumber = state.myNumber\n\nif myNumber ~= oddNumber and myNumber ~= evenNumber then\n    self.used = true\n    return\nend\n\nstate.lpduStop=true\nstate.lpduBaitShapes={}\nAnyoneCore.Shotcall(\"Stop and bait\",true,3,false)\nlocal chaser = TensorCore.mGetEntity(eventArgs.entityID)\nlocal player = TensorCore.mGetPlayer()\nlocal chaserPos = chaser and chaser.pos\nlocal playerPos = player and player.pos\n\nif chaserPos and playerPos then\n    local direction = myNumber == oddNumber and 1 or -1\n    local baitDistance = 3\n    local targetPos = {\n        x = chaserPos.x + (math.sin(chaserPos.h) * baitDistance * direction),\n        y = chaserPos.y,\n        z = chaserPos.z + (math.cos(chaserPos.h) * baitDistance * direction)\n    }\n    local duration = 3400\n    local drawer = TensorCore.getCachedDrawer(\n        0xFF00FF00,\n        0xFF00FF00,\n        0xFF00FF00,\n        0xFF00FF00,\n        2\n    )\n\n    local circleID=drawer:addTimedCircle(\n        duration,\n        targetPos.x, targetPos.y, targetPos.z,\n        0.5,\n        0,\n        false,\n        true\n    )\n\n    if circleID then state.lpduBaitShapes[#state.lpduBaitShapes+1]=circleID end\n    local distance = TensorCore.getDistance2d(playerPos, targetPos)\n    local tipLength = math.min(1.5, distance)\n    local baseLength = distance - tipLength\n\n    if baseLength > 0.25 then\n        local heading = TensorCore.getHeadingToTarget(playerPos, targetPos)\n        local arrowID=drawer:addTimedArrow(\n            duration,\n            playerPos.x, playerPos.y, playerPos.z,\n            heading,\n            baseLength, 0.35,\n            tipLength, 1,\n            0,\n            false,\n            Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n        )\n        if arrowID then state.lpduBaitShapes[#state.lpduBaitShapes+1]=arrowID end\n    end\nend\n\nself.used = true",
+							actionLua = "local state = data.teaLimitCut\n\nif not state then\n    self.used = true\n    return\nend\n\nstate.baitPairIndex = (state.baitPairIndex or 0) + 1\nlocal pairIndex = state.baitPairIndex\nlocal oddNumber = (pairIndex * 2) - 1\nlocal evenNumber = pairIndex * 2\nlocal myNumber = state.myNumber\n\nif myNumber ~= oddNumber and myNumber ~= evenNumber then\n    self.used = true\n    return\nend\n\nstate.lpduStop=true\nstate.lpduBaitShapes={}\nAnyoneCore.Shotcall(\"Stop and bait\", not (NAUR_TTS and NAUR_TTS.enabled==false),3,false)\nlocal chaser = TensorCore.mGetEntity(eventArgs.entityID)\nlocal player = TensorCore.mGetPlayer()\nlocal chaserPos = chaser and chaser.pos\nlocal playerPos = player and player.pos\n\nif chaserPos and playerPos then\n    local direction = myNumber == oddNumber and 1 or -1\n    local baitDistance = 3\n    local targetPos = {\n        x = chaserPos.x + (math.sin(chaserPos.h) * baitDistance * direction),\n        y = chaserPos.y,\n        z = chaserPos.z + (math.cos(chaserPos.h) * baitDistance * direction)\n    }\n    local duration = 3400\n    local drawer = TensorCore.getCachedDrawer(\n        0xFF00FF00,\n        0xFF00FF00,\n        0xFF00FF00,\n        0xFF00FF00,\n        2\n    )\n\n    local circleID=drawer:addTimedCircle(\n        duration,\n        targetPos.x, targetPos.y, targetPos.z,\n        0.5,\n        0,\n        false,\n        true\n    )\n\n    if circleID then state.lpduBaitShapes[#state.lpduBaitShapes+1]=circleID end\n    local distance = TensorCore.getDistance2d(playerPos, targetPos)\n    local tipLength = math.min(1.5, distance)\n    local baseLength = distance - tipLength\n\n    if baseLength > 0.25 then\n        local heading = TensorCore.getHeadingToTarget(playerPos, targetPos)\n        local arrowID=drawer:addTimedArrow(\n            duration,\n            playerPos.x, playerPos.y, playerPos.z,\n            heading,\n            baseLength, 0.35,\n            tipLength, 1,\n            0,\n            false,\n            Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n        )\n        if arrowID then state.lpduBaitShapes[#state.lpduBaitShapes+1]=arrowID end\n    end\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -2403,7 +2538,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local state = data.teaLimitCut\nlocal x = eventArgs.castPosX\nlocal z = eventArgs.castPosZ\n\nif state and not state.firstExplosion and x and z then\n    local centerX = 100\n    local centerZ = 100\n    local epsilon = 0.1\n    local inWestToNorthEast = z < (centerZ - epsilon)\n        or (math.abs(z - centerZ) <= epsilon and x < centerX)\n\n    if inWestToNorthEast then\n        local y = eventArgs.castPosY or 0\n        state.firstExplosion = { x = x, y = y, z = z }\n        state.oppositeExplosion = {\n            x = (2 * centerX) - x,\n            y = y,\n            z = (2 * centerZ) - z\n        }\n\n        local myNumber = state.myNumber\n        if myNumber then\n            local usesFirstExplosion = myNumber == 1\n                or myNumber == 2\n                or myNumber == 5\n                or myNumber == 6\n            local targetPosition = usesFirstExplosion\n                and state.firstExplosion\n                or state.oppositeExplosion\n            local goNorth = targetPosition.z < centerZ\n            AnyoneCore.Shotcall(\"Take your start arrow, then run clockwise\", true, 5, false)\n        end\n\n        -- The explosion preview moved to \"Limit Cut Next Explosion\", which follows each real blast.\n    end\nend\n\nself.used = true",
+							actionLua = "local state = data.teaLimitCut\nlocal x = eventArgs.castPosX\nlocal z = eventArgs.castPosZ\n\nif state and not state.firstExplosion and x and z then\n    local centerX = 100\n    local centerZ = 100\n    local epsilon = 0.1\n    local inWestToNorthEast = z < (centerZ - epsilon)\n        or (math.abs(z - centerZ) <= epsilon and x < centerX)\n\n    if inWestToNorthEast then\n        local y = eventArgs.castPosY or 0\n        state.firstExplosion = { x = x, y = y, z = z }\n        state.oppositeExplosion = {\n            x = (2 * centerX) - x,\n            y = y,\n            z = (2 * centerZ) - z\n        }\n\n        local myNumber = state.myNumber\n        if myNumber then\n            local usesFirstExplosion = myNumber == 1\n                or myNumber == 2\n                or myNumber == 5\n                or myNumber == 6\n            local targetPosition = usesFirstExplosion\n                and state.firstExplosion\n                or state.oppositeExplosion\n            local goNorth = targetPosition.z < centerZ\n            AnyoneCore.Shotcall(\"Take your start arrow, then run clockwise\", not (NAUR_TTS and NAUR_TTS.enabled==false), 5, false)\n        end\n\n        -- The explosion preview moved to \"Limit Cut Next Explosion\", which follows each real blast.\n    end\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -2604,7 +2739,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local s=data.teaLimitCut\nif not s or not s.myNumber then self.used=true;return end\nlocal pair=s.baitPairIndex\nif not pair then self.used=true;return end\n-- The center blast and the final charge can resolve in either order.\nif eventArgs.spellID == 18480 then\n s.lpduFinalCenterClear = true\nelseif eventArgs.spellID==18484 then\n if math.ceil(s.myNumber/2)==pair and s.myNumber%2==1 then AnyoneCore.Shotcall(\"Wait for the charge\",true,1.8,false) end\nelse\n if s.lpduLastCharge==pair then self.used=true;return end\n s.lpduLastCharge=pair\n if math.ceil(s.myNumber/2)==pair then\n  s.lpduStop=false\n  if s.lpduBaitShapes then for _,id in ipairs(s.lpduBaitShapes) do Argus.deleteTimedShape(id) end;s.lpduBaitShapes=nil end\n  if pair > 2 then\n   AnyoneCore.Shotcall(pair==4 and \"Move in\" or \"Continue running clockwise\",true,3,false)\n  end\n end\n -- In 1256, pairs 1 and 3 share a lane, as do pairs 2 and 4.\n -- After the first charge in your lane, the completed pair moves out.\n local myPair = math.ceil(s.myNumber / 2)\n if pair <= 2 and (myPair == pair or myPair == pair + 2) then\n  s.lpduSwapOutward = myPair == pair\n  s.lpduSwapUntil = Now() + 1800\n  AnyoneCore.Shotcall(s.lpduSwapOutward and \"Swap outside\" or \"Swap inside\",true,2,false)\n end\nend\nif s.lpduFinalCenterClear and s.lpduLastCharge == 4 and not s.lpduFinished then\n s.lpduFinished = true\n AnyoneCore.Shotcall(\"Move to middle\", true, 3, false)\nend\nself.used=true",
+							actionLua = "local s=data.teaLimitCut\nif not s or not s.myNumber then self.used=true;return end\nlocal pair=s.baitPairIndex\nif not pair then self.used=true;return end\n-- The center blast and the final charge can resolve in either order.\nif eventArgs.spellID == 18480 then\n s.lpduFinalCenterClear = true\nelseif eventArgs.spellID==18484 then\n if math.ceil(s.myNumber/2)==pair and s.myNumber%2==1 then AnyoneCore.Shotcall(\"Wait for the charge\", not (NAUR_TTS and NAUR_TTS.enabled==false),1.8,false) end\nelse\n if s.lpduLastCharge==pair then self.used=true;return end\n s.lpduLastCharge=pair\n if math.ceil(s.myNumber/2)==pair then\n  s.lpduStop=false\n  if s.lpduBaitShapes then for _,id in ipairs(s.lpduBaitShapes) do Argus.deleteTimedShape(id) end;s.lpduBaitShapes=nil end\n  if pair > 2 then\n   AnyoneCore.Shotcall(pair==4 and \"Move in\" or \"Continue running clockwise\", not (NAUR_TTS and NAUR_TTS.enabled==false),3,false)\n  end\n end\n -- In 1256, pairs 1 and 3 share a lane, as do pairs 2 and 4.\n -- After the first charge in your lane, the completed pair moves out.\n local myPair = math.ceil(s.myNumber / 2)\n if pair <= 2 and (myPair == pair or myPair == pair + 2) then\n  s.lpduSwapOutward = myPair == pair\n  s.lpduSwapUntil = Now() + 1800\n  AnyoneCore.Shotcall(s.lpduSwapOutward and \"Swap outside\" or \"Swap inside\", not (NAUR_TTS and NAUR_TTS.enabled==false),2,false)\n end\nend\nif s.lpduFinalCenterClear and s.lpduLastCharge == 4 and not s.lpduFinished then\n s.lpduFinished = true\n AnyoneCore.Shotcall(\"Move to middle\", not (NAUR_TTS and NAUR_TTS.enabled==false), 3, false)\nend\nself.used=true",
 							conditions = 
 							{
 								
@@ -2650,6 +2785,17 @@ local tbl =
 	},
 	[43] = 
 	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "fc7b834f-fc60-d263-5637-620d65150fdf",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
 		
 		{
 			data = 
@@ -3176,8 +3322,33 @@ local tbl =
 			},
 		},
 	},
+	[58] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "9944f683-6956-7b77-cb89-e38514f44313",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+	},
 	[59] = 
 	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "b2ded696-46c3-92ba-f1c2-88804ab89b26",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
 		
 		{
 			data = 
@@ -3357,7 +3528,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "AnyoneCore.Shotcall(\"Bait AOE outside\", true, 3, false)\nself.used = true",
+							actionLua = "AnyoneCore.Shotcall(\"Bait AOE outside\", not (NAUR_TTS and NAUR_TTS.enabled==false), 3, false)\nself.used = true",
 							endIfUsed = true,
 							name = "Outside Bait Shotcall",
 							uuid = "2f06b0f8-2688-63b6-8260-a2b0b20a34aa",
@@ -3542,7 +3713,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local player = TensorCore.mGetPlayer()\nif player and TensorCore.isDPS(player) then\n  local roster = AnyoneCore.Roster\n  local slot = roster and roster.mySlot()\n  local partners = {\n    M1 = \"T1\",\n    M2 = \"H1\",\n    R1 = \"T2\",\n    R2 = \"H2\"\n  }\n  local partnerSlot = slot and partners[slot]\n  local members = roster and roster.members()\n  local member = partnerSlot and members and members[partnerSlot]\n  local partnerJob = member and member.job\n  local partnerName = partnerJob and TensorCore.getJobNameByID(partnerJob)\n  if partnerName then\n    AnyoneCore.Shotcall(\"Stack on \" .. partnerName, true, 4, true)\n  end\nend\n\nself.used = true",
+							actionLua = "local player = TensorCore.mGetPlayer()\nif player and TensorCore.isDPS(player) then\n  local roster = AnyoneCore.Roster\n  local slot = roster and roster.mySlot()\n  local partners = {\n    M1 = \"T1\",\n    M2 = \"H1\",\n    R1 = \"T2\",\n    R2 = \"H2\"\n  }\n  local partnerSlot = slot and partners[slot]\n  local members = roster and roster.members()\n  local member = partnerSlot and members and members[partnerSlot]\n  local partnerJob = member and member.job\n  local partnerName = partnerJob and TensorCore.getJobNameByID(partnerJob)\n  if partnerName then\n    AnyoneCore.Shotcall(\"Stack on \" .. partnerName, not (NAUR_TTS and NAUR_TTS.enabled==false), 4, true)\n  end\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -3611,7 +3782,7 @@ local tbl =
 				displayPath = "P2 - Brute Justice + Cruise Chaser",
 				enabled = false,
 				eventType = 2,
-				execute = "local player = TensorCore.mGetPlayer()\nif not player then self.used = true return end\nif TensorCore.isDPS(player) then\n  local slot = AnyoneCore.Roster and AnyoneCore.Roster.mySlot()\n  local partners = { M1 = \"T1\", M2 = \"H1\", R1 = \"T2\", R2 = \"H2\" }\n  local partner = slot and partners[slot]\n  if partner then\n    AnyoneCore.Shotcall(\"Photon: one HP - move to \" .. partner .. \" partner CCW\", true, 4, true)\n  else\n    AnyoneCore.Shotcall(\"Photon: one HP - move to partner CCW\", true, 4, true)\n  end\nelse\n  AnyoneCore.Shotcall(\"Photon - party to one HP\", true, 4, true)\nend\nself.used = true",
+				execute = "local player = TensorCore.mGetPlayer()\nif not player then self.used = true return end\nif TensorCore.isDPS(player) then\n  local slot = AnyoneCore.Roster and AnyoneCore.Roster.mySlot()\n  local partners = { M1 = \"T1\", M2 = \"H1\", R1 = \"T2\", R2 = \"H2\" }\n  local partner = slot and partners[slot]\n  if partner then\n    AnyoneCore.Shotcall(\"Photon: one HP - move to \" .. partner .. \" partner CCW\", not (NAUR_TTS and NAUR_TTS.enabled==false), 4, true)\n  else\n    AnyoneCore.Shotcall(\"Photon: one HP - move to partner CCW\", not (NAUR_TTS and NAUR_TTS.enabled==false), 4, true)\n  end\nelse\n  AnyoneCore.Shotcall(\"Photon - party to one HP\", not (NAUR_TTS and NAUR_TTS.enabled==false), 4, true)\nend\nself.used = true",
 				executeType = 2,
 				mechanicTime = 262.5,
 				name = "P2 - Photon Partner CCW",
@@ -3647,7 +3818,7 @@ local tbl =
 				{
 				},
 				displayPath = "P2 - Brute Justice + Cruise Chaser",
-				execute = "local player = TensorCore.mGetPlayer()\nif player and TensorCore.hasBuff(player, 2143) then AnyoneCore.Shotcall(\"Lightning: move to T1 north and pass\", true, 5, true) end\nself.used = true",
+				execute = "local player = TensorCore.mGetPlayer()\nif player and TensorCore.hasBuff(player, 2143) then AnyoneCore.Shotcall(\"Lightning: move to T1 north and pass\", not (NAUR_TTS and NAUR_TTS.enabled==false), 5, true) end\nself.used = true",
 				executeType = 2,
 				mechanicTime = 272.7,
 				name = "P2 - Pass Lightning to T1",
@@ -3699,6 +3870,17 @@ local tbl =
 			data = 
 			{
 				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "19c31bf9-cc13-1785-f849-f4e3da3d8fc9",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
 				name = "P2 - Brute Justice + Cruise Chaser",
 				uuid = "ff3a3934-7187-d228-8be6-f749429c78c0",
 			},
@@ -3715,7 +3897,7 @@ local tbl =
 				{
 				},
 				displayPath = "P2 - Brute Justice + Cruise Chaser",
-				execute = "local player = TensorCore.mGetPlayer()\nlocal party = TensorCore.getEntityGroupList(\"Party\") or {}\nlocal water\nfor _, member in pairs(party) do\n  if member and TensorCore.hasBuff(member, 2142) then water = member break end\nend\nif not player or not water then self.used = true return end\n\nlocal _, _, _, _, outlineThickness = TensorCore.getMoogleColors()\nlocal drawer = TensorCore.getCachedDrawer(\n  0x30FF0000, 0x60FF0000, 0xA0FF0000, 0xFFFF0000,\n  outlineThickness, 0, flags\n)\ndrawer:addTimedCircleOnEnt(5000, water.id, 8, 0, false, false, flags)\n\nif water.id == player.id then\n  AnyoneCore.Shotcall(\"Water to D\", true, 5, true)\n  local destination = { x = 86, y = 0, z = 100 }\n  local heading = TensorCore.getHeadingToTarget(player.pos, destination)\n  local length = math.max(1, TensorCore.getDistance2d(player.pos, destination) - 1)\n  -- The holder's guide arrow is \"[Draw] Water N to D/B\".\nelseif not TensorCore.hasBuff(player, 2143) and\n       (TensorCore.isHealer(player) or (AnyoneCore.Roster and (AnyoneCore.Roster.mySlot() == \"R1\" or AnyoneCore.Roster.mySlot() == \"R2\"))) then\n  AnyoneCore.Shotcall(\"Stack with water\", true, 5, false)\n  drawer:addTimedArrowOnEnt(5000, player.id, 1, 0.35, 1, 0.9, water.id, 0, false, 0, false, flags)\nend\nself.used = true",
+				execute = "local player = TensorCore.mGetPlayer()\nlocal party = TensorCore.getEntityGroupList(\"Party\") or {}\nlocal water\nfor _, member in pairs(party) do\n  if member and TensorCore.hasBuff(member, 2142) then water = member break end\nend\nif not player or not water then self.used = true return end\n\nlocal _, _, _, _, outlineThickness = TensorCore.getMoogleColors()\nlocal drawer = TensorCore.getCachedDrawer(\n  0x30FF0000, 0x60FF0000, 0xA0FF0000, 0xFFFF0000,\n  outlineThickness, 0, flags\n)\ndrawer:addTimedCircleOnEnt(5000, water.id, 8, 0, false, false, flags)\n\nif water.id == player.id then\n  AnyoneCore.Shotcall(\"Water to D\", not (NAUR_TTS and NAUR_TTS.enabled==false), 5, true)\n  local destination = { x = 86, y = 0, z = 100 }\n  local heading = TensorCore.getHeadingToTarget(player.pos, destination)\n  local length = math.max(1, TensorCore.getDistance2d(player.pos, destination) - 1)\n  -- The holder's guide arrow is \"[Draw] Water N to D/B\".\nelseif not TensorCore.hasBuff(player, 2143) and\n       (TensorCore.isHealer(player) or (AnyoneCore.Roster and (AnyoneCore.Roster.mySlot() == \"R1\" or AnyoneCore.Roster.mySlot() == \"R2\"))) then\n  AnyoneCore.Shotcall(\"Stack with water\", not (NAUR_TTS and NAUR_TTS.enabled==false), 5, false)\n  drawer:addTimedArrowOnEnt(5000, player.id, 1, 0.35, 1, 0.9, water.id, 0, false, 0, false, flags)\nend\nself.used = true",
 				executeType = 2,
 				mechanicTime = 277.3,
 				name = "P2 - First Water Stack",
@@ -3890,7 +4072,7 @@ local tbl =
 				{
 				},
 				displayPath = "P2 - Brute Justice + Cruise Chaser",
-				execute = "local slot = AnyoneCore.Roster and AnyoneCore.Roster.mySlot()\nif slot == \"T2\" or slot == \"R1\" then AnyoneCore.Shotcall(\"Bait Earth Missile south beside partner\", true, 5, true) end\nself.used = true",
+				execute = "local slot = AnyoneCore.Roster and AnyoneCore.Roster.mySlot()\nif slot == \"T2\" or slot == \"R1\" then AnyoneCore.Shotcall(\"Bait Earth Missile south beside partner\", not (NAUR_TTS and NAUR_TTS.enabled==false), 5, true) end\nself.used = true",
 				executeType = 2,
 				mechanicTime = 288.6,
 				name = "P2 - Earth Missile Bait",
@@ -3993,7 +4175,7 @@ local tbl =
 				{
 				},
 				displayPath = "P2 - Brute Justice + Cruise Chaser",
-				execute = "local player = TensorCore.mGetPlayer()\nif player and TensorCore.isTank(player) then AnyoneCore.Shotcall(\"Tank: soak a hidden mine\", true, 4, true) end\nself.used = true",
+				execute = "local player = TensorCore.mGetPlayer()\nif player and TensorCore.isTank(player) then AnyoneCore.Shotcall(\"Tank: soak a hidden mine\", not (NAUR_TTS and NAUR_TTS.enabled==false), 4, true) end\nself.used = true",
 				executeType = 2,
 				mechanicTime = 290.6,
 				name = "P2 - Hidden Minefield",
@@ -4228,7 +4410,7 @@ local tbl =
 				},
 				displayPath = "P2 - Brute Justice + Cruise Chaser",
 				eventType = 4,
-				execute = "data.teaP2 = data.teaP2 or {}\n\nif not eventArgs or eventArgs.markerID ~= 65 then\n  self.used = true\n  return\nend\n\nlocal defaultSideBySlot = {\n  M1 = \"west\",\n  M2 = \"west\",\n  R1 = \"east\",\n  R2 = \"east\"\n}\n\nlocal function findEntity(entityID)\n  if not entityID then return nil end\n  local party = TensorCore.getEntityGroupList(\"Party\", \"Number\") or {}\n  for _, entity in pairs(party) do\n    if entity and entity.id == entityID then\n      return entity\n    end\n  end\n  return nil\nend\n\nlocal function drawAndCall(marker, side, localSlot)\n  if not marker then return end\n\n  local drawer = TensorCore.getCachedDrawer(0x4400FF00, 0x8800FF00, 0x6600FF00, 0xDD00FF00, 2)\n  if drawer then\n    drawer:addTimedCircleOnEnt(5000, marker, 5, 0, false, true)\n  end\n\n  local markerSlot = AnyoneCore.Roster.slotOf(marker.guid)\n  if localSlot and markerSlot and localSlot == markerSlot then\n    AnyoneCore.Shotcall(\"put enum \" .. side, true, 5, true)\n  else\n    local jobName = marker.job and TensorCore.getJobNameByID(marker.job)\n    if jobName then\n      AnyoneCore.Shotcall(\"stack with \" .. side .. \" enumeration \" .. jobName, true, 5, true)\n    end\n  end\nend\n\nlocal slot = AnyoneCore.Roster.mySlot()\nlocal marker = findEntity(eventArgs.entityID)\nlocal markerSlot = marker and AnyoneCore.Roster.slotOf(marker.guid)\n\nif not marker or not markerSlot then\n  self.used = true\n  return\nend\n\nlocal state = data.teaP2.enumerationMarkers\nif not state or state.resolved then\n  state = { count = 0 }\n  data.teaP2.enumerationMarkers = state\nend\n\nif not state[marker.id] then\n  state.count = (state.count or 0) + 1\n  state[marker.id] = {\n    entity = marker,\n    slot = markerSlot,\n    defaultSide = defaultSideBySlot[markerSlot]\n  }\nend\n\nif state.count < 2 then\n  self.used = true\n  return\nend\n\nif state.resolved then\n  self.used = true\n  return\nend\n\nlocal sideBySlot = {\n  M1 = \"west\",\n  M2 = \"west\",\n  R1 = \"east\",\n  R2 = \"east\"\n}\n\nlocal westMarkers = 0\nlocal eastMarkers = 0\nfor _, record in pairs(state) do\n  if type(record) == \"table\" and record.slot then\n    if record.defaultSide == \"west\" then\n      westMarkers = westMarkers + 1\n    elseif record.defaultSide == \"east\" then\n      eastMarkers = eastMarkers + 1\n    end\n  end\nend\n\nif westMarkers == 2 or eastMarkers == 2 then\n  sideBySlot.M1 = \"east\"\n  sideBySlot.M2 = \"west\"\n  sideBySlot.R1 = \"west\"\n  sideBySlot.R2 = \"east\"\nend\n\nlocal ownSide\nif slot == \"H1\" then\n  ownSide = \"west\"\nelseif slot == \"H2\" then\n  ownSide = \"east\"\nelseif slot then\n  ownSide = sideBySlot[slot]\nend\n\nlocal selected\nif ownSide then\n  for _, record in pairs(state) do\n    if type(record) == \"table\" and record.entity and sideBySlot[record.slot] == ownSide then\n      selected = record.entity\n      break\n    end\n  end\nend\n\nif selected then\n  drawAndCall(selected, ownSide, slot)\nend\n\nstate.resolved = true\nself.used = true",
+				execute = "data.teaP2 = data.teaP2 or {}\n\nif not eventArgs or eventArgs.markerID ~= 65 then\n  self.used = true\n  return\nend\n\nlocal defaultSideBySlot = {\n  M1 = \"west\",\n  M2 = \"west\",\n  R1 = \"east\",\n  R2 = \"east\"\n}\n\nlocal function findEntity(entityID)\n  if not entityID then return nil end\n  local party = TensorCore.getEntityGroupList(\"Party\", \"Number\") or {}\n  for _, entity in pairs(party) do\n    if entity and entity.id == entityID then\n      return entity\n    end\n  end\n  return nil\nend\n\nlocal function drawAndCall(marker, side, localSlot)\n  if not marker then return end\n\n  local drawer = TensorCore.getCachedDrawer(0x4400FF00, 0x8800FF00, 0x6600FF00, 0xDD00FF00, 2)\n  if drawer then\n    drawer:addTimedCircleOnEnt(5000, marker, 5, 0, false, true)\n  end\n\n  local markerSlot = AnyoneCore.Roster.slotOf(marker.guid)\n  if localSlot and markerSlot and localSlot == markerSlot then\n    AnyoneCore.Shotcall(\"put enum \" .. side, not (NAUR_TTS and NAUR_TTS.enabled==false), 5, true)\n  else\n    local jobName = marker.job and TensorCore.getJobNameByID(marker.job)\n    if jobName then\n      AnyoneCore.Shotcall(\"stack with \" .. side .. \" enumeration \" .. jobName, not (NAUR_TTS and NAUR_TTS.enabled==false), 5, true)\n    end\n  end\nend\n\nlocal slot = AnyoneCore.Roster.mySlot()\nlocal marker = findEntity(eventArgs.entityID)\nlocal markerSlot = marker and AnyoneCore.Roster.slotOf(marker.guid)\n\nif not marker or not markerSlot then\n  self.used = true\n  return\nend\n\nlocal state = data.teaP2.enumerationMarkers\nif not state or state.resolved then\n  state = { count = 0 }\n  data.teaP2.enumerationMarkers = state\nend\n\nif not state[marker.id] then\n  state.count = (state.count or 0) + 1\n  state[marker.id] = {\n    entity = marker,\n    slot = markerSlot,\n    defaultSide = defaultSideBySlot[markerSlot]\n  }\nend\n\nif state.count < 2 then\n  self.used = true\n  return\nend\n\nif state.resolved then\n  self.used = true\n  return\nend\n\nlocal sideBySlot = {\n  M1 = \"west\",\n  M2 = \"west\",\n  R1 = \"east\",\n  R2 = \"east\"\n}\n\nlocal westMarkers = 0\nlocal eastMarkers = 0\nfor _, record in pairs(state) do\n  if type(record) == \"table\" and record.slot then\n    if record.defaultSide == \"west\" then\n      westMarkers = westMarkers + 1\n    elseif record.defaultSide == \"east\" then\n      eastMarkers = eastMarkers + 1\n    end\n  end\nend\n\nif westMarkers == 2 or eastMarkers == 2 then\n  sideBySlot.M1 = \"east\"\n  sideBySlot.M2 = \"west\"\n  sideBySlot.R1 = \"west\"\n  sideBySlot.R2 = \"east\"\nend\n\nlocal ownSide\nif slot == \"H1\" then\n  ownSide = \"west\"\nelseif slot == \"H2\" then\n  ownSide = \"east\"\nelseif slot then\n  ownSide = sideBySlot[slot]\nend\n\nlocal selected\nif ownSide then\n  for _, record in pairs(state) do\n    if type(record) == \"table\" and record.entity and sideBySlot[record.slot] == ownSide then\n      selected = record.entity\n      break\n    end\n  end\nend\n\nif selected then\n  drawAndCall(selected, ownSide, slot)\nend\n\nstate.resolved = true\nself.used = true",
 				executeType = 2,
 				mechanicTime = 292.7,
 				name = "P2 - Enumeration",
@@ -4270,7 +4452,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local player = TensorCore.mGetPlayer()\nif player and TensorCore.isDPS(player) then\n  local roster = AnyoneCore.Roster\n  local slot = roster and roster.mySlot()\n  local partners = {\n    M1 = \"T1\",\n    M2 = \"H1\",\n    R1 = \"T2\",\n    R2 = \"H2\"\n  }\n  local partnerSlot = slot and partners[slot]\n  local members = roster and roster.members()\n  local member = partnerSlot and members and members[partnerSlot]\n  local partnerJob = member and member.job\n  local partnerName = partnerJob and TensorCore.getJobNameByID(partnerJob)\n  if partnerName then\n    AnyoneCore.Shotcall(\"Stack on \" .. partnerName, true, 4, true)\n  end\nend\n\nself.used = true",
+							actionLua = "local player = TensorCore.mGetPlayer()\nif player and TensorCore.isDPS(player) then\n  local roster = AnyoneCore.Roster\n  local slot = roster and roster.mySlot()\n  local partners = {\n    M1 = \"T1\",\n    M2 = \"H1\",\n    R1 = \"T2\",\n    R2 = \"H2\"\n  }\n  local partnerSlot = slot and partners[slot]\n  local members = roster and roster.members()\n  local member = partnerSlot and members and members[partnerSlot]\n  local partnerJob = member and member.job\n  local partnerName = partnerJob and TensorCore.getJobNameByID(partnerJob)\n  if partnerName then\n    AnyoneCore.Shotcall(\"Stack on \" .. partnerName, not (NAUR_TTS and NAUR_TTS.enabled==false), 4, true)\n  end\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -4391,7 +4573,7 @@ local tbl =
 				},
 				displayPath = "P2 - Brute Justice + Cruise Chaser",
 				eventType = 4,
-				execute = "if not eventArgs or eventArgs.markerID ~= 67 then\n  self.used = true\n  return\nend\n\nlocal entityID = eventArgs.entityID\nif entityID then\n  TensorCore.getMoogleDrawer():addTimedCircleOnEnt(\n    5000,\n    entityID,\n    6,\n    0,\n    false,\n    false\n  )\n  local player = TensorCore.mGetPlayer()\n  if player and player.id == entityID then\n    AnyoneCore.Shotcall(\"Ice missile: freeze west water tornado\", true, 5, true)\n  end\nend\n\nself.used = true",
+				execute = "if not eventArgs or eventArgs.markerID ~= 67 then\n  self.used = true\n  return\nend\n\nlocal entityID = eventArgs.entityID\nif entityID then\n  TensorCore.getMoogleDrawer():addTimedCircleOnEnt(\n    5000,\n    entityID,\n    6,\n    0,\n    false,\n    false\n  )\n  local player = TensorCore.mGetPlayer()\n  if player and player.id == entityID then\n    AnyoneCore.Shotcall(\"Ice missile: freeze west water tornado\", not (NAUR_TTS and NAUR_TTS.enabled==false), 5, true)\n  end\nend\n\nself.used = true",
 				executeType = 2,
 				mechanicTime = 292.7,
 				name = "P2 - Ice Earth Missile",
@@ -4444,6 +4626,17 @@ local tbl =
 			data = 
 			{
 				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "5c7a6520-2bb3-8764-2e72-f966ff5a6030",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
 				name = "P2 - Brute Justice + Cruise Chaser",
 				uuid = "6f34513e-7b07-2df8-b8e7-e069b269b0b9",
 			},
@@ -4460,7 +4653,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local state = data.teaP2 or {}\ndata.teaP2 = state\nif state.thirdNisiComplete then return end\n\nlocal roster = AnyoneCore.Roster\nif not roster or not roster.current() or not roster.isReady() then return end\nlocal slot = roster.mySlot()\nif slot ~= \"M1\" and slot ~= \"M2\" and slot ~= \"R1\" and slot ~= \"R2\" then return end\nlocal player = TensorCore.mGetPlayer()\nif not player or not player.pos then return end\n\n-- Each index pairs a transferable Nisi with its Verdict requirement.\nlocal activeColors = {[2222] = 1, [2223] = 2, [2137] = 3, [2138] = 4}\nlocal decreeColors = {[2224] = 1, [2225] = 2, [2139] = 3, [2140] = 4}\nlocal function readColors(entity)\n    local active, decree\n    for _, buff in pairs(TensorCore.getBuffs(entity) or {}) do\n        active = activeColors[buff.id] or active\n        decree = decreeColors[buff.id] or decree\n    end\n    return active, decree\nend\n\nlocal myActive, myDecree = readColors(player)\nif not myDecree then return end\nlocal pending = state.thirdNisiTransfer\nif pending then\n    local support = roster.entOf(pending.slot)\n    if support and support.id == pending.id then\n        local theirActive = readColors(support)\n        if myActive == pending.color and theirActive == pending.color then\n            state.thirdNisiComplete = true\n            return\n        end\n    end\nend\n\nlocal partner, passing, partnerSlot\nfor _, supportSlot in ipairs({\"T1\", \"T2\", \"H1\", \"H2\"}) do\n    local support = roster.entOf(supportSlot)\n    if support and support.pos then\n        local theirActive, theirDecree = readColors(support)\n        if myActive and theirActive == myActive and theirDecree == myActive then\n            state.thirdNisiComplete = true\n            return\n        end\n        if myActive and not theirActive and theirDecree == myActive then\n            if partner then return end\n            partner, passing, partnerSlot = support, true, supportSlot\n        elseif not myActive and theirActive == myDecree then\n            if partner then return end\n            partner, passing, partnerSlot = support, false, supportSlot\n        end\n    end\nend\nif not partner then return end\nstate.thirdNisiTransfer = {slot = partnerSlot, id = partner.id, color = passing and myActive or myDecree}\n\n-- The support lineup can shift with Lightning. Follow the live partner.\nlocal sourcePos = player.pos\nlocal targetPos = partner.pos\nif state.thirdNisiCalledPartner ~= partner.id then\n    local job = TensorCore.getJobNameByID(partner.job)\n    if job then\n        local instruction = passing and \"Pass Nisi to \" or \"Take Nisi from \"\n        AnyoneCore.Shotcall(instruction .. job, true, 4, true)\n        state.thirdNisiCalledPartner = partner.id\n    end\nend\nif sourcePos and targetPos then\n  local heading = TensorCore.getHeadingToTarget(sourcePos, targetPos)\n  local totalDistance = TensorCore.getDistance2d(sourcePos, targetPos)\n  local arrowDistance = math.max(0, totalDistance - 1)\n  local scale = math.min(1, arrowDistance / 15)\n  local baseWidth = math.max(0.1, scale)\n  local tipWidth = math.max(0.3, 3 * scale)\n  local tipLength = math.min(3, arrowDistance * 0.3)\n  local baseLength = arrowDistance - tipLength\n  local flags = Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n  if baseLength > 0.1 then\n    local arrowDrawer = TensorCore.getCachedDrawer(0xFF00FFFF, 0xFF0088FF, 0xFF0000FF, 0xFFFFFFFF, 2)\n    arrowDrawer:addArrow(sourcePos.x, sourcePos.y, sourcePos.z, heading,\n      baseLength, baseWidth, tipLength, tipWidth, false, flags)\n  end\n  local partnerCircle = TensorCore.getCachedDrawer(nil, nil, 0xFFFF0000, 0xFFFF0000, 2)\n  partnerCircle:addCircle(targetPos.x, targetPos.y, targetPos.z, 0.4, false, flags)\n  Argus.addCircleFilled(targetPos.x, targetPos.y, targetPos.z, 0.15, 32,\n    0xFF00FF00, nil, 0, 0, 0, 0, false, flags)\nend\nself.used = true",
+							actionLua = "local state = data.teaP2 or {}\ndata.teaP2 = state\nif state.thirdNisiComplete then return end\n\nlocal roster = AnyoneCore.Roster\nif not roster or not roster.current() or not roster.isReady() then return end\nlocal slot = roster.mySlot()\nif slot ~= \"M1\" and slot ~= \"M2\" and slot ~= \"R1\" and slot ~= \"R2\" then return end\nlocal player = TensorCore.mGetPlayer()\nif not player or not player.pos then return end\n\n-- Each index pairs a transferable Nisi with its Verdict requirement.\nlocal activeColors = {[2222] = 1, [2223] = 2, [2137] = 3, [2138] = 4}\nlocal decreeColors = {[2224] = 1, [2225] = 2, [2139] = 3, [2140] = 4}\nlocal function readColors(entity)\n    local active, decree\n    for _, buff in pairs(TensorCore.getBuffs(entity) or {}) do\n        active = activeColors[buff.id] or active\n        decree = decreeColors[buff.id] or decree\n    end\n    return active, decree\nend\n\nlocal myActive, myDecree = readColors(player)\nif not myDecree then return end\nlocal pending = state.thirdNisiTransfer\nif pending then\n    local support = roster.entOf(pending.slot)\n    if support and support.id == pending.id then\n        local theirActive = readColors(support)\n        if myActive == pending.color and theirActive == pending.color then\n            state.thirdNisiComplete = true\n            return\n        end\n    end\nend\n\nlocal partner, passing, partnerSlot\nfor _, supportSlot in ipairs({\"T1\", \"T2\", \"H1\", \"H2\"}) do\n    local support = roster.entOf(supportSlot)\n    if support and support.pos then\n        local theirActive, theirDecree = readColors(support)\n        if myActive and theirActive == myActive and theirDecree == myActive then\n            state.thirdNisiComplete = true\n            return\n        end\n        if myActive and not theirActive and theirDecree == myActive then\n            if partner then return end\n            partner, passing, partnerSlot = support, true, supportSlot\n        elseif not myActive and theirActive == myDecree then\n            if partner then return end\n            partner, passing, partnerSlot = support, false, supportSlot\n        end\n    end\nend\nif not partner then return end\nstate.thirdNisiTransfer = {slot = partnerSlot, id = partner.id, color = passing and myActive or myDecree}\n\n-- The support lineup can shift with Lightning. Follow the live partner.\nlocal sourcePos = player.pos\nlocal targetPos = partner.pos\nif state.thirdNisiCalledPartner ~= partner.id then\n    local job = TensorCore.getJobNameByID(partner.job)\n    if job then\n        local instruction = passing and \"Pass Nisi to \" or \"Take Nisi from \"\n        AnyoneCore.Shotcall(instruction .. job, not (NAUR_TTS and NAUR_TTS.enabled==false), 4, true)\n        state.thirdNisiCalledPartner = partner.id\n    end\nend\nif sourcePos and targetPos then\n  local heading = TensorCore.getHeadingToTarget(sourcePos, targetPos)\n  local totalDistance = TensorCore.getDistance2d(sourcePos, targetPos)\n  local arrowDistance = math.max(0, totalDistance - 1)\n  local scale = math.min(1, arrowDistance / 15)\n  local baseWidth = math.max(0.1, scale)\n  local tipWidth = math.max(0.3, 3 * scale)\n  local tipLength = math.min(3, arrowDistance * 0.3)\n  local baseLength = arrowDistance - tipLength\n  local flags = Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n  if baseLength > 0.1 then\n    local arrowDrawer = TensorCore.getCachedDrawer(0xFF00FFFF, 0xFF0088FF, 0xFF0000FF, 0xFFFFFFFF, 2)\n    arrowDrawer:addArrow(sourcePos.x, sourcePos.y, sourcePos.z, heading,\n      baseLength, baseWidth, tipLength, tipWidth, false, flags)\n  end\n  local partnerCircle = TensorCore.getCachedDrawer(nil, nil, 0xFFFF0000, 0xFFFF0000, 2)\n  partnerCircle:addCircle(targetPos.x, targetPos.y, targetPos.z, 0.4, false, flags)\n  Argus.addCircleFilled(targetPos.x, targetPos.y, targetPos.z, 0.15, 32,\n    0xFF00FF00, nil, 0, 0, 0, 0, false, flags)\nend\nself.used = true",
 							name = "Draw arrow to clockwise partner",
 							uuid = "09321da7-06e7-4440-a7ec-f0dff6454428",
 							version = 2.1,
@@ -4494,7 +4687,7 @@ local tbl =
 				{
 				},
 				displayPath = "P2 - Brute Justice + Cruise Chaser",
-				execute = "local player = TensorCore.mGetPlayer()\nlocal party = TensorCore.getEntityGroupList(\"Party\") or {}\nlocal water\nfor _, member in pairs(party) do\n  if member and TensorCore.hasBuff(member, 2142) then water = member break end\nend\nif not player or not water then self.used = true return end\n\nlocal _, _, _, _, outlineThickness = TensorCore.getMoogleColors()\nlocal drawer = TensorCore.getCachedDrawer(\n  0x30FF0000, 0x60FF0000, 0xA0FF0000, 0xFFFF0000,\n  outlineThickness, 0, flags\n)\ndrawer:addTimedCircleOnEnt(5000, water.id, 8, 0, false, false, flags)\n\nif water.id == player.id then\n  AnyoneCore.Shotcall(\"Water to B\", true, 5, true)\n  local x, y, z, active = Argus.getWaymarkInfo(2)\n  local destination = active and { x = x, y = y, z = z } or { x = 113.7, y = 0, z = 91.9 }\n  local heading = TensorCore.getHeadingToTarget(player.pos, destination)\n  local length = math.max(1, TensorCore.getDistance2d(player.pos, destination) - 1)\n  -- The holder's guide arrow is \"[Draw] Water N to D/B\".\nelseif not TensorCore.hasBuff(player, 2143) and\n       (TensorCore.isHealer(player) or (AnyoneCore.Roster and (AnyoneCore.Roster.mySlot() == \"R1\" or AnyoneCore.Roster.mySlot() == \"R2\"))) then\n  AnyoneCore.Shotcall(\"Stack with water\", true, 5, false)\n  drawer:addTimedArrowOnEnt(5000, player.id, 1, 0.35, 1, 0.9, water.id, 0, false, 0, false, flags)\nend\nself.used = true",
+				execute = "local player = TensorCore.mGetPlayer()\nlocal party = TensorCore.getEntityGroupList(\"Party\") or {}\nlocal water\nfor _, member in pairs(party) do\n  if member and TensorCore.hasBuff(member, 2142) then water = member break end\nend\nif not player or not water then self.used = true return end\n\nlocal _, _, _, _, outlineThickness = TensorCore.getMoogleColors()\nlocal drawer = TensorCore.getCachedDrawer(\n  0x30FF0000, 0x60FF0000, 0xA0FF0000, 0xFFFF0000,\n  outlineThickness, 0, flags\n)\ndrawer:addTimedCircleOnEnt(5000, water.id, 8, 0, false, false, flags)\n\nif water.id == player.id then\n  AnyoneCore.Shotcall(\"Water to B\", not (NAUR_TTS and NAUR_TTS.enabled==false), 5, true)\n  local x, y, z, active = Argus.getWaymarkInfo(2)\n  local destination = active and { x = x, y = y, z = z } or { x = 113.7, y = 0, z = 91.9 }\n  local heading = TensorCore.getHeadingToTarget(player.pos, destination)\n  local length = math.max(1, TensorCore.getDistance2d(player.pos, destination) - 1)\n  -- The holder's guide arrow is \"[Draw] Water N to D/B\".\nelseif not TensorCore.hasBuff(player, 2143) and\n       (TensorCore.isHealer(player) or (AnyoneCore.Roster and (AnyoneCore.Roster.mySlot() == \"R1\" or AnyoneCore.Roster.mySlot() == \"R2\"))) then\n  AnyoneCore.Shotcall(\"Stack with water\", not (NAUR_TTS and NAUR_TTS.enabled==false), 5, false)\n  drawer:addTimedArrowOnEnt(5000, player.id, 1, 0.35, 1, 0.9, water.id, 0, false, 0, false, flags)\nend\nself.used = true",
 				executeType = 2,
 				mechanicTime = 306.7,
 				name = "P2 - Second Water Stack",
@@ -4515,7 +4708,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local function resolvePartner()\n  local roster = AnyoneCore.Roster\n  local slot = roster and roster.mySlot()\n  local partners = { T1 = \"M1\", M1 = \"T1\", H1 = \"M2\", M2 = \"H1\", T2 = \"R1\", R1 = \"T2\", H2 = \"R2\", R2 = \"H2\" }\n  local partnerSlot = slot and partners[slot]\n  local members = roster and roster.members()\n  local member = partnerSlot and members and members[partnerSlot]\n  local partnerJob = member and member.job\n  local party = TensorCore.getEntityGroupList(\"Party\", \"Number\")\n  if party and partnerJob then\n    for _, entity in pairs(party) do if entity and entity.job == partnerJob then return entity end end\n  end\n  return nil\nend\nlocal state = data.teaP2 or {}\ndata.teaP2 = state\nstate.verdictNisiArrowRemoved = nil\nlocal partner = resolvePartner()\nif not partner or not partner.job then return end\nlocal jobName = TensorCore.getJobNameByID(partner.job)\nif not jobName then return end\nAnyoneCore.Shotcall(\"Stack on \" .. jobName, true, 4, true)\nself.used = true",
+							actionLua = "local function resolvePartner()\n  local roster = AnyoneCore.Roster\n  local slot = roster and roster.mySlot()\n  local partners = { T1 = \"M1\", M1 = \"T1\", H1 = \"M2\", M2 = \"H1\", T2 = \"R1\", R1 = \"T2\", H2 = \"R2\", R2 = \"H2\" }\n  local partnerSlot = slot and partners[slot]\n  local members = roster and roster.members()\n  local member = partnerSlot and members and members[partnerSlot]\n  local partnerJob = member and member.job\n  local party = TensorCore.getEntityGroupList(\"Party\", \"Number\")\n  if party and partnerJob then\n    for _, entity in pairs(party) do if entity and entity.job == partnerJob then return entity end end\n  end\n  return nil\nend\nlocal state = data.teaP2 or {}\ndata.teaP2 = state\nstate.verdictNisiArrowRemoved = nil\nlocal partner = resolvePartner()\nif not partner or not partner.job then return end\nlocal jobName = TensorCore.getJobNameByID(partner.job)\nif not jobName then return end\nAnyoneCore.Shotcall(\"Stack on \" .. jobName, not (NAUR_TTS and NAUR_TTS.enabled==false), 4, true)\nself.used = true",
 							conditions = 
 							{
 								
@@ -4658,7 +4851,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local roster = AnyoneCore.Roster\nif not roster or not roster.current() then return end\nlocal slot = roster.mySlot()\nif slot ~= \"T1\" and slot ~= \"T2\" and slot ~= \"H1\" and slot ~= \"H2\" then return end\nAnyoneCore.Shotcall(\"Line up north to south: BJ tank, shield healer, regen healer, CC tank. Adjust for lightning.\", true, 6, true)\nself.used = true\n",
+							actionLua = "local roster = AnyoneCore.Roster\nif not roster or not roster.current() then return end\nlocal slot = roster.mySlot()\nif slot ~= \"T1\" and slot ~= \"T2\" and slot ~= \"H1\" and slot ~= \"H2\" then return end\nAnyoneCore.Shotcall(\"Line up north to south: BJ tank, shield healer, regen healer, CC tank. Adjust for lightning.\", not (NAUR_TTS and NAUR_TTS.enabled==false), 6, true)\nself.used = true\n",
 							name = "Third Nisi - Support lineup reminder",
 							uuid = "645109e3-523e-1298-a363-a9d2e71ce45a",
 							version = 2.1,
@@ -4733,8 +4926,33 @@ local tbl =
 			},
 		},
 	},
+	[73] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "543f36f6-e5c4-891a-f58c-31109b003686",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+	},
 	[74] = 
 	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "52f978a9-42b8-8935-653f-9df76dbe4a39",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
 		
 		{
 			data = 
@@ -4780,8 +4998,33 @@ local tbl =
 			},
 		},
 	},
+	[75] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "b1ad6154-aef6-19f0-42ac-b53a023c4ca4",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+	},
 	[76] = 
 	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "1c629a87-1931-2133-db74-40194e16e197",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
 		
 		{
 			data = 
@@ -4803,7 +5046,7 @@ local tbl =
 				{
 				},
 				displayPath = "P2 - Brute Justice + Cruise Chaser",
-				execute = "local flags=Argus2.RenderFlags.FLAG_RENDER_OVERLAY\nlocal player = TensorCore.mGetPlayer()\nlocal party = TensorCore.getEntityGroupList(\"Party\") or {}\nlocal water\nfor _, member in pairs(party) do\n  if member and TensorCore.hasBuff(member, 2142) then water = member break end\nend\nif not player or not water then return end\n\nif water.id~=player.id and not TensorCore.isTank(player) and not TensorCore.hasBuff(player,2143) and\n   (not data.tea_lpdu_water or not data.tea_lpdu_water.previous) then\n if not self.historyDiagnostic then\n  TensorCore.timelineLogToFile(\"[TEA Water3] waiting for previous Water holder; player=\"..tostring(player.id)..\" water=\"..tostring(water.id)..\"\\n\")\n  self.historyDiagnostic=true\n end\n return\nend\nlocal _, _, _, _, outlineThickness = TensorCore.getMoogleColors()\nlocal drawer = TensorCore.getCachedDrawer(\n  0x30FF0000, 0x60FF0000, 0xA0FF0000, 0xFFFF0000,\n  outlineThickness, 0, flags\n)\ndrawer:addTimedCircleOnEnt(5000, water.id, 8, 0, false, false, flags)\n\nif water.id == player.id then\n  AnyoneCore.Shotcall(\"Water: go to B\", true, 5, false)\n  local x,y,z,active=Argus.getWaymarkInfo(2)\n  local destination=active and {x=x,y=y,z=z} or {x=113.7,y=0,z=91.9}\n  local heading = TensorCore.getHeadingToTarget(player.pos, destination)\n  local length = math.max(1, TensorCore.getDistance2d(player.pos, destination) - 1)\n  drawer:addTimedArrow(5000, player.pos.x, player.pos.y, player.pos.z, heading, length, 0.35, 1, 0.9, 0, false, flags)\nelseif not TensorCore.hasBuff(player, 2143) and not TensorCore.isTank(player) and\n       data.tea_lpdu_water and data.tea_lpdu_water.previous and data.tea_lpdu_water.previous~=player.id then\n  AnyoneCore.Shotcall(\"Stack with water\", true, 5, false)\n  drawer:addTimedArrowOnEnt(5000, player.id, 1, 0.35, 1, 0.9, water.id, 0, false, 0, false, flags)\nend\nself.used = true",
+				execute = "local flags=Argus2.RenderFlags.FLAG_RENDER_OVERLAY\nlocal player = TensorCore.mGetPlayer()\nlocal party = TensorCore.getEntityGroupList(\"Party\") or {}\nlocal water\nfor _, member in pairs(party) do\n  if member and TensorCore.hasBuff(member, 2142) then water = member break end\nend\nif not player or not water then return end\n\nif water.id~=player.id and not TensorCore.isTank(player) and not TensorCore.hasBuff(player,2143) and\n   (not data.tea_lpdu_water or not data.tea_lpdu_water.previous) then\n if not self.historyDiagnostic then\n  TensorCore.timelineLogToFile(\"[TEA Water3] waiting for previous Water holder; player=\"..tostring(player.id)..\" water=\"..tostring(water.id)..\"\\n\")\n  self.historyDiagnostic=true\n end\n return\nend\nlocal _, _, _, _, outlineThickness = TensorCore.getMoogleColors()\nlocal drawer = TensorCore.getCachedDrawer(\n  0x30FF0000, 0x60FF0000, 0xA0FF0000, 0xFFFF0000,\n  outlineThickness, 0, flags\n)\ndrawer:addTimedCircleOnEnt(5000, water.id, 8, 0, false, false, flags)\n\nif water.id == player.id then\n  AnyoneCore.Shotcall(\"Water: go to B\", not (NAUR_TTS and NAUR_TTS.enabled==false), 5, false)\n  local x,y,z,active=Argus.getWaymarkInfo(2)\n  local destination=active and {x=x,y=y,z=z} or {x=113.7,y=0,z=91.9}\n  local heading = TensorCore.getHeadingToTarget(player.pos, destination)\n  local length = math.max(1, TensorCore.getDistance2d(player.pos, destination) - 1)\n  drawer:addTimedArrow(5000, player.pos.x, player.pos.y, player.pos.z, heading, length, 0.35, 1, 0.9, 0, false, flags)\nelseif not TensorCore.hasBuff(player, 2143) and not TensorCore.isTank(player) and\n       data.tea_lpdu_water and data.tea_lpdu_water.previous and data.tea_lpdu_water.previous~=player.id then\n  AnyoneCore.Shotcall(\"Stack with water\", not (NAUR_TTS and NAUR_TTS.enabled==false), 5, false)\n  drawer:addTimedArrowOnEnt(5000, player.id, 1, 0.35, 1, 0.9, water.id, 0, false, 0, false, flags)\nend\nself.used = true",
 				executeType = 2,
 				mechanicTime = 336.2,
 				name = "P2 - Third Water Stack",
@@ -5067,7 +5310,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local s={boss=eventArgs.entityID,deadline=Now()+eventArgs.channelTimeMax*1000,covered=false}\ndata.tea_lpdu_wind=s\nAnyoneCore.Shotcall(\"Get behind ice\",true,4,false)\nself.used=true",
+							actionLua = "local s={boss=eventArgs.entityID,deadline=Now()+eventArgs.channelTimeMax*1000,covered=false}\ndata.tea_lpdu_wind=s\nAnyoneCore.Shotcall(\"Get behind ice\", not (NAUR_TTS and NAUR_TTS.enabled==false),4,false)\nself.used=true",
 							conditions = 
 							{
 								
@@ -5121,7 +5364,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local s=data.tea_lpdu_wind\nif not s or s.covered or Now()>=s.deadline then self.used=true;return end\nlocal p=TensorCore.mGetPlayer();local boss=TensorCore.mGetEntity(s.boss)\nif not p or not p.pos or not boss or not boss.pos then return end\nlocal pillars=TensorCore.entityList(\"contentid=9219\")\nfor _,ice in pairs(pillars or {}) do\n if ice.pos and Argus.isEntityVisible(ice) then\n  local ix,iz=ice.pos.x-boss.pos.x,ice.pos.z-boss.pos.z\n  local px,pz=p.pos.x-boss.pos.x,p.pos.z-boss.pos.z\n  local d2=ix*ix+iz*iz\n  local along=px*ix+pz*iz\n  if d2>0 and along>d2 and math.abs(px*iz-pz*ix)<=2.5*along/math.sqrt(d2) then\n   s.covered=true;AnyoneCore.Shotcall(\"Behind ice. Stay there\",true,2,false);break\n  end\n end\nend\nself.used=true",
+							actionLua = "local s=data.tea_lpdu_wind\nif not s or s.covered or Now()>=s.deadline then self.used=true;return end\nlocal p=TensorCore.mGetPlayer();local boss=TensorCore.mGetEntity(s.boss)\nif not p or not p.pos or not boss or not boss.pos then return end\nlocal pillars=TensorCore.entityList(\"contentid=9219\")\nfor _,ice in pairs(pillars or {}) do\n if ice.pos and Argus.isEntityVisible(ice) then\n  local ix,iz=ice.pos.x-boss.pos.x,ice.pos.z-boss.pos.z\n  local px,pz=p.pos.x-boss.pos.x,p.pos.z-boss.pos.z\n  local d2=ix*ix+iz*iz\n  local along=px*ix+pz*iz\n  if d2>0 and along>d2 and math.abs(px*iz-pz*ix)<=2.5*along/math.sqrt(d2) then\n   s.covered=true;AnyoneCore.Shotcall(\"Behind ice. Stay there\", not (NAUR_TTS and NAUR_TTS.enabled==false),2,false);break\n  end\n end\nend\nself.used=true",
 							name = "Propeller Wind - Ice shadow confirmation",
 							uuid = "752b0225-befd-186e-a522-ea025a4a5ada",
 							version = 2.1,
@@ -5143,6 +5386,20 @@ local tbl =
 				uuid = "3992caa6-b567-d985-a877-e1b3d9480695",
 				version = 2,
 			},
+		},
+	},
+	[78] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "b2b1261d-eace-7df1-20d7-e6ebcd8a53ed",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
 		},
 	},
 	[79] = 
@@ -5168,7 +5425,7 @@ local tbl =
 				{
 				},
 				displayPath = "P2 - Brute Justice + Cruise Chaser",
-				execute = "local player = TensorCore.mGetPlayer()\nif player then\n  if TensorCore.isHealer(player) then\n    AnyoneCore.Shotcall(\"Tank Photon - heal both tanks\", true, 4, true)\n  elseif TensorCore.isTank(player) then\n    AnyoneCore.Shotcall(\"Tank Photon - tanks to one HP\", true, 4, true)\n  end\nend\nself.used = true",
+				execute = "local player = TensorCore.mGetPlayer()\nif player then\n  if TensorCore.isHealer(player) then\n    AnyoneCore.Shotcall(\"Tank Photon - heal both tanks\", not (NAUR_TTS and NAUR_TTS.enabled==false), 4, true)\n  elseif TensorCore.isTank(player) then\n    AnyoneCore.Shotcall(\"Tank Photon - tanks to one HP\", not (NAUR_TTS and NAUR_TTS.enabled==false), 4, true)\n  end\nend\nself.used = true",
 				executeType = 2,
 				mechanicTime = 366.8,
 				name = "P2 - Tank Photon",
@@ -5201,11 +5458,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(4000,\"Double Rocket Punch - tanks share\",1.0,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Double Rocket Punch - tanks share\",100) end\nself.used=true\n",
 							alertDuration = 4000,
 							alertPriority = 3,
 							alertScale = 1,
-							alertTTS = true,
 							alertText = "Double Rocket Punch - tanks share",
 							alertVolume = 100,
 							conditions = 
@@ -5253,6 +5510,17 @@ local tbl =
 			data = 
 			{
 				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "6713b775-eb49-9a01-b332-1f3f44928d05",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
 				name = "P2 - Brute Justice + Cruise Chaser",
 				uuid = "e10b4310-9fce-066e-8877-d2a1b0909aa5",
 			},
@@ -5268,11 +5536,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3500,\"Super Jump - farthest player bait\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Super Jump - farthest player bait\",100) end\nself.used=true\n",
 							alertDuration = 3500,
 							alertPriority = 2,
 							alertScale = 1,
-							alertTTS = true,
 							alertText = "Super Jump - farthest player bait",
 							alertVolume = 100,
 							name = "Super Jump - farthest player bait",
@@ -5304,7 +5572,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local roster = AnyoneCore.Roster\nif not roster or not roster.current() or not roster.isReady() or roster.mySlot() ~= \"R1\" then return end\nlocal player = TensorCore.mGetPlayer()\nlocal boss = TensorCore.getEntityByGroup(\"ContentID\", {contentid = 9216}, false)\nif not player or not boss or not boss.pos then return end\n\n-- LPDU puts R1 at the east edge, across from the party and Brute Justice.\nlocal bait = {x = 118, y = 0, z = 100}\nlocal radius = 1.2\nlocal baitDistance = TensorCore.getDistance2d(boss.pos, bait)\nlocal party = TensorCore.getEntityGroupList(\"Party\", \"Number\")\nif not party then return end\nlocal checked = 0\nfor _, member in pairs(party) do\n    if member and member.id ~= player.id and member.pos then\n        checked = checked + 1\n        if TensorCore.getDistance2d(boss.pos, member.pos) >= baitDistance - radius - 1 then return end\n    end\nend\nif checked < 7 then return end\n\nlocal remaining = math.floor((382.1 - TensorReactions_CurrentTimer) * 1000)\nif remaining <= 0 then return end\nlocal drawer = TensorCore.getStaticDrawer(0xB040FF20, 2)\ndrawer:addTimedCircle(remaining, bait.x, bait.y, bait.z, radius, 0, false, true)\nAnyoneCore.addTimedWorldText(remaining, \"BAIT JUMP HERE\", {x = bait.x, y = 1.5, z = bait.z}, 0xFF40FF20, true, 1.5)\nAnyoneCore.Shotcall(\"Bait jump east\", true, 3, true)\nself.used = true\n",
+							actionLua = "local roster = AnyoneCore.Roster\nif not roster or not roster.current() or not roster.isReady() or roster.mySlot() ~= \"R1\" then return end\nlocal player = TensorCore.mGetPlayer()\nlocal boss = TensorCore.getEntityByGroup(\"ContentID\", {contentid = 9216}, false)\nif not player or not boss or not boss.pos then return end\n\n-- LPDU puts R1 at the east edge, across from the party and Brute Justice.\nlocal bait = {x = 118, y = 0, z = 100}\nlocal radius = 1.2\nlocal baitDistance = TensorCore.getDistance2d(boss.pos, bait)\nlocal party = TensorCore.getEntityGroupList(\"Party\", \"Number\")\nif not party then return end\nlocal checked = 0\nfor _, member in pairs(party) do\n    if member and member.id ~= player.id and member.pos then\n        checked = checked + 1\n        if TensorCore.getDistance2d(boss.pos, member.pos) >= baitDistance - radius - 1 then return end\n    end\nend\nif checked < 7 then return end\n\nlocal remaining = math.floor((382.1 - TensorReactions_CurrentTimer) * 1000)\nif remaining <= 0 then return end\nlocal drawer = TensorCore.getStaticDrawer(0xB040FF20, 2)\ndrawer:addTimedCircle(remaining, bait.x, bait.y, bait.z, radius, 0, false, true)\nAnyoneCore.addTimedWorldText(remaining, \"BAIT JUMP HERE\", {x = bait.x, y = 1.5, z = bait.z}, 0xFF40FF20, true, 1.5)\nAnyoneCore.Shotcall(\"Bait jump east\", not (NAUR_TTS and NAUR_TTS.enabled==false), 3, true)\nself.used = true\n",
 							name = "Mark the east bait spot",
 							uuid = "a320f9d3-6058-362e-bbb8-2ee137d8956e",
 							version = 2.1,
@@ -5333,6 +5601,17 @@ local tbl =
 			data = 
 			{
 				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "639cdf86-81e2-c742-3b4c-086c3936ded6",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
 				name = "P2 - Brute Justice + Cruise Chaser",
 				uuid = "2ce8048f-9d07-b1ba-96cd-a18282aff260",
 			},
@@ -5348,11 +5627,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(4500,\"Apocalyptic Ray - outrange the frontal cone\",1.0,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Apocalyptic Ray - outrange the frontal cone\",100) end\nself.used=true\n",
 							alertDuration = 4500,
 							alertPriority = 3,
 							alertScale = 1,
-							alertTTS = true,
 							alertText = "Apocalyptic Ray - outrange the frontal cone",
 							alertVolume = 100,
 							name = "Apocalyptic Ray - outrange the frontal cone",
@@ -5372,6 +5651,20 @@ local tbl =
 				uuid = "86cf6ea6-c669-c388-afd2-eb9c84282202",
 				version = 2,
 			},
+		},
+	},
+	[84] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "cad8f5a4-68c0-2238-a0ca-b1ce48d204b4",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
 		},
 	},
 	[85] = 
@@ -5396,11 +5689,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(4000,\"Final Sentence - finish the phase\",1.0,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Final Sentence - finish the phase\",100) end\nself.used=true\n",
 							alertDuration = 4000,
 							alertPriority = 3,
 							alertScale = 1,
-							alertTTS = true,
 							alertText = "Final Sentence - finish the phase",
 							alertVolume = 100,
 							name = "Final Sentence - finish the phase",
@@ -5422,8 +5715,33 @@ local tbl =
 			},
 		},
 	},
+	[86] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "d6c89e5a-2dc4-e80e-09fc-6ef8cb2835aa",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+	},
 	[88] = 
 	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "48df0468-0e70-4534-6766-e9eaa321e1b8",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
 		
 		{
 			data = 
@@ -5455,7 +5773,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "\n\nlocal function findEntity(contentID, cacheKey)\n    local cachedID=data[cacheKey]\n    local cached=cachedID and TensorCore.mGetEntity(cachedID)\n    if cached and cached.contentid==contentID then return cached end\n    for _,candidate in pairs(TensorCore.entityList(\"contentid=\"..tostring(contentID)) or {}) do\n        if candidate.id then data[cacheKey]=candidate.id;return candidate end\n    end\nend\nlocal party = TensorCore.getEntityGroupList(\"Party\") or {}\nlocal player = TensorCore.mGetPlayer()\nlocal cruiseChaser = findEntity(9218, \"teaTemporalCallCC\")\nlocal bruteJustice = findEntity(9216, \"teaTemporalCallBJ\")\n\nif player and player.id and cruiseChaser and cruiseChaser.pos and bruteJustice and bruteJustice.pos then\n    local partyCount, greenCount, blueCount, aggravatedCount, nothingCount = 0, 0, 0, 0, 0\n    local playerMechanic\n\n    for _, member in pairs(party) do\n        if member and member.id then\n            partyCount = partyCount + 1\n            local mechanic = \"nothing\"\n            for _, buff in pairs(TensorCore.getBuffs(member) or {}) do\n                if buff.id == 1123 then\n                    mechanic = \"green\"\n                    break\n                elseif buff.id == 1124 then\n                    mechanic = \"blue\"\n                    break\n                elseif buff.id == 1121 then\n                    mechanic = \"aggravated\"\n                    break\n                end\n            end\n\n            if mechanic == \"green\" then\n                greenCount = greenCount + 1\n            elseif mechanic == \"blue\" then\n                blueCount = blueCount + 1\n            elseif mechanic == \"aggravated\" then\n                aggravatedCount = aggravatedCount + 1\n            else\n                nothingCount = nothingCount + 1\n            end\n\n            if member.id == player.id then\n                playerMechanic = mechanic\n            end\n        end\n    end\n\n    if partyCount == 8 and greenCount == 2 and blueCount == 2 and aggravatedCount == 2 and nothingCount == 2 and playerMechanic then\n        local ccOnWest = cruiseChaser.pos.x < bruteJustice.pos.x\n        local leftRobotName = ccOnWest and \"CRUISE CHASER\" or \"BRUTE JUSTICE\"\n        local rightRobotName = ccOnWest and \"BRUTE JUSTICE\" or \"CRUISE CHASER\"\n        local isDPS = TensorCore.isDPS(player)\n        local message\n\n        if playerMechanic == \"nothing\" then\n            message = \"NOTHING: \" .. leftRobotName .. \" - \" .. (isDPS and \"SOUTH\" or \"NORTH\")\n        elseif playerMechanic == \"green\" then\n            message = \"GREEN: \" .. rightRobotName .. \" - \" .. (isDPS and \"SOUTH\" or \"NORTH\")\n        elseif playerMechanic == \"blue\" then\n            local side = isDPS and \"EAST\" or \"WEST\" -- NAUR: blue DPS east, support west\n            local playerOnCCSide = (side == \"WEST\" and ccOnWest) or (side == \"EAST\" and not ccOnWest)\n            message = \"BLUE: \" .. side\n            if playerOnCCSide then\n                message = message .. \" - MOVE IN FOR THIRD CC BAIT\"\n            else\n                message = message .. \" - STAY AT WALL\"\n            end\n        else\n            message = bruteJustice.pos.x < 100 and \"AGGRAVATED: BRUTE JUSTICE WEST WALL\" or \"AGGRAVATED: BRUTE JUSTICE EAST WALL\"\n        end\n\n        AnyoneCore.Shotcall(message, true, 9, false)\n        self.used = true\n    end\nend\n",
+							actionLua = "\n\nlocal function findEntity(contentID, cacheKey)\n    local cachedID=data[cacheKey]\n    local cached=cachedID and TensorCore.mGetEntity(cachedID)\n    if cached and cached.contentid==contentID then return cached end\n    for _,candidate in pairs(TensorCore.entityList(\"contentid=\"..tostring(contentID)) or {}) do\n        if candidate.id then data[cacheKey]=candidate.id;return candidate end\n    end\nend\nlocal party = TensorCore.getEntityGroupList(\"Party\") or {}\nlocal player = TensorCore.mGetPlayer()\nlocal cruiseChaser = findEntity(9218, \"teaTemporalCallCC\")\nlocal bruteJustice = findEntity(9216, \"teaTemporalCallBJ\")\n\nif player and player.id and cruiseChaser and cruiseChaser.pos and bruteJustice and bruteJustice.pos then\n    local partyCount, greenCount, blueCount, aggravatedCount, nothingCount = 0, 0, 0, 0, 0\n    local playerMechanic\n\n    for _, member in pairs(party) do\n        if member and member.id then\n            partyCount = partyCount + 1\n            local mechanic = \"nothing\"\n            for _, buff in pairs(TensorCore.getBuffs(member) or {}) do\n                if buff.id == 1123 then\n                    mechanic = \"green\"\n                    break\n                elseif buff.id == 1124 then\n                    mechanic = \"blue\"\n                    break\n                elseif buff.id == 1121 then\n                    mechanic = \"aggravated\"\n                    break\n                end\n            end\n\n            if mechanic == \"green\" then\n                greenCount = greenCount + 1\n            elseif mechanic == \"blue\" then\n                blueCount = blueCount + 1\n            elseif mechanic == \"aggravated\" then\n                aggravatedCount = aggravatedCount + 1\n            else\n                nothingCount = nothingCount + 1\n            end\n\n            if member.id == player.id then\n                playerMechanic = mechanic\n            end\n        end\n    end\n\n    if partyCount == 8 and greenCount == 2 and blueCount == 2 and aggravatedCount == 2 and nothingCount == 2 and playerMechanic then\n        local ccOnWest = cruiseChaser.pos.x < bruteJustice.pos.x\n        local leftRobotName = ccOnWest and \"CRUISE CHASER\" or \"BRUTE JUSTICE\"\n        local rightRobotName = ccOnWest and \"BRUTE JUSTICE\" or \"CRUISE CHASER\"\n        local isDPS = TensorCore.isDPS(player)\n        local message\n\n        if playerMechanic == \"nothing\" then\n            message = \"NOTHING: \" .. leftRobotName .. \" - \" .. (isDPS and \"SOUTH\" or \"NORTH\")\n        elseif playerMechanic == \"green\" then\n            message = \"GREEN: \" .. rightRobotName .. \" - \" .. (isDPS and \"SOUTH\" or \"NORTH\")\n        elseif playerMechanic == \"blue\" then\n            local side = isDPS and \"EAST\" or \"WEST\" -- NAUR: blue DPS east, support west\n            local playerOnCCSide = (side == \"WEST\" and ccOnWest) or (side == \"EAST\" and not ccOnWest)\n            message = \"BLUE: \" .. side\n            if playerOnCCSide then\n                message = message .. \" - MOVE IN FOR THIRD CC BAIT\"\n            else\n                message = message .. \" - STAY AT WALL\"\n            end\n        else\n            message = bruteJustice.pos.x < 100 and \"AGGRAVATED: BRUTE JUSTICE WEST WALL\" or \"AGGRAVATED: BRUTE JUSTICE EAST WALL\"\n        end\n\n        AnyoneCore.Shotcall(message, not (NAUR_TTS and NAUR_TTS.enabled==false), 9, false)\n        self.used = true\n    end\nend\n",
 							endIfUsed = true,
 							name = "Call local assignment",
 							uuid = "3e07af7c-0304-2775-a83f-e2e4f162901f",
@@ -5630,6 +5948,20 @@ local tbl =
 			},
 		},
 	},
+	[95] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "604b8d6e-140a-75b2-682a-d6e8775e167e",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+	},
 	[97] = 
 	{
 		
@@ -5700,6 +6032,17 @@ local tbl =
 	},
 	[99] = 
 	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "9ad6da0a-b5a7-4346-ea24-c8245e43fe9a",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
 		
 		{
 			data = 
@@ -5934,8 +6277,33 @@ local tbl =
 			},
 		},
 	},
+	[101] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "eb6f4294-a797-3f58-e13e-7d0260838ea4",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+	},
 	[102] = 
 	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "ca5709c7-acb3-cb7b-f88b-22c1ac5e2397",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
 		
 		{
 			data = 
@@ -5967,7 +6335,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local player = TensorCore.mGetPlayer()\nlocal state = data.inception\nif not player or not state or state.personalPlacementCalled then return end\n\nlocal message\nfor _, pair in pairs(state.tetherPairs or {}) do\n    if pair.player == player.id and pair.sphere then\n        message = \"Orb tether. Follow your arrow\"\n        break\n    end\nend\n\nlocal solver = state.puddleArrowSolver\nif not message and solver and solver.byPlayer and solver.byPlayer[player.id] then\n    message = \"Drop your crystal at your arrow\"\nend\nif not message then return end\n\nAnyoneCore.Shotcall(message, true, 3, false)\nstate.personalPlacementCalled = true\nself.used = true",
+							actionLua = "local player = TensorCore.mGetPlayer()\nlocal state = data.inception\nif not player or not state or state.personalPlacementCalled then return end\n\nlocal message\nfor _, pair in pairs(state.tetherPairs or {}) do\n    if pair.player == player.id and pair.sphere then\n        message = \"Orb tether. Follow your arrow\"\n        break\n    end\nend\n\nlocal solver = state.puddleArrowSolver\nif not message and solver and solver.byPlayer and solver.byPlayer[player.id] then\n    message = \"Drop your crystal at your arrow\"\nend\nif not message then return end\n\nAnyoneCore.Shotcall(message, not (NAUR_TTS and NAUR_TTS.enabled==false), 3, false)\nstate.personalPlacementCalled = true\nself.used = true",
 							name = "Call crystal or orb assignment",
 							uuid = "301a427f-cce8-8284-a2d6-cfe28a626b92",
 							version = 2.1,
@@ -5996,6 +6364,17 @@ local tbl =
 			data = 
 			{
 				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "15d63b0a-5ddb-37ae-bdb4-406c6c73375a",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
 				name = "Guidance",
 				uuid = "8ddd5035-1193-df7b-ab8c-abea12c72c99",
 			},
@@ -6012,7 +6391,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local g=data.tea_lpdu_p4\nif not g then\n g={texts={},shapes={}};data.tea_lpdu_p4=g\n function g.timer(ms,id,prefix,height)\n  if ms<=0 then return end\n  local uuid=AnyoneCore.addWorldTextCountdownOnEnt(math.floor(ms),id,0xFFFFFFFF,true,1.35,height or 2.5,0,prefix)\n  if uuid then g.texts[#g.texts+1]=uuid end\n  return uuid\n end\nend\nif g.heartExplained then self.used=true;return end\nAnyoneCore.Shotcall(\"Heart clears crystals. Move away\",true,4,false)\ng.heartExplained=true;self.used=true",
+							actionLua = "local g=data.tea_lpdu_p4\nif not g then\n g={texts={},shapes={}};data.tea_lpdu_p4=g\n function g.timer(ms,id,prefix,height)\n  if ms<=0 then return end\n  local uuid=AnyoneCore.addWorldTextCountdownOnEnt(math.floor(ms),id,0xFFFFFFFF,true,1.35,height or 2.5,0,prefix)\n  if uuid then g.texts[#g.texts+1]=uuid end\n  return uuid\n end\nend\nif g.heartExplained then self.used=true;return end\nAnyoneCore.Shotcall(\"Heart clears crystals. Move away\", not (NAUR_TTS and NAUR_TTS.enabled==false),4,false)\ng.heartExplained=true;self.used=true",
 							name = "Inception - Heart purpose and crystal escape",
 							uuid = "e4b9537a-fc87-1f49-ad69-70d3f84dff84",
 							version = 2.1,
@@ -6038,6 +6417,17 @@ local tbl =
 	},
 	[104] = 
 	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "a25a2d65-8eaf-f321-d1e1-809bfcbe5075",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
 		
 		{
 			data = 
@@ -6082,7 +6472,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local roster = AnyoneCore.Roster\nlocal mySlot = roster and roster.mySlot()\nlocal currentTime = TensorReactions_CurrentTimer\n\nlocal calls = {\n    -- NAUR: MT 1st (far), OT 2nd (middle).\n    T1 = { message = \"Bait 1st Flarethrower\", startTime = 565.5, endTime = 570.7 },\n    T2 = { message = \"Bait 2nd Flarethrower\", startTime = 565.5, endTime = 572.5 },\n    other = { message = \"Bait 3rd Flarethrower\", startTime = 565.5, endTime = 574.6 }\n}\n\nlocal bait = mySlot and (calls[mySlot] or calls.other)\nif not bait or currentTime < bait.startTime or currentTime >= bait.endTime then\n    return\nend\n\nlocal timer = math.max(0, bait.endTime - currentTime)\nAnyoneCore.Shotcall(bait.message, true, timer, true)\nself.used = true",
+							actionLua = "local roster = AnyoneCore.Roster\nlocal mySlot = roster and roster.mySlot()\nlocal currentTime = TensorReactions_CurrentTimer\n\nlocal calls = {\n    -- NAUR: MT 1st (far), OT 2nd (middle).\n    T1 = { message = \"Bait 1st Flarethrower\", startTime = 565.5, endTime = 570.7 },\n    T2 = { message = \"Bait 2nd Flarethrower\", startTime = 565.5, endTime = 572.5 },\n    other = { message = \"Bait 3rd Flarethrower\", startTime = 565.5, endTime = 574.6 }\n}\n\nlocal bait = mySlot and (calls[mySlot] or calls.other)\nif not bait or currentTime < bait.startTime or currentTime >= bait.endTime then\n    return\nend\n\nlocal timer = math.max(0, bait.endTime - currentTime)\nAnyoneCore.Shotcall(bait.message, not (NAUR_TTS and NAUR_TTS.enabled==false), timer, true)\nself.used = true",
 							endIfUsed = true,
 							name = "Shotcall Flarethrower role bait",
 							uuid = "c7c979c7-d19e-d192-bc6e-06d5fbbdef96",
@@ -6180,6 +6570,17 @@ local tbl =
 		{
 			data = 
 			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "6d5ef4a3-ac5d-051f-8fa0-9ebd65830973",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
 				actions = 
 				{
 					
@@ -6230,7 +6631,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local g=data.tea_lpdu_p4\nif not g then\n g={texts={},shapes={}};data.tea_lpdu_p4=g\n function g.timer(ms,id,prefix,height)\n  if ms<=0 then return end\n  local uuid=AnyoneCore.addWorldTextCountdownOnEnt(math.floor(ms),id,0xFFFFFFFF,true,1.35,height or 2.5,0,prefix)\n  if uuid then g.texts[#g.texts+1]=uuid end\n  return uuid\n end\nend\nif g.heartGathered then self.used=true;return end\nself.callAt = self.callAt or (Now() + 1000)\nif Now() < self.callAt then return end\n\nAnyoneCore.Shotcall(\"Gather at the heart\",true,4,false)\ng.heartGathered=true;self.used=true",
+							actionLua = "local g=data.tea_lpdu_p4\nif not g then\n g={texts={},shapes={}};data.tea_lpdu_p4=g\n function g.timer(ms,id,prefix,height)\n  if ms<=0 then return end\n  local uuid=AnyoneCore.addWorldTextCountdownOnEnt(math.floor(ms),id,0xFFFFFFFF,true,1.35,height or 2.5,0,prefix)\n  if uuid then g.texts[#g.texts+1]=uuid end\n  return uuid\n end\nend\nif g.heartGathered then self.used=true;return end\nself.callAt = self.callAt or (Now() + 1000)\nif Now() < self.callAt then return end\n\nAnyoneCore.Shotcall(\"Gather at the heart\", not (NAUR_TTS and NAUR_TTS.enabled==false),4,false)\ng.heartGathered=true;self.used=true",
 							conditions = 
 							{
 								
@@ -6281,6 +6682,17 @@ local tbl =
 			data = 
 			{
 				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "97faca36-f083-f0e2-8c64-a6f8f9477886",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
 				name = "Guidance",
 				uuid = "7ff3c8d0-ed61-73e5-80c2-0f296c5331ed",
 			},
@@ -6297,7 +6709,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local g=data.tea_lpdu_p4\nif not g then\n g={texts={},shapes={}};data.tea_lpdu_p4=g\n function g.timer(ms,id,prefix,height)\n  if ms<=0 then return end\n  local uuid=AnyoneCore.addWorldTextCountdownOnEnt(math.floor(ms),id,0xFFFFFFFF,true,1.35,height or 2.5,0,prefix)\n  if uuid then g.texts[#g.texts+1]=uuid end\n  return uuid\n end\nend\nif g.heartSplitCalled then self.used=true;return end\nlocal roster=AnyoneCore.Roster\nif not roster or not roster.current() or not data.trueHeartNewNorth then return end\nlocal p=TensorCore.mGetPlayer();if not p then return end\nlocal slot=roster.mySlot();local stack=TensorCore.hasBuff(p,1122)\nlocal far=TensorCore.hasBuff(p,1124)\nlocal message\nif slot==\"T1\" or slot==\"T2\" or stack then message=\"Follow your arrow. Stack with tanks\"\nelse message=\"Follow your arrow. Stay out of the stack\" end\nif far then message=message..\". Tether: go far\" end\nAnyoneCore.Shotcall(message,true,5,false)\ng.heartSplitCalled=true;self.used=true",
+							actionLua = "local g=data.tea_lpdu_p4\nif not g then\n g={texts={},shapes={}};data.tea_lpdu_p4=g\n function g.timer(ms,id,prefix,height)\n  if ms<=0 then return end\n  local uuid=AnyoneCore.addWorldTextCountdownOnEnt(math.floor(ms),id,0xFFFFFFFF,true,1.35,height or 2.5,0,prefix)\n  if uuid then g.texts[#g.texts+1]=uuid end\n  return uuid\n end\nend\nif g.heartSplitCalled then self.used=true;return end\nlocal roster=AnyoneCore.Roster\nif not roster or not roster.current() or not data.trueHeartNewNorth then return end\nlocal p=TensorCore.mGetPlayer();if not p then return end\nlocal slot=roster.mySlot();local stack=TensorCore.hasBuff(p,1122)\nlocal far=TensorCore.hasBuff(p,1124)\nlocal message\nif slot==\"T1\" or slot==\"T2\" or stack then message=\"Follow your arrow. Stack with tanks\"\nelse message=\"Follow your arrow. Stay out of the stack\" end\nif far then message=message..\". Tether: go far\" end\nAnyoneCore.Shotcall(message, not (NAUR_TTS and NAUR_TTS.enabled==false),5,false)\ng.heartSplitCalled=true;self.used=true",
 							name = "Inception - Personal Heart split instruction",
 							uuid = "0d06bf7d-e42a-44b9-b54e-0613935e6e5d",
 							version = 2.1,
@@ -6446,7 +6858,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local g=data.tea_lpdu_p4\nif not g then\n g={texts={},shapes={}};data.tea_lpdu_p4=g\n function g.timer(ms,id,prefix,height)\n  if ms<=0 then return end\n  local uuid=AnyoneCore.addWorldTextCountdownOnEnt(math.floor(ms),id,0xFFFFFFFF,true,1.35,height or 2.5,0,prefix)\n  if uuid then g.texts[#g.texts+1]=uuid end\n  return uuid\n end\nend\nif g.heartAfterCalled then self.used=true;return end\nlocal roster=AnyoneCore.Roster;if not roster or not roster.current() then return end\nlocal p=TensorCore.mGetPlayer();if not p then return end\nlocal slot=roster.mySlot();local message\nif slot==\"H1\" then message=\"Bait cleave north\"\nelseif slot==\"H2\" then message=\"Bait cleave south\"\nelseif p.id==data.trueHeartRestrainingOrderDpsID then message=\"Bait cleave west\"\nelseif slot==\"T1\" then message=\"Bait jump east\"\nelse message=\"Go to one. Avoid cleaves\" end\nAnyoneCore.Shotcall(message,true,4,false)\ng.heartAfterCalled=true;self.used=true",
+							actionLua = "local g=data.tea_lpdu_p4\nif not g then\n g={texts={},shapes={}};data.tea_lpdu_p4=g\n function g.timer(ms,id,prefix,height)\n  if ms<=0 then return end\n  local uuid=AnyoneCore.addWorldTextCountdownOnEnt(math.floor(ms),id,0xFFFFFFFF,true,1.35,height or 2.5,0,prefix)\n  if uuid then g.texts[#g.texts+1]=uuid end\n  return uuid\n end\nend\nif g.heartAfterCalled then self.used=true;return end\nlocal roster=AnyoneCore.Roster;if not roster or not roster.current() then return end\nlocal p=TensorCore.mGetPlayer();if not p then return end\nlocal slot=roster.mySlot();local message\nif slot==\"H1\" then message=\"Bait cleave north\"\nelseif slot==\"H2\" then message=\"Bait cleave south\"\nelseif p.id==data.trueHeartRestrainingOrderDpsID then message=\"Bait cleave west\"\nelseif slot==\"T1\" then message=\"Bait jump east\"\nelse message=\"Go to one. Avoid cleaves\" end\nAnyoneCore.Shotcall(message, not (NAUR_TTS and NAUR_TTS.enabled==false),4,false)\ng.heartAfterCalled=true;self.used=true",
 							conditions = 
 							{
 								
@@ -6584,6 +6996,20 @@ local tbl =
 			},
 		},
 	},
+	[114] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "de9c4086-201e-4432-a629-24840a6bb996",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+	},
 	[116] = 
 	{
 		
@@ -6658,6 +7084,17 @@ local tbl =
 		{
 			data = 
 			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "217036f2-c1bb-11c6-68bf-f7c8d5350b82",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
 				actions = 
 				{
 					
@@ -6688,6 +7125,17 @@ local tbl =
 	},
 	[119] = 
 	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "d0e695ef-6362-a5b3-df98-cdcd2990e5bf",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
 		
 		{
 			data = 
@@ -6763,7 +7211,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "data.teaWormhole = data.teaWormhole or {}\nlocal state = data.teaWormhole\nif state.positions == nil then\n    state.positions = {\n        [1] = {{ x = 86.5, y = 0, z = 86 }, { x = 86.5, y = 0, z = 86 }, { x = 81, y = 0, z = 99 }, { x = 90, y = 0, z = 97 }},\n        [2] = {{ x = 113.5, y = 0, z = 86 }, { x = 113.5, y = 0, z = 86 }, { x = 119, y = 0, z = 99 }, { x = 110, y = 0, z = 103 }},\n        [3] = {{ x = 87.150, y = 0, z = 112.8 }, { x = 81, y = 0, z = 101 }, { x = 81, y = 0, z = 101 }},\n        [4] = {{ x = 113, y = 0, z = 113 }, { x = 113, y = 0, z = 113 }, { x = 119, y = 0, z = 101 }, { x = 119, y = 0, z = 101 }},\n        [5] = {{ x = 84.45, y = 0, z = 89.65 }, { x = 82, y = 0, z = 96 }, { x = 86.5, y = 0, z = 86 }},\n        [6] = {{ x = 115.55, y = 0, z = 89.65 }, { x = 118, y = 0, z = 104 }, { x = 113.5, y = 0, z = 86 }},\n        [7] = {{ x = 83, y = 0, z = 93 }, { x = 81.5, y = 0, z = 100 }, { x = 85, y = 0, z = 93 }, { x = 86.5, y = 0, z = 114 }},\n        [8] = {{ x = 117, y = 0, z = 93 }, { x = 118.5, y = 0, z = 100 }, { x = 115, y = 0, z = 107 }, { x = 113.5, y = 0, z = 114 }}\n    }\n    state.targetPos = { x = 0, y = 0, z = 0 }\nend\n\nif state.positions[3] and state.positions[3][4] ~= nil then\n    local oldPlayer3Positions = state.positions[3]\n    state.positions[3] = {\n        oldPlayer3Positions[1],\n        oldPlayer3Positions[3],\n        oldPlayer3Positions[4]\n    }\nend\n\nif state.positions[5] then\n    state.positions[5][4] = nil\nend\n\nif state.positions[6] then\n    state.positions[6][4] = nil\nend\n\nlocal actualNumber = eventArgs.markerID - 78\nstate.actualNumber = actualNumber\nstate.myNumber = actualNumber\nstate.phase = 0\nstate.active = true\nstate.inverted = false\n-- NAUR cheat sheet: Wormhole is Alexander-relative. The spot table is laid out with Alexander Prime south (as in the NAUR\n-- toolbox); when he's north, the Position Arrow, ray baiter and Enumeration turn 180 degrees. He stands at the arena edge.\nstate.alexNorth = false\nlocal alexFar = 0\nfor _, e in pairs(TensorCore.entityList(\"contentid=9220\") or {}) do\n    if e and e.pos then\n        local dz = e.pos.z - 100\n        if math.abs(dz) > alexFar then alexFar = math.abs(dz); state.alexNorth = dz < 0 end\n    end\nend\nif alexFar < 5 then state.alexNorth = false end\nstate.visibleSequence = 0\nstate.firstAlphaResolvedAt = nil\nstate.firstChargeResolvedAt = nil\nstate.apocalypticRayStarted = false\nstate.wormholeEntityIDs = {}\nstate.assignmentSequence = (state.assignmentSequence or 0) + 1\n\nif state.shotcallNumber ~= state.myNumber then\n    AnyoneCore.Shotcall(\"Wormhole \" .. tostring(state.myNumber), true, 5, false)\n    state.shotcallNumber = state.myNumber\nend\n\nself.used = true\n",
+							actionLua = "data.teaWormhole = data.teaWormhole or {}\nlocal state = data.teaWormhole\nif state.positions == nil then\n    state.positions = {\n        [1] = {{ x = 86.5, y = 0, z = 86 }, { x = 86.5, y = 0, z = 86 }, { x = 81, y = 0, z = 99 }, { x = 90, y = 0, z = 97 }},\n        [2] = {{ x = 113.5, y = 0, z = 86 }, { x = 113.5, y = 0, z = 86 }, { x = 119, y = 0, z = 99 }, { x = 110, y = 0, z = 103 }},\n        [3] = {{ x = 87.150, y = 0, z = 112.8 }, { x = 81, y = 0, z = 101 }, { x = 81, y = 0, z = 101 }},\n        [4] = {{ x = 113, y = 0, z = 113 }, { x = 113, y = 0, z = 113 }, { x = 119, y = 0, z = 101 }, { x = 119, y = 0, z = 101 }},\n        [5] = {{ x = 84.45, y = 0, z = 89.65 }, { x = 82, y = 0, z = 96 }, { x = 86.5, y = 0, z = 86 }},\n        [6] = {{ x = 115.55, y = 0, z = 89.65 }, { x = 118, y = 0, z = 104 }, { x = 113.5, y = 0, z = 86 }},\n        [7] = {{ x = 83, y = 0, z = 93 }, { x = 81.5, y = 0, z = 100 }, { x = 85, y = 0, z = 93 }, { x = 86.5, y = 0, z = 114 }},\n        [8] = {{ x = 117, y = 0, z = 93 }, { x = 118.5, y = 0, z = 100 }, { x = 115, y = 0, z = 107 }, { x = 113.5, y = 0, z = 114 }}\n    }\n    state.targetPos = { x = 0, y = 0, z = 0 }\nend\n\nif state.positions[3] and state.positions[3][4] ~= nil then\n    local oldPlayer3Positions = state.positions[3]\n    state.positions[3] = {\n        oldPlayer3Positions[1],\n        oldPlayer3Positions[3],\n        oldPlayer3Positions[4]\n    }\nend\n\nif state.positions[5] then\n    state.positions[5][4] = nil\nend\n\nif state.positions[6] then\n    state.positions[6][4] = nil\nend\n\nlocal actualNumber = eventArgs.markerID - 78\nstate.actualNumber = actualNumber\nstate.myNumber = actualNumber\nstate.phase = 0\nstate.active = true\nstate.inverted = false\n-- NAUR cheat sheet: Wormhole is Alexander-relative. The spot table is laid out with Alexander Prime south (as in the NAUR\n-- toolbox); when he's north, the Position Arrow, ray baiter and Enumeration turn 180 degrees. He stands at the arena edge.\nstate.alexNorth = false\nlocal alexFar = 0\nfor _, e in pairs(TensorCore.entityList(\"contentid=9220\") or {}) do\n    if e and e.pos then\n        local dz = e.pos.z - 100\n        if math.abs(dz) > alexFar then alexFar = math.abs(dz); state.alexNorth = dz < 0 end\n    end\nend\nif alexFar < 5 then state.alexNorth = false end\nstate.visibleSequence = 0\nstate.firstAlphaResolvedAt = nil\nstate.firstChargeResolvedAt = nil\nstate.apocalypticRayStarted = false\nstate.wormholeEntityIDs = {}\nstate.assignmentSequence = (state.assignmentSequence or 0) + 1\n\nif state.shotcallNumber ~= state.myNumber then\n    AnyoneCore.Shotcall(\"Wormhole \" .. tostring(state.myNumber), not (NAUR_TTS and NAUR_TTS.enabled==false), 5, false)\n    state.shotcallNumber = state.myNumber\nend\n\nself.used = true\n",
 							conditions = 
 							{
 								
@@ -7032,7 +7480,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local w=data.teaWormhole\nlocal p=TensorCore.mGetPlayer()\nif not w or not w.myNumber or not p then self.used=true;return end\nlocal s=data.tea_lpdu_wormCalls\nif not s or s.assignment~=w.assignmentSequence then\n s={assignment=w.assignmentSequence,soakStage=0};data.tea_lpdu_wormCalls=s\nend\nlocal spell=eventArgs.spellID\nlocal number=w.myNumber\nif spell==18506 then\n if not s.rayHolder and eventArgs.castPosX and eventArgs.castPosX>75 and eventArgs.castPosX<125 and math.abs(eventArgs.castPosX-100)>5 then\n  -- Alexander-relative: with Alexander north the jump on 3 lands east, so read it in his frame.\n s.rayHolder=((eventArgs.castPosX<100)~=(w.alexNorth==true)) and 2 or 1\n  if number==s.rayHolder then AnyoneCore.Shotcall(\"Hold. Bait ray\",true,3,false) end\n end\nelseif spell==18507 then\n if number==s.rayHolder and not s.rayDone then\n  s.rayDone=true;AnyoneCore.Shotcall(\"Ray baited. Move\",true,2,false)\n end\nelseif spell==18517 then\n if s.soakStage==0 then\n  s.soakStage=1\n  if number==5 or number==6 then AnyoneCore.Shotcall(\"Soak your puddle\",true,3,false) end\n end\nelse\n local stage=spell==18537 and 1 or (spell==18536 and 2 or 3)\n local expected=(stage==1 and (number==5 or number==6)) or (stage==2 and (number==7 or number==8)) or (stage==3 and (number==1 or number==2))\n if expected and not s.ownSoakDone then\n  for _,id in pairs(eventArgs.hitTargets or {}) do\n   if id==p.id then\n    if s.finalSoakTimer then\n     AnyoneCore.removeTimedWorldText(s.finalSoakTimer)\n     s.finalSoakTimer = nil\n    end\n    s.ownSoakDone=true;AnyoneCore.Shotcall(\"Leave puddle\",true,2,false);break\n   end\n  end\n end\n if s.soakStage<=stage then\n  s.soakStage=stage+1\n  if not s.ownSoakDone and ((stage==1 and (number==7 or number==8)) or (stage==2 and (number==1 or number==2))) then\n   AnyoneCore.Shotcall(\"Soak your puddle\",true,3,false)\n  end\n end\nend\nself.used=true",
+							actionLua = "local w=data.teaWormhole\nlocal p=TensorCore.mGetPlayer()\nif not w or not w.myNumber or not p then self.used=true;return end\nlocal s=data.tea_lpdu_wormCalls\nif not s or s.assignment~=w.assignmentSequence then\n s={assignment=w.assignmentSequence,soakStage=0};data.tea_lpdu_wormCalls=s\nend\nlocal spell=eventArgs.spellID\nlocal number=w.myNumber\nif spell==18506 then\n if not s.rayHolder and eventArgs.castPosX and eventArgs.castPosX>75 and eventArgs.castPosX<125 and math.abs(eventArgs.castPosX-100)>5 then\n  -- Alexander-relative: with Alexander north the jump on 3 lands east, so read it in his frame.\n s.rayHolder=((eventArgs.castPosX<100)~=(w.alexNorth==true)) and 2 or 1\n  if number==s.rayHolder then AnyoneCore.Shotcall(\"Hold. Bait ray\", not (NAUR_TTS and NAUR_TTS.enabled==false),3,false) end\n end\nelseif spell==18507 then\n if number==s.rayHolder and not s.rayDone then\n  s.rayDone=true;AnyoneCore.Shotcall(\"Ray baited. Move\", not (NAUR_TTS and NAUR_TTS.enabled==false),2,false)\n end\nelseif spell==18517 then\n if s.soakStage==0 then\n  s.soakStage=1\n  if number==5 or number==6 then AnyoneCore.Shotcall(\"Soak your puddle\", not (NAUR_TTS and NAUR_TTS.enabled==false),3,false) end\n end\nelse\n local stage=spell==18537 and 1 or (spell==18536 and 2 or 3)\n local expected=(stage==1 and (number==5 or number==6)) or (stage==2 and (number==7 or number==8)) or (stage==3 and (number==1 or number==2))\n if expected and not s.ownSoakDone then\n  for _,id in pairs(eventArgs.hitTargets or {}) do\n   if id==p.id then\n    if s.finalSoakTimer then\n     AnyoneCore.removeTimedWorldText(s.finalSoakTimer)\n     s.finalSoakTimer = nil\n    end\n    s.ownSoakDone=true;AnyoneCore.Shotcall(\"Leave puddle\", not (NAUR_TTS and NAUR_TTS.enabled==false),2,false);break\n   end\n  end\n end\n if s.soakStage<=stage then\n  s.soakStage=stage+1\n  if not s.ownSoakDone and ((stage==1 and (number==7 or number==8)) or (stage==2 and (number==1 or number==2))) then\n   AnyoneCore.Shotcall(\"Soak your puddle\", not (NAUR_TTS and NAUR_TTS.enabled==false),3,false)\n  end\n end\nend\nself.used=true",
 							conditions = 
 							{
 								
@@ -7076,6 +7524,34 @@ local tbl =
 			},
 		},
 	},
+	[120] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "33a597ff-39de-fb73-b68f-cd295585a98f",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+	},
+	[122] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "a7651981-d11a-4275-7ff8-ef07807188d1",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+	},
 	[125] = 
 	{
 		
@@ -7114,6 +7590,17 @@ local tbl =
 	},
 	[126] = 
 	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "4d167c7d-a061-7e39-7ab2-2ce36ba5038d",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
 		
 		{
 			data = 
@@ -7441,6 +7928,17 @@ local tbl =
 	},
 	[128] = 
 	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "4dd00d67-d350-c18b-c2cf-c921cb11ccb7",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
 		
 		{
 			data = 
@@ -8025,7 +8523,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local p=TensorCore.mGetPlayer()\nif not p then return end\nif eventArgs.entityID==p.id then AnyoneCore.Shotcall(\"Stack: go middle\",true,4,false) end\nself.used=true",
+							actionLua = "local p=TensorCore.mGetPlayer()\nif not p then return end\nif eventArgs.entityID==p.id then AnyoneCore.Shotcall(\"Stack: go middle\", not (NAUR_TTS and NAUR_TTS.enabled==false),4,false) end\nself.used=true",
 							conditions = 
 							{
 								
@@ -8067,6 +8565,20 @@ local tbl =
 				uuid = "ff03a7c7-0744-1d1e-be88-9e14ddd928cb",
 				version = 2,
 			},
+		},
+	},
+	[141] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "579ef058-3b67-9194-94e9-c2c6794e13a8",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
 		},
 	},
 	[142] = 
@@ -8139,7 +8651,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local player = TensorCore.mGetPlayer()\nlocal state = data.teaP3\nlocal ids = state and state.enumerationIDs\nif not player or not ids then\n  self.used = true\n  return\nend\n\nlocal first\nlocal second\n\nfor entityID in pairs(ids) do\n  local entity = TensorCore.mGetEntity(entityID)\n  if entity and TensorCore.isDPS(entity) and entity.pos then\n    if not first then\n      first = entity\n    elseif not second then\n      second = entity\n    end\n  end\nend\n\nif not first or not second then\n  self.used = true\n  return\nend\n\nlocal eastTarget = first\nlocal westTarget = first\nif second.pos.x > first.pos.x then\n  eastTarget = second\nelseif second.pos.x < first.pos.x then\n  westTarget = second\nend\n\n-- Alexander-relative (NAUR cheat sheet): tanks take the circle on the right when facing away from Alexander south.\nlocal wormhole = data.teaWormhole\nif wormhole and wormhole.alexNorth then\n  eastTarget, westTarget = westTarget, eastTarget\nend\n\nlocal greenTarget\nif TensorCore.isDPS(player) then\n  if ids[player.id] then\n    greenTarget = player\n  end\nelseif TensorCore.isTank(player) then\n  greenTarget = eastTarget\nelseif TensorCore.isHealer(player) then\n  greenTarget = westTarget\nelse\n  self.used = true\n  return\nend\n\nif not state.lpduEnumCalled then\n state.lpduEnumCalled=true\n local message\n if TensorCore.isDPS(player) then message=ids[player.id] and \"Enumeration: stay with your group\" or \"Stay out of enumerations\"\n else message=\"Join your green enumeration\" end\n AnyoneCore.Shotcall(message,true,3,false)\nend\n\nlocal greenDrawer = TensorCore.getCachedDrawer(\n  0x4400FF00, 0x8800FF00, 0x6600FF00, 0xDD00FF00, 2\n)\nlocal redDrawer = TensorCore.getCachedDrawer(\n  0x440000FF, 0x880000FF, 0x660000FF, 0xDD0000FF, 2\n)\n\nlocal firstDrawer = greenTarget and first.id == greenTarget.id\n    and greenDrawer or redDrawer\nfirstDrawer:addCircle(\n  first.pos.x,\n  first.pos.y,\n  first.pos.z,\n  5,\n  false,\n  0\n)\n\nlocal secondDrawer = greenTarget and second.id == greenTarget.id\n    and greenDrawer or redDrawer\nsecondDrawer:addCircle(\n  second.pos.x,\n  second.pos.y,\n  second.pos.z,\n  5,\n  false,\n  0\n)\n\nif greenTarget and greenTarget.id ~= player.id\n    and player.pos and greenTarget.pos then\n  local heading = TensorCore.getHeadingToTarget(player.pos, greenTarget.pos)\n  local totalDistance = TensorCore.getDistance2d(player.pos, greenTarget.pos)\n  local tipLength = math.min(3, math.max(1.5, totalDistance * 0.2))\n  local baseLength = totalDistance - tipLength\n\n  if baseLength > 0.5 then\n    local arrowDrawer = TensorCore.getCachedDrawer(\n      0xFF00FFFF, 0xFF0088FF, 0xFF0000FF, 0xFFFFFFFF, 2\n    )\n    local scale = math.min(1, totalDistance / 15)\n    arrowDrawer:addArrow(\n      player.pos.x,\n      player.pos.y,\n      player.pos.z,\n      heading,\n      baseLength,\n      math.max(0.5, 1 * scale),\n      tipLength,\n      math.max(1.5, 3 * scale),\n      false,\n      Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n    )\n  end\nend\n\nself.used = true",
+							actionLua = "local player = TensorCore.mGetPlayer()\nlocal state = data.teaP3\nlocal ids = state and state.enumerationIDs\nif not player or not ids then\n  self.used = true\n  return\nend\n\nlocal first\nlocal second\n\nfor entityID in pairs(ids) do\n  local entity = TensorCore.mGetEntity(entityID)\n  if entity and TensorCore.isDPS(entity) and entity.pos then\n    if not first then\n      first = entity\n    elseif not second then\n      second = entity\n    end\n  end\nend\n\nif not first or not second then\n  self.used = true\n  return\nend\n\nlocal eastTarget = first\nlocal westTarget = first\nif second.pos.x > first.pos.x then\n  eastTarget = second\nelseif second.pos.x < first.pos.x then\n  westTarget = second\nend\n\n-- Alexander-relative (NAUR cheat sheet): tanks take the circle on the right when facing away from Alexander south.\nlocal wormhole = data.teaWormhole\nif wormhole and wormhole.alexNorth then\n  eastTarget, westTarget = westTarget, eastTarget\nend\n\nlocal greenTarget\nif TensorCore.isDPS(player) then\n  if ids[player.id] then\n    greenTarget = player\n  end\nelseif TensorCore.isTank(player) then\n  greenTarget = eastTarget\nelseif TensorCore.isHealer(player) then\n  greenTarget = westTarget\nelse\n  self.used = true\n  return\nend\n\nif not state.lpduEnumCalled then\n state.lpduEnumCalled=true\n local message\n if TensorCore.isDPS(player) then message=ids[player.id] and \"Enumeration: stay with your group\" or \"Stay out of enumerations\"\n else message=\"Join your green enumeration\" end\n AnyoneCore.Shotcall(message, not (NAUR_TTS and NAUR_TTS.enabled==false),3,false)\nend\n\nlocal greenDrawer = TensorCore.getCachedDrawer(\n  0x4400FF00, 0x8800FF00, 0x6600FF00, 0xDD00FF00, 2\n)\nlocal redDrawer = TensorCore.getCachedDrawer(\n  0x440000FF, 0x880000FF, 0x660000FF, 0xDD0000FF, 2\n)\n\nlocal firstDrawer = greenTarget and first.id == greenTarget.id\n    and greenDrawer or redDrawer\nfirstDrawer:addCircle(\n  first.pos.x,\n  first.pos.y,\n  first.pos.z,\n  5,\n  false,\n  0\n)\n\nlocal secondDrawer = greenTarget and second.id == greenTarget.id\n    and greenDrawer or redDrawer\nsecondDrawer:addCircle(\n  second.pos.x,\n  second.pos.y,\n  second.pos.z,\n  5,\n  false,\n  0\n)\n\nif greenTarget and greenTarget.id ~= player.id\n    and player.pos and greenTarget.pos then\n  local heading = TensorCore.getHeadingToTarget(player.pos, greenTarget.pos)\n  local totalDistance = TensorCore.getDistance2d(player.pos, greenTarget.pos)\n  local tipLength = math.min(3, math.max(1.5, totalDistance * 0.2))\n  local baseLength = totalDistance - tipLength\n\n  if baseLength > 0.5 then\n    local arrowDrawer = TensorCore.getCachedDrawer(\n      0xFF00FFFF, 0xFF0088FF, 0xFF0000FF, 0xFFFFFFFF, 2\n    )\n    local scale = math.min(1, totalDistance / 15)\n    arrowDrawer:addArrow(\n      player.pos.x,\n      player.pos.y,\n      player.pos.z,\n      heading,\n      baseLength,\n      math.max(0.5, 1 * scale),\n      tipLength,\n      math.max(1.5, 3 * scale),\n      false,\n      Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n    )\n  end\nend\n\nself.used = true",
 							name = "Draw Enumeration Circles and Arrow",
 							uuid = "28460a18-fc7c-3897-b611-8d5d85e44f94",
 							version = 2.1,
@@ -8163,8 +8675,33 @@ local tbl =
 			},
 		},
 	},
+	[146] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "5c64b61f-bd57-43a3-1c68-4b791f135a2f",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+	},
 	[147] = 
 	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "a08ba1e2-e7f3-1936-4913-bce4ead12d32",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
 		
 		{
 			data = 
@@ -8219,6 +8756,20 @@ local tbl =
 			},
 		},
 	},
+	[149] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "3bf894a0-6c68-528c-1c3e-d67ec3da8770",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+	},
 	[151] = 
 	{
 		
@@ -8242,7 +8793,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local g=data.tea_lpdu_p4\nif not g then\n g={texts={},shapes={}};data.tea_lpdu_p4=g\n function g.timer(ms,id,prefix,height)\n  if ms<=0 then return end\n  local uuid=AnyoneCore.addWorldTextCountdownOnEnt(math.floor(ms),id,0xFFFFFFFF,true,1.35,height or 2.5,0,prefix)\n  if uuid then g.texts[#g.texts+1]=uuid end\n  return uuid\n end\nend\nlocal C = TEA_LPDU_Config\nif not C then\n    self.used = true\n    return\nend\n\nif g.lbCalled then self.used=true;return end\nlocal roster=AnyoneCore.Roster;local p=TensorCore.mGetPlayer()\nif not roster or not roster.current() or not p or not TensorCore.isTank(p) or roster.mySlot()~=C.values.lbTank then self.used=true;return end\nAnyoneCore.Shotcall(\"Tank LB now\",true,3,false)\ng.lbCalled=true;self.used=true",
+							actionLua = "local g=data.tea_lpdu_p4\nif not g then\n g={texts={},shapes={}};data.tea_lpdu_p4=g\n function g.timer(ms,id,prefix,height)\n  if ms<=0 then return end\n  local uuid=AnyoneCore.addWorldTextCountdownOnEnt(math.floor(ms),id,0xFFFFFFFF,true,1.35,height or 2.5,0,prefix)\n  if uuid then g.texts[#g.texts+1]=uuid end\n  return uuid\n end\nend\nlocal C = TEA_LPDU_Config\nif not C then\n    self.used = true\n    return\nend\n\nif g.lbCalled then self.used=true;return end\nlocal roster=AnyoneCore.Roster;local p=TensorCore.mGetPlayer()\nif not roster or not roster.current() or not p or not TensorCore.isTank(p) or roster.mySlot()~=C.values.lbTank then self.used=true;return end\nAnyoneCore.Shotcall(\"Tank LB now\", not (NAUR_TTS and NAUR_TTS.enabled==false),3,false)\ng.lbCalled=true;self.used=true",
 							name = "Transition - Tank LB reminder",
 							uuid = "e40c98ff-9ee6-a480-9485-c530462ea269",
 							version = 2.1,
@@ -8319,8 +8870,33 @@ local tbl =
 			},
 		},
 	},
+	[153] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "04f8572d-0152-a339-70f7-0d6767c1b47d",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+	},
 	[155] = 
 	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "0468222f-9ad0-2073-e973-4d054e50cfff",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
 		
 		{
 			data = 
@@ -8376,7 +8952,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local g=data.tea_lpdu_p4\nif not g then\n g={texts={},shapes={}};data.tea_lpdu_p4=g\n function g.timer(ms,id,prefix,height)\n  if ms<=0 then return end\n  local uuid=AnyoneCore.addWorldTextCountdownOnEnt(math.floor(ms),id,0xFFFFFFFF,true,1.35,height or 2.5,0,prefix)\n  if uuid then g.texts[#g.texts+1]=uuid end\n  return uuid\n end\nend\nif g.wordDone then self.used=true;return end\nlocal p=TensorCore.mGetPlayer();if not p then return end\nlocal id,buff\nfor status=2152,2155 do local b=TensorCore.getBuff(p,status);if b and b.duration>0 then id=status;buff=b;break end end\nif not buff then return end\nlocal message\nif id==2153 then message=\"Light beacon: north\"\nelseif id==2155 then message=\"Dark beacon: south\"\nelse message=\"In front of dark beacon\" end\nAnyoneCore.Shotcall(message,true,4,false)\n-- Only Contact and Escape followers are forced to move.\nif id == 2152 or id == 2154 then\n    g.timer(buff.duration * 1000, p.id, \"March \")\nend\ng.wordDone=true;self.used=true",
+							actionLua = "local g=data.tea_lpdu_p4\nif not g then\n g={texts={},shapes={}};data.tea_lpdu_p4=g\n function g.timer(ms,id,prefix,height)\n  if ms<=0 then return end\n  local uuid=AnyoneCore.addWorldTextCountdownOnEnt(math.floor(ms),id,0xFFFFFFFF,true,1.35,height or 2.5,0,prefix)\n  if uuid then g.texts[#g.texts+1]=uuid end\n  return uuid\n end\nend\nif g.wordDone then self.used=true;return end\nlocal p=TensorCore.mGetPlayer();if not p then return end\nlocal id,buff\nfor status=2152,2155 do local b=TensorCore.getBuff(p,status);if b and b.duration>0 then id=status;buff=b;break end end\nif not buff then return end\nlocal message\nif id==2153 then message=\"Light beacon: north\"\nelseif id==2155 then message=\"Dark beacon: south\"\nelse message=\"In front of dark beacon\" end\nAnyoneCore.Shotcall(message, not (NAUR_TTS and NAUR_TTS.enabled==false),4,false)\n-- Only Contact and Escape followers are forced to move.\nif id == 2152 or id == 2154 then\n    g.timer(buff.duration * 1000, p.id, \"March \")\nend\ng.wordDone=true;self.used=true",
 							name = " Final Word - Personal instruction and march timer",
 							uuid = "9ae4d3e9-2ff2-bed2-a760-6db824b5b057",
 							version = 2.1,
@@ -8475,7 +9051,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- OnDraw also runs before combat, when the startup update may not have run.\nlocal C=TEA_LPDU_Config\nif not C then\n C={folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]};C.path=C.folder..[[TEA_LPDU_Draws.lua]]\n local values=FileExists(C.path) and FileLoad(C.path) or {};if type(values)~=\"table\" then values={} end\n local changed=false\n for _,key in ipairs({\"autoStillness\",\"autoMotion\",\"autoLB\"}) do if type(values[key])~=\"boolean\" then values[key]=key~=\"autoLB\";changed=true end end\n if values.lbTank~=\"T1\" and values.lbTank~=\"T2\" then values.lbTank=\"T2\";changed=true end\n if type(values.alphaLabels) ~= \"boolean\" then values.alphaLabels = false; changed = true end\n C.values=values\n function C.save() if not FolderExists(C.folder) then FolderCreate(C.folder) end;FileSave(C.path,C.values) end\n TEA_LPDU_Config=C;if changed then C.save() end\nend\n\nlocal visible = GUI:Begin(\"LPDU Settings###TEALPDUSettings\", true, GUI.WindowFlags_AlwaysAutoResize)\nif visible then\n    local options = {\"Enabled\", \"Disabled\"}\n    local motion, motionChanged = GUI:Combo(\"Ordained Motion\", C.values.autoMotion and 1 or 2, options)\n    if motionChanged then\n        C.values.autoMotion = motion == 1\n        C.save()\n    end\n    local stillness, stillnessChanged = GUI:Combo(\"Ordained Stillness\", C.values.autoStillness and 1 or 2, options)\n    if stillnessChanged then\n        C.values.autoStillness = stillness == 1\n        C.save()\n    end\n    local labels, labelsChanged = GUI:Combo(\"Fate Alpha labels\", C.values.alphaLabels and 1 or 2, options)\n    if labelsChanged then\n        C.values.alphaLabels = labels == 1\n        C.save()\n    end\n\n    local judgmentStyles = {\"Subtractive\", \"Exaflares\"}\n    local currentStyle = C.values.judgmentStyle == \"Exaflares\" and 2 or 1\n    local selectedStyle, styleChanged = GUI:Combo(\"Almighty Judgment draws\", currentStyle, judgmentStyles)\n    if styleChanged then\n        C.values.judgmentStyle = judgmentStyles[selectedStyle]\n        C.save()\n    end\n\n    local player = TensorCore.mGetPlayer()\n    if player and player.job == 23 then\n        local paean, paeanChanged = GUI:Combo(\"Auto-cleanse Throttle (Bard)\", C.values.autoThrottlePaean == true and 1 or 2, options)\n        if paeanChanged then\n            C.values.autoThrottlePaean = paean == 1\n            C.save()\n        end\n    end\n\n    if player and TensorCore.isTank(player) then\n        local lb, lbChanged = GUI:Combo(\"Automatic Tank LB\", C.values.autoLB and 1 or 2, options)\n        if lbChanged then\n            C.values.autoLB = lb == 1\n            C.save()\n        end\n        if C.values.autoLB then\n            local tank, tankChanged = GUI:Combo(\"Tank LB user\", C.values.lbTank == \"T1\" and 1 or 2, {\"T1\", \"T2\"})\n            if tankChanged then\n                C.values.lbTank = tank == 1 and \"T1\" or \"T2\"\n                C.save()\n            end\n        end\n    end\nend\nGUI:End()\nself.used = true",
+							actionLua = "if not NAUR_TTS then\n local path=GetLuaModsPath()..[[TensorReactions\\Settings\\NAUR-TTS.lua]]\n local v=FileExists(path) and FileLoad(path)\n NAUR_TTS={enabled=not (type(v)==\"table\" and v.enabled==false),path=path}\n function NAUR_TTS.save()\n  local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n  if not FolderExists(folder) then FolderCreate(folder) end\n  FileSave(NAUR_TTS.path,{enabled=NAUR_TTS.enabled})\n end\nend\n-- OnDraw also runs before combat, when the startup update may not have run.\nlocal C=TEA_LPDU_Config\nif not C then\n C={folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]};C.path=C.folder..[[TEA_LPDU_Draws.lua]]\n local values=FileExists(C.path) and FileLoad(C.path) or {};if type(values)~=\"table\" then values={} end\n local changed=false\n for _,key in ipairs({\"autoStillness\",\"autoMotion\",\"autoLB\"}) do if type(values[key])~=\"boolean\" then values[key]=key~=\"autoLB\";changed=true end end\n if values.lbTank~=\"T1\" and values.lbTank~=\"T2\" then values.lbTank=\"T2\";changed=true end\n if type(values.alphaLabels) ~= \"boolean\" then values.alphaLabels = false; changed = true end\n C.values=values\n function C.save() if not FolderExists(C.folder) then FolderCreate(C.folder) end;FileSave(C.path,C.values) end\n TEA_LPDU_Config=C;if changed then C.save() end\nend\n\nlocal visible = GUI:Begin(\"LPDU Settings###TEALPDUSettings\", true, GUI.WindowFlags_AlwaysAutoResize)\nif visible then\n local naurTTS=GUI:Checkbox(\"Voice callouts (TTS)##NAURTTS\",NAUR_TTS.enabled)\n if naurTTS~=NAUR_TTS.enabled then NAUR_TTS.enabled=naurTTS;NAUR_TTS.save() end\n if GUI:IsItemHovered() then GUI:SetTooltip(\"Shared by the TEA, UCOB and UWU NAUR draws. Off: callouts stay on screen, no voice.\") end\n if GUI:Button(\"Open Party Roster##NAURRoster\") then\n  if AnyoneCore and AnyoneCore.RosterPopup and AnyoneCore.RosterPopup.openManual then AnyoneCore.RosterPopup.openManual() end\n end\n if GUI:IsItemHovered() then GUI:SetTooltip(\"Opens Anyone's Party Roster to set or check your slot.\") end\n    local options = {\"Enabled\", \"Disabled\"}\n    local motion, motionChanged = GUI:Combo(\"Ordained Motion\", C.values.autoMotion and 1 or 2, options)\n    if motionChanged then\n        C.values.autoMotion = motion == 1\n        C.save()\n    end\n    local stillness, stillnessChanged = GUI:Combo(\"Ordained Stillness\", C.values.autoStillness and 1 or 2, options)\n    if stillnessChanged then\n        C.values.autoStillness = stillness == 1\n        C.save()\n    end\n    local labels, labelsChanged = GUI:Combo(\"Fate Alpha labels\", C.values.alphaLabels and 1 or 2, options)\n    if labelsChanged then\n        C.values.alphaLabels = labels == 1\n        C.save()\n    end\n\n    local judgmentStyles = {\"Subtractive\", \"Exaflares\"}\n    local currentStyle = C.values.judgmentStyle == \"Exaflares\" and 2 or 1\n    local selectedStyle, styleChanged = GUI:Combo(\"Almighty Judgment draws\", currentStyle, judgmentStyles)\n    if styleChanged then\n        C.values.judgmentStyle = judgmentStyles[selectedStyle]\n        C.save()\n    end\n\n    local player = TensorCore.mGetPlayer()\n    if player and player.job == 23 then\n        local paean, paeanChanged = GUI:Combo(\"Auto-cleanse Throttle (Bard)\", C.values.autoThrottlePaean == true and 1 or 2, options)\n        if paeanChanged then\n            C.values.autoThrottlePaean = paean == 1\n            C.save()\n        end\n    end\n\n    if player and TensorCore.isTank(player) then\n        local lb, lbChanged = GUI:Combo(\"Automatic Tank LB\", C.values.autoLB and 1 or 2, options)\n        if lbChanged then\n            C.values.autoLB = lb == 1\n            C.save()\n        end\n        if C.values.autoLB then\n            local tank, tankChanged = GUI:Combo(\"Tank LB user\", C.values.lbTank == \"T1\" and 1 or 2, {\"T1\", \"T2\"})\n            if tankChanged then\n                C.values.lbTank = tank == 1 and \"T1\" or \"T2\"\n                C.save()\n            end\n        end\n    end\nend\nGUI:End()\nself.used = true",
 							name = "TEA - Optional automation settings",
 							uuid = "f0875a94-0ffe-1944-996f-54c45c3be10b",
 							version = 2.1,
@@ -8509,7 +9085,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local g = data.tea_lpdu_p4\nif not g then\n    g = {texts = {}, shapes = {}};data.tea_lpdu_p4 = g\n    function g.timer(ms, id, prefix, height)\n        if ms <= 0 then\n            return\n        end\n        local uuid = AnyoneCore.addWorldTextCountdownOnEnt(math.floor(ms), id, 0xFFFFFFFF, true, 1.35, height or 2.5, 0, prefix)\n        if uuid then\n            g.texts[#g.texts+1] = uuid\n        end\n        return uuid\n    end\nend\nlocal p = TensorCore.mGetPlayer()\nif not p or eventArgs.targetID ~= p.id then\n    self.used = true\n    return\nend\ng.resolved = g.resolved or {}\nlocal t = TensorReactions_CurrentTimer\nlocal key = t < 921 and \"word1\" or (t < 950 and \"word2\" or (t < 992 and \"alpha1\" or \"alpha2\"))\nif g.resolved[key] then\n    self.used = true\n    return\nend\ng.resolved[key] = true\n-- Alpha uses the final Move in cue after the full sequence.\nif key == \"alpha1\" or key == \"alpha2\" then\n    self.used = true\n    return\nend\nAnyoneCore.Shotcall(eventArgs.spellID == 19039 and \"Ordained Motion resolved\" or \"Ordained Stillness resolved\",true, 2, false)\nself.used = true",
+							actionLua = "local g = data.tea_lpdu_p4\nif not g then\n    g = {texts = {}, shapes = {}};data.tea_lpdu_p4 = g\n    function g.timer(ms, id, prefix, height)\n        if ms <= 0 then\n            return\n        end\n        local uuid = AnyoneCore.addWorldTextCountdownOnEnt(math.floor(ms), id, 0xFFFFFFFF, true, 1.35, height or 2.5, 0, prefix)\n        if uuid then\n            g.texts[#g.texts+1] = uuid\n        end\n        return uuid\n    end\nend\nlocal p = TensorCore.mGetPlayer()\nif not p or eventArgs.targetID ~= p.id then\n    self.used = true\n    return\nend\ng.resolved = g.resolved or {}\nlocal t = TensorReactions_CurrentTimer\nlocal key = t < 921 and \"word1\" or (t < 950 and \"word2\" or (t < 992 and \"alpha1\" or \"alpha2\"))\nif g.resolved[key] then\n    self.used = true\n    return\nend\ng.resolved[key] = true\n-- Alpha uses the final Move in cue after the full sequence.\nif key == \"alpha1\" or key == \"alpha2\" then\n    self.used = true\n    return\nend\nAnyoneCore.Shotcall(eventArgs.spellID == 19039 and \"Ordained Motion resolved\" or \"Ordained Stillness resolved\", not (NAUR_TTS and NAUR_TTS.enabled==false), 2, false)\nself.used = true",
 							conditions = 
 							{
 								
@@ -8587,6 +9163,17 @@ local tbl =
 	},
 	[156] = 
 	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "603d679c-92ee-b930-de17-9ed6b6e4a32c",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
 		
 		{
 			data = 
@@ -8700,7 +9287,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if data.teaOrdainedCurrent == \"stillness\" then\n    AnyoneCore.Shotcall(\"Stop. No actions\", true, 3, true)\nelseif data.teaOrdainedCurrent == \"motion\" then\n    AnyoneCore.Shotcall(\"keep moving\", true, 3, true)\nend\nself.used = true",
+							actionLua = "if data.teaOrdainedCurrent == \"stillness\" then\n    AnyoneCore.Shotcall(\"Stop. No actions\", not (NAUR_TTS and NAUR_TTS.enabled==false), 3, true)\nelseif data.teaOrdainedCurrent == \"motion\" then\n    AnyoneCore.Shotcall(\"keep moving\", not (NAUR_TTS and NAUR_TTS.enabled==false), 3, true)\nend\nself.used = true",
 							name = "Shotcall Ordained Type",
 							uuid = "74e444cf-363a-336a-8727-b1247a9dd3d9",
 							version = 2.1,
@@ -8824,6 +9411,17 @@ local tbl =
 			data = 
 			{
 				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "e507b371-320b-6775-c226-c2c3c2105181",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
 				name = "P3 - Alexander Prime",
 				uuid = "16c9d248-cf34-e0b5-9d75-48ad8a76e61f",
 			},
@@ -8850,7 +9448,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if data.teaOrdainedCurrent == \"motion\" then\n    AnyoneCore.Shotcall(\"keep moving\", true, 3, true)\nend\nself.used = true",
+							actionLua = "if data.teaOrdainedCurrent == \"motion\" then\n    AnyoneCore.Shotcall(\"keep moving\", not (NAUR_TTS and NAUR_TTS.enabled==false), 3, true)\nend\nself.used = true",
 							name = "Shotcall Keep Moving if 916 Stillness",
 							uuid = "1f832c7b-9af6-5626-b615-d92745b7d0c6",
 							version = 2.1,
@@ -9036,7 +9634,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local g=data.tea_lpdu_p4\nif not g then\n g={texts={},shapes={}};data.tea_lpdu_p4=g\n function g.timer(ms,id,prefix,height)\n  if ms<=0 then return end\n  local uuid=AnyoneCore.addWorldTextCountdownOnEnt(math.floor(ms),id,0xFFFFFFFF,true,1.35,height or 2.5,0,prefix)\n  if uuid then g.texts[#g.texts+1]=uuid end\n  return uuid\n end\nend\nlocal s=g.optical\nif not s then s={};g.optical=s end\nif s.lastCall and Now()-s.lastCall<1000 then self.used=true;return end\ns.lastCall=Now()\nlocal message = eventArgs.spellID == 18570 and \"Spread\" or \"Split stacks west and east\"\nAnyoneCore.Shotcall(message, true, 3, false)\nself.used=true",
+							actionLua = "local g=data.tea_lpdu_p4\nif not g then\n g={texts={},shapes={}};data.tea_lpdu_p4=g\n function g.timer(ms,id,prefix,height)\n  if ms<=0 then return end\n  local uuid=AnyoneCore.addWorldTextCountdownOnEnt(math.floor(ms),id,0xFFFFFFFF,true,1.35,height or 2.5,0,prefix)\n  if uuid then g.texts[#g.texts+1]=uuid end\n  return uuid\n end\nend\nlocal s=g.optical\nif not s then s={};g.optical=s end\nif s.lastCall and Now()-s.lastCall<1000 then self.used=true;return end\ns.lastCall=Now()\nlocal message = eventArgs.spellID == 18570 and \"Spread\" or \"Split stacks west and east\"\nAnyoneCore.Shotcall(message, not (NAUR_TTS and NAUR_TTS.enabled==false), 3, false)\nself.used=true",
 							conditions = 
 							{
 								
@@ -9202,8 +9800,89 @@ local tbl =
 			},
 		},
 	},
+	[161] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "7dab1b86-8df6-95c2-5d37-8d98a97a9496",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+	},
+	[162] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "8121f375-f75d-6881-2c5e-62bbea756bc5",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+	},
+	[163] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "e2054530-ec31-ba2c-01ff-97ee472155c0",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+	},
+	[164] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "30c1c697-7f70-a35b-1d4f-7d61dc1c1e27",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+	},
+	[165] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "f0d6da5a-39d8-b68e-4324-ad0c7cd48b6a",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+	},
 	[166] = 
 	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "50692f39-9d0e-cb7d-cf65-c35fd793acc9",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
 		
 		{
 			data = 
@@ -9330,7 +10009,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "data.fateAlpha = data.fateAlpha or {}\nlocal state = data.fateAlpha\n\nif state.assignmentShotcallDone ~= true then\n    state.assignmentShotcallDone = true\n    local duration = math.max(0.1, 988 - TensorReactions_CurrentTimer)\n    TensorCore.sendTTS(\"2. Nothing\",75)\nend\n\nself.used = true",
+							actionLua = "data.fateAlpha = data.fateAlpha or {}\nlocal state = data.fateAlpha\n\nif state.assignmentShotcallDone ~= true then\n    state.assignmentShotcallDone = true\n    local duration = math.max(0.1, 988 - TensorReactions_CurrentTimer)\n    pcall((not (NAUR_TTS and NAUR_TTS.enabled==false)) and TensorCore.sendTTS or tostring,\"2. Nothing\",75)\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -9421,7 +10100,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "data.fateAlpha = data.fateAlpha or {}\nlocal state = data.fateAlpha\n\nif state.firstShotcallDone ~= true then\n    state.firstShotcallDone = true\n    local duration = math.max(0.1, 988 - TensorReactions_CurrentTimer)\n    TensorCore.sendTTS(\"1. Motion\",75)\nend\n\nself.used = true",
+							actionLua = "data.fateAlpha = data.fateAlpha or {}\nlocal state = data.fateAlpha\n\nif state.firstShotcallDone ~= true then\n    state.firstShotcallDone = true\n    local duration = math.max(0.1, 988 - TensorReactions_CurrentTimer)\n    pcall((not (NAUR_TTS and NAUR_TTS.enabled==false)) and TensorCore.sendTTS or tostring,\"1. Motion\",75)\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -9512,7 +10191,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "data.fateAlpha = data.fateAlpha or {}\nlocal state = data.fateAlpha\n\nif state.thirdShotcallDone ~= true then\n    state.thirdShotcallDone = true\n    local duration = math.max(0.1, 988 - TensorReactions_CurrentTimer)\n    TensorCore.sendTTS(\"3. Motion\",75)\nend\n\nself.used = true",
+							actionLua = "data.fateAlpha = data.fateAlpha or {}\nlocal state = data.fateAlpha\n\nif state.thirdShotcallDone ~= true then\n    state.thirdShotcallDone = true\n    local duration = math.max(0.1, 988 - TensorReactions_CurrentTimer)\n    pcall((not (NAUR_TTS and NAUR_TTS.enabled==false)) and TensorCore.sendTTS or tostring,\"3. Motion\",75)\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -9603,7 +10282,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "data.fateAlpha = data.fateAlpha or {}\nlocal state = data.fateAlpha\n\nif state.firstShotcallDone ~= true then\n    state.firstShotcallDone = true\n    local duration = math.max(0.1, 988 - TensorReactions_CurrentTimer)\n    TensorCore.sendTTS(\"1. Stillness\",75)\nend\n\nself.used = true",
+							actionLua = "data.fateAlpha = data.fateAlpha or {}\nlocal state = data.fateAlpha\n\nif state.firstShotcallDone ~= true then\n    state.firstShotcallDone = true\n    local duration = math.max(0.1, 988 - TensorReactions_CurrentTimer)\n    pcall((not (NAUR_TTS and NAUR_TTS.enabled==false)) and TensorCore.sendTTS or tostring,\"1. Stillness\",75)\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -9694,7 +10373,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "data.fateAlpha = data.fateAlpha or {}\nlocal state = data.fateAlpha\n\nif state.thirdShotcallDone ~= true then\n    state.thirdShotcallDone = true\n    local duration = math.max(0.1, 988 - TensorReactions_CurrentTimer)\n    TensorCore.sendTTS(\"3. Stillness\",75)\nend\n\nself.used = true",
+							actionLua = "data.fateAlpha = data.fateAlpha or {}\nlocal state = data.fateAlpha\n\nif state.thirdShotcallDone ~= true then\n    state.thirdShotcallDone = true\n    local duration = math.max(0.1, 988 - TensorReactions_CurrentTimer)\n    pcall((not (NAUR_TTS and NAUR_TTS.enabled==false)) and TensorCore.sendTTS or tostring,\"3. Stillness\",75)\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -9785,7 +10464,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "data.fateAlpha = data.fateAlpha or {}\nlocal state = data.fateAlpha\n\nif state.assignmentShotcallDone ~= true then\n    state.assignmentShotcallDone = true\n    local duration = math.max(0.1, 988 - TensorReactions_CurrentTimer)\n    TensorCore.sendTTS(\"2. Defamation\",75)\nend\n\nself.used = true",
+							actionLua = "data.fateAlpha = data.fateAlpha or {}\nlocal state = data.fateAlpha\n\nif state.assignmentShotcallDone ~= true then\n    state.assignmentShotcallDone = true\n    local duration = math.max(0.1, 988 - TensorReactions_CurrentTimer)\n    pcall((not (NAUR_TTS and NAUR_TTS.enabled==false)) and TensorCore.sendTTS or tostring,\"2. Defamation\",75)\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -9876,7 +10555,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "data.fateAlpha = data.fateAlpha or {}\nlocal state = data.fateAlpha\n\nif state.assignmentShotcallDone ~= true then\n    state.assignmentShotcallDone = true\n    local duration = math.max(0.1, 988 - TensorReactions_CurrentTimer)\n    TensorCore.sendTTS(\"2. Aggravated Assault\",75)\nend\n\nself.used = true",
+							actionLua = "data.fateAlpha = data.fateAlpha or {}\nlocal state = data.fateAlpha\n\nif state.assignmentShotcallDone ~= true then\n    state.assignmentShotcallDone = true\n    local duration = math.max(0.1, 988 - TensorReactions_CurrentTimer)\n    pcall((not (NAUR_TTS and NAUR_TTS.enabled==false)) and TensorCore.sendTTS or tostring,\"2. Aggravated Assault\",75)\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -9967,7 +10646,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "data.fateAlpha = data.fateAlpha or {}\nlocal state = data.fateAlpha\n\nif state.assignmentShotcallDone ~= true then\n    state.assignmentShotcallDone = true\n    local duration = math.max(0.1, 988 - TensorReactions_CurrentTimer)\n    TensorCore.sendTTS(\"2. Shared Sentence\",75)\nend\n\nself.used = true",
+							actionLua = "data.fateAlpha = data.fateAlpha or {}\nlocal state = data.fateAlpha\n\nif state.assignmentShotcallDone ~= true then\n    state.assignmentShotcallDone = true\n    local duration = math.max(0.1, 988 - TensorReactions_CurrentTimer)\n    pcall((not (NAUR_TTS and NAUR_TTS.enabled==false)) and TensorCore.sendTTS or tostring,\"2. Shared Sentence\",75)\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -10327,7 +11006,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local g=data.tea_lpdu_p4\nif not g then\n g={texts={},shapes={}};data.tea_lpdu_p4=g\n function g.timer(ms,id,prefix,height)\n  if ms<=0 then return end\n  local uuid=AnyoneCore.addWorldTextCountdownOnEnt(math.floor(ms),id,0xFFFFFFFF,true,1.35,height or 2.5,0,prefix)\n  if uuid then g.texts[#g.texts+1]=uuid end\n  return uuid\n end\nend\nlocal s=g.alpha\nif not s then s={preview={},lasers={},commands=0};g.alpha=s end\nlocal spell=eventArgs.spellID\nif s.done then self.used=true;return end\nif spell==18859 or spell==18860 then\n if not s.lastCommand or Now()-s.lastCommand>1000 then\n  s.lastCommand=Now();s.commands=s.commands+1\n  if s.commands==1 then AnyoneCore.Shotcall(\"Stay in your spot\",true,2,false) end\n end\nelseif spell==18569 and not s.lasers[eventArgs.entityID] then\n s.lasers[eventArgs.entityID]=true;s.laserCount=(s.laserCount or 0)+1\nend\nif s.commands>=2 and (s.laserCount or 0)>=3 then\n s.done=true\n if data.fateAlpha then data.fateAlpha.targetPos={x=100,y=0,z=100} end\n AnyoneCore.Shotcall(\"Move in\",true,3,false)\nend\nself.used=true",
+							actionLua = "local g=data.tea_lpdu_p4\nif not g then\n g={texts={},shapes={}};data.tea_lpdu_p4=g\n function g.timer(ms,id,prefix,height)\n  if ms<=0 then return end\n  local uuid=AnyoneCore.addWorldTextCountdownOnEnt(math.floor(ms),id,0xFFFFFFFF,true,1.35,height or 2.5,0,prefix)\n  if uuid then g.texts[#g.texts+1]=uuid end\n  return uuid\n end\nend\nlocal s=g.alpha\nif not s then s={preview={},lasers={},commands=0};g.alpha=s end\nlocal spell=eventArgs.spellID\nif s.done then self.used=true;return end\nif spell==18859 or spell==18860 then\n if not s.lastCommand or Now()-s.lastCommand>1000 then\n  s.lastCommand=Now();s.commands=s.commands+1\n  if s.commands==1 then AnyoneCore.Shotcall(\"Stay in your spot\", not (NAUR_TTS and NAUR_TTS.enabled==false),2,false) end\n end\nelseif spell==18569 and not s.lasers[eventArgs.entityID] then\n s.lasers[eventArgs.entityID]=true;s.laserCount=(s.laserCount or 0)+1\nend\nif s.commands>=2 and (s.laserCount or 0)>=3 then\n s.done=true\n if data.fateAlpha then data.fateAlpha.targetPos={x=100,y=0,z=100} end\n AnyoneCore.Shotcall(\"Move in\", not (NAUR_TTS and NAUR_TTS.enabled==false),3,false)\nend\nself.used=true",
 							conditions = 
 							{
 								
@@ -10403,6 +11082,20 @@ local tbl =
 				uuid = "ad29312e-a801-4eff-ae68-0a7013944c66",
 				version = 2,
 			},
+		},
+	},
+	[168] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "8358728b-9dc8-5c67-c90e-d6e564e6ea1b",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
 		},
 	},
 	[169] = 
@@ -10560,7 +11253,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if data.teaOrdained989Type == \"stillness\" then\n    AnyoneCore.Shotcall(\"Stop. No actions\", true, 3, true)\nelseif data.teaOrdained989Type == \"motion\" then\n    AnyoneCore.Shotcall(\"keep moving\", true, 3, true)\nend\nself.used = true",
+							actionLua = "if data.teaOrdained989Type == \"stillness\" then\n    AnyoneCore.Shotcall(\"Stop. No actions\", not (NAUR_TTS and NAUR_TTS.enabled==false), 3, true)\nelseif data.teaOrdained989Type == \"motion\" then\n    AnyoneCore.Shotcall(\"keep moving\", not (NAUR_TTS and NAUR_TTS.enabled==false), 3, true)\nend\nself.used = true",
 							name = "Shotcall 989 Ordained Type",
 							uuid = "29139eda-d06b-0377-9939-f5a9fc885512",
 							version = 2.1,
@@ -10780,7 +11473,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if data.teaOrdained993Type == \"stillness\" then\n    AnyoneCore.Shotcall(\"Stop. No actions\", true, 3, true)\nelseif data.teaOrdained993Type == \"motion\" then\n    AnyoneCore.Shotcall(\"keep moving\", true, 3, true)\nend\nself.used = true",
+							actionLua = "if data.teaOrdained993Type == \"stillness\" then\n    AnyoneCore.Shotcall(\"Stop. No actions\", not (NAUR_TTS and NAUR_TTS.enabled==false), 3, true)\nelseif data.teaOrdained993Type == \"motion\" then\n    AnyoneCore.Shotcall(\"keep moving\", not (NAUR_TTS and NAUR_TTS.enabled==false), 3, true)\nend\nself.used = true",
 							name = "Shotcall 993 Ordained Type",
 							uuid = "d6928352-e93c-e937-a0e7-791febcc1492",
 							version = 2.1,
@@ -10845,8 +11538,33 @@ local tbl =
 			},
 		},
 	},
+	[173] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "c170e627-a888-9c13-37db-076d7aad3f77",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+	},
 	[179] = 
 	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "70e55441-a0f2-1a8d-718c-7af37156b791",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
 		
 		{
 			data = 
@@ -10921,7 +11639,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local state = data.fateBeta\nlocal spellID = eventArgs.spellID\n\nif state then\n    if spellID == 18590 then\n        if state.donutPos == nil then\n            local caster = TensorCore.mGetEntity(eventArgs.entityID)\n            if caster and caster.pos then\n                state.donutPos = {\n                    x = caster.pos.x,\n                    y = caster.pos.y,\n                    z = caster.pos.z\n                }\n            end\n        end\n    elseif spellID == 18592 or spellID == 18593 then\n        if spellID == 18592 then\n            state.opticalSight = \"Spread\"\n            state.stackDirection = nil\n        else\n            state.opticalSight = \"Stack\"\n            state.stackDirection = state.color == \"Light\" and \"North\" or \"South\"\n        end\n\n    elseif spellID == 18565 then\n        if state.firstArrowCleared ~= true then\n            state.firstArrowCleared = true\n            state.targetPos = nil\n            state.arrowStage = nil\n        end\n    elseif spellID == 18572 or spellID == 18573 then\n        local player = TensorCore.mGetPlayer()\n        if not player then return end\n        local hit = eventArgs.targetID == player.id\n        for _, id in pairs(eventArgs.hitTargets or {}) do\n            if id == player.id then hit = true; break end\n        end\n        if not hit then self.used = true; return end\n        if state.secondArrowStarted ~= true and state.donutPos then\n            state.secondArrowStarted = true\n            state.targetPos = {\n                x = state.donutPos.x,\n                y = state.donutPos.y,\n                z = state.donutPos.z\n            }\n            state.arrowStage = \"second\"\n\n            local duration = math.max(0.1, 1093.6 - TensorReactions_CurrentTimer)\n            AnyoneCore.Shotcall(\"Under donut\", true, duration, true)\n        end\n    elseif spellID == 18566 then\n        state.targetPos = nil\n        state.arrowStage = nil\n        state.finished = true\n    end\nend\n\nself.used = true",
+							actionLua = "local state = data.fateBeta\nlocal spellID = eventArgs.spellID\n\nif state then\n    if spellID == 18590 then\n        if state.donutPos == nil then\n            local caster = TensorCore.mGetEntity(eventArgs.entityID)\n            if caster and caster.pos then\n                state.donutPos = {\n                    x = caster.pos.x,\n                    y = caster.pos.y,\n                    z = caster.pos.z\n                }\n            end\n        end\n    elseif spellID == 18592 or spellID == 18593 then\n        if spellID == 18592 then\n            state.opticalSight = \"Spread\"\n            state.stackDirection = nil\n        else\n            state.opticalSight = \"Stack\"\n            state.stackDirection = state.color == \"Light\" and \"North\" or \"South\"\n        end\n\n    elseif spellID == 18565 then\n        if state.firstArrowCleared ~= true then\n            state.firstArrowCleared = true\n            state.targetPos = nil\n            state.arrowStage = nil\n        end\n    elseif spellID == 18572 or spellID == 18573 then\n        local player = TensorCore.mGetPlayer()\n        if not player then return end\n        local hit = eventArgs.targetID == player.id\n        for _, id in pairs(eventArgs.hitTargets or {}) do\n            if id == player.id then hit = true; break end\n        end\n        if not hit then self.used = true; return end\n        if state.secondArrowStarted ~= true and state.donutPos then\n            state.secondArrowStarted = true\n            state.targetPos = {\n                x = state.donutPos.x,\n                y = state.donutPos.y,\n                z = state.donutPos.z\n            }\n            state.arrowStage = \"second\"\n\n            local duration = math.max(0.1, 1093.6 - TensorReactions_CurrentTimer)\n            AnyoneCore.Shotcall(\"Under donut\", not (NAUR_TTS and NAUR_TTS.enabled==false), duration, true)\n        end\n    elseif spellID == 18566 then\n        state.targetPos = nil\n        state.arrowStage = nil\n        state.finished = true\n    end\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -10975,7 +11693,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "data.fateBeta = data.fateBeta or {}\nlocal state = data.fateBeta\nlocal player = TensorCore.mGetPlayer()\nlocal now = TensorReactions_CurrentTimer\n\nif state.lastTetherTimer == nil\n    or now < state.lastTetherTimer\n    or now - state.lastTetherTimer > 2\nthen\n    state = {}\n    data.fateBeta = state\nend\n\nstate.lastTetherTimer = now\nstate.tetherCount = (state.tetherCount or 0) + 1\n\nif player and eventArgs.sourceEntityID == player.id then\n    state.myProjection = eventArgs.newTargetID\n    state.myTetherOrder = state.tetherCount\n\n    local reverseIndex = 8 - state.myTetherOrder\n    local assignments = {\n        [0] = { role = \"Dark Beacon\", color = \"Dark\", x = 114, z = 100, call = \"Dark beacon - 2 marker\" },\n        [1] = { role = \"Light Beacon\", color = \"Light\", x = 92.8, z = 83.2, call = \"Light beacon - northwest of A on the dot\" },\n        [2] = { role = \"Dark Nothing\", color = \"Dark\", x = 111, z = 100, call = \"Dark nothing - west of 2\" },\n        [3] = { role = \"Light Follow\", color = \"Light\", x = 111, z = 98, call = \"Light follow - northwest of 2\" },\n        [4] = { role = \"Dark House Arrest\", color = \"Dark\", x = 111, z = 98, call = \"Dark House Arrest - northwest of 2\" },\n        [5] = { role = \"Light Follow\", color = \"Light\", x = 111, z = 98, call = \"Light follow - northwest of 2\" },\n        [6] = { role = \"Dark Restraining Order\", color = \"Dark\", x = 111, z = 102, call = \"Dark Restraining Order - southwest of 2\" },\n        [7] = { role = \"Light Follow\", color = \"Light\", x = 111, z = 98, call = \"Light follow - northwest of 2\" }\n    }\n\n    local assignment = assignments[reverseIndex]\n    state.assignment = assignment.role\n    state.color = assignment.color\n\n    if assignment.role == \"Light Beacon\" then\n        -- NAUR: the arena dot northwest of A, not a waymark.\n        state.targetPos = { x = assignment.x, y = 0, z = assignment.z }\n    else\n        local x, y, z, isActive = Argus.getWaymarkInfo(6)\n        if isActive then\n            local diagonal = 1.8 / math.sqrt(2)\n            if assignment.role == \"Dark Beacon\" then\n                state.targetPos = { x = x, y = y, z = z }\n            elseif assignment.role == \"Dark Nothing\" then\n                state.targetPos = { x = x - 1.8, y = y, z = z }\n            elseif assignment.role == \"Dark Restraining Order\" then\n                state.targetPos = { x = x - diagonal, y = y, z = z + diagonal }\n            else\n                state.targetPos = { x = x - diagonal, y = y, z = z - diagonal }\n            end\n        else\n            state.targetPos = { x = assignment.x, y = 0, z = assignment.z }\n        end\n    end\n\n    state.arrowStage = \"first\"\n\n    if state.assignmentShotcallDone ~= true then\n        state.assignmentShotcallDone = true\n        local duration = 4\n        AnyoneCore.Shotcall(assignment.call, true, duration, true)\n    end\nend\n\nself.used = true",
+							actionLua = "data.fateBeta = data.fateBeta or {}\nlocal state = data.fateBeta\nlocal player = TensorCore.mGetPlayer()\nlocal now = TensorReactions_CurrentTimer\n\nif state.lastTetherTimer == nil\n    or now < state.lastTetherTimer\n    or now - state.lastTetherTimer > 2\nthen\n    state = {}\n    data.fateBeta = state\nend\n\nstate.lastTetherTimer = now\nstate.tetherCount = (state.tetherCount or 0) + 1\n\nif player and eventArgs.sourceEntityID == player.id then\n    state.myProjection = eventArgs.newTargetID\n    state.myTetherOrder = state.tetherCount\n\n    local reverseIndex = 8 - state.myTetherOrder\n    local assignments = {\n        [0] = { role = \"Dark Beacon\", color = \"Dark\", x = 114, z = 100, call = \"Dark beacon - 2 marker\" },\n        [1] = { role = \"Light Beacon\", color = \"Light\", x = 92.8, z = 83.2, call = \"Light beacon - northwest of A on the dot\" },\n        [2] = { role = \"Dark Nothing\", color = \"Dark\", x = 111, z = 100, call = \"Dark nothing - west of 2\" },\n        [3] = { role = \"Light Follow\", color = \"Light\", x = 111, z = 98, call = \"Light follow - northwest of 2\" },\n        [4] = { role = \"Dark House Arrest\", color = \"Dark\", x = 111, z = 98, call = \"Dark House Arrest - northwest of 2\" },\n        [5] = { role = \"Light Follow\", color = \"Light\", x = 111, z = 98, call = \"Light follow - northwest of 2\" },\n        [6] = { role = \"Dark Restraining Order\", color = \"Dark\", x = 111, z = 102, call = \"Dark Restraining Order - southwest of 2\" },\n        [7] = { role = \"Light Follow\", color = \"Light\", x = 111, z = 98, call = \"Light follow - northwest of 2\" }\n    }\n\n    local assignment = assignments[reverseIndex]\n    state.assignment = assignment.role\n    state.color = assignment.color\n\n    if assignment.role == \"Light Beacon\" then\n        -- NAUR: the arena dot northwest of A, not a waymark.\n        state.targetPos = { x = assignment.x, y = 0, z = assignment.z }\n    else\n        local x, y, z, isActive = Argus.getWaymarkInfo(6)\n        if isActive then\n            local diagonal = 1.8 / math.sqrt(2)\n            if assignment.role == \"Dark Beacon\" then\n                state.targetPos = { x = x, y = y, z = z }\n            elseif assignment.role == \"Dark Nothing\" then\n                state.targetPos = { x = x - 1.8, y = y, z = z }\n            elseif assignment.role == \"Dark Restraining Order\" then\n                state.targetPos = { x = x - diagonal, y = y, z = z + diagonal }\n            else\n                state.targetPos = { x = x - diagonal, y = y, z = z - diagonal }\n            end\n        else\n            state.targetPos = { x = assignment.x, y = 0, z = assignment.z }\n        end\n    end\n\n    state.arrowStage = \"first\"\n\n    if state.assignmentShotcallDone ~= true then\n        state.assignmentShotcallDone = true\n        local duration = 4\n        AnyoneCore.Shotcall(assignment.call, not (NAUR_TTS and NAUR_TTS.enabled==false), duration, true)\n    end\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -11204,6 +11922,20 @@ local tbl =
 			},
 		},
 	},
+	[186] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "6c1518ab-b078-1027-6490-0865bf63cc3b",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+	},
 	[188] = 
 	{
 		
@@ -11261,7 +11993,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local g=data.tea_lpdu_p4\nif not g then\n g={texts={},shapes={}};data.tea_lpdu_p4=g\n function g.timer(ms,id,prefix,height)\n  if ms<=0 then return end\n  local uuid=AnyoneCore.addWorldTextCountdownOnEnt(math.floor(ms),id,0xFFFFFFFF,true,1.35,height or 2.5,0,prefix)\n  if uuid then g.texts[#g.texts+1]=uuid end\n  return uuid\n end\nend\nif g.betaBaitDone then self.used=true;return end\nlocal s=data.fateBeta;if not s or not s.assignment then return end\nlocal message\nif s.assignment==\"Dark Beacon\" then message=\"Bait jump east\"\nelseif s.assignment == \"Dark Nothing\" then\n    message = \"Bait jump west\"\n    local remainingMs = math.floor((1082.5 - TensorReactions_CurrentTimer) * 1000)\n    if remainingMs > 0 then\n        local drawer = TensorCore.getStaticDrawer(0xFF00FF00)\n        local circle = drawer:addTimedCircle(remainingMs, 82, 0, 100, 1.2, 0, false, true)\n        if circle then\n            g.westJumpCircle = circle\n            g.shapes[#g.shapes + 1] = circle\n        end\n    end\nelseif s.assignment==\"Dark Restraining Order\" then message=\"Bait jump south\"\nelse message=\"Stack north\" end\nAnyoneCore.Shotcall(message,true,4,false)\ng.betaBaitDone=true;self.used=true",
+							actionLua = "local g=data.tea_lpdu_p4\nif not g then\n g={texts={},shapes={}};data.tea_lpdu_p4=g\n function g.timer(ms,id,prefix,height)\n  if ms<=0 then return end\n  local uuid=AnyoneCore.addWorldTextCountdownOnEnt(math.floor(ms),id,0xFFFFFFFF,true,1.35,height or 2.5,0,prefix)\n  if uuid then g.texts[#g.texts+1]=uuid end\n  return uuid\n end\nend\nif g.betaBaitDone then self.used=true;return end\nlocal s=data.fateBeta;if not s or not s.assignment then return end\nlocal message\nif s.assignment==\"Dark Beacon\" then message=\"Bait jump east\"\nelseif s.assignment == \"Dark Nothing\" then\n    message = \"Bait jump west\"\n    local remainingMs = math.floor((1082.5 - TensorReactions_CurrentTimer) * 1000)\n    if remainingMs > 0 then\n        local drawer = TensorCore.getStaticDrawer(0xFF00FF00)\n        local circle = drawer:addTimedCircle(remainingMs, 82, 0, 100, 1.2, 0, false, true)\n        if circle then\n            g.westJumpCircle = circle\n            g.shapes[#g.shapes + 1] = circle\n        end\n    end\nelseif s.assignment==\"Dark Restraining Order\" then message=\"Bait jump south\"\nelse message=\"Stack north\" end\nAnyoneCore.Shotcall(message, not (NAUR_TTS and NAUR_TTS.enabled==false),4,false)\ng.betaBaitDone=true;self.used=true",
 							name = "Fate Beta - Personal jump or stack step",
 							uuid = "fb237f1a-96d4-ce11-965b-25c6b852c63e",
 							version = 2.1,
@@ -11294,7 +12026,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local g=data.tea_lpdu_p4\nif not g then\n g={texts={},shapes={}};data.tea_lpdu_p4=g\n function g.timer(ms,id,prefix,height)\n  if ms<=0 then return end\n  local uuid=AnyoneCore.addWorldTextCountdownOnEnt(math.floor(ms),id,0xFFFFFFFF,true,1.35,height or 2.5,0,prefix)\n  if uuid then g.texts[#g.texts+1]=uuid end\n  return uuid\n end\nend\nlocal s=data.fateBeta\nif not s or not s.opticalSight or g.betaReleased then self.used=true;return end\ng.betaJumps=g.betaJumps or {}\nif not g.betaJumps[eventArgs.entityID] then\n g.betaJumps[eventArgs.entityID]=true;g.betaJumpCount=(g.betaJumpCount or 0)+1\nend\nif g.betaJumpCount>=3 then\n g.betaReleased=true\n if g.westJumpCircle then\n  Argus.deleteTimedShape(g.westJumpCircle)\n  g.westJumpCircle = nil\n end\n local call\n if s.opticalSight==\"Spread\" then call=\"Spread\";s.targetPos=nil\n elseif s.color==\"Light\" then call=\"Stack north\";s.targetPos={x=100,y=0,z=86}\n else call=\"Stack middle\";s.targetPos={x=100,y=0,z=100} end\n AnyoneCore.Shotcall(call,true,4,false)\nend\nself.used=true",
+							actionLua = "local g=data.tea_lpdu_p4\nif not g then\n g={texts={},shapes={}};data.tea_lpdu_p4=g\n function g.timer(ms,id,prefix,height)\n  if ms<=0 then return end\n  local uuid=AnyoneCore.addWorldTextCountdownOnEnt(math.floor(ms),id,0xFFFFFFFF,true,1.35,height or 2.5,0,prefix)\n  if uuid then g.texts[#g.texts+1]=uuid end\n  return uuid\n end\nend\nlocal s=data.fateBeta\nif not s or not s.opticalSight or g.betaReleased then self.used=true;return end\ng.betaJumps=g.betaJumps or {}\nif not g.betaJumps[eventArgs.entityID] then\n g.betaJumps[eventArgs.entityID]=true;g.betaJumpCount=(g.betaJumpCount or 0)+1\nend\nif g.betaJumpCount>=3 then\n g.betaReleased=true\n if g.westJumpCircle then\n  Argus.deleteTimedShape(g.westJumpCircle)\n  g.westJumpCircle = nil\n end\n local call\n if s.opticalSight==\"Spread\" then call=\"Spread\";s.targetPos=nil\n elseif s.color==\"Light\" then call=\"Stack north\";s.targetPos={x=100,y=0,z=86}\n else call=\"Stack middle\";s.targetPos={x=100,y=0,z=100} end\n AnyoneCore.Shotcall(call, not (NAUR_TTS and NAUR_TTS.enabled==false),4,false)\nend\nself.used=true",
 							conditions = 
 							{
 								
@@ -11461,6 +12193,20 @@ local tbl =
 			},
 		},
 	},
+	[192] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "bb7ede8c-df55-c490-c241-c4ce40de585c",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+	},
 	[199] = 
 	{
 		
@@ -11594,7 +12340,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local g=data.tea_lpdu_p4\nif not g then\n g={texts={},shapes={}};data.tea_lpdu_p4=g\n function g.timer(ms,id,prefix,height)\n  if ms<=0 then return end\n  local uuid=AnyoneCore.addWorldTextCountdownOnEnt(math.floor(ms),id,0xFFFFFFFF,true,1.35,height or 2.5,0,prefix)\n  if uuid then g.texts[#g.texts+1]=uuid end\n  return uuid\n end\nend\nlocal key=\"judgment1\"\nlocal s=g[key]\nif not s then s={waves=0,hits=0};g[key]=s end\nif s.done then self.used=true;return end\nif eventArgs.spellID==18575 then\n if not s.lastPreview or Now()-s.lastPreview>1000 then\n  s.waves=s.waves+1;s.lastPreview=Now()\n  if s.waves==1 then\n   g.activeJudgment=s\n   local p=TensorCore.mGetPlayer();if p then s.timer=g.timer(6600,p.id,\"First hit \") end\n   AnyoneCore.Shotcall(\"Find your start spot\",true,2,false)\n  elseif s.waves==3 then AnyoneCore.Shotcall(\"Wait\",true,2,false) end\n end\nelse\n if not s.lastHit or Now()-s.lastHit>1000 then\n  s.lastHit=Now();s.hits=s.hits+1\n  if s.hits==1 then\n   if s.timer then AnyoneCore.removeTimedWorldText(s.timer);s.timer=nil end\n   AnyoneCore.Shotcall(\"Move together\",true,2,false)\n  elseif s.hits==3 then\n   s.done=true;g.activeJudgment=nil\n   if g.grace and Now()<g.grace.deadline then AnyoneCore.Shotcall(\"Stack\",true,2,false) end\n  end\n end\nend\nself.used=true",
+							actionLua = "local g=data.tea_lpdu_p4\nif not g then\n g={texts={},shapes={}};data.tea_lpdu_p4=g\n function g.timer(ms,id,prefix,height)\n  if ms<=0 then return end\n  local uuid=AnyoneCore.addWorldTextCountdownOnEnt(math.floor(ms),id,0xFFFFFFFF,true,1.35,height or 2.5,0,prefix)\n  if uuid then g.texts[#g.texts+1]=uuid end\n  return uuid\n end\nend\nlocal key=\"judgment1\"\nlocal s=g[key]\nif not s then s={waves=0,hits=0};g[key]=s end\nif s.done then self.used=true;return end\nif eventArgs.spellID==18575 then\n if not s.lastPreview or Now()-s.lastPreview>1000 then\n  s.waves=s.waves+1;s.lastPreview=Now()\n  if s.waves==1 then\n   g.activeJudgment=s\n   local p=TensorCore.mGetPlayer();if p then s.timer=g.timer(6600,p.id,\"First hit \") end\n   AnyoneCore.Shotcall(\"Find your start spot\", not (NAUR_TTS and NAUR_TTS.enabled==false),2,false)\n  elseif s.waves==3 then AnyoneCore.Shotcall(\"Wait\", not (NAUR_TTS and NAUR_TTS.enabled==false),2,false) end\n end\nelse\n if not s.lastHit or Now()-s.lastHit>1000 then\n  s.lastHit=Now();s.hits=s.hits+1\n  if s.hits==1 then\n   if s.timer then AnyoneCore.removeTimedWorldText(s.timer);s.timer=nil end\n   AnyoneCore.Shotcall(\"Move together\", not (NAUR_TTS and NAUR_TTS.enabled==false),2,false)\n  elseif s.hits==3 then\n   s.done=true;g.activeJudgment=nil\n   if g.grace and Now()<g.grace.deadline then AnyoneCore.Shotcall(\"Stack\", not (NAUR_TTS and NAUR_TTS.enabled==false),2,false) end\n  end\n end\nend\nself.used=true",
 							conditions = 
 							{
 								
@@ -11638,8 +12384,33 @@ local tbl =
 			},
 		},
 	},
+	[202] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "fa7afc4c-0a56-2150-5260-c75aa278c21c",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+	},
 	[203] = 
 	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "6647c6a1-f23e-1915-924b-b39727430df1",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
 		
 		{
 			data = 
@@ -11661,7 +12432,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local g=data.tea_lpdu_p4\nif not g then\n g={texts={},shapes={}};data.tea_lpdu_p4=g\n function g.timer(ms,id,prefix,height)\n  if ms<=0 then return end\n  local uuid=AnyoneCore.addWorldTextCountdownOnEnt(math.floor(ms),id,0xFFFFFFFF,true,1.35,height or 2.5,0,prefix)\n  if uuid then g.texts[#g.texts+1]=uuid end\n  return uuid\n end\nend\nlocal target=TensorCore.mGetEntity(eventArgs.targetID)\nif not target then self.used=true;return end\nlocal ms=math.floor((eventArgs.channelTimeMax+0.3)*1000)\ng.grace={deadline=Now()+ms,target=target.id}\ng.timer(ms,target.id,\"Stack \",2.8)\nif g.activeJudgment and g.activeJudgment.done then AnyoneCore.Shotcall(\"Stack\",true,3,false) end\nself.used=true",
+							actionLua = "local g=data.tea_lpdu_p4\nif not g then\n g={texts={},shapes={}};data.tea_lpdu_p4=g\n function g.timer(ms,id,prefix,height)\n  if ms<=0 then return end\n  local uuid=AnyoneCore.addWorldTextCountdownOnEnt(math.floor(ms),id,0xFFFFFFFF,true,1.35,height or 2.5,0,prefix)\n  if uuid then g.texts[#g.texts+1]=uuid end\n  return uuid\n end\nend\nlocal target=TensorCore.mGetEntity(eventArgs.targetID)\nif not target then self.used=true;return end\nlocal ms=math.floor((eventArgs.channelTimeMax+0.3)*1000)\ng.grace={deadline=Now()+ms,target=target.id}\ng.timer(ms,target.id,\"Stack \",2.8)\nif g.activeJudgment and g.activeJudgment.done then AnyoneCore.Shotcall(\"Stack\", not (NAUR_TTS and NAUR_TTS.enabled==false),3,false) end\nself.used=true",
 							conditions = 
 							{
 								
@@ -11838,7 +12609,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local g=data.tea_lpdu_p4\nif not g then\n g={texts={},shapes={}};data.tea_lpdu_p4=g\n function g.timer(ms,id,prefix,height)\n  if ms<=0 then return end\n  local uuid=AnyoneCore.addWorldTextCountdownOnEnt(math.floor(ms),id,0xFFFFFFFF,true,1.35,height or 2.5,0,prefix)\n  if uuid then g.texts[#g.texts+1]=uuid end\n  return uuid\n end\nend\nlocal key=\"judgment2\"\nlocal s=g[key]\nif not s then s={waves=0,hits=0};g[key]=s end\nif s.done then self.used=true;return end\nif eventArgs.spellID==18575 then\n if not s.lastPreview or Now()-s.lastPreview>1000 then\n  s.waves=s.waves+1;s.lastPreview=Now()\n  if s.waves==1 then\n   g.activeJudgment=s\n   local p=TensorCore.mGetPlayer();if p then s.timer=g.timer(6600,p.id,\"First hit \") end\n   AnyoneCore.Shotcall(\"Find your start spot\",true,2,false)\n  elseif s.waves==3 then AnyoneCore.Shotcall(\"Wait\",true,2,false) end\n end\nelse\n if not s.lastHit or Now()-s.lastHit>1000 then\n  s.lastHit=Now();s.hits=s.hits+1\n  if s.hits==1 then\n   if s.timer then AnyoneCore.removeTimedWorldText(s.timer);s.timer=nil end\n   AnyoneCore.Shotcall(\"Move together\",true,2,false)\n  elseif s.hits==3 then\n   s.done=true;g.activeJudgment=nil\n   if g.grace and Now()<g.grace.deadline then AnyoneCore.Shotcall(\"Stack\",true,2,false) end\n  end\n end\nend\nself.used=true",
+							actionLua = "local g=data.tea_lpdu_p4\nif not g then\n g={texts={},shapes={}};data.tea_lpdu_p4=g\n function g.timer(ms,id,prefix,height)\n  if ms<=0 then return end\n  local uuid=AnyoneCore.addWorldTextCountdownOnEnt(math.floor(ms),id,0xFFFFFFFF,true,1.35,height or 2.5,0,prefix)\n  if uuid then g.texts[#g.texts+1]=uuid end\n  return uuid\n end\nend\nlocal key=\"judgment2\"\nlocal s=g[key]\nif not s then s={waves=0,hits=0};g[key]=s end\nif s.done then self.used=true;return end\nif eventArgs.spellID==18575 then\n if not s.lastPreview or Now()-s.lastPreview>1000 then\n  s.waves=s.waves+1;s.lastPreview=Now()\n  if s.waves==1 then\n   g.activeJudgment=s\n   local p=TensorCore.mGetPlayer();if p then s.timer=g.timer(6600,p.id,\"First hit \") end\n   AnyoneCore.Shotcall(\"Find your start spot\", not (NAUR_TTS and NAUR_TTS.enabled==false),2,false)\n  elseif s.waves==3 then AnyoneCore.Shotcall(\"Wait\", not (NAUR_TTS and NAUR_TTS.enabled==false),2,false) end\n end\nelse\n if not s.lastHit or Now()-s.lastHit>1000 then\n  s.lastHit=Now();s.hits=s.hits+1\n  if s.hits==1 then\n   if s.timer then AnyoneCore.removeTimedWorldText(s.timer);s.timer=nil end\n   AnyoneCore.Shotcall(\"Move together\", not (NAUR_TTS and NAUR_TTS.enabled==false),2,false)\n  elseif s.hits==3 then\n   s.done=true;g.activeJudgment=nil\n   if g.grace and Now()<g.grace.deadline then AnyoneCore.Shotcall(\"Stack\", not (NAUR_TTS and NAUR_TTS.enabled==false),2,false) end\n  end\n end\nend\nself.used=true",
 							conditions = 
 							{
 								
@@ -11882,8 +12653,33 @@ local tbl =
 			},
 		},
 	},
+	[213] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "3b4cfed2-d187-eb56-281d-1360e2c6fc62",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
+	},
 	[214] = 
 	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\tea\\universal",
+				uuid = "8310cb4d-fb95-9789-caef-d1c7d46ab01d",
+			},
+			inheritanceRoot = "store\\anyone\\tea\\universal",
+			objectType = "folder",
+		},
 		
 		{
 			data = 
@@ -11905,7 +12701,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local g=data.tea_lpdu_p4\nif not g then\n g={texts={},shapes={}};data.tea_lpdu_p4=g\n function g.timer(ms,id,prefix,height)\n  if ms<=0 then return end\n  local uuid=AnyoneCore.addWorldTextCountdownOnEnt(math.floor(ms),id,0xFFFFFFFF,true,1.35,height or 2.5,0,prefix)\n  if uuid then g.texts[#g.texts+1]=uuid end\n  return uuid\n end\nend\nlocal target=TensorCore.mGetEntity(eventArgs.targetID)\nif not target then self.used=true;return end\nlocal ms=math.floor((eventArgs.channelTimeMax+0.3)*1000)\ng.grace={deadline=Now()+ms,target=target.id}\ng.timer(ms,target.id,\"Stack \",2.8)\nif g.activeJudgment and g.activeJudgment.done then AnyoneCore.Shotcall(\"Stack\",true,3,false) end\nself.used=true",
+							actionLua = "local g=data.tea_lpdu_p4\nif not g then\n g={texts={},shapes={}};data.tea_lpdu_p4=g\n function g.timer(ms,id,prefix,height)\n  if ms<=0 then return end\n  local uuid=AnyoneCore.addWorldTextCountdownOnEnt(math.floor(ms),id,0xFFFFFFFF,true,1.35,height or 2.5,0,prefix)\n  if uuid then g.texts[#g.texts+1]=uuid end\n  return uuid\n end\nend\nlocal target=TensorCore.mGetEntity(eventArgs.targetID)\nif not target then self.used=true;return end\nlocal ms=math.floor((eventArgs.channelTimeMax+0.3)*1000)\ng.grace={deadline=Now()+ms,target=target.id}\ng.timer(ms,target.id,\"Stack \",2.8)\nif g.activeJudgment and g.activeJudgment.done then AnyoneCore.Shotcall(\"Stack\", not (NAUR_TTS and NAUR_TTS.enabled==false),3,false) end\nself.used=true",
 							conditions = 
 							{
 								
@@ -12025,7 +12821,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local g=data.tea_lpdu_p4\nif not g then\n g={texts={},shapes={}};data.tea_lpdu_p4=g\n function g.timer(ms,id,prefix,height)\n  if ms<=0 then return end\n  local uuid=AnyoneCore.addWorldTextCountdownOnEnt(math.floor(ms),id,0xFFFFFFFF,true,1.35,height or 2.5,0,prefix)\n  if uuid then g.texts[#g.texts+1]=uuid end\n  return uuid\n end\nend\nlocal state=g.prison\nif not state then return end\nlocal roster=AnyoneCore.Roster\nlocal player=TensorCore.mGetPlayer()\nif not roster or not roster.current() or not player then return end\nif TensorCore.hasBuff(player,2165) then self.used=true;return end\nlocal slot=roster.mySlot()\nlocal turn=slot==\"H2\" and 1 or slot==\"H1\" and 2 or slot==\"T1\" and 3 or slot==\"T2\" and 4 or nil\nlocal elapsed=(Now()-state.start)/1000\nif turn then\n local remaining=10+(turn-1)*5-elapsed\n if remaining>0 and remaining<=5 and not state.called then\n  state.called=true\n  local direction=turn==1 and \"northeast\" or turn==2 and \"east\" or turn==3 and \"southeast\" or \"south\"\n  AnyoneCore.Shotcall(\"Your prison. \"..direction,true,3,false)\n  g.timer(remaining*1000,player.id,\"Prison \")\n end\nelseif slot and elapsed>=22 and elapsed<30 and not state.called then\n state.called=true\n AnyoneCore.Shotcall(\"DPS prisons next. Check your order\",true,3,false)\nend\nself.used=true",
+							actionLua = "local g=data.tea_lpdu_p4\nif not g then\n g={texts={},shapes={}};data.tea_lpdu_p4=g\n function g.timer(ms,id,prefix,height)\n  if ms<=0 then return end\n  local uuid=AnyoneCore.addWorldTextCountdownOnEnt(math.floor(ms),id,0xFFFFFFFF,true,1.35,height or 2.5,0,prefix)\n  if uuid then g.texts[#g.texts+1]=uuid end\n  return uuid\n end\nend\nlocal state=g.prison\nif not state then return end\nlocal roster=AnyoneCore.Roster\nlocal player=TensorCore.mGetPlayer()\nif not roster or not roster.current() or not player then return end\nif TensorCore.hasBuff(player,2165) then self.used=true;return end\nlocal slot=roster.mySlot()\nlocal turn=slot==\"H2\" and 1 or slot==\"H1\" and 2 or slot==\"T1\" and 3 or slot==\"T2\" and 4 or nil\nlocal elapsed=(Now()-state.start)/1000\nif turn then\n local remaining=10+(turn-1)*5-elapsed\n if remaining>0 and remaining<=5 and not state.called then\n  state.called=true\n  local direction=turn==1 and \"northeast\" or turn==2 and \"east\" or turn==3 and \"southeast\" or \"south\"\n  AnyoneCore.Shotcall(\"Your prison. \"..direction, not (NAUR_TTS and NAUR_TTS.enabled==false),3,false)\n  g.timer(remaining*1000,player.id,\"Prison \")\n end\nelseif slot and elapsed>=22 and elapsed<30 and not state.called then\n state.called=true\n AnyoneCore.Shotcall(\"DPS prisons next. Check your order\", not (NAUR_TTS and NAUR_TTS.enabled==false),3,false)\nend\nself.used=true",
 							name = "Prison - Personal turn and countdown",
 							uuid = "79a4646f-1b57-eb0b-a1ed-3ca4c4d6dc2a",
 							version = 2.1,

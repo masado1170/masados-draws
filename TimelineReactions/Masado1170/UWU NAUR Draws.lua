@@ -912,7 +912,7 @@ local tbl =
 				},
 				displayPath = "NAUR / Automation",
 				eventType = 13,
-				execute = "-- Independent UWU settings; available before GUI or targeting reads.\nif not _G.UWU_NAURSettingsIOReady then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UWU-NAUR.lua]]\n local saved={}\n if FileExists(path) then\n  local loaded=FileLoad(path)\n  if type(loaded)==\"table\" then saved=loaded end\n end\n local current=_G.UWU_NAURGuiState\n local old=_G.UWU_NAUR_AnnihilationAssignments or {}\n local defaults={automaticOpen=true,ultimaOpen=true,orbsOpen=true,autoTarget=_G.NAUR_UWU_AutoTarget~=false,melee=(old.melee==2 and 2 or 1),solo=old.solo or 0}\n local keys={\"automaticOpen\",\"ultimaOpen\",\"orbsOpen\",\"autoTarget\",\"melee\",\"solo\"}\n local C={}\n for _,key in ipairs(keys) do\n  local value=current and current[key]\n  if value==nil then value=saved[key] end\n  if type(defaults[key])==\"boolean\" then\n   C[key]=type(value)==\"boolean\" and value or defaults[key]\n   if value==false then C[key]=false end\n  else\n   C[key]=type(value)==\"number\" and value>=0 and value<=2 and value%1==0 and value or defaults[key]\n  end\n end\n if C.melee==0 then C.melee=1 end\n function C.save()\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local values={}\n  for _,key in ipairs(keys) do values[key]=C[key] end\n  FileSave(path,values)\n end\n _G.UWU_NAURGuiState=C\n _G.UWU_NAUR_AnnihilationAssignments={melee=C.melee,solo=C.solo}\n _G.NAUR_UWU_AutoTarget=C.autoTarget\n C.save()\n _G.UWU_NAURSettingsIOReady=true\nend\n-- Upgrade only an unset melee assignment; preserve either explicit role choice.\ndo\n local preferences=_G.UWU_NAURGuiState\n if preferences and preferences.melee==0 then\n  preferences.melee=1\n  local assignment=_G.UWU_NAUR_AnnihilationAssignments\n  if assignment then assignment.melee=1 end\n  preferences.save()\n end\nend\nlocal C=_G.UWU_NAURGuiState\nlocal function section(key,label)\n GUI:SetNextTreeNodeOpened(C[key],GUI.SetCond_Always)\n local opened\n if label==\"General\" then\n  opened=C[key]\n  GUI:PushStyleVar(GUI.StyleVar_ButtonTextAlign,0,0.5)\n  if GUI:Button((opened and \"- \" or \"+ \")..label..\"##UWU_NAUR_Draws_\"..key,GUI:GetContentRegionAvailWidth(),0) then opened=not opened end\n  GUI:PopStyleVar()\n  if opened then GUI:TreePush(\"UWU_NAUR_Draws_\"..key) end\n else\n  opened=GUI:CollapsingHeader(label,0)\n  if opened then GUI:TreePush(label) end\n end\n if opened~=C[key] then C[key]=opened;C.save() end\n return opened\nend\n\n_G.NAUR_UWU_AutoTarget=C.autoTarget\nGUI:SetNextWindowSize(440,0,GUI.SetCond_Always)\nlocal visible=GUI:Begin(\"UWU NAUR Settings\",true,GUI.WindowFlags_NoCollapse+GUI.WindowFlags_AlwaysAutoResize)\nif visible then\n GUI:Text(\"UWU | NAUR Draws\")\n GUI:Text(\"Settings and expanded sections save automatically.\")\n if section(\"automaticOpen\",\"General\") then\n  if data.uwuAutoSim or data.uwuBLMAutoSim or data.uwuBRDAutoSim or data.uwuRPRAutoSim then\n   GUI:Text(\"Managed by AutoSim.\")\n  else\n   local value=GUI:Checkbox(\"Enable automatic targeting\",C.autoTarget)\n   if value~=C.autoTarget then\n    C.autoTarget=value;C.save()\n    _G.NAUR_UWU_AutoTarget=value\n   end\n   if GUI:IsItemHovered() then GUI:SetTooltip(\"Targets bosses, gaols, Magitek Bits and Lahabrea. Turn off to select targets manually. AutoSim uses its own targeting.\") end\n  end\n  GUI:TreePop()\n end\n if section(\"ultimaOpen\",\"P4 - Ultima\") then\n  if section(\"orbsOpen\",\"Annihilation orb assignments\") then\n   GUI:Text(\"3-3-1-1: first two orbs shared, last two solo.\")\n   local Roster=AnyoneCore and AnyoneCore.Roster\n   local slot=Roster and Roster.current() and Roster.mySlot() or nil\n   local cfg=_G.UWU_NAUR_AnnihilationAssignments\n   if slot==\"M1\" or slot==\"M2\" then\n    GUI:Text(\"Melee with tanks\")\n    GUI:PushItemWidth(380)\n    local value=GUI:Combo(\"##UWU_orb_melee\",cfg.melee,{\"Choose melee\",\"M1\",\"M2\"},3)\n    GUI:PopItemWidth()\n    if value~=cfg.melee then cfg.melee=value;C.melee=value;C.save() end\n    GUI:Text(\"Orbs 1-2: MT + OT + selected melee.\")\n   elseif slot==\"T1\" or slot==\"T2\" then\n    GUI:Text(\"Solo tank\")\n    GUI:PushItemWidth(380)\n    local value=GUI:Combo(\"##UWU_orb_solo\",cfg.solo,{\"Choose tank\",\"MT\",\"OT\"},3)\n    GUI:PopItemWidth()\n    if value~=cfg.solo then cfg.solo=value;C.solo=value;C.save() end\n    GUI:Text(\"Orbs 3-4: selected tank alone.\")\n   elseif not slot then\n    GUI:Text(\"Waiting for your party role.\")\n   else\n    GUI:Text(\"No orb assignment needed for your role.\")\n   end\n   GUI:TreePop()\n  end\n  GUI:TreePop()\n end\nend\nGUI:End()\n",
+				execute = "if not NAUR_TTS then\n local path=GetLuaModsPath()..[[TensorReactions\\Settings\\NAUR-TTS.lua]]\n local v=FileExists(path) and FileLoad(path)\n NAUR_TTS={enabled=not (type(v)==\"table\" and v.enabled==false),path=path}\n function NAUR_TTS.save()\n  local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n  if not FolderExists(folder) then FolderCreate(folder) end\n  FileSave(NAUR_TTS.path,{enabled=NAUR_TTS.enabled})\n end\nend\n-- Independent UWU settings; available before GUI or targeting reads.\nif not _G.UWU_NAURSettingsIOReady then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UWU-NAUR.lua]]\n local saved={}\n if FileExists(path) then\n  local loaded=FileLoad(path)\n  if type(loaded)==\"table\" then saved=loaded end\n end\n local current=_G.UWU_NAURGuiState\n local old=_G.UWU_NAUR_AnnihilationAssignments or {}\n local defaults={automaticOpen=true,ultimaOpen=true,orbsOpen=true,autoTarget=_G.NAUR_UWU_AutoTarget~=false,melee=(old.melee==2 and 2 or 1),solo=old.solo or 0}\n local keys={\"automaticOpen\",\"ultimaOpen\",\"orbsOpen\",\"autoTarget\",\"melee\",\"solo\"}\n local C={}\n for _,key in ipairs(keys) do\n  local value=current and current[key]\n  if value==nil then value=saved[key] end\n  if type(defaults[key])==\"boolean\" then\n   C[key]=type(value)==\"boolean\" and value or defaults[key]\n   if value==false then C[key]=false end\n  else\n   C[key]=type(value)==\"number\" and value>=0 and value<=2 and value%1==0 and value or defaults[key]\n  end\n end\n if C.melee==0 then C.melee=1 end\n function C.save()\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local values={}\n  for _,key in ipairs(keys) do values[key]=C[key] end\n  FileSave(path,values)\n end\n _G.UWU_NAURGuiState=C\n _G.UWU_NAUR_AnnihilationAssignments={melee=C.melee,solo=C.solo}\n _G.NAUR_UWU_AutoTarget=C.autoTarget\n C.save()\n _G.UWU_NAURSettingsIOReady=true\nend\n-- Upgrade only an unset melee assignment; preserve either explicit role choice.\ndo\n local preferences=_G.UWU_NAURGuiState\n if preferences and preferences.melee==0 then\n  preferences.melee=1\n  local assignment=_G.UWU_NAUR_AnnihilationAssignments\n  if assignment then assignment.melee=1 end\n  preferences.save()\n end\nend\nlocal C=_G.UWU_NAURGuiState\nlocal function section(key,label)\n GUI:SetNextTreeNodeOpened(C[key],GUI.SetCond_Always)\n local opened\n if label==\"General\" then\n  opened=C[key]\n  GUI:PushStyleVar(GUI.StyleVar_ButtonTextAlign,0,0.5)\n  if GUI:Button((opened and \"- \" or \"+ \")..label..\"##UWU_NAUR_Draws_\"..key,GUI:GetContentRegionAvailWidth(),0) then opened=not opened end\n  GUI:PopStyleVar()\n  if opened then GUI:TreePush(\"UWU_NAUR_Draws_\"..key) end\n else\n  opened=GUI:CollapsingHeader(label,0)\n  if opened then GUI:TreePush(label) end\n end\n if opened~=C[key] then C[key]=opened;C.save() end\n return opened\nend\n\n_G.NAUR_UWU_AutoTarget=C.autoTarget\nGUI:SetNextWindowSize(440,0,GUI.SetCond_Always)\nlocal visible=GUI:Begin(\"UWU NAUR Settings\",true,GUI.WindowFlags_NoCollapse+GUI.WindowFlags_AlwaysAutoResize)\nif visible then\n GUI:Text(\"UWU | NAUR Draws\")\n GUI:Text(\"Settings and expanded sections save automatically.\")\n local naurTTS=GUI:Checkbox(\"Voice callouts (TTS)##NAURTTS\",NAUR_TTS.enabled)\n if naurTTS~=NAUR_TTS.enabled then NAUR_TTS.enabled=naurTTS;NAUR_TTS.save() end\n if GUI:IsItemHovered() then GUI:SetTooltip(\"Shared by the TEA, UCOB and UWU NAUR draws. Off: callouts stay on screen, no voice.\") end\n if GUI:Button(\"Open Party Roster##NAURRoster\") then\n  if AnyoneCore and AnyoneCore.RosterPopup and AnyoneCore.RosterPopup.openManual then AnyoneCore.RosterPopup.openManual() end\n end\n if GUI:IsItemHovered() then GUI:SetTooltip(\"Opens Anyone's Party Roster to set or check your slot.\") end\n if section(\"automaticOpen\",\"General\") then\n  if data.uwuAutoSim or data.uwuBLMAutoSim or data.uwuBRDAutoSim or data.uwuRPRAutoSim then\n   GUI:Text(\"Managed by AutoSim.\")\n  else\n   local value=GUI:Checkbox(\"Enable automatic targeting\",C.autoTarget)\n   if value~=C.autoTarget then\n    C.autoTarget=value;C.save()\n    _G.NAUR_UWU_AutoTarget=value\n   end\n   if GUI:IsItemHovered() then GUI:SetTooltip(\"Targets bosses, gaols, Magitek Bits and Lahabrea. Turn off to select targets manually. AutoSim uses its own targeting.\") end\n  end\n  GUI:TreePop()\n end\n if section(\"ultimaOpen\",\"P4 - Ultima\") then\n  if section(\"orbsOpen\",\"Annihilation orb assignments\") then\n   GUI:Text(\"NAUR 2-2-1-1: MT + OT orbs 1-2, MT alone orbs 3-4.\")\n   local Roster=AnyoneCore and AnyoneCore.Roster\n   local slot=Roster and Roster.current() and Roster.mySlot() or nil\n   local cfg=_G.UWU_NAUR_AnnihilationAssignments\n   if slot==\"M1\" or slot==\"M2\" then\n    GUI:Text(\"Melee with tanks\")\n    GUI:PushItemWidth(380)\n    local value=GUI:Combo(\"##UWU_orb_melee\",cfg.melee,{\"Choose melee\",\"M1\",\"M2\"},3)\n    GUI:PopItemWidth()\n    if value~=cfg.melee then cfg.melee=value;C.melee=value;C.save() end\n    GUI:Text(\"Orbs 1-2: MT + OT + selected melee.\")\n   elseif slot==\"T1\" or slot==\"T2\" then\n    GUI:Text(\"Solo tank\")\n    GUI:PushItemWidth(380)\n    local value=GUI:Combo(\"##UWU_orb_solo\",cfg.solo,{\"Choose tank\",\"MT\",\"OT\"},3)\n    GUI:PopItemWidth()\n    if value~=cfg.solo then cfg.solo=value;C.solo=value;C.save() end\n    GUI:Text(\"Orbs 3-4: selected tank alone.\")\n   elseif not slot then\n    GUI:Text(\"Waiting for your party role.\")\n   else\n    GUI:Text(\"No orb assignment needed for your role.\")\n   end\n   GUI:TreePop()\n  end\n  GUI:TreePop()\n end\nend\nGUI:End()\n",
 				executeType = 2,
 				mechanicTime = 9,
 				name = "[GUI][NAUR] Settings",
@@ -1350,10 +1350,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(2500,\"Move: Feather Rain\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Move: Feather Rain\",100) end\nself.used=true\n",
 							alertDuration = 2500,
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "Move: Feather Rain",
 							conditions = 
 							{
@@ -1875,9 +1875,9 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"Move under barrier\",1.0,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Move under barrier\",81) end\nself.used=true\n",
 							alertPriority = 3,
-							alertTTS = true,
 							alertText = "Move under barrier",
 							alertVolume = 81,
 							uuid = "dcae8059-54d7-af3f-a3da-cce6291a52ce",
@@ -1999,9 +1999,9 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"Move out of barrier and Get hit by friction\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Move out of barrier and Get hit by friction\",100) end\nself.used=true\n",
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "Move out of barrier and Get hit by friction",
 							conditions = 
 							{
@@ -2362,9 +2362,9 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"Move outside and get hit by Friction\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Move outside and get hit by Friction\",100) end\nself.used=true\n",
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "Move outside and get hit by Friction",
 							conditions = 
 							{
@@ -2412,9 +2412,9 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"Cleanse Debuff.\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Cleanse Debuff.\",100) end\nself.used=true\n",
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "Cleanse Debuff.",
 							conditions = 
 							{
@@ -2474,9 +2474,9 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"Stay outside of barrier and get hit by Friction\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Stay outside of barrier and get hit by Friction\",100) end\nself.used=true\n",
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "Stay outside of barrier and get hit by Friction",
 							conditions = 
 							{
@@ -2524,9 +2524,9 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"Cleanse debuff inside the barrier\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Cleanse debuff inside the barrier\",100) end\nself.used=true\n",
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "Cleanse debuff inside the barrier",
 							conditions = 
 							{
@@ -2577,10 +2577,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(2500,\"Move: Feather Rain\",1.0,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Move: Feather Rain\",81) end\nself.used=true\n",
 							alertDuration = 2500,
 							alertPriority = 3,
-							alertTTS = true,
 							alertText = "Move: Feather Rain",
 							alertVolume = 81,
 							conditions = 
@@ -2770,10 +2770,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(2500,\"Move: Feather Rain\",1.0,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Move: Feather Rain\",81) end\nself.used=true\n",
 							alertDuration = 2500,
 							alertPriority = 3,
-							alertTTS = true,
 							alertText = "Move: Feather Rain",
 							alertVolume = 81,
 							conditions = 
@@ -2905,10 +2905,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(8000,\"Move to 3 (SE)\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Move to 3 (SE)\",100) end\nself.used=true\n",
 							alertDuration = 8000,
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "Move to 3 (SE)",
 							conditions = 
 							{
@@ -2957,10 +2957,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(8000,\"Cover the debuff\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Cover the debuff\",100) end\nself.used=true\n",
 							alertDuration = 8000,
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "Cover the debuff",
 							conditions = 
 							{
@@ -3532,10 +3532,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(2500,\"Move: Feather Rain\",1.0,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Move: Feather Rain\",81) end\nself.used=true\n",
 							alertDuration = 2500,
 							alertPriority = 3,
-							alertTTS = true,
 							alertText = "Move: Feather Rain",
 							alertVolume = 81,
 							conditions = 
@@ -3788,10 +3788,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(8000,\"Caster take west tether\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Caster take west tether\",100) end\nself.used=true\n",
 							alertDuration = 8000,
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "Caster take west tether",
 							conditions = 
 							{
@@ -3839,10 +3839,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(8000,\"Tank take East Tether\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Tank take East Tether\",100) end\nself.used=true\n",
 							alertDuration = 8000,
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "Tank take East Tether",
 							conditions = 
 							{
@@ -4053,9 +4053,9 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"Kill adds & stack middle.\",1.0,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Kill adds & stack middle.\",81) end\nself.used=true\n",
 							alertPriority = 3,
-							alertTTS = true,
 							alertText = "Kill adds & stack middle.",
 							alertVolume = 81,
 							uuid = "8d25e8ad-1263-0299-a7f1-51f9deed2666",
@@ -4298,10 +4298,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(2500,\"Move: Feather Rain\",1.0,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Move: Feather Rain\",81) end\nself.used=true\n",
 							alertDuration = 2500,
 							alertPriority = 3,
-							alertTTS = true,
 							alertText = "Move: Feather Rain",
 							alertVolume = 81,
 							conditions = 
@@ -4523,11 +4523,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(4500,\"OT: PROVOKE IFRIT / MOVE TO C\",0.9,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"OT: PROVOKE IFRIT / MOVE TO C\",100) end\nself.used=true\n",
 							alertDuration = 4500,
 							alertPriority = 3,
 							alertScale = 0.9,
-							alertTTS = true,
 							alertText = "OT: PROVOKE IFRIT / MOVE TO C",
 							conditions = 
 							{
@@ -5052,10 +5052,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"Move to A\",0.85,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Move to A\",100) end\nself.used=true\n",
 							alertPriority = 3,
 							alertScale = 0.85,
-							alertTTS = true,
 							alertText = "Move to A",
 							conditions = 
 							{
@@ -5248,11 +5248,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(4000,\"OT: INVULN BEFORE INCINERATE\",0.9,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"OT: INVULN BEFORE INCINERATE\",100) end\nself.used=true\n",
 							alertDuration = 4000,
 							alertPriority = 3,
 							alertScale = 0.9,
-							alertTTS = true,
 							alertText = "OT: INVULN BEFORE INCINERATE",
 							conditions = 
 							{
@@ -5446,11 +5446,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(4500,\"MT: PROVOKE IFRIT, MOVE TO C\",0.9,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"MT: PROVOKE IFRIT, MOVE TO C\",100) end\nself.used=true\n",
 							alertDuration = 4500,
 							alertPriority = 3,
 							alertScale = 0.9,
-							alertTTS = true,
 							alertText = "MT: PROVOKE IFRIT, MOVE TO C",
 							conditions = 
 							{
@@ -5980,10 +5980,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"MT: MOVE NORTH BETWEEN SHORT NAILS\",0.9,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"MT: MOVE NORTH BETWEEN SHORT NAILS\",100) end\nself.used=true\n",
 							alertPriority = 3,
 							alertScale = 0.9,
-							alertTTS = true,
 							alertText = "MT: MOVE NORTH BETWEEN SHORT NAILS",
 							conditions = 
 							{
@@ -6079,11 +6079,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(6000,\"DPS-CLOSE NAIL TO 40%, THEN FOLLOW ORDER\",0.89999997615814,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"DPS-CLOSE NAIL TO 40%, THEN FOLLOW ORDER\",100) end\nself.used=true\n",
 							alertDuration = 6000,
 							alertPriority = 2,
 							alertScale = 0.89999997615814,
-							alertTTS = true,
 							alertText = "DPS-CLOSE NAIL TO 40%, THEN FOLLOW ORDER",
 							conditions = 
 							{
@@ -6237,10 +6237,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(8000,\"DPS nails low then follow order\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"DPS nails low then follow order\",100) end\nself.used=true\n",
 							alertDuration = 8000,
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "DPS nails low then follow order",
 							conditions = 
 							{
@@ -6372,9 +6372,9 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(4000,\"Kill nail order\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Kill nail order\",100) end\nself.used=true\n",
 							alertDuration = 4000,
-							alertTTS = true,
 							alertText = "Kill nail order",
 							conditions = 
 							{
@@ -6772,10 +6772,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"SEARING WIND: MOVE SOUTH, CLOSE TO WALL\",0.9,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"SEARING WIND: MOVE SOUTH, CLOSE TO WALL\",100) end\nself.used=true\n",
 							alertPriority = 3,
 							alertScale = 0.9,
-							alertTTS = true,
 							alertText = "SEARING WIND: MOVE SOUTH, CLOSE TO WALL",
 							conditions = 
 							{
@@ -7986,9 +7986,9 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"Stack\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Stack\",100) end\nself.used=true\n",
 							alertDuration = 3000,
-							alertTTS = true,
 							alertText = "Stack",
 							conditions = 
 							{
@@ -9149,10 +9149,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(8000,\"R2 pick up Light Puddle\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"R2 pick up Light Puddle\",100) end\nself.used=true\n",
 							alertDuration = 8000,
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "R2 pick up Light Puddle",
 							conditions = 
 							{
@@ -9723,9 +9723,9 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"Dodge twice\",1.0,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Dodge twice\",81) end\nself.used=true\n",
 							alertPriority = 3,
-							alertTTS = true,
 							alertText = "Dodge twice",
 							alertVolume = 81,
 							uuid = "ebb9c709-68be-a091-95d0-9aa3044dd1bd",
@@ -9853,9 +9853,9 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"Go opposite of Titan \",1.0,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Go opposite of Titan \",81) end\nself.used=true\n",
 							alertPriority = 3,
-							alertTTS = true,
 							alertText = "Go opposite of Titan ",
 							alertVolume = 81,
 							uuid = "1cf5df1d-68f6-aec1-b949-8f2e3f39e09a",
@@ -10494,10 +10494,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(8000,\"1 closest Titan, 3 furthest\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"1 closest Titan, 3 furthest\",100) end\nself.used=true\n",
 							alertDuration = 8000,
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "1 closest Titan, 3 furthest",
 							uuid = "cf5933a6-60c7-6c7d-96a3-4c9784a16321",
 							version = 2.1,
@@ -10795,10 +10795,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"Dodge Landslide, then move into position\",0.85,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Dodge Landslide, then move into position\",100) end\nself.used=true\n",
 							alertPriority = 3,
 							alertScale = 0.85,
-							alertTTS = true,
 							alertText = "Dodge Landslide, then move into position",
 							conditions = 
 							{
@@ -11036,8 +11036,8 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
-							alertTTS = true,
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"Dodge 2x + landslides\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Dodge 2x + landslides\",100) end\nself.used=true\n",
 							alertText = "Dodge 2x + landslides",
 							uuid = "dd364a2e-4391-2895-ab8f-1f1d9ef7af30",
 							version = 2.1,
@@ -11288,9 +11288,9 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"Opposite of purple\",1.0,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Opposite of purple\",81) end\nself.used=true\n",
 							alertPriority = 3,
-							alertTTS = true,
 							alertText = "Opposite of purple",
 							alertVolume = 81,
 							uuid = "2b718efa-38a4-585d-a464-9e9b0cb10ef9",
@@ -11329,10 +11329,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(8000,\"Break rock once formed\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Break rock once formed\",100) end\nself.used=true\n",
 							alertDuration = 8000,
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "Break rock once formed",
 							uuid = "5a088776-6156-abaf-867e-d4a8528d9e59",
 							version = 2.1,
@@ -11912,8 +11912,8 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
-							alertTTS = true,
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"Dodge Landslide\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Dodge Landslide\",100) end\nself.used=true\n",
 							alertText = "Dodge Landslide",
 							uuid = "f7d833fc-fcdb-359b-9dbb-71c19250ac73",
 							version = 2.1,
@@ -12019,10 +12019,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(8000,\"Take Tankbuster alone\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Take Tankbuster alone\",100) end\nself.used=true\n",
 							alertDuration = 8000,
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "Take Tankbuster alone",
 							conditions = 
 							{
@@ -12114,11 +12114,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(4000,\"Go in front of Titan\",0.85,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Go in front of Titan\",100) end\nself.used=true\n",
 							alertDuration = 4000,
 							alertPriority = 3,
 							alertScale = 0.85,
-							alertTTS = true,
 							alertText = "Go in front of Titan",
 							conditions = 
 							{
@@ -12187,11 +12187,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(4000,\"Stack on MT in front of Titan\",0.85,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Stack on MT in front of Titan\",100) end\nself.used=true\n",
 							alertDuration = 4000,
 							alertPriority = 3,
 							alertScale = 0.85,
-							alertTTS = true,
 							alertText = "Stack on MT in front of Titan",
 							conditions = 
 							{
@@ -12592,9 +12592,9 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(6000,\"Melee: take the light orb\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Melee: take the light orb\",100) end\nself.used=true\n",
 							alertDuration = 6000,
-							alertTTS = true,
 							alertText = "Melee: take the light orb",
 							conditions = 
 							{
@@ -13935,11 +13935,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(6000,\"Provoke, then move away from the party\",0.85,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Provoke, then move away from the party\",100) end\nself.used=true\n",
 							alertDuration = 6000,
 							alertPriority = 3,
 							alertScale = 0.85,
-							alertTTS = true,
 							alertText = "Provoke, then move away from the party",
 							conditions = 
 							{
@@ -14399,9 +14399,9 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\" Wait for Feather rain\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\" Wait for Feather rain\",100) end\nself.used=true\n",
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = " Wait for Feather rain",
 							uuid = "88058d5c-aa30-28fa-abe3-32fb67e877ad",
 							version = 2.1,
@@ -14558,10 +14558,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(6000,\"Move south for eruption baits\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Move south for eruption baits\",100) end\nself.used=true\n",
 							alertDuration = 6000,
 							alertPriority = 2,
-							alertTTS = true,
 							alertText = "Move south for eruption baits",
 							conditions = 
 							{
@@ -14901,11 +14901,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(4000,\"Out, dodge landslides\",0.85,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Out, dodge landslides\",100) end\nself.used=true\n",
 							alertDuration = 4000,
 							alertPriority = 3,
 							alertScale = 0.85,
-							alertTTS = true,
 							alertText = "Out, dodge landslides",
 							conditions = 
 							{
@@ -15091,10 +15091,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(2500,\"Stack together, tanks stay out\",1.0,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Stack together, tanks stay out\",100) end\nself.used=true\n",
 							alertDuration = 2500,
 							alertPriority = 3,
-							alertTTS = true,
 							alertText = "Stack together, tanks stay out",
 							displayPath = "[Raid calls]",
 							name = "[Raid Call][Ultima] Party Stack 1077",
@@ -15222,7 +15222,7 @@ local tbl =
 				{
 				},
 				displayPath = "Draws - Ultima NAUR",
-				execute = "local Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current() or Roster.mySlot() ~= 'T1' then return end\nlocal alive, ultima = TensorCore.isEntityAlive(2137)\nif not alive or not ultima or not ultima.id then return end\nlocal drawer = TensorCore.getCachedDrawer(0xCC33FF66, 0xCC33FF66, 0xFF33FF66, 0xFF000000, 3)\ndrawer:addTimedArrowOnEnt(4000, ultima.id, 6, 1.5, 3, 2.5, nil, 0, false, -math.pi / 2, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nTensorCore.addAlertText(3500, 'MT: left of Ultima', 1, 1, true)\nself.used = true",
+				execute = "local Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current() or Roster.mySlot() ~= 'T1' then return end\nlocal alive, ultima = TensorCore.isEntityAlive(2137)\nif not alive or not ultima or not ultima.id then return end\nlocal drawer = TensorCore.getCachedDrawer(0xCC33FF66, 0xCC33FF66, 0xFF33FF66, 0xFF000000, 3)\ndrawer:addTimedArrowOnEnt(4000, ultima.id, 6, 1.5, 3, 2.5, nil, 0, false, -math.pi / 2, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nTensorCore.addAlertText(3500, 'MT: left of Ultima', 1, 1, not (NAUR_TTS and NAUR_TTS.enabled==false))\nself.used = true",
 				executeType = 2,
 				mechanicTime = 1079,
 				name = "[Draw][NAUR][Post Predation] MT left of Ultima",
@@ -15256,11 +15256,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(6000,\"MT invulnerability ready: Provoke now\",0.85,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"MT invulnerability ready: Provoke now\",100) end\nself.used=true\n",
 							alertDuration = 6000,
 							alertPriority = 3,
 							alertScale = 0.85,
-							alertTTS = true,
 							alertText = "MT invulnerability ready: Provoke now",
 							conditions = 
 							{
@@ -15431,11 +15431,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(6000,\"MT invulnerability ready: Provoke now\",0.85,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"MT invulnerability ready: Provoke now\",100) end\nself.used=true\n",
 							alertDuration = 6000,
 							alertPriority = 3,
 							alertScale = 0.85,
-							alertTTS = true,
 							alertText = "MT invulnerability ready: Provoke now",
 							conditions = 
 							{
@@ -15606,11 +15606,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(6000,\"MT invulnerability ready: Provoke now\",0.85,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"MT invulnerability ready: Provoke now\",100) end\nself.used=true\n",
 							alertDuration = 6000,
 							alertPriority = 3,
 							alertScale = 0.85,
-							alertTTS = true,
 							alertText = "MT invulnerability ready: Provoke now",
 							conditions = 
 							{
@@ -15781,11 +15781,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(6000,\"MT invulnerability ready: Provoke now\",0.85,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"MT invulnerability ready: Provoke now\",100) end\nself.used=true\n",
 							alertDuration = 6000,
 							alertPriority = 3,
 							alertScale = 0.85,
-							alertTTS = true,
 							alertText = "MT invulnerability ready: Provoke now",
 							conditions = 
 							{
@@ -15979,11 +15979,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(2500,\"STACK UNTIL FEATHER RAIN, THEN MOVE\",0.9,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"STACK UNTIL FEATHER RAIN, THEN MOVE\",100) end\nself.used=true\n",
 							alertDuration = 2500,
 							alertPriority = 3,
 							alertScale = 0.9,
-							alertTTS = true,
 							alertText = "STACK UNTIL FEATHER RAIN, THEN MOVE",
 							displayPath = "[Raid calls]",
 							name = "Stack until Feather Rain, then move",
@@ -16049,11 +16049,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(2500,\"MOVE FOR FEATHER RAIN\",0.9,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"MOVE FOR FEATHER RAIN\",100) end\nself.used=true\n",
 							alertDuration = 2500,
 							alertPriority = 3,
 							alertScale = 0.9,
-							alertTTS = true,
 							alertText = "MOVE FOR FEATHER RAIN",
 							conditions = 
 							{
@@ -16196,10 +16196,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(2500,\"Move away from MT\",1.0,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Move away from MT\",100) end\nself.used=true\n",
 							alertDuration = 2500,
 							alertPriority = 3,
-							alertTTS = true,
 							alertText = "Move away from MT",
 							conditions = 
 							{
@@ -16273,10 +16273,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"Homing Lasers: stay away from the party\",0.85,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Homing Lasers: stay away from the party\",100) end\nself.used=true\n",
 							alertPriority = 3,
 							alertScale = 0.85,
-							alertTTS = true,
 							alertText = "Homing Lasers: stay away from the party",
 							conditions = 
 							{
@@ -16363,11 +16363,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(2500,\"MOVE FOR FEATHER RAIN\",0.9,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"MOVE FOR FEATHER RAIN\",100) end\nself.used=true\n",
 							alertDuration = 2500,
 							alertPriority = 3,
 							alertScale = 0.9,
-							alertTTS = true,
 							alertText = "MOVE FOR FEATHER RAIN",
 							conditions = 
 							{
@@ -16469,10 +16469,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(2500,\"Stack southwest of Ultima\",1.0,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Stack southwest of Ultima\",100) end\nself.used=true\n",
 							alertDuration = 2500,
 							alertPriority = 3,
-							alertTTS = true,
 							alertText = "Stack southwest of Ultima",
 							conditions = 
 							{
@@ -16581,10 +16581,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"Go to C and take tether\",0.85,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Go to C and take tether\",100) end\nself.used=true\n",
 							alertPriority = 3,
 							alertScale = 0.85,
-							alertTTS = true,
 							alertText = "Go to C and take tether",
 							conditions = 
 							{
@@ -16801,11 +16801,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(2500,\"DODGE WEIGHT OF THE LAND\",0.89999997615814,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"DODGE WEIGHT OF THE LAND\",100) end\nself.used=true\n",
 							alertDuration = 2500,
 							alertPriority = 3,
 							alertScale = 0.89999997615814,
-							alertTTS = true,
 							alertText = "DODGE WEIGHT OF THE LAND",
 							conditions = 
 							{
@@ -16982,11 +16982,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(2500,\"DODGE WEIGHT OF THE LAND\",0.9,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"DODGE WEIGHT OF THE LAND\",100) end\nself.used=true\n",
 							alertDuration = 2500,
 							alertPriority = 3,
 							alertScale = 0.9,
-							alertTTS = true,
 							alertText = "DODGE WEIGHT OF THE LAND",
 							conditions = 
 							{
@@ -17066,7 +17066,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- Independent UWU settings; available before GUI or targeting reads.\nif not _G.UWU_NAURSettingsIOReady then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UWU-NAUR.lua]]\n local saved={}\n if FileExists(path) then\n  local loaded=FileLoad(path)\n  if type(loaded)==\"table\" then saved=loaded end\n end\n local current=_G.UWU_NAURGuiState\n local old=_G.UWU_NAUR_AnnihilationAssignments or {}\n local defaults={automaticOpen=true,ultimaOpen=true,orbsOpen=true,autoTarget=_G.NAUR_UWU_AutoTarget~=false,melee=(old.melee==2 and 2 or 1),solo=old.solo or 0}\n local keys={\"automaticOpen\",\"ultimaOpen\",\"orbsOpen\",\"autoTarget\",\"melee\",\"solo\"}\n local C={}\n for _,key in ipairs(keys) do\n  local value=current and current[key]\n  if value==nil then value=saved[key] end\n  if type(defaults[key])==\"boolean\" then\n   C[key]=type(value)==\"boolean\" and value or defaults[key]\n   if value==false then C[key]=false end\n  else\n   C[key]=type(value)==\"number\" and value>=0 and value<=2 and value%1==0 and value or defaults[key]\n  end\n end\n if C.melee==0 then C.melee=1 end\n function C.save()\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local values={}\n  for _,key in ipairs(keys) do values[key]=C[key] end\n  FileSave(path,values)\n end\n _G.UWU_NAURGuiState=C\n _G.UWU_NAUR_AnnihilationAssignments={melee=C.melee,solo=C.solo}\n _G.NAUR_UWU_AutoTarget=C.autoTarget\n C.save()\n _G.UWU_NAURSettingsIOReady=true\nend\n-- Upgrade only an unset melee assignment; preserve either explicit role choice.\ndo\n local preferences=_G.UWU_NAURGuiState\n if preferences and preferences.melee==0 then\n  preferences.melee=1\n  local assignment=_G.UWU_NAUR_AnnihilationAssignments\n  if assignment then assignment.melee=1 end\n  preferences.save()\n end\nend\nlocal state=data.uwu_annihilation_orbs\nif not state then state={seen={},count=0};data.uwu_annihilation_orbs=state end\nstate.live=state.live or {}\nif not self.orb then\n if state.seen[eventArgs.entityID] or state.count>=4 then self.used=true;return end\n state.count=state.count+1\n state.seen[eventArgs.entityID]=true\n self.orb=state.count\n self.entry={number=self.orb,draws={},expires=Now()+10000}\n state.live[eventArgs.entityID]=self.entry\nend\nif self.entry.finished then self.used=true;return end\nlocal duration=self.entry.expires-Now()\nif duration<=0 then self.used=true;return end\nlocal orbEntity=TensorCore.mGetEntity(eventArgs.entityID)\nif not orbEntity then\n if not self.reportedMissingActor then TensorCore.timelineLogToFile(string.format(\"[UWU orb] waiting for actor=%d orb=%d\\n\",eventArgs.entityID,self.orb));self.reportedMissingActor=true end\n return\nend\nif not self.entry.highlighted then\n local drawer=TensorCore.getCachedDrawer(0x22FFFF44,0x66FFFF44,0x88FFFF44,0xFF000000,3)\n local id=drawer:addTimedCircleOnEnt(duration,eventArgs.entityID,1,0,false,true,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\n if not id then\n  if not self.reportedDrawWait then TensorCore.timelineLogToFile(\"[UWU orb] waiting for world-highlight submission\\n\");self.reportedDrawWait=true end\n  return\n end\n self.entry.draws[#self.entry.draws+1]=id\n self.entry.highlighted=true\n TensorCore.timelineLogToFile(string.format(\"[UWU orb] highlight orb=%d actor=%d position=(%.2f,%.2f,%.2f) shape=%s\\n\",self.orb,eventArgs.entityID,orbEntity.pos.x,orbEntity.pos.y,orbEntity.pos.z,tostring(id)))\nend\nlocal Roster=AnyoneCore.Roster\nif not Roster or not Roster.current() then return end\nlocal slot=Roster.mySlot()\nif not slot then return end\nlocal cfg=_G.UWU_NAUR_AnnihilationAssignments\nlocal orb=self.orb\nlocal assigned,missing=false,false\nif orb<=2 then\n if slot==\"T1\" or slot==\"T2\" then assigned=true\n elseif slot==\"M1\" or slot==\"M2\" then\n  missing=false\n  assigned=false\n end\nelseif slot==\"T1\" or slot==\"T2\" then\n missing=false\n assigned=(slot==\"T1\")\nend\nif missing then\n TensorCore.addAlertText(3500,\"Orb \"..orb..\": choose your assignment\",1,2,true)\nelseif assigned then\n if not Roster.isReady() then return end\n local player=TensorCore.mGetPlayer()\n if not player then return end\n local drawer=TensorCore.getCachedDrawer(0x4433FF66,0xCC33FF66,0xFF33FF66,0xFF000000,3)\n local id=drawer:addTimedArrowOnEnt(duration,player.id,0,1,1,2.4,eventArgs.entityID,0,false,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\n if id then self.entry.draws[#self.entry.draws+1]=id end\n TensorCore.addAlertText(3500,\"Orb \"..orb..(orb<=2 and \": soak with tanks\" or \": solo tank soak\"),1,1,true)\nelse\n TensorCore.addAlertText(3000,\"Orb \"..orb..\": stay clear\",0.9,2,false)\nend\nself.used=true",
+							actionLua = "-- Independent UWU settings; available before GUI or targeting reads.\nif not _G.UWU_NAURSettingsIOReady then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UWU-NAUR.lua]]\n local saved={}\n if FileExists(path) then\n  local loaded=FileLoad(path)\n  if type(loaded)==\"table\" then saved=loaded end\n end\n local current=_G.UWU_NAURGuiState\n local old=_G.UWU_NAUR_AnnihilationAssignments or {}\n local defaults={automaticOpen=true,ultimaOpen=true,orbsOpen=true,autoTarget=_G.NAUR_UWU_AutoTarget~=false,melee=(old.melee==2 and 2 or 1),solo=old.solo or 0}\n local keys={\"automaticOpen\",\"ultimaOpen\",\"orbsOpen\",\"autoTarget\",\"melee\",\"solo\"}\n local C={}\n for _,key in ipairs(keys) do\n  local value=current and current[key]\n  if value==nil then value=saved[key] end\n  if type(defaults[key])==\"boolean\" then\n   C[key]=type(value)==\"boolean\" and value or defaults[key]\n   if value==false then C[key]=false end\n  else\n   C[key]=type(value)==\"number\" and value>=0 and value<=2 and value%1==0 and value or defaults[key]\n  end\n end\n if C.melee==0 then C.melee=1 end\n function C.save()\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local values={}\n  for _,key in ipairs(keys) do values[key]=C[key] end\n  FileSave(path,values)\n end\n _G.UWU_NAURGuiState=C\n _G.UWU_NAUR_AnnihilationAssignments={melee=C.melee,solo=C.solo}\n _G.NAUR_UWU_AutoTarget=C.autoTarget\n C.save()\n _G.UWU_NAURSettingsIOReady=true\nend\n-- Upgrade only an unset melee assignment; preserve either explicit role choice.\ndo\n local preferences=_G.UWU_NAURGuiState\n if preferences and preferences.melee==0 then\n  preferences.melee=1\n  local assignment=_G.UWU_NAUR_AnnihilationAssignments\n  if assignment then assignment.melee=1 end\n  preferences.save()\n end\nend\nlocal state=data.uwu_annihilation_orbs\nif not state then state={seen={},count=0};data.uwu_annihilation_orbs=state end\nstate.live=state.live or {}\nif not self.orb then\n if state.seen[eventArgs.entityID] or state.count>=4 then self.used=true;return end\n state.count=state.count+1\n state.seen[eventArgs.entityID]=true\n self.orb=state.count\n self.entry={number=self.orb,draws={},expires=Now()+10000}\n state.live[eventArgs.entityID]=self.entry\nend\nif self.entry.finished then self.used=true;return end\nlocal duration=self.entry.expires-Now()\nif duration<=0 then self.used=true;return end\nlocal orbEntity=TensorCore.mGetEntity(eventArgs.entityID)\nif not orbEntity then\n if not self.reportedMissingActor then TensorCore.timelineLogToFile(string.format(\"[UWU orb] waiting for actor=%d orb=%d\\n\",eventArgs.entityID,self.orb));self.reportedMissingActor=true end\n return\nend\nif not self.entry.highlighted then\n local drawer=TensorCore.getCachedDrawer(0x22FFFF44,0x66FFFF44,0x88FFFF44,0xFF000000,3)\n local id=drawer:addTimedCircleOnEnt(duration,eventArgs.entityID,1,0,false,true,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\n if not id then\n  if not self.reportedDrawWait then TensorCore.timelineLogToFile(\"[UWU orb] waiting for world-highlight submission\\n\");self.reportedDrawWait=true end\n  return\n end\n self.entry.draws[#self.entry.draws+1]=id\n self.entry.highlighted=true\n TensorCore.timelineLogToFile(string.format(\"[UWU orb] highlight orb=%d actor=%d position=(%.2f,%.2f,%.2f) shape=%s\\n\",self.orb,eventArgs.entityID,orbEntity.pos.x,orbEntity.pos.y,orbEntity.pos.z,tostring(id)))\nend\nlocal Roster=AnyoneCore.Roster\nif not Roster or not Roster.current() then return end\nlocal slot=Roster.mySlot()\nif not slot then return end\nlocal cfg=_G.UWU_NAUR_AnnihilationAssignments\nlocal orb=self.orb\nlocal assigned,missing=false,false\nif orb<=2 then\n if slot==\"T1\" or slot==\"T2\" then assigned=true\n elseif slot==\"M1\" or slot==\"M2\" then\n  missing=false\n  assigned=false\n end\nelseif slot==\"T1\" or slot==\"T2\" then\n missing=false\n assigned=(slot==\"T1\")\nend\nif missing then\n TensorCore.addAlertText(3500,\"Orb \"..orb..\": choose your assignment\",1,2, not (NAUR_TTS and NAUR_TTS.enabled==false))\nelseif assigned then\n if not Roster.isReady() then return end\n local player=TensorCore.mGetPlayer()\n if not player then return end\n local drawer=TensorCore.getCachedDrawer(0x4433FF66,0xCC33FF66,0xFF33FF66,0xFF000000,3)\n local id=drawer:addTimedArrowOnEnt(duration,player.id,0,1,1,2.4,eventArgs.entityID,0,false,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\n if id then self.entry.draws[#self.entry.draws+1]=id end\n TensorCore.addAlertText(3500,\"Orb \"..orb..(orb<=2 and \": soak with tanks\" or \": solo tank soak\"),1,1, not (NAUR_TTS and NAUR_TTS.enabled==false))\nelse\n TensorCore.addAlertText(3000,\"Orb \"..orb..\": stay clear\",0.9,2,false)\nend\nself.used=true",
 							conditions = 
 							{
 								
@@ -17099,7 +17099,7 @@ local tbl =
 				},
 				displayPath = "Draws - Ultima NAUR",
 				eventType = 5,
-				execute = "-- Independent UWU settings; available before GUI or targeting reads.\nif not _G.UWU_NAURSettingsIOReady then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UWU-NAUR.lua]]\n local saved={}\n if FileExists(path) then\n  local loaded=FileLoad(path)\n  if type(loaded)==\"table\" then saved=loaded end\n end\n local current=_G.UWU_NAURGuiState\n local old=_G.UWU_NAUR_AnnihilationAssignments or {}\n local defaults={automaticOpen=true,ultimaOpen=true,orbsOpen=true,autoTarget=_G.NAUR_UWU_AutoTarget~=false,melee=(old.melee==2 and 2 or 1),solo=old.solo or 0}\n local keys={\"automaticOpen\",\"ultimaOpen\",\"orbsOpen\",\"autoTarget\",\"melee\",\"solo\"}\n local C={}\n for _,key in ipairs(keys) do\n  local value=current and current[key]\n  if value==nil then value=saved[key] end\n  if type(defaults[key])==\"boolean\" then\n   C[key]=type(value)==\"boolean\" and value or defaults[key]\n   if value==false then C[key]=false end\n  else\n   C[key]=type(value)==\"number\" and value>=0 and value<=2 and value%1==0 and value or defaults[key]\n  end\n end\n if C.melee==0 then C.melee=1 end\n function C.save()\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local values={}\n  for _,key in ipairs(keys) do values[key]=C[key] end\n  FileSave(path,values)\n end\n _G.UWU_NAURGuiState=C\n _G.UWU_NAUR_AnnihilationAssignments={melee=C.melee,solo=C.solo}\n _G.NAUR_UWU_AutoTarget=C.autoTarget\n C.save()\n _G.UWU_NAURSettingsIOReady=true\nend\n-- Upgrade only an unset melee assignment; preserve either explicit role choice.\ndo\n local preferences=_G.UWU_NAURGuiState\n if preferences and preferences.melee==0 then\n  preferences.melee=1\n  local assignment=_G.UWU_NAUR_AnnihilationAssignments\n  if assignment then assignment.melee=1 end\n  preferences.save()\n end\nend\nif not eventArgs or eventArgs.entityContentID ~= 2138 or not eventArgs.entityID then return end\ndata.uwu_annihilation_orbs = data.uwu_annihilation_orbs or {seen = {}, count = 0}\nlocal state = data.uwu_annihilation_orbs\nif state.seen[eventArgs.entityID] then return end\nif state.count >= 4 then return end\nstate.seen[eventArgs.entityID] = true\nstate.count = state.count + 1\nlocal orb = state.count\nlocal Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current() then self.used = true return end\nlocal slot = Roster.mySlot()\nif not slot then self.used = true return end\nlocal cfg = _G.UWU_NAUR_AnnihilationAssignments or {}\nlocal assigned = false\nlocal missing = false\nif orb <= 2 then\n    if slot == \"T1\" or slot == \"T2\" then\n        assigned = true\n    elseif slot == \"M1\" or slot == \"M2\" then\n        missing=false\n        assigned=false\n    end\nelseif slot == \"T1\" or slot == \"T2\" then\n    missing=false\n    assigned=(slot==\"T1\")\nend\nif missing then\n    TensorCore.addAlertText(3500, \"Orb \" .. orb .. \": choose your assignment\", 1.0, 2, true)\nelseif assigned then\n    if Roster.isReady() then\n        local id = Roster.idOf(slot)\n        if id then\n            local drawer = TensorCore.getCachedDrawer(0x6633FF66, 0xCC33FF66, 0xFF33FF66, 0xFF000000, 3)\n            drawer:addTimedCircleOnEnt(4000, id, 1.2, 0, false, true, Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\n            AnyoneCore.addTimedWorldTextOnEnt(4000, \"SOAK ORB \" .. orb, id, 0xFF33FF66, true, 1.1, 1.5)\n        end\n    end\n    TensorCore.addAlertText(3500, \"Orb \" .. orb .. (orb <= 2 and \": soak with tanks\" or \": solo tank soak\"), 1.0, 1, true)\nelse\n    TensorCore.addAlertText(3000, \"Orb \" .. orb .. \": stay clear\", 0.9, 2, false)\nend\nself.used = true",
+				execute = "-- Independent UWU settings; available before GUI or targeting reads.\nif not _G.UWU_NAURSettingsIOReady then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UWU-NAUR.lua]]\n local saved={}\n if FileExists(path) then\n  local loaded=FileLoad(path)\n  if type(loaded)==\"table\" then saved=loaded end\n end\n local current=_G.UWU_NAURGuiState\n local old=_G.UWU_NAUR_AnnihilationAssignments or {}\n local defaults={automaticOpen=true,ultimaOpen=true,orbsOpen=true,autoTarget=_G.NAUR_UWU_AutoTarget~=false,melee=(old.melee==2 and 2 or 1),solo=old.solo or 0}\n local keys={\"automaticOpen\",\"ultimaOpen\",\"orbsOpen\",\"autoTarget\",\"melee\",\"solo\"}\n local C={}\n for _,key in ipairs(keys) do\n  local value=current and current[key]\n  if value==nil then value=saved[key] end\n  if type(defaults[key])==\"boolean\" then\n   C[key]=type(value)==\"boolean\" and value or defaults[key]\n   if value==false then C[key]=false end\n  else\n   C[key]=type(value)==\"number\" and value>=0 and value<=2 and value%1==0 and value or defaults[key]\n  end\n end\n if C.melee==0 then C.melee=1 end\n function C.save()\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local values={}\n  for _,key in ipairs(keys) do values[key]=C[key] end\n  FileSave(path,values)\n end\n _G.UWU_NAURGuiState=C\n _G.UWU_NAUR_AnnihilationAssignments={melee=C.melee,solo=C.solo}\n _G.NAUR_UWU_AutoTarget=C.autoTarget\n C.save()\n _G.UWU_NAURSettingsIOReady=true\nend\n-- Upgrade only an unset melee assignment; preserve either explicit role choice.\ndo\n local preferences=_G.UWU_NAURGuiState\n if preferences and preferences.melee==0 then\n  preferences.melee=1\n  local assignment=_G.UWU_NAUR_AnnihilationAssignments\n  if assignment then assignment.melee=1 end\n  preferences.save()\n end\nend\nif not eventArgs or eventArgs.entityContentID ~= 2138 or not eventArgs.entityID then return end\ndata.uwu_annihilation_orbs = data.uwu_annihilation_orbs or {seen = {}, count = 0}\nlocal state = data.uwu_annihilation_orbs\nif state.seen[eventArgs.entityID] then return end\nif state.count >= 4 then return end\nstate.seen[eventArgs.entityID] = true\nstate.count = state.count + 1\nlocal orb = state.count\nlocal Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current() then self.used = true return end\nlocal slot = Roster.mySlot()\nif not slot then self.used = true return end\nlocal cfg = _G.UWU_NAUR_AnnihilationAssignments or {}\nlocal assigned = false\nlocal missing = false\nif orb <= 2 then\n    if slot == \"T1\" or slot == \"T2\" then\n        assigned = true\n    elseif slot == \"M1\" or slot == \"M2\" then\n        missing=false\n        assigned=false\n    end\nelseif slot == \"T1\" or slot == \"T2\" then\n    missing=false\n    assigned=(slot==\"T1\")\nend\nif missing then\n    TensorCore.addAlertText(3500, \"Orb \" .. orb .. \": choose your assignment\", 1.0, 2, not (NAUR_TTS and NAUR_TTS.enabled==false))\nelseif assigned then\n    if Roster.isReady() then\n        local id = Roster.idOf(slot)\n        if id then\n            local drawer = TensorCore.getCachedDrawer(0x6633FF66, 0xCC33FF66, 0xFF33FF66, 0xFF000000, 3)\n            drawer:addTimedCircleOnEnt(4000, id, 1.2, 0, false, true, Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\n            AnyoneCore.addTimedWorldTextOnEnt(4000, \"SOAK ORB \" .. orb, id, 0xFF33FF66, true, 1.1, 1.5)\n        end\n    end\n    TensorCore.addAlertText(3500, \"Orb \" .. orb .. (orb <= 2 and \": soak with tanks\" or \": solo tank soak\"), 1.0, 1, not (NAUR_TTS and NAUR_TTS.enabled==false))\nelse\n    TensorCore.addAlertText(3000, \"Orb \" .. orb .. \": stay clear\", 0.9, 2, false)\nend\nself.used = true",
 				loop = true,
 				mechanicTime = 1116,
 				name = "[Draw][NAUR][Annihilation] Orb spawn role cues",
@@ -17375,11 +17375,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(2500,\"DODGE WEIGHT OF THE LAND\",0.9,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"DODGE WEIGHT OF THE LAND\",100) end\nself.used=true\n",
 							alertDuration = 2500,
 							alertPriority = 3,
 							alertScale = 0.9,
-							alertTTS = true,
 							alertText = "DODGE WEIGHT OF THE LAND",
 							conditions = 
 							{
@@ -17493,11 +17493,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(2500,\"MOVE FOR FEATHER RAIN\",0.9,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"MOVE FOR FEATHER RAIN\",100) end\nself.used=true\n",
 							alertDuration = 2500,
 							alertPriority = 3,
 							alertScale = 0.9,
-							alertTTS = true,
 							alertText = "MOVE FOR FEATHER RAIN",
 							conditions = 
 							{
@@ -17578,7 +17578,7 @@ local tbl =
 				},
 				displayPath = "Draws - Ultima NAUR",
 				enabled = false,
-				execute = "-- Independent UWU settings; available before GUI or targeting reads.\nif not _G.UWU_NAURSettingsIOReady then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UWU-NAUR.lua]]\n local saved={}\n if FileExists(path) then\n  local loaded=FileLoad(path)\n  if type(loaded)==\"table\" then saved=loaded end\n end\n local current=_G.UWU_NAURGuiState\n local old=_G.UWU_NAUR_AnnihilationAssignments or {}\n local defaults={automaticOpen=true,ultimaOpen=true,orbsOpen=true,autoTarget=_G.NAUR_UWU_AutoTarget~=false,melee=(old.melee==2 and 2 or 1),solo=old.solo or 0}\n local keys={\"automaticOpen\",\"ultimaOpen\",\"orbsOpen\",\"autoTarget\",\"melee\",\"solo\"}\n local C={}\n for _,key in ipairs(keys) do\n  local value=current and current[key]\n  if value==nil then value=saved[key] end\n  if type(defaults[key])==\"boolean\" then\n   C[key]=type(value)==\"boolean\" and value or defaults[key]\n   if value==false then C[key]=false end\n  else\n   C[key]=type(value)==\"number\" and value>=0 and value<=2 and value%1==0 and value or defaults[key]\n  end\n end\n if C.melee==0 then C.melee=1 end\n function C.save()\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local values={}\n  for _,key in ipairs(keys) do values[key]=C[key] end\n  FileSave(path,values)\n end\n _G.UWU_NAURGuiState=C\n _G.UWU_NAUR_AnnihilationAssignments={melee=C.melee,solo=C.solo}\n _G.NAUR_UWU_AutoTarget=C.autoTarget\n C.save()\n _G.UWU_NAURSettingsIOReady=true\nend\n-- Upgrade only an unset melee assignment; preserve either explicit role choice.\ndo\n local preferences=_G.UWU_NAURGuiState\n if preferences and preferences.melee==0 then\n  preferences.melee=1\n  local assignment=_G.UWU_NAUR_AnnihilationAssignments\n  if assignment then assignment.melee=1 end\n  preferences.save()\n end\nend\nlocal Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current() then return end\nlocal slot = Roster.mySlot()\nif not slot then return end\nlocal cfg = _G.UWU_NAUR_AnnihilationAssignments or {}\nlocal assigned\nlocal missing = false\nif true then\n    if slot == \"T1\" or slot == \"T2\" then\n        assigned = true\n    elseif slot == \"M1\" or slot == \"M2\" then\n        missing=false\n        assigned=false\n    end\nelse\n    if slot == \"T1\" or slot == \"T2\" then\n        missing=false\n        assigned=(slot==\"T1\")\n    end\nend\nif missing then\n    TensorCore.addAlertText(3500, \"Orb 2: choose your assignment\", 1.0, 2, true)\nelseif assigned then\n    if Roster.isReady() then\n        local id = Roster.idOf(slot)\n        if id then\n            local drawer = TensorCore.getCachedDrawer(0x6633FF66, 0xCC33FF66, 0xFF33FF66, 0xFF000000, 3)\n            drawer:addTimedCircleOnEnt(4000, id, 1.2, 0, false, true, Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\n            AnyoneCore.addTimedWorldTextOnEnt(4000, \"SOAK ORB 2\", id, 0xFF33FF66, true, 1.1, 1.5)\n        end\n    end\n    TensorCore.addAlertText(3500, \"Orb 2: soak with tanks\", 1.0, 1, true)\nelse\n    TensorCore.addAlertText(3000, \"Orb 2: stay clear\", 0.9, 2, false)\nend\nself.used = true",
+				execute = "-- Independent UWU settings; available before GUI or targeting reads.\nif not _G.UWU_NAURSettingsIOReady then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UWU-NAUR.lua]]\n local saved={}\n if FileExists(path) then\n  local loaded=FileLoad(path)\n  if type(loaded)==\"table\" then saved=loaded end\n end\n local current=_G.UWU_NAURGuiState\n local old=_G.UWU_NAUR_AnnihilationAssignments or {}\n local defaults={automaticOpen=true,ultimaOpen=true,orbsOpen=true,autoTarget=_G.NAUR_UWU_AutoTarget~=false,melee=(old.melee==2 and 2 or 1),solo=old.solo or 0}\n local keys={\"automaticOpen\",\"ultimaOpen\",\"orbsOpen\",\"autoTarget\",\"melee\",\"solo\"}\n local C={}\n for _,key in ipairs(keys) do\n  local value=current and current[key]\n  if value==nil then value=saved[key] end\n  if type(defaults[key])==\"boolean\" then\n   C[key]=type(value)==\"boolean\" and value or defaults[key]\n   if value==false then C[key]=false end\n  else\n   C[key]=type(value)==\"number\" and value>=0 and value<=2 and value%1==0 and value or defaults[key]\n  end\n end\n if C.melee==0 then C.melee=1 end\n function C.save()\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local values={}\n  for _,key in ipairs(keys) do values[key]=C[key] end\n  FileSave(path,values)\n end\n _G.UWU_NAURGuiState=C\n _G.UWU_NAUR_AnnihilationAssignments={melee=C.melee,solo=C.solo}\n _G.NAUR_UWU_AutoTarget=C.autoTarget\n C.save()\n _G.UWU_NAURSettingsIOReady=true\nend\n-- Upgrade only an unset melee assignment; preserve either explicit role choice.\ndo\n local preferences=_G.UWU_NAURGuiState\n if preferences and preferences.melee==0 then\n  preferences.melee=1\n  local assignment=_G.UWU_NAUR_AnnihilationAssignments\n  if assignment then assignment.melee=1 end\n  preferences.save()\n end\nend\nlocal Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current() then return end\nlocal slot = Roster.mySlot()\nif not slot then return end\nlocal cfg = _G.UWU_NAUR_AnnihilationAssignments or {}\nlocal assigned\nlocal missing = false\nif true then\n    if slot == \"T1\" or slot == \"T2\" then\n        assigned = true\n    elseif slot == \"M1\" or slot == \"M2\" then\n        missing=false\n        assigned=false\n    end\nelse\n    if slot == \"T1\" or slot == \"T2\" then\n        missing=false\n        assigned=(slot==\"T1\")\n    end\nend\nif missing then\n    TensorCore.addAlertText(3500, \"Orb 2: choose your assignment\", 1.0, 2, not (NAUR_TTS and NAUR_TTS.enabled==false))\nelseif assigned then\n    if Roster.isReady() then\n        local id = Roster.idOf(slot)\n        if id then\n            local drawer = TensorCore.getCachedDrawer(0x6633FF66, 0xCC33FF66, 0xFF33FF66, 0xFF000000, 3)\n            drawer:addTimedCircleOnEnt(4000, id, 1.2, 0, false, true, Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\n            AnyoneCore.addTimedWorldTextOnEnt(4000, \"SOAK ORB 2\", id, 0xFF33FF66, true, 1.1, 1.5)\n        end\n    end\n    TensorCore.addAlertText(3500, \"Orb 2: soak with tanks\", 1.0, 1, not (NAUR_TTS and NAUR_TTS.enabled==false))\nelse\n    TensorCore.addAlertText(3000, \"Orb 2: stay clear\", 0.9, 2, false)\nend\nself.used = true",
 				executeType = 2,
 				mechanicTime = 1123,
 				name = "[Draw][NAUR][Annihilation] Orb 2 role cue",
@@ -17642,11 +17642,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(2500,\"SEARING WIND: SOUTH WALL\",0.9,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"SEARING WIND: SOUTH WALL\",100) end\nself.used=true\n",
 							alertDuration = 2500,
 							alertPriority = 3,
 							alertScale = 0.9,
-							alertTTS = true,
 							alertText = "SEARING WIND: SOUTH WALL",
 							conditions = 
 							{
@@ -17876,11 +17876,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(2500,\"South, away from party\",0.9,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"South, away from party\",100) end\nself.used=true\n",
 							alertDuration = 2500,
 							alertPriority = 3,
 							alertScale = 0.9,
-							alertTTS = true,
 							alertText = "South, away from party",
 							conditions = 
 							{
@@ -18028,7 +18028,7 @@ local tbl =
 				},
 				displayPath = "Draws - Ultima NAUR",
 				enabled = false,
-				execute = "-- Independent UWU settings; available before GUI or targeting reads.\nif not _G.UWU_NAURSettingsIOReady then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UWU-NAUR.lua]]\n local saved={}\n if FileExists(path) then\n  local loaded=FileLoad(path)\n  if type(loaded)==\"table\" then saved=loaded end\n end\n local current=_G.UWU_NAURGuiState\n local old=_G.UWU_NAUR_AnnihilationAssignments or {}\n local defaults={automaticOpen=true,ultimaOpen=true,orbsOpen=true,autoTarget=_G.NAUR_UWU_AutoTarget~=false,melee=(old.melee==2 and 2 or 1),solo=old.solo or 0}\n local keys={\"automaticOpen\",\"ultimaOpen\",\"orbsOpen\",\"autoTarget\",\"melee\",\"solo\"}\n local C={}\n for _,key in ipairs(keys) do\n  local value=current and current[key]\n  if value==nil then value=saved[key] end\n  if type(defaults[key])==\"boolean\" then\n   C[key]=type(value)==\"boolean\" and value or defaults[key]\n   if value==false then C[key]=false end\n  else\n   C[key]=type(value)==\"number\" and value>=0 and value<=2 and value%1==0 and value or defaults[key]\n  end\n end\n if C.melee==0 then C.melee=1 end\n function C.save()\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local values={}\n  for _,key in ipairs(keys) do values[key]=C[key] end\n  FileSave(path,values)\n end\n _G.UWU_NAURGuiState=C\n _G.UWU_NAUR_AnnihilationAssignments={melee=C.melee,solo=C.solo}\n _G.NAUR_UWU_AutoTarget=C.autoTarget\n C.save()\n _G.UWU_NAURSettingsIOReady=true\nend\n-- Upgrade only an unset melee assignment; preserve either explicit role choice.\ndo\n local preferences=_G.UWU_NAURGuiState\n if preferences and preferences.melee==0 then\n  preferences.melee=1\n  local assignment=_G.UWU_NAUR_AnnihilationAssignments\n  if assignment then assignment.melee=1 end\n  preferences.save()\n end\nend\nlocal Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current() then return end\nlocal slot = Roster.mySlot()\nif not slot then return end\nlocal cfg = _G.UWU_NAUR_AnnihilationAssignments or {}\nlocal assigned\nlocal missing = false\nif false then\n    if slot == \"T1\" or slot == \"T2\" then\n        assigned = true\n    elseif slot == \"M1\" or slot == \"M2\" then\n        missing=false\n        assigned=false\n    end\nelse\n    if slot == \"T1\" or slot == \"T2\" then\n        missing=false\n        assigned=(slot==\"T1\")\n    end\nend\nif missing then\n    TensorCore.addAlertText(3500, \"Orb 3: choose your assignment\", 1.0, 2, true)\nelseif assigned then\n    if Roster.isReady() then\n        local id = Roster.idOf(slot)\n        if id then\n            local drawer = TensorCore.getCachedDrawer(0x6633FF66, 0xCC33FF66, 0xFF33FF66, 0xFF000000, 3)\n            drawer:addTimedCircleOnEnt(4000, id, 1.2, 0, false, true, Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\n            AnyoneCore.addTimedWorldTextOnEnt(4000, \"SOAK ORB 3\", id, 0xFF33FF66, true, 1.1, 1.5)\n        end\n    end\n    TensorCore.addAlertText(3500, \"Orb 3: solo tank soak\", 1.0, 1, true)\nelse\n    TensorCore.addAlertText(3000, \"Orb 3: stay clear\", 0.9, 2, false)\nend\nself.used = true",
+				execute = "-- Independent UWU settings; available before GUI or targeting reads.\nif not _G.UWU_NAURSettingsIOReady then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UWU-NAUR.lua]]\n local saved={}\n if FileExists(path) then\n  local loaded=FileLoad(path)\n  if type(loaded)==\"table\" then saved=loaded end\n end\n local current=_G.UWU_NAURGuiState\n local old=_G.UWU_NAUR_AnnihilationAssignments or {}\n local defaults={automaticOpen=true,ultimaOpen=true,orbsOpen=true,autoTarget=_G.NAUR_UWU_AutoTarget~=false,melee=(old.melee==2 and 2 or 1),solo=old.solo or 0}\n local keys={\"automaticOpen\",\"ultimaOpen\",\"orbsOpen\",\"autoTarget\",\"melee\",\"solo\"}\n local C={}\n for _,key in ipairs(keys) do\n  local value=current and current[key]\n  if value==nil then value=saved[key] end\n  if type(defaults[key])==\"boolean\" then\n   C[key]=type(value)==\"boolean\" and value or defaults[key]\n   if value==false then C[key]=false end\n  else\n   C[key]=type(value)==\"number\" and value>=0 and value<=2 and value%1==0 and value or defaults[key]\n  end\n end\n if C.melee==0 then C.melee=1 end\n function C.save()\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local values={}\n  for _,key in ipairs(keys) do values[key]=C[key] end\n  FileSave(path,values)\n end\n _G.UWU_NAURGuiState=C\n _G.UWU_NAUR_AnnihilationAssignments={melee=C.melee,solo=C.solo}\n _G.NAUR_UWU_AutoTarget=C.autoTarget\n C.save()\n _G.UWU_NAURSettingsIOReady=true\nend\n-- Upgrade only an unset melee assignment; preserve either explicit role choice.\ndo\n local preferences=_G.UWU_NAURGuiState\n if preferences and preferences.melee==0 then\n  preferences.melee=1\n  local assignment=_G.UWU_NAUR_AnnihilationAssignments\n  if assignment then assignment.melee=1 end\n  preferences.save()\n end\nend\nlocal Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current() then return end\nlocal slot = Roster.mySlot()\nif not slot then return end\nlocal cfg = _G.UWU_NAUR_AnnihilationAssignments or {}\nlocal assigned\nlocal missing = false\nif false then\n    if slot == \"T1\" or slot == \"T2\" then\n        assigned = true\n    elseif slot == \"M1\" or slot == \"M2\" then\n        missing=false\n        assigned=false\n    end\nelse\n    if slot == \"T1\" or slot == \"T2\" then\n        missing=false\n        assigned=(slot==\"T1\")\n    end\nend\nif missing then\n    TensorCore.addAlertText(3500, \"Orb 3: choose your assignment\", 1.0, 2, not (NAUR_TTS and NAUR_TTS.enabled==false))\nelseif assigned then\n    if Roster.isReady() then\n        local id = Roster.idOf(slot)\n        if id then\n            local drawer = TensorCore.getCachedDrawer(0x6633FF66, 0xCC33FF66, 0xFF33FF66, 0xFF000000, 3)\n            drawer:addTimedCircleOnEnt(4000, id, 1.2, 0, false, true, Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\n            AnyoneCore.addTimedWorldTextOnEnt(4000, \"SOAK ORB 3\", id, 0xFF33FF66, true, 1.1, 1.5)\n        end\n    end\n    TensorCore.addAlertText(3500, \"Orb 3: solo tank soak\", 1.0, 1, not (NAUR_TTS and NAUR_TTS.enabled==false))\nelse\n    TensorCore.addAlertText(3000, \"Orb 3: stay clear\", 0.9, 2, false)\nend\nself.used = true",
 				executeType = 2,
 				mechanicTime = 1131,
 				name = "[Draw][NAUR][Annihilation] Orb 3 role cue",
@@ -18162,10 +18162,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"Prepare to take the next tether\",0.85,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Prepare to take the next tether\",100) end\nself.used=true\n",
 							alertPriority = 3,
 							alertScale = 0.85,
-							alertTTS = true,
 							alertText = "Prepare to take the next tether",
 							conditions = 
 							{
@@ -18231,7 +18231,7 @@ local tbl =
 				},
 				displayPath = "Draws - Ultima NAUR",
 				enabled = false,
-				execute = "-- Independent UWU settings; available before GUI or targeting reads.\nif not _G.UWU_NAURSettingsIOReady then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UWU-NAUR.lua]]\n local saved={}\n if FileExists(path) then\n  local loaded=FileLoad(path)\n  if type(loaded)==\"table\" then saved=loaded end\n end\n local current=_G.UWU_NAURGuiState\n local old=_G.UWU_NAUR_AnnihilationAssignments or {}\n local defaults={automaticOpen=true,ultimaOpen=true,orbsOpen=true,autoTarget=_G.NAUR_UWU_AutoTarget~=false,melee=(old.melee==2 and 2 or 1),solo=old.solo or 0}\n local keys={\"automaticOpen\",\"ultimaOpen\",\"orbsOpen\",\"autoTarget\",\"melee\",\"solo\"}\n local C={}\n for _,key in ipairs(keys) do\n  local value=current and current[key]\n  if value==nil then value=saved[key] end\n  if type(defaults[key])==\"boolean\" then\n   C[key]=type(value)==\"boolean\" and value or defaults[key]\n   if value==false then C[key]=false end\n  else\n   C[key]=type(value)==\"number\" and value>=0 and value<=2 and value%1==0 and value or defaults[key]\n  end\n end\n if C.melee==0 then C.melee=1 end\n function C.save()\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local values={}\n  for _,key in ipairs(keys) do values[key]=C[key] end\n  FileSave(path,values)\n end\n _G.UWU_NAURGuiState=C\n _G.UWU_NAUR_AnnihilationAssignments={melee=C.melee,solo=C.solo}\n _G.NAUR_UWU_AutoTarget=C.autoTarget\n C.save()\n _G.UWU_NAURSettingsIOReady=true\nend\n-- Upgrade only an unset melee assignment; preserve either explicit role choice.\ndo\n local preferences=_G.UWU_NAURGuiState\n if preferences and preferences.melee==0 then\n  preferences.melee=1\n  local assignment=_G.UWU_NAUR_AnnihilationAssignments\n  if assignment then assignment.melee=1 end\n  preferences.save()\n end\nend\nlocal Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current() then return end\nlocal slot = Roster.mySlot()\nif not slot then return end\nlocal cfg = _G.UWU_NAUR_AnnihilationAssignments or {}\nlocal assigned\nlocal missing = false\nif false then\n    if slot == \"T1\" or slot == \"T2\" then\n        assigned = true\n    elseif slot == \"M1\" or slot == \"M2\" then\n        missing=false\n        assigned=false\n    end\nelse\n    if slot == \"T1\" or slot == \"T2\" then\n        missing=false\n        assigned=(slot==\"T1\")\n    end\nend\nif missing then\n    TensorCore.addAlertText(3500, \"Orb 4: choose your assignment\", 1.0, 2, true)\nelseif assigned then\n    if Roster.isReady() then\n        local id = Roster.idOf(slot)\n        if id then\n            local drawer = TensorCore.getCachedDrawer(0x6633FF66, 0xCC33FF66, 0xFF33FF66, 0xFF000000, 3)\n            drawer:addTimedCircleOnEnt(4000, id, 1.2, 0, false, true, Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\n            AnyoneCore.addTimedWorldTextOnEnt(4000, \"SOAK ORB 4\", id, 0xFF33FF66, true, 1.1, 1.5)\n        end\n    end\n    TensorCore.addAlertText(3500, \"Orb 4: solo tank soak\", 1.0, 1, true)\nelse\n    TensorCore.addAlertText(3000, \"Orb 4: stay clear\", 0.9, 2, false)\nend\nself.used = true",
+				execute = "-- Independent UWU settings; available before GUI or targeting reads.\nif not _G.UWU_NAURSettingsIOReady then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UWU-NAUR.lua]]\n local saved={}\n if FileExists(path) then\n  local loaded=FileLoad(path)\n  if type(loaded)==\"table\" then saved=loaded end\n end\n local current=_G.UWU_NAURGuiState\n local old=_G.UWU_NAUR_AnnihilationAssignments or {}\n local defaults={automaticOpen=true,ultimaOpen=true,orbsOpen=true,autoTarget=_G.NAUR_UWU_AutoTarget~=false,melee=(old.melee==2 and 2 or 1),solo=old.solo or 0}\n local keys={\"automaticOpen\",\"ultimaOpen\",\"orbsOpen\",\"autoTarget\",\"melee\",\"solo\"}\n local C={}\n for _,key in ipairs(keys) do\n  local value=current and current[key]\n  if value==nil then value=saved[key] end\n  if type(defaults[key])==\"boolean\" then\n   C[key]=type(value)==\"boolean\" and value or defaults[key]\n   if value==false then C[key]=false end\n  else\n   C[key]=type(value)==\"number\" and value>=0 and value<=2 and value%1==0 and value or defaults[key]\n  end\n end\n if C.melee==0 then C.melee=1 end\n function C.save()\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local values={}\n  for _,key in ipairs(keys) do values[key]=C[key] end\n  FileSave(path,values)\n end\n _G.UWU_NAURGuiState=C\n _G.UWU_NAUR_AnnihilationAssignments={melee=C.melee,solo=C.solo}\n _G.NAUR_UWU_AutoTarget=C.autoTarget\n C.save()\n _G.UWU_NAURSettingsIOReady=true\nend\n-- Upgrade only an unset melee assignment; preserve either explicit role choice.\ndo\n local preferences=_G.UWU_NAURGuiState\n if preferences and preferences.melee==0 then\n  preferences.melee=1\n  local assignment=_G.UWU_NAUR_AnnihilationAssignments\n  if assignment then assignment.melee=1 end\n  preferences.save()\n end\nend\nlocal Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current() then return end\nlocal slot = Roster.mySlot()\nif not slot then return end\nlocal cfg = _G.UWU_NAUR_AnnihilationAssignments or {}\nlocal assigned\nlocal missing = false\nif false then\n    if slot == \"T1\" or slot == \"T2\" then\n        assigned = true\n    elseif slot == \"M1\" or slot == \"M2\" then\n        missing=false\n        assigned=false\n    end\nelse\n    if slot == \"T1\" or slot == \"T2\" then\n        missing=false\n        assigned=(slot==\"T1\")\n    end\nend\nif missing then\n    TensorCore.addAlertText(3500, \"Orb 4: choose your assignment\", 1.0, 2, not (NAUR_TTS and NAUR_TTS.enabled==false))\nelseif assigned then\n    if Roster.isReady() then\n        local id = Roster.idOf(slot)\n        if id then\n            local drawer = TensorCore.getCachedDrawer(0x6633FF66, 0xCC33FF66, 0xFF33FF66, 0xFF000000, 3)\n            drawer:addTimedCircleOnEnt(4000, id, 1.2, 0, false, true, Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\n            AnyoneCore.addTimedWorldTextOnEnt(4000, \"SOAK ORB 4\", id, 0xFF33FF66, true, 1.1, 1.5)\n        end\n    end\n    TensorCore.addAlertText(3500, \"Orb 4: solo tank soak\", 1.0, 1, not (NAUR_TTS and NAUR_TTS.enabled==false))\nelse\n    TensorCore.addAlertText(3000, \"Orb 4: stay clear\", 0.9, 2, false)\nend\nself.used = true",
 				executeType = 2,
 				mechanicTime = 1136,
 				name = "[Draw][NAUR][Annihilation] Orb 4 role cue",
@@ -18275,11 +18275,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(2500,\"SEARING WIND: SOUTH WALL\",0.9,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"SEARING WIND: SOUTH WALL\",100) end\nself.used=true\n",
 							alertDuration = 2500,
 							alertPriority = 3,
 							alertScale = 0.9,
-							alertTTS = true,
 							alertText = "SEARING WIND: SOUTH WALL",
 							conditions = 
 							{
@@ -18399,11 +18399,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(2500,\"MOVE FOR FEATHER RAIN\",0.9,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"MOVE FOR FEATHER RAIN\",100) end\nself.used=true\n",
 							alertDuration = 2500,
 							alertPriority = 3,
 							alertScale = 0.9,
-							alertTTS = true,
 							alertText = "MOVE FOR FEATHER RAIN",
 							conditions = 
 							{
@@ -18511,11 +18511,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(2500,\"SEARING WIND: SOUTH WALL\",0.9,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"SEARING WIND: SOUTH WALL\",100) end\nself.used=true\n",
 							alertDuration = 2500,
 							alertPriority = 3,
 							alertScale = 0.9,
-							alertTTS = true,
 							alertText = "SEARING WIND: SOUTH WALL",
 							conditions = 
 							{
@@ -18611,11 +18611,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(2500,\"SEARING WIND: SOUTH WALL\",0.9,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"SEARING WIND: SOUTH WALL\",100) end\nself.used=true\n",
 							alertDuration = 2500,
 							alertPriority = 3,
 							alertScale = 0.9,
-							alertTTS = true,
 							alertText = "SEARING WIND: SOUTH WALL",
 							conditions = 
 							{
@@ -18696,7 +18696,7 @@ local tbl =
 				{
 				},
 				displayPath = "Raid Calls - Ultima NAUR",
-				execute = "local Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current() then return end\nlocal slot = Roster.mySlot()\nif slot == 'T2' then TensorCore.addAlertText(4000,'OT: invuln Homing Laser',1,1,true)\nelseif slot then TensorCore.addAlertText(4000,'OT takes Homing: stay away',1,2,false) end\nself.used = true",
+				execute = "local Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current() then return end\nlocal slot = Roster.mySlot()\nif slot == 'T2' then TensorCore.addAlertText(4000,'OT: invuln Homing Laser',1,1, not (NAUR_TTS and NAUR_TTS.enabled==false))\nelseif slot then TensorCore.addAlertText(4000,'OT takes Homing: stay away',1,2,false) end\nself.used = true",
 				executeType = 2,
 				mechanicTime = 1155,
 				name = "[Raid Call][NAUR][Post Annihilation] OT invuln Homing",
@@ -18731,7 +18731,7 @@ local tbl =
 				{
 				},
 				displayPath = "Raid Calls - Ultima NAUR",
-				execute = "local Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current() then return end\nlocal slot = Roster.mySlot()\nif slot == 'T1' then TensorCore.addAlertText(4000,'MT: take cleave',1,1,true)\nelseif slot then TensorCore.addAlertText(4000,'Cleave on MT: stay clear',1,2,false) end\nself.used = true",
+				execute = "local Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current() then return end\nlocal slot = Roster.mySlot()\nif slot == 'T1' then TensorCore.addAlertText(4000,'MT: take cleave',1,1, not (NAUR_TTS and NAUR_TTS.enabled==false))\nelseif slot then TensorCore.addAlertText(4000,'Cleave on MT: stay clear',1,2,false) end\nself.used = true",
 				executeType = 2,
 				mechanicTime = 1169,
 				name = "[Raid Call][NAUR][Post Annihilation] MT cleave",
@@ -19361,11 +19361,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(4000,\"DPS THE GRANITE GAOL\",0.9,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"DPS THE GRANITE GAOL\",100) end\nself.used=true\n",
 							alertDuration = 4000,
 							alertPriority = 3,
 							alertScale = 0.9,
-							alertTTS = true,
 							alertText = "DPS THE GRANITE GAOL",
 							conditions = 
 							{
@@ -20178,11 +20178,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(2500,\"MOVE\",0.89999997615814,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"MOVE\",100) end\nself.used=true\n",
 							alertDuration = 2500,
 							alertPriority = 3,
 							alertScale = 0.89999997615814,
-							alertTTS = true,
 							alertText = "MOVE",
 							conditions = 
 							{
@@ -20298,11 +20298,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(2500,\"MOVE\",0.89999997615814,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"MOVE\",100) end\nself.used=true\n",
 							alertDuration = 2500,
 							alertPriority = 3,
 							alertScale = 0.89999997615814,
-							alertTTS = true,
 							alertText = "MOVE",
 							conditions = 
 							{
@@ -20381,11 +20381,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(4000,\"Dodge both Landslides\",0.85,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Dodge both Landslides\",100) end\nself.used=true\n",
 							alertDuration = 4000,
 							alertPriority = 3,
 							alertScale = 0.85,
-							alertTTS = true,
 							alertText = "Dodge both Landslides",
 							conditions = 
 							{
@@ -20452,10 +20452,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(4000,\"Stack now for Flaming Crush\",0.85,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Stack now for Flaming Crush\",100) end\nself.used=true\n",
 							alertDuration = 4000,
 							alertScale = 0.85,
-							alertTTS = true,
 							alertText = "Stack now for Flaming Crush",
 							conditions = 
 							{
@@ -20657,10 +20657,10 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"Prepare to take Garuda tether\",0.85,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Prepare to take Garuda tether\",100) end\nself.used=true\n",
 							alertPriority = 3,
 							alertScale = 0.85,
-							alertTTS = true,
 							alertText = "Prepare to take Garuda tether",
 							conditions = 
 							{
@@ -20734,11 +20734,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3500,\"Wait for Feather Rain, then move\",0.85000002384186,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Wait for Feather Rain, then move\",100) end\nself.used=true\n",
 							alertDuration = 3500,
 							alertPriority = 2,
 							alertScale = 0.85000002384186,
-							alertTTS = true,
 							alertText = "Wait for Feather Rain, then move",
 							displayPath = "[Raid calls]",
 							name = "Wait for Feather Rain then move",
@@ -20866,11 +20866,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(2500,\"MOVE FOR FEATHER RAIN\",0.9,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"MOVE FOR FEATHER RAIN\",100) end\nself.used=true\n",
 							alertDuration = 2500,
 							alertPriority = 3,
 							alertScale = 0.9,
-							alertTTS = true,
 							alertText = "MOVE FOR FEATHER RAIN",
 							conditions = 
 							{
@@ -21838,11 +21838,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(2500,\"MOVE FOR FEATHER RAIN\",0.89999997615814,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"MOVE FOR FEATHER RAIN\",100) end\nself.used=true\n",
 							alertDuration = 2500,
 							alertPriority = 3,
 							alertScale = 0.89999997615814,
-							alertTTS = true,
 							alertText = "MOVE FOR FEATHER RAIN",
 							conditions = 
 							{
@@ -22033,8 +22033,8 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
-							alertTTS = true,
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(3000,\"Bait eruptions then move\",1.0,2,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"Bait eruptions then move\",100) end\nself.used=true\n",
 							alertText = "Bait eruptions then move",
 							uuid = "ea15e3a5-556b-c9d3-a895-9d8ca071e664",
 							version = 2.1,
@@ -22222,11 +22222,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(2500,\"DODGE WEIGHT OF THE LAND\",0.9,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"DODGE WEIGHT OF THE LAND\",100) end\nself.used=true\n",
 							alertDuration = 2500,
 							alertPriority = 3,
 							alertScale = 0.9,
-							alertTTS = true,
 							alertText = "DODGE WEIGHT OF THE LAND",
 							conditions = 
 							{
@@ -22303,11 +22303,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(2500,\"DODGE WEIGHT OF THE LAND\",0.9,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"DODGE WEIGHT OF THE LAND\",100) end\nself.used=true\n",
 							alertDuration = 2500,
 							alertPriority = 3,
 							alertScale = 0.9,
-							alertTTS = true,
 							alertText = "DODGE WEIGHT OF THE LAND",
 							conditions = 
 							{
@@ -22397,11 +22397,11 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "Alert",
+							aType = "Lua",
+							actionLua = "TensorCore.addAlertText(2500,\"DODGE WEIGHT OF THE LAND\",0.9,3,false)\nif not (NAUR_TTS and NAUR_TTS.enabled==false) then TensorCore.sendTTS(\"DODGE WEIGHT OF THE LAND\",100) end\nself.used=true\n",
 							alertDuration = 2500,
 							alertPriority = 3,
 							alertScale = 0.9,
-							alertTTS = true,
 							alertText = "DODGE WEIGHT OF THE LAND",
 							conditions = 
 							{
