@@ -2,6 +2,9 @@
 
 ## 2026-11-11
 
+New profiles:
+- `TEA NAUR Draws` and `UWU NAUR Draws`, adapted from [Jacob5800/UltimateDraws](https://github.com/Jacob5800/UltimateDraws) (LPDU) to the NAUR strat. Thanks to them for the original draws. Both are untested, so replays are welcome through GitHub issues.
+
 TOP Draws:
 - New `[Boss AoE]` predraws: P2 Optical Laser and Sagittarius Arrow, P4 Wave Cannon lines, P5 Delta laser and fist puddles, P5 Sigma Rear Lasers. Shapes, sizes and timings come from the game's AoE data; each has an on/off row in the options window.
 - P5 Delta fist swap reminder is shown to everyone: gold rings on a pair's same-colour fists, "SWAP" for the two inner players and a note for that colour's outer players.

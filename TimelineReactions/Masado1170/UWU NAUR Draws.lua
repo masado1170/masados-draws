@@ -1,0 +1,22408 @@
+local tbl = 
+{
+	[2] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\core",
+				uuid = "0a021efd-fd3d-77e9-bdab-d25762fe772d",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\core",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\optimization",
+				uuid = "1796b537-4222-24e3-7ebb-639582f943c7",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\optimization",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Garuda",
+				uuid = "7c82c781-f4c1-68ef-9934-0c5d314d5e70",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player = TensorCore.mGetPlayer()\nif not player or not player.pos then\n    return\nend\n\nlocal boss = TensorCore.getEntityByGroup(\"ContentID\", {contentid = 1644})\nif not boss or not boss.pos then\n    return\nend\n\nlocal slot = AnyoneCore.Roster.mySlot()\nlocal isMT = slot == \"T1\"\nlocal isTank = slot == \"T1\" or slot == \"T2\"\n\nif isMT then\n    local sideColor = 0xFFFFB347\n    local sideX = boss.pos.x + 5.0\n    local destination = {\n        x = sideX,\n        y = player.pos.y,\n        z = player.pos.z\n    }\n\n    local distance = TensorCore.getDistance2d(player.pos, destination)\n    if distance > 0.25 then\n        local heading = TensorCore.getHeadingToTarget(player.pos, destination)\n        local tipLength = math.min(2.5, distance * 0.35)\n        local baseLength = math.max(0.1, distance - tipLength)\n        local drawer = TensorCore.getCachedDrawer(\n            sideColor, sideColor, 0xFFFFFFFF, 0xFF000000, 3\n        )\n        drawer:addTimedArrow(\n            9000,\n            player.pos.x, player.pos.y, player.pos.z,\n            heading,\n            baseLength, 1.4, tipLength, 2.8,\n            0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n        )\n    end\n\n    AnyoneCore.addTimedWorldText(\n        9000,\n        \"MT EAST\",\n        {x = destination.x, y = player.pos.y + 1.5, z = destination.z},\n        sideColor,\n        true,\n        1.35\n    )\nend\n\nif isTank then\n    -- C is around z=110 in this pull; keep the tank outside the AOE.\n    local southTarget = {\n        x = boss.pos.x,\n        y = boss.pos.y,\n        z = 111.0\n    }\n    local southHeading = TensorCore.getHeadingToTarget(player.pos, southTarget)\n    local southDistance = TensorCore.getDistance2d(player.pos, southTarget)\n    local southTipLength = math.min(2.8, southDistance * 0.2)\n    local southBaseLength = math.max(0.1, southDistance - southTipLength)\n    local southDrawer = TensorCore.getCachedDrawer(\n        0xFFFFD27D, 0xFFFFA31A, 0xFFFFFFFF, 0xFF000000, 3\n    )\n    southDrawer:addTimedArrow(\n        9000,\n        player.pos.x, player.pos.y, player.pos.z,\n        southHeading,\n        southBaseLength, 1.1, southTipLength, 2.8,\n        0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n    )\n\n    AnyoneCore.addTimedWorldText(\n        9000,\n        \"FACE SOUTH\",\n        {x = southTarget.x, y = southTarget.y + 1.5, z = southTarget.z},\n        0xFFFFD27D,\n        true,\n        1.2\n    )\nend\n\nself.used = true",
+							name = "MT East / Tank Face South",
+							uuid = "12efbc70-3403-001e-94a1-23a1107459b0",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "Draws - Garuda",
+				enabled = false,
+				mechanicTime = 9,
+				name = "[Draw] Initial Positioning - replaced",
+				timeRange = true,
+				timelineIndex = 2,
+				timerEndOffset = 4,
+				timerStartOffset = 0.20000000298023,
+				uuid = "406f636a-7cd5-1cd9-bd17-765d2fd4905b",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Garuda",
+							uuid = "dca2e470-9b39-af99-aafb-9586b62537cf",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player = TensorCore.mGetPlayer()\nif not player or not player.pos then\n    self.used = true\n    return\nend\n\nlocal slot = AnyoneCore.Roster.mySlot()\n\nlocal function drawArrowTo(targetPos, colorStart, colorEnd, duration)\n    if not targetPos then\n        return\n    end\n\n    local sourcePos = player.pos\n    local distance = TensorCore.getDistance2d(sourcePos, targetPos)\n    if distance <= 0.25 then\n        return\n    end\n\n    local heading = TensorCore.getHeadingToTarget(sourcePos, targetPos)\n    local tipLength = math.min(2.5, distance * 0.35)\n    local baseLength = math.max(0.1, distance - tipLength)\n    local drawer = TensorCore.getCachedDrawer(\n        colorStart, colorEnd, 0xFFFFFFFF, 0xFF000000, 3\n    )\n    drawer:addTimedArrow(\n        duration,\n        sourcePos.x, sourcePos.y, sourcePos.z,\n        heading,\n        baseLength, 1.2, tipLength, 2.8,\n        0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n    )\nend\n\nif slot == \"T1\" then\n    -- A is the north marker around z=90; keep MT just north of it.\n    local northTarget = {\n        x = 100.0,\n        y = player.pos.y,\n        z = 87.5\n    }\n    drawArrowTo(northTarget, 0xFF66DDFF, 0xFF0088FF, 9000)\n    AnyoneCore.addTimedWorldText(\n        9000,\n        \"MT NORTH OF A / BOSS FACES NORTH\",\n        {x = northTarget.x, y = northTarget.y + 1.5, z = northTarget.z},\n        0xFF66DDFF,\n        true,\n        1.15\n    )\nelseif slot == \"T2\" then\n    local targetID = eventArgs and eventArgs.entityID\n    local marked = targetID and TensorCore.mGetEntity(targetID)\n    if marked and marked.pos then\n        local sourcePos = player.pos\n        local targetPos = {\n            x = marked.pos.x,\n            y = marked.pos.y,\n            z = marked.pos.z\n        }\n        local distance = TensorCore.getDistance2d(sourcePos, targetPos)\n        if distance > 0.25 then\n            local tetherDrawer = TensorCore.getCachedDrawer(\n                0xFFFFAA00, 0xFFFF5500, 0xFFAA2200, 0xFFFFFFFF, 2\n            )\n            tetherDrawer:addTimedLine(\n                7000,\n                sourcePos.x, sourcePos.y, sourcePos.z,\n                targetPos.x, targetPos.y, targetPos.z,\n                1.4, 2.6, 0\n            )\n        end\n        AnyoneCore.addTimedWorldText(\n            7000,\n            \"MISTRAL TARGET\",\n            {x = targetPos.x, y = targetPos.y + 1.5, z = targetPos.z},\n            0xFFFFAA00,\n            true,\n            1.1\n        )\n    end\nend\n\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"92ece809-1370-ca60-8a6f-b23d9ace7e19",
+									true,
+								},
+							},
+							displayPath = "Draws - Garuda",
+							name = "MT North / OT Mistral Tether",
+							uuid = "80964076-11d1-1480-a3e6-67056db5a8a5",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.markerID == 16",
+							dequeueIfLuaFalse = true,
+							name = "Initial Green Mistral Marker",
+							uuid = "92ece809-1370-ca60-8a6f-b23d9ace7e19",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Garuda",
+				eventType = 4,
+				mechanicTime = 9,
+				name = "[Draw] Opening - MT North / OT Mistral Intercept",
+				timeRange = true,
+				timelineIndex = 2,
+				timerEndOffset = 0.5,
+				timerStartOffset = -9.5,
+				uuid = "296c2bc1-2dce-e0d0-a787-e3c61cd3d15e",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Garuda",
+							uuid = "cea20f93-1a0c-9401-a4f6-fa91b3fb02ab",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local targetID = eventArgs and eventArgs.entityID\nif not targetID then\n    self.used = true\n    return\nend\n\nlocal target = TensorCore.mGetEntity(targetID)\nif not target or not target.pos then\n    self.used = true\n    return\nend\n\nlocal drawer = TensorCore.getCachedDrawer(\n    0x5533FF33,\n    0xDD33FF33,\n    0xFF33FF66,\n    0xFF000000,\n    3\n)\ndrawer:addTimedCircleOnEnt(\n    8000,\n    targetID,\n    0.8,\n    0,\n    false,\n    true,\n    Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n)\nAnyoneCore.addTimedWorldTextOnEnt(\n    8000,\n    \"MISTRAL TARGET\",\n    targetID,\n    0xFF33FF66,\n    true,\n    1.15,\n    1.5\n)\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"05385ef1-a032-daeb-b90f-0af2863bdf7c",
+									true,
+								},
+							},
+							displayPath = "Draws - Garuda",
+							name = "Green Circle and Overhead on Target",
+							uuid = "61a907cd-2ec9-530b-89f1-6f136bf9be31",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs ~= nil and eventArgs.markerID == 16",
+							dequeueIfLuaFalse = true,
+							name = "Initial Mistral Marker 16",
+							uuid = "05385ef1-a032-daeb-b90f-0af2863bdf7c",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Garuda",
+				eventType = 4,
+				mechanicTime = 9,
+				name = "[Draw] Opening - Green Mistral Target Marker",
+				timeRange = true,
+				timelineIndex = 2,
+				timerEndOffset = 0.5,
+				timerStartOffset = -9.5,
+				uuid = "a061f66e-9de7-ebfe-a068-dda5e7b15176",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "TensorDrift_SlidecastForceHold = false\ndata.uwu_annihilation_orbs = nil\nself.used = true",
+							name = "End Slide",
+							uuid = "cd9bc5e0-499a-431e-b654-0691e38eae8e",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				eventType = 9,
+				mechanicTime = 9,
+				name = "[Drift] Eruption Reset on Wipe",
+				timeRange = true,
+				timelineIndex = 2,
+				timerEndOffset = 1800,
+				timerStartOffset = -9,
+				uuid = "2c0c08a5-1af4-8844-a166-159efeb9d8c5",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Cooldown Holds",
+				uuid = "62935a2f-3042-1bd1-afdd-8a6712c0158c",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Cooldown Holds",
+							uuid = "e5365be1-4d6d-0a57-bdf5-d97b3ba2c1df",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "TensorDrift_SlidecastForceHold = false\nself.used = true",
+							displayPath = "Cooldown Holds",
+							name = "Reset TensorDrift Slidecast Hold",
+							uuid = "83d1fa50-3f98-470f-8593-1e60e053bf0d",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "Cooldown Holds",
+				mechanicTime = 9,
+				name = "[Start] Reset Slidecast Hold",
+				timelineIndex = 2,
+				timerOffset = -9,
+				uuid = "5a4b28c9-1f95-35b9-a8bf-d1f098a9bc90",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+				},
+				conditions = 
+				{
+				},
+				execute = "if AnyoneCore and AnyoneCore.Settings and AnyoneCore.Settings.DutyHelper then\n    AnyoneCore.Settings.DutyHelper.enabled = false\nend\nself.used = true",
+				executeType = 2,
+				mechanicTime = 9,
+				name = "[Start] Disable Duty Helper",
+				timelineIndex = 2,
+				timerOffset = -9,
+				uuid = "e0c65691-bef4-0e2e-ab81-e430e042ca46",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ultima NAUR",
+				uuid = "4d1c5219-b69d-cea6-abce-6a518dff418d",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+				},
+				conditions = 
+				{
+				},
+				displayPath = "Draws - Ultima NAUR",
+				enabled = false,
+				eventType = 13,
+				execute = "-- Independent UWU settings; available before GUI or targeting reads.\nif not _G.UWU_NAURSettingsIOReady then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UWU-NAUR.lua]]\n local saved={}\n if FileExists(path) then\n  local loaded=FileLoad(path)\n  if type(loaded)==\"table\" then saved=loaded end\n end\n local current=_G.UWU_NAURGuiState\n local old=_G.UWU_NAUR_AnnihilationAssignments or {}\n local defaults={automaticOpen=true,ultimaOpen=true,orbsOpen=true,autoTarget=_G.NAUR_UWU_AutoTarget~=false,melee=(old.melee==2 and 2 or 1),solo=old.solo or 0}\n local keys={\"automaticOpen\",\"ultimaOpen\",\"orbsOpen\",\"autoTarget\",\"melee\",\"solo\"}\n local C={}\n for _,key in ipairs(keys) do\n  local value=current and current[key]\n  if value==nil then value=saved[key] end\n  if type(defaults[key])==\"boolean\" then\n   C[key]=type(value)==\"boolean\" and value or defaults[key]\n   if value==false then C[key]=false end\n  else\n   C[key]=type(value)==\"number\" and value>=0 and value<=2 and value%1==0 and value or defaults[key]\n  end\n end\n if C.melee==0 then C.melee=1 end\n function C.save()\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local values={}\n  for _,key in ipairs(keys) do values[key]=C[key] end\n  FileSave(path,values)\n end\n _G.UWU_NAURGuiState=C\n _G.UWU_NAUR_AnnihilationAssignments={melee=C.melee,solo=C.solo}\n _G.NAUR_UWU_AutoTarget=C.autoTarget\n C.save()\n _G.UWU_NAURSettingsIOReady=true\nend\n-- Upgrade only an unset melee assignment; preserve either explicit role choice.\ndo\n local preferences=_G.UWU_NAURGuiState\n if preferences and preferences.melee==0 then\n  preferences.melee=1\n  local assignment=_G.UWU_NAUR_AnnihilationAssignments\n  if assignment then assignment.melee=1 end\n  preferences.save()\n end\nend\nlocal Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current() then return end\nlocal slot = Roster.mySlot()\nif slot ~= \"T1\" and slot ~= \"T2\" and slot ~= \"M1\" and slot ~= \"M2\" then return end\nlocal cfg = _G.UWU_NAUR_AnnihilationAssignments\nif not cfg then\n    cfg = { melee = 0, solo = 0 }\n    _G.UWU_NAUR_AnnihilationAssignments = cfg\nend\nlocal visible = GUI:Begin(\"UWU NAUR Settings\", true)\nif visible and GUI:TreeNode(\"Annihilation orb assignments\") then\n    GUI:Text(\"Choose the assignments agreed with your group.\")\n    if slot == \"M1\" or slot == \"M2\" then\n        local choice = GUI:Combo(\"Melee with tanks\", cfg.melee, {\"Choose melee\", \"M1\", \"M2\"}, 3)\n        cfg.melee = choice\n        GUI:Text(\"NAUR: orbs 1-2 MT + OT, orbs 3-4 MT alone.\")\n    else\n        local choice = GUI:Combo(\"Solo tank\", cfg.solo, {\"Choose tank\", \"MT\", \"OT\"}, 3)\n        cfg.solo = choice\n        GUI:Text(\"Third and fourth orbs: selected tank alone.\")\n    end\n    GUI:TreePop()\nend\nGUI:End()",
+				executeType = 2,
+				loop = true,
+				mechanicTime = 9,
+				name = "[GUI][NAUR][Annihilation] Orb assignments",
+				timeRange = true,
+				timelineIndex = 2,
+				timerEndOffset = 21,
+				timerStartOffset = -29,
+				uuid = "b025a37c-047b-f366-999b-711917c7ba2d",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR Guidance",
+				uuid = "d7f90340-eb27-9744-b9a7-b27b0a4a1f44",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+				},
+				conditions = 
+				{
+				},
+				displayPath = "NAUR Guidance",
+				eventType = 15,
+				execute = "local a=eventArgs\nif a.sourceEntityContentID~=1645 and a.sourceEntityContentID~=1646 then self.used=true;return end\nlocal s=data.lpdu_mesohigh_aoe\nif not s then s={};data.lpdu_mesohigh_aoe=s end\nlocal old=s[a.sourceEntityID]\nif old then Argus.deleteTimedShape(old);s[a.sourceEntityID]=nil end\nif a.newTetherID==4 and TensorCore.mGetEntity(a.newTargetID) then\n s[a.sourceEntityID]=TensorCore.getMoogleDrawer():addTimedCircleOnEnt(15000,a.newTargetID,3,0,false,false)\nend\nself.used=true",
+				executeType = 2,
+				loop = true,
+				mechanicTime = 9,
+				name = "[NAUR] Mesohigh - Current Tether Holder AoE",
+				timeRange = true,
+				timelineIndex = 2,
+				timerEndOffset = 1591,
+				timerStartOffset = -9,
+				uuid = "0fd6fc1b-02b9-23db-999a-1d4a476209d2",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+				},
+				conditions = 
+				{
+				},
+				displayPath = "NAUR Guidance",
+				eventType = 4,
+				execute = "if eventArgs.markerID~=16 then self.used=true;return end\nlocal r=AnyoneCore.Roster\nif r.current()==nil or not r.isReady() then return end\nlocal slot=r.mySlot()\nif slot~=\"M1\" and slot~=\"M2\" then self.used=true;return end\nlocal ot=r.entOf(\"T2\")\nif not ot then return end\nif data.lpdu_mistral_ot_circle then Argus.deleteTimedShape(data.lpdu_mistral_ot_circle) end\ndata.lpdu_mistral_ot_circle=TensorCore.getStaticDrawer(0xFFFFAA33,2):addTimedCircleOnEnt(10000,ot.id,.6,0,false,true)\nself.used=true",
+				executeType = 2,
+				loop = true,
+				mechanicTime = 9,
+				name = "[NAUR] Mistral Song - OT Marker for Melee",
+				timeRange = true,
+				timelineIndex = 2,
+				timerEndOffset = 1591,
+				timerStartOffset = -9,
+				uuid = "bb476a8a-5c9e-796d-ab9b-9047e718e67a",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "Argus.deleteTimedShape(data.lpdu_mistral_ot_circle)\ndata.lpdu_mistral_ot_circle=nil\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"0ec04be4-d174-ebf0-8e1a-06b33642f675",
+									true,
+								},
+								
+								{
+									"e965b2b6-3f36-a541-9bc8-3d4f369cb8bf",
+									true,
+								},
+							},
+							name = "Clear active OT circle",
+							uuid = "b708d444-45cb-0635-85b0-c13ff5ef41f5",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgOptionType = 3,
+							eventArgType = 2,
+							name = "Mistral damage only",
+							spellIDList = 
+							{
+								11074,
+								11083,
+							},
+							uuid = "0ec04be4-d174-ebf0-8e1a-06b33642f675",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return data.lpdu_mistral_ot_circle ~= nil",
+							dequeueIfLuaFalse = true,
+							name = "Owned OT circle exists",
+							uuid = "e965b2b6-3f36-a541-9bc8-3d4f369cb8bf",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance",
+				eventType = 2,
+				execute = "if eventArgs.spellID~=11074 and eventArgs.spellID~=11083 then self.used=true;return end\nif data.lpdu_mistral_ot_circle then\n Argus.deleteTimedShape(data.lpdu_mistral_ot_circle);data.lpdu_mistral_ot_circle=nil\nend\nself.used=true",
+				loop = true,
+				mechanicTime = 9,
+				name = "[NAUR] Mistral Song - OT Marker Cleanup",
+				timeRange = true,
+				timelineIndex = 2,
+				timerEndOffset = 161,
+				timerStartOffset = -9,
+				uuid = "f0bd2877-5dd3-61c2-b57d-6d1f34026658",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "data.uwuAttackMarkersPending=true;data.uwuAttackMarkersCleared=nil\nself.used=true",
+							name = "[NAUR] Queue Attack 1-3 cleanup on wipe",
+							uuid = "6e4b521d-1a8a-39db-83b9-1b51d2e51ca8",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "NAUR Guidance",
+				eventType = 9,
+				mechanicTime = 9,
+				name = "[NAUR] Queue Attack 1-3 cleanup on wipe",
+				timeRange = true,
+				timelineIndex = 2,
+				timerEndOffset = 2000,
+				timerStartOffset = -9,
+				uuid = "cb5e67fe-4da6-88f8-846e-d73ddbea7721",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "SendTextCommand('/mk off <attack1>')\nSendTextCommand('/mk off <attack2>')\nSendTextCommand('/mk off <attack3>')\ndata.uwuAttackMarkersPending=nil;data.uwuAttackMarkersCleared=true\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"76be9a1e-94cf-5f46-b5b5-9d539d158df2",
+									true,
+								},
+								
+								{
+									"df8dd9f0-a003-0e6f-a955-7e7b9020364d",
+									true,
+								},
+							},
+							name = "[NAUR] Clear Attack 1-3 when alive",
+							uuid = "d4c14ed1-86a8-b721-985d-0d51adc8dd0b",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 2,
+							dequeueIfLuaFalse = true,
+							hpType = 2,
+							hpValue = 1,
+							uuid = "76be9a1e-94cf-5f46-b5b5-9d539d158df2",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return data.uwuAttackMarkersPending==true or data.uwuAttackMarkersCleared~=true",
+							dequeueIfLuaFalse = true,
+							name = "Wipe pending or fresh pull",
+							uuid = "df8dd9f0-a003-0e6f-a955-7e7b9020364d",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance",
+				mechanicTime = 9,
+				name = "[NAUR] Clear Attack 1-3 when alive",
+				throttleTime = 250,
+				timeRange = true,
+				timelineIndex = 2,
+				timerEndOffset = 6,
+				timerStartOffset = -9,
+				uuid = "a4834950-4143-c21e-a1af-5fd283e4710b",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local old=eventArgs.oldData\nif old then\n for _,key in ipairs({\"uwu_geocrush_first\",\"uwu_geocrush_last\",\"uwu_upheaval_guidance\",\"uwu_upheaval_landing\"}) do\n  local s=old[key]\n  if s and s.draws then for _,id in ipairs(s.draws) do Argus.deleteTimedShape(id) end end\n end\n local orbs=old.uwu_annihilation_orbs\n if orbs and orbs.live then\n  for _,entry in pairs(orbs.live) do for _,id in ipairs(entry.draws) do Argus.deleteTimedShape(id) end end\n end\nend\nself.used=true",
+							name = "Clear owned preview shapes",
+							uuid = "ab86d057-544f-45d9-9901-00d612317831",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "NAUR Guidance",
+				eventType = 9,
+				loop = true,
+				mechanicTime = 9,
+				name = "[NAUR] UWU personal previews - Wipe cleanup",
+				timeRange = true,
+				timelineIndex = 2,
+				timerEndOffset = 1591,
+				timerStartOffset = -9,
+				uuid = "f6154fae-d541-f95b-81e2-7f1116b8eb12",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local old=eventArgs.oldData\nif old then\n local state=old.uwu_lpdu_predation\n if state then for _,id in ipairs(state.shapes) do Argus.deleteTimedShape(id) end end\n state=old.uwu_ultima_middle_bury\n if state then for _,shape in ipairs(state.shapes) do if shape.id then Argus.deleteTimedShape(shape.id) end end end\nend\nself.used=true",
+							name = "Ultima personal previews - Wipe cleanup",
+							uuid = "d8070359-6625-5ee6-824d-ab3fe99019ff",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "NAUR Guidance",
+				eventType = 9,
+				loop = true,
+				mechanicTime = 9,
+				name = "[NAUR] Ultima personal previews - Wipe cleanup",
+				timeRange = true,
+				timelineIndex = 2,
+				timerEndOffset = 1591,
+				timerStartOffset = -9,
+				uuid = "335c64b2-9363-58ea-97a0-0197a8849177",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local boss = TensorCore.mGetEntity(eventArgs.detectionTargetID)\nif not boss or not boss.targetable then return end\n-- Cast cones have their own fixed-direction draw.\nif boss.channelingid == 11091 then return end\nlocal target = TensorCore.mGetEntity(boss.targetid)\nif not target then return end\nlocal heading = TensorCore.getHeadingToTarget(boss.pos, target.pos)\nlocal drawer = TensorCore.getMoogleDrawer()\ndrawer:addCone(boss.pos.x,boss.pos.y,boss.pos.z,11.7,math.rad(90),heading)\n",
+							conditions = 
+							{
+								
+								{
+									"ec92f723-9f07-fce9-9ca5-f7e308cb93ce",
+									true,
+								},
+							},
+							name = "Mechanic geometry",
+							uuid = "61d72b85-666b-c273-9616-1e5ce3b7b10b",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Filter",
+							filterTargetType = "ContentID",
+							name = "Garuda Downburst",
+							partyTargetContentID = 1644,
+							uuid = "ec92f723-9f07-fce9-9ca5-f7e308cb93ce",
+							version = 3,
+						},
+					},
+				},
+				enabled = false,
+				eventType = 12,
+				mechanicTime = 9,
+				name = "[Draw][NAUR] Garuda Downburst target cone",
+				timeRange = true,
+				timelineIndex = 2,
+				timerEndOffset = 161,
+				timerStartOffset = -9,
+				uuid = "5a7f4e41-c2d7-5170-a7ef-16dcc65be765",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local boss = TensorCore.mGetEntity(eventArgs.entityID)\nif not boss then return end\n-- Slipstream locks its heading at cast start; no moving target attachment.\nTensorCore.getMoogleDrawer():addTimedCone(eventArgs.channelTimeMax*1000,boss.pos.x,boss.pos.y,boss.pos.z,11.7,math.rad(90),boss.pos.h)\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"a09b89d6-f7e9-607c-b72d-41f7dae223ea",
+									true,
+								},
+							},
+							name = "Mechanic geometry",
+							uuid = "50f4565d-ba72-969d-934a-f14124abb3b6",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgType = 2,
+							eventSpellID = 11091,
+							name = "Attack ID",
+							uuid = "a09b89d6-f7e9-607c-b72d-41f7dae223ea",
+							version = 3,
+						},
+					},
+				},
+				eventType = 3,
+				loop = true,
+				mechanicTime = 9,
+				name = "[Draw][NAUR] Slipstream fixed cast cone",
+				timeRange = true,
+				timelineIndex = 2,
+				timerEndOffset = 161,
+				timerStartOffset = -9,
+				uuid = "3c78b7c5-4624-0463-80f8-73f8e2e1a764",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "data.lpdu_nail_eruption_count = 0\nself.used = true",
+							name = "Initialize owned eruption counter",
+							uuid = "9e48e03e-fd0e-c5f0-ba7c-76cc2655afe2",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				mechanicTime = 9,
+				name = "[State][NAUR] Initialize nail eruption count",
+				timeRange = true,
+				timelineIndex = 2,
+				timerEndOffset = -4,
+				timerStartOffset = -9,
+				uuid = "4d2a774f-8dbb-e19c-86cc-0c1390f93662",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR ",
+				uuid = "231eeede-3c1a-3feb-a5ed-964746f9b592",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "NAUR ",
+				name = " Automation",
+				uuid = "b0d1e1d3-e0ab-4060-8f3a-2aa5ad2b2fc1",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Cooldown Holds",
+							uuid = "15b77dfe-6a85-bbd0-bf9b-82947f8bb8e2",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							displayPath = "Cooldown Holds",
+							gVar = "ACR_TensorNuke4_CD",
+							name = "CD on after wipe",
+							uuid = "00793a37-c5eb-a46e-a6f0-4ffcf666353c",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "NAUR / Automation",
+				eventType = 9,
+				mechanicTime = 9,
+				name = "[NAUR] Restore CD on wipe",
+				timeRange = true,
+				timelineIndex = 2,
+				timerEndOffset = 1800,
+				timerStartOffset = -9,
+				uuid = "93ed5110-a751-7b10-8334-1cc101ae5003",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+				},
+				conditions = 
+				{
+				},
+				displayPath = "NAUR / Automation",
+				eventType = 13,
+				execute = "-- Independent UWU settings; available before GUI or targeting reads.\nif not _G.UWU_NAURSettingsIOReady then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UWU-NAUR.lua]]\n local saved={}\n if FileExists(path) then\n  local loaded=FileLoad(path)\n  if type(loaded)==\"table\" then saved=loaded end\n end\n local current=_G.UWU_NAURGuiState\n local old=_G.UWU_NAUR_AnnihilationAssignments or {}\n local defaults={automaticOpen=true,ultimaOpen=true,orbsOpen=true,autoTarget=_G.NAUR_UWU_AutoTarget~=false,melee=(old.melee==2 and 2 or 1),solo=old.solo or 0}\n local keys={\"automaticOpen\",\"ultimaOpen\",\"orbsOpen\",\"autoTarget\",\"melee\",\"solo\"}\n local C={}\n for _,key in ipairs(keys) do\n  local value=current and current[key]\n  if value==nil then value=saved[key] end\n  if type(defaults[key])==\"boolean\" then\n   C[key]=type(value)==\"boolean\" and value or defaults[key]\n   if value==false then C[key]=false end\n  else\n   C[key]=type(value)==\"number\" and value>=0 and value<=2 and value%1==0 and value or defaults[key]\n  end\n end\n if C.melee==0 then C.melee=1 end\n function C.save()\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local values={}\n  for _,key in ipairs(keys) do values[key]=C[key] end\n  FileSave(path,values)\n end\n _G.UWU_NAURGuiState=C\n _G.UWU_NAUR_AnnihilationAssignments={melee=C.melee,solo=C.solo}\n _G.NAUR_UWU_AutoTarget=C.autoTarget\n C.save()\n _G.UWU_NAURSettingsIOReady=true\nend\n-- Upgrade only an unset melee assignment; preserve either explicit role choice.\ndo\n local preferences=_G.UWU_NAURGuiState\n if preferences and preferences.melee==0 then\n  preferences.melee=1\n  local assignment=_G.UWU_NAUR_AnnihilationAssignments\n  if assignment then assignment.melee=1 end\n  preferences.save()\n end\nend\nlocal C=_G.UWU_NAURGuiState\nlocal function section(key,label)\n GUI:SetNextTreeNodeOpened(C[key],GUI.SetCond_Always)\n local opened\n if label==\"General\" then\n  opened=C[key]\n  GUI:PushStyleVar(GUI.StyleVar_ButtonTextAlign,0,0.5)\n  if GUI:Button((opened and \"- \" or \"+ \")..label..\"##UWU_NAUR_Draws_\"..key,GUI:GetContentRegionAvailWidth(),0) then opened=not opened end\n  GUI:PopStyleVar()\n  if opened then GUI:TreePush(\"UWU_NAUR_Draws_\"..key) end\n else\n  opened=GUI:CollapsingHeader(label,0)\n  if opened then GUI:TreePush(label) end\n end\n if opened~=C[key] then C[key]=opened;C.save() end\n return opened\nend\n\n_G.NAUR_UWU_AutoTarget=C.autoTarget\nGUI:SetNextWindowSize(440,0,GUI.SetCond_Always)\nlocal visible=GUI:Begin(\"UWU NAUR Settings\",true,GUI.WindowFlags_NoCollapse+GUI.WindowFlags_AlwaysAutoResize)\nif visible then\n GUI:Text(\"UWU | NAUR Draws\")\n GUI:Text(\"Settings and expanded sections save automatically.\")\n if section(\"automaticOpen\",\"General\") then\n  if data.uwuAutoSim or data.uwuBLMAutoSim or data.uwuBRDAutoSim or data.uwuRPRAutoSim then\n   GUI:Text(\"Managed by AutoSim.\")\n  else\n   local value=GUI:Checkbox(\"Enable automatic targeting\",C.autoTarget)\n   if value~=C.autoTarget then\n    C.autoTarget=value;C.save()\n    _G.NAUR_UWU_AutoTarget=value\n   end\n   if GUI:IsItemHovered() then GUI:SetTooltip(\"Targets bosses, gaols, Magitek Bits and Lahabrea. Turn off to select targets manually. AutoSim uses its own targeting.\") end\n  end\n  GUI:TreePop()\n end\n if section(\"ultimaOpen\",\"P4 - Ultima\") then\n  if section(\"orbsOpen\",\"Annihilation orb assignments\") then\n   GUI:Text(\"3-3-1-1: first two orbs shared, last two solo.\")\n   local Roster=AnyoneCore and AnyoneCore.Roster\n   local slot=Roster and Roster.current() and Roster.mySlot() or nil\n   local cfg=_G.UWU_NAUR_AnnihilationAssignments\n   if slot==\"M1\" or slot==\"M2\" then\n    GUI:Text(\"Melee with tanks\")\n    GUI:PushItemWidth(380)\n    local value=GUI:Combo(\"##UWU_orb_melee\",cfg.melee,{\"Choose melee\",\"M1\",\"M2\"},3)\n    GUI:PopItemWidth()\n    if value~=cfg.melee then cfg.melee=value;C.melee=value;C.save() end\n    GUI:Text(\"Orbs 1-2: MT + OT + selected melee.\")\n   elseif slot==\"T1\" or slot==\"T2\" then\n    GUI:Text(\"Solo tank\")\n    GUI:PushItemWidth(380)\n    local value=GUI:Combo(\"##UWU_orb_solo\",cfg.solo,{\"Choose tank\",\"MT\",\"OT\"},3)\n    GUI:PopItemWidth()\n    if value~=cfg.solo then cfg.solo=value;C.solo=value;C.save() end\n    GUI:Text(\"Orbs 3-4: selected tank alone.\")\n   elseif not slot then\n    GUI:Text(\"Waiting for your party role.\")\n   else\n    GUI:Text(\"No orb assignment needed for your role.\")\n   end\n   GUI:TreePop()\n  end\n  GUI:TreePop()\n end\nend\nGUI:End()\n",
+				executeType = 2,
+				mechanicTime = 9,
+				name = "[GUI][NAUR] Settings",
+				timeRange = true,
+				timelineIndex = 2,
+				timerEndOffset = 21,
+				timerStartOffset = -29,
+				uuid = "5612dc36-ede8-4158-8aeb-61e48e2a9717",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"34117167-90c9-6c00-898b-962b1935ebdf",
+									true,
+								},
+							},
+							gVar = "ACR_TensorNuke4_Potion",
+							gVarValue = 2,
+							uuid = "7dc90f1b-eece-9d1b-892d-32b56029542d",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 8,
+							dequeueIfLuaFalse = true,
+							localmapid = 777,
+							name = "UWU only",
+							uuid = "34117167-90c9-6c00-898b-962b1935ebdf",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR / Automation",
+				eventType = 16,
+				mechanicTime = 9,
+				name = "[NAUR] Potion off before pull",
+				timeRange = true,
+				timelineIndex = 2,
+				timerEndOffset = 5,
+				timerStartOffset = -9,
+				uuid = "42e206b4-f099-c681-bc2e-2a89107da917",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"76750496-a0dc-1d92-b55f-5f9d43915261",
+									true,
+								},
+							},
+							gVar = "ACR_TensorNuke4_Potion",
+							gVarValue = 2,
+							uuid = "96f3b11b-ebb9-fa8b-a996-9a0ef44fde83",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 8,
+							dequeueIfLuaFalse = true,
+							localmapid = 777,
+							name = "UWU only",
+							uuid = "76750496-a0dc-1d92-b55f-5f9d43915261",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR / Automation",
+				mechanicTime = 9,
+				name = "[NAUR] Potion off at pull start",
+				timeRange = true,
+				timelineIndex = 2,
+				timerEndOffset = 5,
+				timerStartOffset = -9,
+				uuid = "54cfe155-04ac-faa2-9a03-373d495ff301",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Titan NAUR",
+				uuid = "a63fbf75-81dc-093c-895e-593937bec8e6",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local old=eventArgs.oldData\nlocal state=old and old.uwu_titan_late_rocks\nif state then for _,id in pairs(state.draws) do Argus.deleteTimedShape(id) end end\nself.used=true",
+							name = "Titan late rocks - Wipe cleanup",
+							uuid = "d98e2151-a1ab-421f-a0aa-2cc23ed864d0",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "Draws - Titan NAUR",
+				eventType = 9,
+				loop = true,
+				mechanicTime = 9,
+				name = "[NAUR] Titan late rocks - Wipe cleanup",
+				timeRange = true,
+				timelineIndex = 2,
+				timerEndOffset = 1591,
+				timerStartOffset = -9,
+				uuid = "95fbbfc4-cebc-ac63-9460-16dc85e1a8c9",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ultima",
+				uuid = "1f2cbe92-1cf6-9308-942f-7cd68a8642ac",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local old=eventArgs.oldData\nlocal state=old and old.uwu_intermission_meteors\nif state then for _,id in pairs(state.shapes) do Argus.deleteTimedShape(id) end end\nself.used=true",
+							name = "Intermission meteors - Wipe cleanup",
+							uuid = "275ecda6-ac5f-c1dd-9942-7ccbc5e76919",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "Draws - Ultima",
+				eventType = 9,
+				loop = true,
+				mechanicTime = 9,
+				name = "[NAUR] Intermission meteors - Wipe cleanup",
+				timeRange = true,
+				timelineIndex = 2,
+				timerEndOffset = 1591,
+				timerStartOffset = -9,
+				uuid = "7ea8953e-2a4d-a592-809d-6528ec551131",
+				version = 2,
+			},
+		},
+	},
+	[3] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "[Raid calls]",
+				uuid = "0c47e76a-5939-d46a-b10a-53c7b78521a8",
+			},
+			objectType = "folder",
+		},
+	},
+	[4] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\optimization",
+				uuid = "5eb20a9d-bc52-35b1-b53b-68cf3d217bad",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\optimization",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Garuda",
+				uuid = "72aaf4fb-be72-3db4-8943-92aa990e1e93",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player = TensorCore.mGetPlayer()\n\nif player then\n  local sourcePos = player.pos\n  local targetPos = { x = 96.94, y = 0, z = 105.88 }\n  local heading = TensorCore.getHeadingToTarget(sourcePos, targetPos)\n  local totalDistance = TensorCore.getDistance2d(sourcePos, targetPos)\n\n  if totalDistance > 0.2 then\n    local tipLength = math.min(1.25, totalDistance * 0.5)\n    local baseLength = totalDistance - tipLength\n    local drawer = TensorCore.getCachedDrawer(\n      0xFF00FFFF,\n      0xFF0088FF,\n      0xFF0000FF,\n      0xFFFFFFFF,\n      2\n    )\n    drawer:addTimedArrow(\n      3000,\n      sourcePos.x, sourcePos.y, sourcePos.z,\n      heading,\n      baseLength, 0.9, tipLength, 1.8,\n      0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n    )\n  end\nend\n\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"601c266b-117d-867c-8c4f-54b6b02fa23a",
+									true,
+								},
+							},
+							name = "C-side Safe Arrow",
+							uuid = "d8d9cf55-c683-211e-8211-463c91ebb1f8",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.aoeID == 11073",
+							dequeueIfLuaFalse = true,
+							name = "Observed Great Whirlwind AOE",
+							uuid = "601c266b-117d-867c-8c4f-54b6b02fa23a",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Garuda",
+				eventType = 18,
+				mechanicTime = 18,
+				name = "[Draw] Great Whirlwind - C-side Safe Arrow",
+				timeRange = true,
+				timelineIndex = 4,
+				timerStartOffset = -5,
+				uuid = "2da48f8a-e9a4-452c-adb5-b587dfee32ed",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Garuda",
+							uuid = "210f70ee-b4b5-cf2b-9bb1-6376ed2a10e6",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local function ljArrow(ms, from, to)\n local dist = TensorCore.getDistance2d(from, to)\n local scale = math.min(1, dist / 15)\n local tip = math.max(2, 3 * scale)\n if dist - tip <= 1 then return end\n local d = TensorCore.getCachedDrawer(0xFF0000FF, nil, 0xFF0000FF, 0xFFFFFFFF, 2)\n d:addTimedArrow(ms, from.x, from.y, from.z, TensorCore.getHeadingToTarget(from, to),\n  dist - tip, math.max(0.5, scale), tip, math.max(1.5, 3 * scale), 0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\n\nlocal player = TensorCore.mGetPlayer()\nif not player or not player.pos then self.used = true return end\nif AnyoneCore.Roster.mySlot() ~= \"T2\" then self.used = true return end\nlocal spiny = eventArgs and eventArgs.entityID and TensorCore.mGetEntity(eventArgs.entityID)\nif not spiny or not spiny.pos then self.used = true return end\n-- NAUR: OT grabs the Spiny Plume (ranged attack / provoke) and takes it west of D.\nlocal westOfD = {x = 87.0, y = spiny.pos.y, z = 100.0}\nljArrow(10000, player.pos, spiny.pos)\nlocal line = TensorCore.getCachedDrawer(0xFF66FF99, 0xFF00AA66, 0xFF006644, 0xFFFFFFFF, 2)\nlocal dist = TensorCore.getDistance2d(spiny.pos, westOfD)\nif dist > 0.25 then\n local tip = math.min(2.5, dist * 0.35)\n line:addTimedArrow(10000, spiny.pos.x, spiny.pos.y, spiny.pos.z, TensorCore.getHeadingToTarget(spiny.pos, westOfD),\n  math.max(0.1, dist - tip), 1.2, tip, 2.7, 0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nAnyoneCore.addTimedWorldText(10000, \"GRAB SPINY\", {x = spiny.pos.x, y = spiny.pos.y + 1.5, z = spiny.pos.z}, 0xFFFFAA00, true, 1.15)\nAnyoneCore.addTimedWorldText(10000, \"SPINY WEST OF D\", {x = westOfD.x, y = westOfD.y + 1.5, z = westOfD.z}, 0xFF66FF99, true, 1.15)\nself.used = true\n",
+							conditions = 
+							{
+								
+								{
+									"14f46a76-b32e-b294-8be9-124db9945f78",
+									true,
+								},
+							},
+							displayPath = "Draws - Garuda",
+							name = "OT Grab Spiny / West of D",
+							uuid = "0a6dd443-7971-00f1-a05b-dc9369faa5dc",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.entityContentID == 2091 and eventArgs.entityName == \"Spiny Plume\"",
+							dequeueIfLuaFalse = true,
+							name = "Spiny Plume Added",
+							uuid = "14f46a76-b32e-b294-8be9-124db9945f78",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Garuda",
+				eventType = 5,
+				mechanicTime = 18,
+				name = "[Draw] Satin Plumes - OT Grab Spiny West of D",
+				timeRange = true,
+				timelineIndex = 4,
+				timerEndOffset = 4,
+				timerStartOffset = -1,
+				uuid = "806bbd81-eb3d-c6fb-9b32-9b718947cb12",
+				version = 2,
+			},
+		},
+	},
+	[6] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local boss = TensorCore.mGetEntity(eventArgs.detectionTargetID)\nif not boss or not boss.targetable then return end\n-- Cast cones have their own fixed-direction draw.\nif boss.channelingid == 11091 then return end\nlocal target = TensorCore.mGetEntity(boss.targetid)\nif not target then return end\nlocal heading = TensorCore.getHeadingToTarget(boss.pos, target.pos)\nlocal drawer = TensorCore.getMoogleDrawer()\ndrawer:addCone(boss.pos.x,boss.pos.y,boss.pos.z,11.7,math.rad(90),heading)\n",
+							conditions = 
+							{
+								
+								{
+									"8efb5bdd-7307-e373-a1ec-87da4152938d",
+									true,
+								},
+							},
+							name = "Short cleave warning",
+							uuid = "13aeccb0-cafd-6c80-9b03-b5b0fa280edf",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Filter",
+							filterTargetType = "ContentID",
+							name = "Garuda Downburst",
+							partyTargetContentID = 1644,
+							uuid = "8efb5bdd-7307-e373-a1ec-87da4152938d",
+							version = 3,
+						},
+					},
+				},
+				eventType = 12,
+				mechanicTime = 27,
+				name = "[Draw][NAUR] Downburst cone - 27",
+				timeRange = true,
+				timelineIndex = 6,
+				timerStartOffset = -3,
+				uuid = "da872827-a713-fc42-8174-77586f3c2c17",
+				version = 2,
+			},
+		},
+	},
+	[8] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\optimization",
+				uuid = "588cf5e9-f507-4575-6401-4f83d6cff1b9",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\optimization",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 2500,
+							alertPriority = 2,
+							alertTTS = true,
+							alertText = "Move: Feather Rain",
+							conditions = 
+							{
+								
+								{
+									"d4c9f46d-252d-6c14-bdfc-c3bb27d1e2fa",
+									true,
+								},
+								
+								{
+									"7b778849-c7e4-105c-af4c-bc4920c7c0a4",
+									true,
+								},
+								
+								{
+									"9ba70374-e79a-0cf5-b605-e4a9eb44a463",
+									true,
+								},
+								
+								{
+									"66a255f6-a363-9b50-a0ed-589c11f2420d",
+									true,
+								},
+							},
+							uuid = "a985ee6f-3880-d50d-9869-2a7c7ba253a3",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 9,
+							partyTargetType = "Melee DPS",
+							uuid = "0788ac77-19c0-2564-a8aa-b6a5fc46c54b",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							comparator = 3,
+							dequeueIfLuaFalse = true,
+							eventArgType = 4,
+							eventIntValue = 7738,
+							name = "jump",
+							uuid = "d4c9f46d-252d-6c14-bdfc-c3bb27d1e2fa",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							comparator = 3,
+							dequeueIfLuaFalse = true,
+							eventArgType = 2,
+							eventIntValue = 1,
+							name = "animationSlot",
+							uuid = "7b778849-c7e4-105c-af4c-bc4920c7c0a4",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.entityContentID == 1644 or eventArgs.entityContentID == 1645 or eventArgs.entityContentID == 1646",
+							dequeueIfLuaFalse = true,
+							name = "Garuda / sisters",
+							uuid = "9ba70374-e79a-0cf5-b605-e4a9eb44a463",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "if self.claimed then return true end\nif data.uwu_p1_feather_called_1 then return false end\ndata.uwu_p1_feather_called_1=true\nself.claimed=true\nreturn true",
+							dequeueIfLuaFalse = true,
+							name = "One call per wave",
+							uuid = "66a255f6-a363-9b50-a0ed-589c11f2420d",
+							version = 3,
+						},
+					},
+				},
+				eventType = 23,
+				mechanicTime = 34,
+				name = "[NAUR] P1 Feather Rain 1 - Move at jump",
+				timeRange = true,
+				timelineIndex = 8,
+				timerEndOffset = 4,
+				timerOffset = 0.5,
+				timerStartOffset = -1,
+				uuid = "d0ae0670-a75b-b8fe-b2ed-a384ed6acebc",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR ",
+				uuid = "404f57c8-b5fc-8a05-a4d2-359bc33b32c8",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "NAUR ",
+				name = " Automation",
+				uuid = "e5fcf15a-fb59-7e81-9a4c-181966f0d139",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Misc",
+							conditions = 
+							{
+								
+								{
+									"b6183223-d80f-2360-9aaf-c7a958387329",
+									true,
+								},
+								
+								{
+									"6543f9e7-1b05-b181-b38e-5f01b8563362",
+									true,
+								},
+								
+								{
+									"414b8428-bd53-0fb9-804e-29e9a38428da",
+									true,
+								},
+							},
+							endIfUsed = true,
+							name = "Target - Garuda",
+							setTarget = true,
+							targetContentID = 1644,
+							targetType = "ContentID",
+							uuid = "0fdd3b48-f527-169c-9e4b-b27e2a08d2e8",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "-- Independent UWU settings; available before GUI or targeting reads.\nif not _G.UWU_NAURSettingsIOReady then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UWU-NAUR.lua]]\n local saved={}\n if FileExists(path) then\n  local loaded=FileLoad(path)\n  if type(loaded)==\"table\" then saved=loaded end\n end\n local current=_G.UWU_NAURGuiState\n local old=_G.UWU_NAUR_AnnihilationAssignments or {}\n local defaults={automaticOpen=true,ultimaOpen=true,orbsOpen=true,autoTarget=_G.NAUR_UWU_AutoTarget~=false,melee=(old.melee==2 and 2 or 1),solo=old.solo or 0}\n local keys={\"automaticOpen\",\"ultimaOpen\",\"orbsOpen\",\"autoTarget\",\"melee\",\"solo\"}\n local C={}\n for _,key in ipairs(keys) do\n  local value=current and current[key]\n  if value==nil then value=saved[key] end\n  if type(defaults[key])==\"boolean\" then\n   C[key]=type(value)==\"boolean\" and value or defaults[key]\n   if value==false then C[key]=false end\n  else\n   C[key]=type(value)==\"number\" and value>=0 and value<=2 and value%1==0 and value or defaults[key]\n  end\n end\n if C.melee==0 then C.melee=1 end\n function C.save()\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local values={}\n  for _,key in ipairs(keys) do values[key]=C[key] end\n  FileSave(path,values)\n end\n _G.UWU_NAURGuiState=C\n _G.UWU_NAUR_AnnihilationAssignments={melee=C.melee,solo=C.solo}\n _G.NAUR_UWU_AutoTarget=C.autoTarget\n C.save()\n _G.UWU_NAURSettingsIOReady=true\nend\n-- Upgrade only an unset melee assignment; preserve either explicit role choice.\ndo\n local preferences=_G.UWU_NAURGuiState\n if preferences and preferences.melee==0 then\n  preferences.melee=1\n  local assignment=_G.UWU_NAUR_AnnihilationAssignments\n  if assignment then assignment.melee=1 end\n  preferences.save()\n end\nend\nif data.uwuAutoSim or data.uwuBRDAutoSim or data.uwuBLMAutoSim or data.uwuRPRAutoSim then return false end\nreturn (_G.UWU_NAURGuiState.autoTarget~=false)",
+							name = "Shared targeting enabled / no AutoSim owner",
+							uuid = "b6183223-d80f-2360-9aaf-c7a958387329",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local t=TensorCore.mGetTarget()\nreturn t==nil or not t.alive or not t.targetable",
+							name = "No living hostile target",
+							uuid = "6543f9e7-1b05-b181-b38e-5f01b8563362",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Filter",
+							filterTargetType = "ContentID",
+							name = "Garuda",
+							partyTargetContentID = 1644,
+							uuid = "414b8428-bd53-0fb9-804e-29e9a38428da",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR / Automation",
+				loop = true,
+				mechanicTime = 34,
+				name = "[NAUR] [Target] Garuda Reacquire",
+				throttleTime = 250,
+				timeRange = true,
+				timelineIndex = 8,
+				timerEndOffset = 147,
+				uuid = "e60f0b4c-26b5-8be4-a820-72a54685e17f",
+				version = 2,
+			},
+		},
+	},
+	[9] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "7dc37eda-fe92-f2ee-844b-995ce139956a",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Garuda",
+				uuid = "75f1ea5d-3de5-57ec-85ed-b622a90a7907",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player = TensorCore.mGetPlayer()\nlocal aoeCenter = { x = eventArgs.x, y = eventArgs.y, z = eventArgs.z }\nlocal arenaCenter = { x = 100, y = 0, z = 100 }\n\nif player then\n  local dx = arenaCenter.x - aoeCenter.x\n  local dz = arenaCenter.z - aoeCenter.z\n  local centerDistance = math.sqrt(dx * dx + dz * dz)\n\n  if centerDistance > 0.1 then\n    local safeDistance = eventArgs.aoeLength + 0.95\n    local targetPos = {\n      x = aoeCenter.x + (dx / centerDistance) * safeDistance,\n      y = aoeCenter.y,\n      z = aoeCenter.z + (dz / centerDistance) * safeDistance,\n    }\n    local sourcePos = player.pos\n    local heading = TensorCore.getHeadingToTarget(sourcePos, targetPos)\n    local totalDistance = TensorCore.getDistance2d(sourcePos, targetPos)\n\n    if totalDistance > 0.2 then\n      local tipLength = math.min(1.25, totalDistance * 0.5)\n      local baseLength = totalDistance - tipLength\n      local drawer = TensorCore.getCachedDrawer(\n        0xFF00FFFF, 0xFF0088FF, 0xFF0000FF, 0xFFFFFFFF, 2\n      )\n      drawer:addTimedArrow(\n        2500,\n        sourcePos.x, sourcePos.y, sourcePos.z,\n        heading,\n        baseLength, 0.9, tipLength, 1.8,\n        0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n      )\n    end\n  end\nend\n\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"9469bda2-7657-c958-844a-da83eaf0898d",
+									true,
+								},
+							},
+							name = "Spiny to Mid Safe Arrow",
+							uuid = "e4115839-ae15-72e9-b9bd-b56b2bc8ee02",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.aoeID == 11078 and eventArgs.contentID == 2091",
+							dequeueIfLuaFalse = true,
+							name = "Initial Spiny Gigastorm",
+							uuid = "9469bda2-7657-c958-844a-da83eaf0898d",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Garuda",
+				eventType = 18,
+				mechanicTime = 37,
+				name = "[Draw] Initial Spiny Gigastorm - Mid Arrow",
+				timeRange = true,
+				timelineIndex = 9,
+				timerEndOffset = 4,
+				timerStartOffset = -2,
+				uuid = "74a9997c-fcb8-4902-bc76-abd631161ffa",
+				version = 2,
+			},
+		},
+	},
+	[10] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\optimization",
+				uuid = "9acb44e2-8502-5ab6-7c1a-12b899034672",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\optimization",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR ",
+				uuid = "334beeaa-1ad3-8b96-b3b8-fa0c3b0af552",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "NAUR ",
+				name = " Automation",
+				uuid = "df50a2b8-b16b-b400-b678-169b6d06c690",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Misc",
+							conditions = 
+							{
+								
+								{
+									"98631e39-88b5-190d-a164-f394d88a2d9f",
+									true,
+								},
+								
+								{
+									"6a1df749-f1c5-c282-8f38-d1df0bd0bdc9",
+									true,
+								},
+								
+								{
+									"7dc0d398-ca3c-da9c-a2cb-61c3d1334c6a",
+									true,
+								},
+							},
+							name = "Target Garuda",
+							setTarget = true,
+							targetType = "Event Entity",
+							uuid = "6afd6ec1-aaa6-7920-969d-126ec25a574c",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "-- Independent UWU settings; available before GUI or targeting reads.\nif not _G.UWU_NAURSettingsIOReady then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UWU-NAUR.lua]]\n local saved={}\n if FileExists(path) then\n  local loaded=FileLoad(path)\n  if type(loaded)==\"table\" then saved=loaded end\n end\n local current=_G.UWU_NAURGuiState\n local old=_G.UWU_NAUR_AnnihilationAssignments or {}\n local defaults={automaticOpen=true,ultimaOpen=true,orbsOpen=true,autoTarget=_G.NAUR_UWU_AutoTarget~=false,melee=(old.melee==2 and 2 or 1),solo=old.solo or 0}\n local keys={\"automaticOpen\",\"ultimaOpen\",\"orbsOpen\",\"autoTarget\",\"melee\",\"solo\"}\n local C={}\n for _,key in ipairs(keys) do\n  local value=current and current[key]\n  if value==nil then value=saved[key] end\n  if type(defaults[key])==\"boolean\" then\n   C[key]=type(value)==\"boolean\" and value or defaults[key]\n   if value==false then C[key]=false end\n  else\n   C[key]=type(value)==\"number\" and value>=0 and value<=2 and value%1==0 and value or defaults[key]\n  end\n end\n if C.melee==0 then C.melee=1 end\n function C.save()\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local values={}\n  for _,key in ipairs(keys) do values[key]=C[key] end\n  FileSave(path,values)\n end\n _G.UWU_NAURGuiState=C\n _G.UWU_NAUR_AnnihilationAssignments={melee=C.melee,solo=C.solo}\n _G.NAUR_UWU_AutoTarget=C.autoTarget\n C.save()\n _G.UWU_NAURSettingsIOReady=true\nend\n-- Upgrade only an unset melee assignment; preserve either explicit role choice.\ndo\n local preferences=_G.UWU_NAURGuiState\n if preferences and preferences.melee==0 then\n  preferences.melee=1\n  local assignment=_G.UWU_NAUR_AnnihilationAssignments\n  if assignment then assignment.melee=1 end\n  preferences.save()\n end\nend\nif data.uwuAutoSim or data.uwuBRDAutoSim or data.uwuBLMAutoSim or data.uwuRPRAutoSim then return false end\nreturn (_G.UWU_NAURGuiState.autoTarget~=false)",
+							name = "Shared targeting enabled / no AutoSim owner",
+							uuid = "98631e39-88b5-190d-a164-f394d88a2d9f",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgType = 3,
+							name = "Became targetable",
+							uuid = "7dc0d398-ca3c-da9c-a2cb-61c3d1334c6a",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgOptionType = 2,
+							eventEntityContentID = 1644,
+							name = "Garuda",
+							uuid = "6a1df749-f1c5-c282-8f38-d1df0bd0bdc9",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR / Automation",
+				eventType = 26,
+				loop = true,
+				mechanicTime = 39,
+				name = "[NAUR] [Target] Garuda - Acquire",
+				timeRange = true,
+				timelineIndex = 10,
+				timerEndOffset = 12,
+				timerStartOffset = -8,
+				uuid = "797f2250-7029-7397-a053-5d78b82558c7",
+				version = 2,
+			},
+		},
+	},
+	[11] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\mitigation",
+				uuid = "feae04ab-dc44-668f-1856-0eadad99643b",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\mitigation",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Garuda",
+				uuid = "0ce5ed4b-4464-7e15-93f7-c38fce5e82ed",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "_G.UWU_GarudaBarrierPosition = nil\nself.used = true",
+							name = "Clear Barrier Position",
+							uuid = "d60c92d9-7ec1-bef5-bfd3-5025c3a3c342",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local spiny = TensorCore.getEntityByGroup(\"ContentID\", { contentid = 2091, subgroup = \"Nearest\" })\nif spiny then\n  _G.UWU_GarudaBarrierPosition = {\n    x = spiny.pos.x,\n    y = spiny.pos.y,\n    z = spiny.pos.z,\n  }\nend",
+							name = "Track Spiny Position",
+							uuid = "def03522-0727-1375-a203-7c143937604a",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "Draws - Garuda",
+				mechanicTime = 42,
+				name = "[State] Capture Spiny Barrier Position",
+				timeRange = true,
+				timelineIndex = 11,
+				timerStartOffset = -15,
+				uuid = "d7c2e075-97a6-3066-9d8b-5457b05aacf6",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player = TensorCore.mGetPlayer()\nlocal barrierCenter = _G.UWU_GarudaBarrierPosition\n\nif player and barrierCenter then\n  local sourcePos = player.pos\n  local dx = sourcePos.x - barrierCenter.x\n  local dz = sourcePos.z - barrierCenter.z\n  local distanceFromBarrier = math.sqrt(dx * dx + dz * dz)\n  local targetPos = barrierCenter\n\n  if distanceFromBarrier > 3.5 then\n    targetPos = {\n      x = barrierCenter.x + (dx / distanceFromBarrier) * 3.5,\n      y = barrierCenter.y,\n      z = barrierCenter.z + (dz / distanceFromBarrier) * 3.5,\n    }\n  end\n\n  local heading = TensorCore.getHeadingToTarget(sourcePos, targetPos)\n  local totalDistance = TensorCore.getDistance2d(sourcePos, targetPos)\n\n  if totalDistance > 0.2 then\n    local tipLength = math.min(1.25, totalDistance * 0.5)\n    local baseLength = totalDistance - tipLength\n    local drawer = TensorCore.getCachedDrawer(\n      0xFF00FFFF,\n      0xFF0088FF,\n      0xFF0000FF,\n      0xFFFFFFFF,\n      2\n    )\n    drawer:addTimedArrow(\n      2500,\n      sourcePos.x, sourcePos.y, sourcePos.z,\n      heading,\n      baseLength, 0.9, tipLength, 1.8,\n      0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n    )\n  end\nend\nself.used = true",
+							name = "Barrier Entry Arrow",
+							uuid = "c72d3c9d-129b-01da-8da1-62245238f821",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "Draws - Garuda",
+				mechanicTime = 42,
+				name = "[Draw] Mistral Shriek - Barrier Arrow",
+				timelineIndex = 11,
+				timerOffset = -1.1000000238419,
+				uuid = "821d25b3-24ee-3ca7-aca8-bf981b315617",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertPriority = 3,
+							alertTTS = true,
+							alertText = "Move under barrier",
+							alertVolume = 81,
+							uuid = "dcae8059-54d7-af3f-a3da-cce6291a52ce",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				mechanicTime = 42,
+				name = "MOVE!",
+				timelineIndex = 11,
+				timerOffset = -1.1000000238419,
+				uuid = "76f26f8c-03bd-55de-b389-a67ff56092e7",
+				version = 2,
+			},
+		},
+	},
+	[12] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\mitigation",
+				uuid = "97f53f06-6880-abda-db22-8b6c27a8efd6",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\mitigation",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Garuda",
+				uuid = "a21e2da3-99ca-0a66-add1-7050a66716ca",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player = TensorCore.mGetPlayer()\nlocal target = eventArgs.targetAttach and TensorCore.mGetEntity(eventArgs.targetAttach)\nlocal barrier = _G.UWU_GarudaBarrierPosition\n\nif player and target then\n  local sourcePos = player.pos\n  local targetCenter = target.pos\n  local targetPos = targetCenter\n\n  if barrier then\n    local dx = targetCenter.x - barrier.x\n    local dz = targetCenter.z - barrier.z\n    local distanceFromBarrier = math.sqrt(dx * dx + dz * dz)\n    local frictionHitRadius = math.max(0, eventArgs.aoeLength - 0.4)\n    local barrierOuterRadius = 7.0\n\n    if distanceFromBarrier > 0.1 then\n      local targetDistance = math.max(\n        barrierOuterRadius,\n        distanceFromBarrier - frictionHitRadius\n      )\n\n      if math.abs(distanceFromBarrier - targetDistance) <= frictionHitRadius then\n        targetPos = {\n          x = barrier.x + (dx / distanceFromBarrier) * targetDistance,\n          y = targetCenter.y,\n          z = barrier.z + (dz / distanceFromBarrier) * targetDistance,\n        }\n      end\n    end\n  end\n\n  local heading = TensorCore.getHeadingToTarget(sourcePos, targetPos)\n  local totalDistance = TensorCore.getDistance2d(sourcePos, targetPos)\n\n  if totalDistance > 0.2 then\n    local tipLength = math.min(1.25, totalDistance * 0.5)\n    local baseLength = totalDistance - tipLength\n    local drawer = TensorCore.getCachedDrawer(\n      0xFF00FFFF,\n      0xFF0088FF,\n      0xFF0000FF,\n      0xFFFFFFFF,\n      2\n    )\n    drawer:addTimedArrow(\n      2800,\n      sourcePos.x, sourcePos.y, sourcePos.z,\n      heading,\n      baseLength, 0.9, tipLength, 1.8,\n      0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n    )\n  end\nend\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"051cbd63-97c6-98c3-bdde-dc401acb364c",
+									true,
+								},
+								
+								{
+									"b9a0ce10-6329-3e3c-aac9-6a95ff874d4b",
+									true,
+								},
+							},
+							name = "Friction Barrier-Edge Arrow",
+							uuid = "aeb53452-bd39-5751-abca-2079fe56cced",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.aoeID == 11080",
+							dequeueIfLuaFalse = true,
+							name = "Observed Friction AOE",
+							uuid = "051cbd63-97c6-98c3-bdde-dc401acb364c",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore.Roster\nif not Roster or not Roster.current() then return false end\nlocal slot = Roster.mySlot()\nreturn slot == \"T2\" or slot == \"M1\" or slot == \"M2\"",
+							dequeueIfLuaFalse = true,
+							name = "Roster: T2 / M1 / M2",
+							uuid = "b9a0ce10-6329-3e3c-aac9-6a95ff874d4b",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Garuda",
+				eventType = 18,
+				mechanicTime = 51,
+				name = "[Draw] Friction 1 - Melee/Tank Arrow",
+				timeRange = true,
+				timelineIndex = 12,
+				timerStartOffset = -3,
+				uuid = "b2ac0a56-be0e-0f06-8860-a41653959e84",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertPriority = 2,
+							alertTTS = true,
+							alertText = "Move out of barrier and Get hit by friction",
+							conditions = 
+							{
+								
+								{
+									"f356668c-bb3c-8866-a374-433db8366df1",
+									true,
+								},
+							},
+							uuid = "7869fda0-949e-eac8-bd87-9ab475330567",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore.Roster\nif not Roster or not Roster.current() then return false end\nlocal slot = Roster.mySlot()\nreturn slot == \"T2\" or slot == \"M1\" or slot == \"M2\"",
+							conditionType = 9,
+							name = "T2 / M1 / M2",
+							partyTargetType = "Melee DPS",
+							uuid = "f356668c-bb3c-8866-a374-433db8366df1",
+							version = 3,
+						},
+					},
+				},
+				mechanicTime = 51,
+				name = "Melee TTS",
+				timelineIndex = 12,
+				timerOffset = -2.7000000476837,
+				uuid = "5fd81d2c-7a23-e404-940b-c8c68c02b3d8",
+				version = 2,
+			},
+		},
+	},
+	[13] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\mitigation",
+				uuid = "d7b021ed-e654-cbd1-42ec-356ba1dd177d",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\mitigation",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Garuda",
+				uuid = "1eda7fb8-b814-4f3e-845c-9ce2f647be93",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player = TensorCore.mGetPlayer()\nlocal target = eventArgs.targetAttach and TensorCore.mGetEntity(eventArgs.targetAttach)\nlocal barrier = _G.UWU_GarudaBarrierPosition\n\nif player and target then\n  local sourcePos = player.pos\n  local targetCenter = target.pos\n  local targetPos = targetCenter\n\n  if barrier then\n    local dx = targetCenter.x - barrier.x\n    local dz = targetCenter.z - barrier.z\n    local distanceFromBarrier = math.sqrt(dx * dx + dz * dz)\n    local frictionHitRadius = math.max(0, eventArgs.aoeLength - 0.4)\n    local barrierOuterRadius = 7.0\n\n    if distanceFromBarrier > 0.1 then\n      local nearDistance = math.max(\n        barrierOuterRadius,\n        distanceFromBarrier - frictionHitRadius\n      )\n\n      if math.abs(distanceFromBarrier - nearDistance) <= frictionHitRadius then\n        local partyDistance = nearDistance\n          + (distanceFromBarrier - nearDistance) * 0.5\n        targetPos = {\n          x = barrier.x + (dx / distanceFromBarrier) * partyDistance,\n          y = targetCenter.y,\n          z = barrier.z + (dz / distanceFromBarrier) * partyDistance,\n        }\n      end\n    end\n  end\n\n  local heading = TensorCore.getHeadingToTarget(sourcePos, targetPos)\n  local totalDistance = TensorCore.getDistance2d(sourcePos, targetPos)\n\n  if totalDistance > 0.2 then\n    local tipLength = math.min(1.25, totalDistance * 0.5)\n    local baseLength = totalDistance - tipLength\n    local drawer = TensorCore.getCachedDrawer(\n      0xFF00FFFF,\n      0xFF0088FF,\n      0xFF0000FF,\n      0xFFFFFFFF,\n      2\n    )\n    drawer:addTimedArrow(\n      2800,\n      sourcePos.x, sourcePos.y, sourcePos.z,\n      heading,\n      baseLength, 0.9, tipLength, 1.8,\n      0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n    )\n  end\nend\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"44cea2d4-c76f-4cf2-9a50-3f8c97bd2054",
+									true,
+								},
+							},
+							name = "Friction Party Midpoint Arrow",
+							uuid = "1ecaad84-823a-7ca0-80e5-9307e8aa98ee",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.aoeID == 11080",
+							dequeueIfLuaFalse = true,
+							name = "Observed Friction AOE",
+							uuid = "44cea2d4-c76f-4cf2-9a50-3f8c97bd2054",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Garuda",
+				eventType = 18,
+				mechanicTime = 57,
+				name = "[Draw] Friction 2 - Party Arrow",
+				timeRange = true,
+				timelineIndex = 13,
+				timerStartOffset = -3,
+				uuid = "2713bf60-1a44-8a3e-bbbe-68f947b9af55",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local roster = AnyoneCore and AnyoneCore.Roster\nif roster == nil or roster.current() == nil or roster.mySlot() ~= \"M1\" then\n  self.used = true\n  return\nend\n\nlocal player = TensorCore.mGetPlayer()\nlocal barrierPos = _G.UWU_GarudaBarrierPosition\n\nif player and barrierPos then\n  local targetPos = barrierPos\n  local dx = 100 - barrierPos.x\n  local dz = 100 - barrierPos.z\n  local distanceToMiddle = math.sqrt(dx * dx + dz * dz)\n\n  if distanceToMiddle > 0.1 then\n    local bossSideShift = math.min(2, distanceToMiddle)\n    targetPos = {\n      x = barrierPos.x + (dx / distanceToMiddle) * bossSideShift,\n      y = barrierPos.y,\n      z = barrierPos.z + (dz / distanceToMiddle) * bossSideShift,\n    }\n  end\n\n  local sourcePos = player.pos\n  local heading = TensorCore.getHeadingToTarget(sourcePos, targetPos)\n  local totalDistance = TensorCore.getDistance2d(sourcePos, targetPos)\n  local scale = math.min(1, totalDistance / 15)\n  local baseWidth = math.max(0.5, scale)\n  local tipWidth = math.max(1.5, 3 * scale)\n  local tipLength = math.max(2, 3 * scale)\n  local baseLength = totalDistance - tipLength\n  local arrowDuration = 3000\n  local postHitDelay = math.floor(eventArgs.duration * 1000) + 1000\n\n  if baseLength > 0 then\n    local drawer = TensorCore.getCachedDrawer(\n      0xFF00FFFF,\n      0xFF0088FF,\n      0xFF0000FF,\n      0xFFFFFFFF,\n      2\n    )\n    drawer:addTimedArrow(\n      postHitDelay + arrowDuration,\n      sourcePos.x, sourcePos.y, sourcePos.z,\n      heading,\n      baseLength, baseWidth, tipLength, tipWidth,\n      postHitDelay, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n    )\n  end\nend\n\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"34d43cc3-bf08-af02-ab0a-2144cf799d08",
+									true,
+								},
+							},
+							name = "M1 Barrier Cleansing Arrow",
+							uuid = "a7fcfbfb-989b-1077-8032-21b1a4404eaa",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.aoeID == 11080",
+							dequeueIfLuaFalse = true,
+							name = "Observed Friction AOE",
+							uuid = "34d43cc3-bf08-af02-ab0a-2144cf799d08",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Garuda",
+				eventType = 18,
+				mechanicTime = 57,
+				name = "[Draw] Friction 2 - M1 Barrier Arrow",
+				timeRange = true,
+				timelineIndex = 13,
+				timerStartOffset = -3,
+				uuid = "cee8402f-4682-401c-b8a3-e5608847dfd6",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local roster = AnyoneCore and AnyoneCore.Roster\nif roster == nil or roster.current() == nil or roster.mySlot() ~= \"M2\" then\n  self.used = true\n  return\nend\n\nlocal player = TensorCore.mGetPlayer()\nlocal barrierPos = _G.UWU_GarudaBarrierPosition\nif not player or not barrierPos then\n  return\nend\n\nlocal targetPos = barrierPos\nlocal dx = 100 - barrierPos.x\nlocal dz = 100 - barrierPos.z\nlocal distanceToMiddle = math.sqrt(dx * dx + dz * dz)\nif distanceToMiddle > 0.1 then\n  local bossSideShift = math.min(2, distanceToMiddle)\n  targetPos = {\n    x = barrierPos.x + (dx / distanceToMiddle) * bossSideShift,\n    y = barrierPos.y,\n    z = barrierPos.z + (dz / distanceToMiddle) * bossSideShift,\n  }\nend\n\nlocal sourcePos = player.pos\nlocal heading = TensorCore.getHeadingToTarget(sourcePos, targetPos)\nlocal totalDistance = TensorCore.getDistance2d(sourcePos, targetPos)\nlocal scale = math.min(1, totalDistance / 15)\nlocal baseWidth = math.max(0.5, scale)\nlocal tipWidth = math.max(1.5, 3 * scale)\nlocal tipLength = math.max(2, 3 * scale)\nlocal baseLength = totalDistance - tipLength\nif baseLength <= 0 then\n  return\nend\n\nlocal arrowDuration = 3000\nlocal drawer = TensorCore.getCachedDrawer(\n  0xFF00FFFF,\n  0xFF0088FF,\n  0xFF0000FF,\n  0xFFFFFFFF,\n  2\n)\ndrawer:addTimedArrow(\n  arrowDuration,\n  sourcePos.x, sourcePos.y, sourcePos.z,\n  heading,\n  baseLength, baseWidth, tipLength, tipWidth,\n  0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n)\n\nlocal state = data.uwu_friction2_m2_hp_gate\nif state ~= nil then\n  state.arrowDrawn = true\nend\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"5b478b52-d61e-7bb4-98d1-ef0b4cc3508d",
+									true,
+								},
+								
+								{
+									"c8464ab1-5414-a10f-afec-9583645b29c2",
+									true,
+								},
+							},
+							name = "M2 Barrier Cleansing Arrow",
+							uuid = "8b8cb5d9-c994-80ec-89d9-6b39cba26ad8",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local state = data.uwu_friction2_m2_hp_gate\nreturn state ~= nil and state.aoeSeen == true and state.arrowDrawn ~= true",
+							name = "Friction AOE seen; arrow pending",
+							uuid = "5b478b52-d61e-7bb4-98d1-ef0b4cc3508d",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Party",
+							conditionType = 2,
+							hpValue = 57,
+							name = "Party HP >=57% (lowest)",
+							partyTargetSubType = "Lowest HP",
+							uuid = "c8464ab1-5414-a10f-afec-9583645b29c2",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Garuda",
+				mechanicTime = 57,
+				name = "[Draw] Friction 2 - M2 Barrier Arrow",
+				timeRange = true,
+				timelineIndex = 13,
+				timerEndOffset = 8,
+				uuid = "ebbec822-982e-60fc-b29c-67fb4a4cc5db",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Garuda",
+							uuid = "e2c7e715-13d1-8da3-9907-8b4c33f92820",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local Roster = AnyoneCore and AnyoneCore.Roster\nif Roster == nil or Roster.current() == nil or not Roster.isReady() then return end\n\nlocal localSlot = Roster.mySlot()\nif localSlot ~= \"M1\" and localSlot ~= \"M2\" then return end\n\nlocal partySlots = {\"H1\", \"H2\", \"M1\", \"M2\", \"R1\", \"R2\"}\nfor i = 1, #partySlots do\n  local slot = partySlots[i]\n  local entityID = Roster.idOf(slot)\n  local entity = Roster.entOf(slot)\n\n  if entityID and entity and entity.pos and TensorCore.getBuff(entity, 1525, nil, 2) then\n    local pos = entity.pos\n    Argus2.addTimedCircleFilled(\n      150,\n      pos.x, pos.y, pos.z,\n      0.55, 32,\n      0x35FF0000, 0x35FF0000, nil, 0,\n      entityID, 0xFFFF0000, 1.5,\n      0, 0.15, 2,\n      false, true, Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n    )\n  end\nend",
+							conditions = 
+							{
+								
+								{
+									"a0f5841e-12e5-b462-8ecc-35d4523597e8",
+									true,
+								},
+							},
+							displayPath = "Draws - Garuda",
+							name = "Red Thermal Low circles - 2 stacks",
+							uuid = "4ac5b8ba-39c4-ce14-82aa-72c13ffb6927",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore and AnyoneCore.Roster\nreturn Roster ~= nil\n  and Roster.current() ~= nil\n  and Roster.isReady()\n  and (Roster.mySlot() == \"M1\" or Roster.mySlot() == \"M2\")",
+							dequeueIfLuaFalse = true,
+							name = "Roster ready: M1/M2",
+							uuid = "a0f5841e-12e5-b462-8ecc-35d4523597e8",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Garuda",
+				mechanicTime = 57,
+				name = "Thermal Low - Two Stack Circles (M1/M2)",
+				timeRange = true,
+				timelineIndex = 13,
+				timerEndOffset = 8,
+				timerStartOffset = -7,
+				uuid = "121f565f-1a82-c392-84af-bac17e99a206",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local state = data.uwu_friction2_m2_hp_gate\nif state == nil then\n  state = {}\n  data.uwu_friction2_m2_hp_gate = state\nend\nstate.aoeSeen = true\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"37fba76e-489f-9e9b-b3fe-6893d9421b61",
+									true,
+								},
+							},
+							name = "Latch AOE for M2 arrow",
+							uuid = "3acc2e6d-f466-8964-8380-83f4895285f1",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.aoeID == 11080",
+							dequeueIfLuaFalse = true,
+							name = "Friction 2 AOE 11080",
+							uuid = "37fba76e-489f-9e9b-b3fe-6893d9421b61",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Garuda",
+				eventType = 18,
+				mechanicTime = 57,
+				name = "[State] Friction 2 AOE seen for M2 arrow",
+				timeRange = true,
+				timelineIndex = 13,
+				timerEndOffset = 8,
+				timerStartOffset = -3,
+				uuid = "7e53417b-46b1-675f-ac96-3a659a730bc4",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertPriority = 2,
+							alertTTS = true,
+							alertText = "Move outside and get hit by Friction",
+							conditions = 
+							{
+								
+								{
+									"23249288-238b-cd7b-8e52-c0ddbad3a51a",
+									true,
+								},
+							},
+							uuid = "4dce1523-144f-d707-a5c6-26b3446a33af",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore and AnyoneCore.Roster\nif Roster == nil or Roster.current() == nil then\n  return false\nend\n\nlocal slot = Roster.mySlot()\nreturn slot ~= nil and slot ~= \"M1\" and slot ~= \"M2\" and slot ~= \"T2\"",
+							dequeueIfLuaFalse = true,
+							name = "Roster: not M1/M2/OT",
+							uuid = "23249288-238b-cd7b-8e52-c0ddbad3a51a",
+							version = 3,
+						},
+					},
+				},
+				mechanicTime = 57,
+				name = "Second Friction",
+				timelineIndex = 13,
+				timerOffset = -2.5,
+				uuid = "f00db3a6-4df6-093a-bde3-5383605e73e9",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertPriority = 2,
+							alertTTS = true,
+							alertText = "Cleanse Debuff.",
+							conditions = 
+							{
+								
+								{
+									"45f19d2b-a640-d33b-8e69-5d4f7961e4ef",
+									true,
+								},
+							},
+							uuid = "c3e1ec47-be81-c8fd-bbea-7ae501a8142c",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore and AnyoneCore.Roster; if not Roster or not Roster.current() then return false end; return Roster.mySlot() == [=[M1]=]",
+							conditionType = 9,
+							dequeueIfLuaFalse = true,
+							name = "M1 Only",
+							partyTargetType = "Melee DPS",
+							uuid = "45f19d2b-a640-d33b-8e69-5d4f7961e4ef",
+							version = 3,
+						},
+					},
+				},
+				mechanicTime = 57,
+				name = "Melee TTS",
+				timelineIndex = 13,
+				timerOffset = 1,
+				uuid = "9a326430-8413-a0b4-a5ed-aa0043f625ed",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Monk Opti",
+				uuid = "156aa6ec-fde5-2f78-8108-fc447d895332",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertPriority = 2,
+							alertTTS = true,
+							alertText = "Stay outside of barrier and get hit by Friction",
+							conditions = 
+							{
+								
+								{
+									"71eaa0eb-af0f-d515-8cae-6684e739410d",
+									true,
+								},
+							},
+							uuid = "45733463-eb59-4291-8cd9-500aaae84b2e",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore and AnyoneCore.Roster\nif Roster == nil or Roster.current() == nil then\n  return false\nend\n\nlocal slot = Roster.mySlot()\nreturn slot == \"M1\" or slot == \"M2\" or slot == \"T2\"",
+							dequeueIfLuaFalse = true,
+							name = "Roster: M1/M2/OT",
+							uuid = "71eaa0eb-af0f-d515-8cae-6684e739410d",
+							version = 3,
+						},
+					},
+				},
+				mechanicTime = 57,
+				name = "Second Friction - M1/M2/OT",
+				timelineIndex = 13,
+				timerOffset = -2.5,
+				uuid = "4a8a694a-02c3-a9b8-81e1-e753d2cfe4de",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertPriority = 2,
+							alertTTS = true,
+							alertText = "Cleanse debuff inside the barrier",
+							conditions = 
+							{
+								
+								{
+									"5fd4a872-297a-2cab-8b2d-6471297ef251",
+									true,
+								},
+							},
+							uuid = "0799ca24-b5ac-975e-88d8-dd059e3579cb",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore and AnyoneCore.Roster; if not Roster or not Roster.current() then return false end; return Roster.mySlot() == [=[M2]=]",
+							dequeueIfLuaFalse = true,
+							name = "M2 Only",
+							uuid = "5fd4a872-297a-2cab-8b2d-6471297ef251",
+							version = 3,
+						},
+					},
+				},
+				mechanicTime = 57,
+				name = "Melee TTS - M2",
+				timelineIndex = 13,
+				timerOffset = 2,
+				uuid = "8d8a113e-94ea-9e5c-a874-a9e8bcd4516f",
+				version = 2,
+			},
+		},
+	},
+	[14] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 2500,
+							alertPriority = 3,
+							alertTTS = true,
+							alertText = "Move: Feather Rain",
+							alertVolume = 81,
+							conditions = 
+							{
+								
+								{
+									"b753994f-bb30-94fe-adb1-208a75849f67",
+									true,
+								},
+								
+								{
+									"dff8309e-b6b7-6580-a66d-089b0578b7c8",
+									true,
+								},
+								
+								{
+									"f3a1d886-0bed-a3af-a256-99ccf9ccb2b8",
+									true,
+								},
+								
+								{
+									"2473cfd8-430f-8b0c-90e4-1af3c97379d0",
+									true,
+								},
+							},
+							uuid = "44636adf-d8b8-1ae4-92a8-7e5bc28fe41f",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							comparator = 3,
+							dequeueIfLuaFalse = true,
+							eventArgType = 4,
+							eventIntValue = 7738,
+							name = "jump",
+							uuid = "b753994f-bb30-94fe-adb1-208a75849f67",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							comparator = 3,
+							dequeueIfLuaFalse = true,
+							eventArgType = 2,
+							eventIntValue = 1,
+							name = "animationSlot",
+							uuid = "dff8309e-b6b7-6580-a66d-089b0578b7c8",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.entityContentID == 1644 or eventArgs.entityContentID == 1645 or eventArgs.entityContentID == 1646",
+							dequeueIfLuaFalse = true,
+							name = "Garuda / sisters",
+							uuid = "f3a1d886-0bed-a3af-a256-99ccf9ccb2b8",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "if self.claimed then return true end\nif data.uwu_p1_feather_called_2 then return false end\ndata.uwu_p1_feather_called_2=true\nself.claimed=true\nreturn true",
+							dequeueIfLuaFalse = true,
+							name = "One call per wave",
+							uuid = "2473cfd8-430f-8b0c-90e4-1af3c97379d0",
+							version = 3,
+						},
+					},
+				},
+				eventType = 23,
+				mechanicTime = 69,
+				name = "[NAUR] P1 Feather Rain 2 - Move at jump",
+				timeRange = true,
+				timelineIndex = 14,
+				timerEndOffset = 4,
+				timerOffset = 0.5,
+				timerStartOffset = -3,
+				uuid = "482b9860-fe7b-97d4-a78c-88771acdf739",
+				version = 2,
+			},
+		},
+	},
+	[15] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "e4495e2f-608b-96c3-ff7e-d9d527e5557f",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+	},
+	[17] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\core",
+				uuid = "b3f876bd-780e-5fb9-6892-4053191c7b2d",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\core",
+			objectType = "folder",
+		},
+	},
+	[18] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "8ed924be-cefa-437a-648b-9bc4145b6a0e",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Garuda",
+				uuid = "c237707a-bef2-169c-91b2-9ab0d81e5020",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player = TensorCore.mGetPlayer()\n\nif player then\n  local targetPos = { x = 99.99, y = 0, z = 103.11 }\n  local sourcePos = player.pos\n  local heading = TensorCore.getHeadingToTarget(sourcePos, targetPos)\n  local totalDistance = TensorCore.getDistance2d(sourcePos, targetPos)\n\n  if totalDistance > 0.2 then\n    local tipLength = math.min(1.25, totalDistance * 0.5)\n    local baseLength = totalDistance - tipLength\n    local drawer = TensorCore.getCachedDrawer(\n      0xFF00FFFF,\n      0xFF0088FF,\n      0xFF0000FF,\n      0xFFFFFFFF,\n      2\n    )\n    drawer:addTimedArrow(\n      5000,\n      sourcePos.x, sourcePos.y, sourcePos.z,\n      heading,\n      baseLength, 0.9, tipLength, 1.8,\n      0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n    )\n  end\nend\n\nself.used = true",
+							name = "Stack Middle Arrow",
+							uuid = "89237135-d816-7c71-b175-35e69fc6847e",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "Draws - Garuda",
+				mechanicTime = 93,
+				name = "[Draw] Garuda Stack - Middle Arrow",
+				timelineIndex = 18,
+				timerOffset = -12.5,
+				uuid = "8466c926-0c10-a9c0-9f0f-6a65768b6791",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 2500,
+							alertPriority = 3,
+							alertTTS = true,
+							alertText = "Move: Feather Rain",
+							alertVolume = 81,
+							conditions = 
+							{
+								
+								{
+									"dd9ae533-54c1-3948-a6c4-c1f29262d9ac",
+									true,
+								},
+								
+								{
+									"4812dc8a-6689-a2b6-8e68-38bf90743f30",
+									true,
+								},
+								
+								{
+									"2bc15e71-1845-fab9-85e2-32df0a887dd6",
+									true,
+								},
+								
+								{
+									"806a009d-d16f-83a6-b960-e4887647cae0",
+									true,
+								},
+							},
+							uuid = "cbda6130-e490-7f91-8e2d-aa7defa89bd1",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs and eventArgs.aoeID == 11085 and eventArgs.contentID == 1644 and eventArgs.friendly == false",
+							dequeueIfLuaFalse = true,
+							name = "Feather Rain AOE",
+							uuid = "69a98f6c-c55b-8ba0-ab80-6aca5e037de8",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							comparator = 3,
+							dequeueIfLuaFalse = true,
+							eventArgType = 4,
+							eventIntValue = 7738,
+							name = "jump",
+							uuid = "dd9ae533-54c1-3948-a6c4-c1f29262d9ac",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							comparator = 3,
+							dequeueIfLuaFalse = true,
+							eventArgType = 2,
+							eventIntValue = 1,
+							name = "animationSlot",
+							uuid = "4812dc8a-6689-a2b6-8e68-38bf90743f30",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.entityContentID == 1644 or eventArgs.entityContentID == 1645 or eventArgs.entityContentID == 1646",
+							dequeueIfLuaFalse = true,
+							name = "Garuda / sisters",
+							uuid = "2bc15e71-1845-fab9-85e2-32df0a887dd6",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "if self.claimed then return true end\nif data.uwu_p1_feather_called_3 then return false end\ndata.uwu_p1_feather_called_3=true\nself.claimed=true\nreturn true",
+							dequeueIfLuaFalse = true,
+							name = "One call per wave",
+							uuid = "806a009d-d16f-83a6-b960-e4887647cae0",
+							version = 3,
+						},
+					},
+				},
+				eventType = 23,
+				mechanicTime = 93,
+				name = "[NAUR] P1 Feather Rain 3 - Move at jump",
+				timeRange = true,
+				timelineIndex = 18,
+				timerEndOffset = 2,
+				timerStartOffset = -5,
+				uuid = "cb193897-47a1-eecb-87eb-41788a04c223",
+				version = 2,
+			},
+		},
+	},
+	[19] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "[Raid calls]",
+				uuid = "147e4fbc-7fd3-f817-97b1-bbea3a4e768f",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 8000,
+							alertPriority = 2,
+							alertTTS = true,
+							alertText = "Move to 3 (SE)",
+							conditions = 
+							{
+								
+								{
+									"bf441fb9-2cd0-0878-99ca-f33d913ecf47",
+									true,
+								},
+							},
+							uuid = "8c62e06d-eddc-65d3-8626-db29a9c4ec94",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local slot = AnyoneCore.Roster.mySlot()\nreturn slot ~= \"T1\" and slot ~= \"T2\"",
+							dequeueIfLuaFalse = true,
+							name = "Non-tank slots (T1/T2)",
+							uuid = "bf441fb9-2cd0-0878-99ca-f33d913ecf47",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "[Raid calls]",
+				mechanicTime = 100,
+				name = "[Raid Call][Garuda] Double Mistral",
+				timelineIndex = 19,
+				timerOffset = -1.8999999761581,
+				uuid = "17cd5836-d9c6-7195-8de4-93d3203a2db3",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 8000,
+							alertPriority = 2,
+							alertTTS = true,
+							alertText = "Cover the debuff",
+							conditions = 
+							{
+								
+								{
+									"83d6dec2-8bcf-8a0f-93bb-68c7d4a9038f",
+									true,
+								},
+							},
+							name = "MT/OT Debuff Alert",
+							uuid = "2e616c1c-e4d6-1744-bddd-347782ad91a7",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local slot = AnyoneCore.Roster.mySlot()\nreturn slot == \"T1\" or slot == \"T2\"",
+							dequeueIfLuaFalse = true,
+							name = "Tank slots (T1/T2)",
+							uuid = "83d6dec2-8bcf-8a0f-93bb-68c7d4a9038f",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "[Raid calls]",
+				mechanicTime = 100,
+				name = "[Raid Call][Garuda] Double Mistral - MT/OT",
+				timelineIndex = 19,
+				timerOffset = -1,
+				uuid = "98e7d24b-6fe9-08df-8163-ca3b81229025",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertPriority = 2,
+							alertText = "Wait for Feather Rain",
+							uuid = "2dc3c7e9-bcf5-69d5-a046-96a68282fc2e",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "[Raid calls]",
+				mechanicTime = 100,
+				name = "[Raid Call][Garuda] Wait for Feather Rain",
+				timelineIndex = 19,
+				uuid = "2dbaba35-5788-6850-888d-98e57e9d9bef",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Movement - Garuda",
+				uuid = "6a9ee2c4-6ba7-f855-ab4c-92229235f375",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 25762,
+							conditions = 
+							{
+								
+								{
+									"c9daa3c2-58e2-ffd7-ab54-2373dd15d5ba",
+									true,
+								},
+								
+								{
+									"b98b5ff8-c3ef-b6eb-acf2-8d1163919b29",
+									true,
+								},
+								
+								{
+									"b4426e24-2dd4-fc31-961b-a08d8299f523",
+									true,
+								},
+							},
+							ignoreWeaveRules = true,
+							name = "Thunderclap to Garuda after both Mistral hits",
+							targetContentID = 1644,
+							targetType = "ContentID",
+							uuid = "ef3f78c8-e172-4f81-a6a8-fefc1f70f4b6",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 14,
+							jobIDList = 
+							{
+								20,
+							},
+							name = "Job = MNK",
+							uuid = "c9daa3c2-58e2-ffd7-ab54-2373dd15d5ba",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							eventArgOptionType = 2,
+							eventEntityContentID = 1645,
+							name = "Event entity = Suparna",
+							uuid = "b98b5ff8-c3ef-b6eb-acf2-8d1163919b29",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							eventArgType = 2,
+							eventSpellID = 11083,
+							name = "Spell = Mistral Song",
+							uuid = "b4426e24-2dd4-fc31-961b-a08d8299f523",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Movement - Garuda",
+				eventType = 2,
+				mechanicTime = 100,
+				name = "[Dash][NAUR][Garuda] Double Mistral Hit - MNK Thunderclap",
+				timeRange = true,
+				timelineIndex = 19,
+				timerEndOffset = 0.5,
+				uuid = "7c7fc348-5998-77fc-bab1-4f8d4bac8089",
+				version = 2,
+			},
+		},
+	},
+	[20] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "73e23ebf-d58d-886b-e19f-e6d111053e0f",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+	},
+	[21] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Garuda",
+				uuid = "78ce14d2-2d3f-6986-86dd-d36a4b326543",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local function ljArrow(ms, from, to)\n local dist = TensorCore.getDistance2d(from, to)\n local scale = math.min(1, dist / 15)\n local tip = math.max(2, 3 * scale)\n if dist - tip <= 1 then return end\n local d = TensorCore.getCachedDrawer(0xFF0000FF, nil, 0xFF0000FF, 0xFFFFFFFF, 2)\n d:addTimedArrow(ms, from.x, from.y, from.z, TensorCore.getHeadingToTarget(from, to),\n  dist - tip, math.max(0.5, scale), tip, math.max(1.5, 3 * scale), 0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\n\nlocal player = TensorCore.mGetPlayer()\nif not player or not player.pos then return end\ndata.uwu_wicked_wheel_role_arrow = data.uwu_wicked_wheel_role_arrow or {}\nlocal state = data.uwu_wicked_wheel_role_arrow\nif state.started then self.used = true return end\nlocal slot = AnyoneCore.Roster.mySlot()\nlocal sisters = {}\nfor _, cid in ipairs({1645, 1646}) do\n for _, e in pairs(TensorCore.getEntityGroupList(\"ContentID\", cid) or {}) do\n  if e and e.pos then\n   local dx, dz = e.pos.x - 100, e.pos.z - 100\n   if dx * dx + dz * dz > 25 then\n    local bearing = math.deg(math.atan2(dx, -dz)) % 360\n    if bearing > 337.5 then bearing = bearing - 360 end -- a sister on north counts as first clockwise\n    sisters[#sisters + 1] = {e = e, b = bearing}\n   end\n  end\n end\nend\nlocal target\nif slot == \"T1\" or slot == \"T2\" then\n if #sisters < 2 then return end -- wait until both sisters are placed\n table.sort(sisters, function(a, b) return a.b < b.b end)\n local s = (slot == \"T1\" and sisters[1] or sisters[2]).e\n local dx, dz = s.pos.x - 100, s.pos.z - 100\n local len = math.sqrt(dx * dx + dz * dz)\n target = {x = 100 + dx / len * 10, y = player.pos.y, z = 100 + dz / len * 10}\n AnyoneCore.addTimedWorldText(6500, slot == \"T1\" and \"MT: TAKE MISTRAL\" or \"OT: TAKE MISTRAL\",\n  {x = target.x, y = target.y + 1.5, z = target.z}, 0xFF66DDFF, true, 1.1)\nelse\n target = {x = 108.141, y = player.pos.y, z = 106.126}\nend\nstate.started = true\nljArrow(6500, player.pos, target)\nself.used = true\n",
+							conditions = 
+							{
+								
+								{
+									"6b7429b5-3ef8-edcb-9376-715034667fd3",
+									true,
+								},
+							},
+							name = "Role Safe Arrow + Tank Mistral Soak",
+							uuid = "84b4370c-f3a2-fb6e-8896-065f855c2c5d",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.markerID == 16",
+							dequeueIfLuaFalse = true,
+							name = "Observed Green Overhead",
+							uuid = "6b7429b5-3ef8-edcb-9376-715034667fd3",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Garuda",
+				eventType = 4,
+				mechanicTime = 100,
+				name = "[Draw] Wicked Wheel - Role Safe Arrow",
+				timeRange = true,
+				timelineIndex = 21,
+				timerStartOffset = -7,
+				uuid = "83f759fe-5cbf-1d52-a2af-4f96f6eb6a0b",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Movement - Wicked Wheel",
+				uuid = "4613bab2-e3a1-3dcb-bd46-5bba5e067d3f",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 25762,
+							conditions = 
+							{
+								
+								{
+									"e8f94772-2742-013b-aad2-0091c53a9b10",
+									true,
+								},
+							},
+							ignoreWeaveRules = true,
+							name = "Thunderclap to nearest healer",
+							targetType = "Healer",
+							uuid = "9fe48ad5-ddd6-4065-b6d8-2127af5fbb55",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 14,
+							jobIDList = 
+							{
+								20,
+							},
+							name = "Job = MNK",
+							uuid = "e8f94772-2742-013b-aad2-0091c53a9b10",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Movement - Wicked Wheel",
+				mechanicTime = 100,
+				name = "[Dash] Wicked Wheel - MNK Thunderclap",
+				timeRange = true,
+				timelineIndex = 21,
+				timerEndOffset = -0.35,
+				timerStartOffset = -0.45,
+				uuid = "d576464b-8041-38b2-8670-fe351917b3ce",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 2262,
+							castPosX = 107.58,
+							castPosZ = 105.88,
+							conditions = 
+							{
+								
+								{
+									"d75a4af8-fd42-4a88-ba00-bb5c42b25060",
+									true,
+								},
+							},
+							ignoreWeaveRules = true,
+							isAreaTarget = true,
+							name = "Shukuchi to fixed party spot",
+							uuid = "418cdf6d-d3b3-cb93-9ee3-4a9349fba383",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 14,
+							jobIDList = 
+							{
+								30,
+							},
+							name = "Job = NIN",
+							uuid = "d75a4af8-fd42-4a88-ba00-bb5c42b25060",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Movement - Wicked Wheel",
+				mechanicTime = 100,
+				name = "[Dash] Wicked Wheel - NIN Shukuchi",
+				timeRange = true,
+				timelineIndex = 21,
+				timerEndOffset = -0.35,
+				timerStartOffset = -0.45,
+				uuid = "6557e19c-1d34-5892-b407-a2829fb0cb60",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 34646,
+							conditions = 
+							{
+								
+								{
+									"96c0bcc3-7784-712c-9292-5f0e17b8fb82",
+									true,
+								},
+							},
+							ignoreWeaveRules = true,
+							name = "Slither to nearest healer",
+							targetType = "Healer",
+							uuid = "947487ee-fc0a-8956-9e74-2c0dc7b4e984",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 14,
+							jobIDList = 
+							{
+								41,
+							},
+							name = "Job = VPR",
+							uuid = "96c0bcc3-7784-712c-9292-5f0e17b8fb82",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Movement - Wicked Wheel",
+				mechanicTime = 100,
+				name = "[Dash] Wicked Wheel - VPR Slither",
+				timeRange = true,
+				timelineIndex = 21,
+				timerEndOffset = -0.34999999403954,
+				timerStartOffset = -0.44999998807907,
+				uuid = "38785df2-1fc6-5bc8-b323-c46dd6deb1bb",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 155,
+							conditions = 
+							{
+								
+								{
+									"c9d9fa43-33db-858c-afc9-2d08f583de62",
+									true,
+								},
+							},
+							ignoreWeaveRules = true,
+							name = "Aetherial Manipulation to nearest healer",
+							targetType = "Healer",
+							uuid = "840ba3fb-b155-8f95-9e3a-3c4bf95ffee2",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 14,
+							jobIDList = 
+							{
+								25,
+							},
+							name = "Job = BLM",
+							uuid = "c9d9fa43-33db-858c-afc9-2d08f583de62",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Movement - Wicked Wheel",
+				mechanicTime = 100,
+				name = "[Dash] Wicked Wheel - BLM Aetherial Manipulation",
+				timeRange = true,
+				timelineIndex = 21,
+				timerEndOffset = -0.34999999403954,
+				timerStartOffset = -0.44999998807907,
+				uuid = "fdb4de3f-c90f-6c63-a320-dc2588c729d4",
+				version = 2,
+			},
+		},
+	},
+	[22] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "80101ba5-7963-bec1-f4b0-993b3627b8f5",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Garuda",
+				uuid = "b2e65a07-c442-72ac-bcfb-4d4ee4e69b12",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "data.uwu_feather_whirlwind_safe_arrow = data.uwu_feather_whirlwind_safe_arrow or {\n    whirlwinds = {},\n    rains = {},\n    drawn = false\n}\nlocal state = data.uwu_feather_whirlwind_safe_arrow\n\nlocal aoe = {\n    x = eventArgs.x,\n    y = eventArgs.y,\n    z = eventArgs.z,\n    radius = eventArgs.aoeLength + 1.25\n}\n\nif eventArgs.aoeID == 11073 then\n    state.whirlwinds[eventArgs.entityID] = aoe\nelse\n    state.rains[eventArgs.entityID] = aoe\nend\n\nlocal whirlwindCount = 0\nfor _ in pairs(state.whirlwinds) do\n    whirlwindCount = whirlwindCount + 1\nend\n\nlocal rainCount = 0\nfor _ in pairs(state.rains) do\n    rainCount = rainCount + 1\nend\n\nif state.drawn or whirlwindCount < 2 or rainCount < 5 then\n    self.used = true\n    return\nend\nstate.drawn = true\n\nlocal aoes = {}\nfor _, storedAOE in pairs(state.whirlwinds) do\n    table.insert(aoes, storedAOE)\nend\nfor _, storedAOE in pairs(state.rains) do\n    table.insert(aoes, storedAOE)\nend\n\nlocal desired = { x = 100, z = 100 }\nlocal best\nlocal bestScore\n\nlocal function tryCandidate(x, z)\n    for _, hazard in ipairs(aoes) do\n        local dx = x - hazard.x\n        local dz = z - hazard.z\n        if math.sqrt(dx * dx + dz * dz) < hazard.radius - 0.001 then\n            return\n        end\n    end\n\n    local dx = x - desired.x\n    local dz = z - desired.z\n    local score = dx * dx + dz * dz\n    if not best or score < bestScore then\n        best = { x = x, y = 0, z = z }\n        bestScore = score\n    end\nend\n\ntryCandidate(desired.x, desired.z)\n\nfor _, hazard in ipairs(aoes) do\n    for step = 0, 23 do\n        local angle = (step / 24) * math.pi * 2\n        tryCandidate(\n            hazard.x + math.cos(angle) * hazard.radius,\n            hazard.z + math.sin(angle) * hazard.radius\n        )\n    end\nend\n\nfor first = 1, #aoes - 1 do\n    for second = first + 1, #aoes do\n        local a = aoes[first]\n        local b = aoes[second]\n        local dx = b.x - a.x\n        local dz = b.z - a.z\n        local distance = math.sqrt(dx * dx + dz * dz)\n\n        if distance > 0.001 and distance <= a.radius + b.radius\n            and distance >= math.abs(a.radius - b.radius) then\n            local along = (a.radius * a.radius - b.radius * b.radius + distance * distance)\n                / (2 * distance)\n            local heightSquared = a.radius * a.radius - along * along\n            if heightSquared >= 0 then\n                local height = math.sqrt(heightSquared)\n                local baseX = a.x + along * dx / distance\n                local baseZ = a.z + along * dz / distance\n                local offsetX = -dz * height / distance\n                local offsetZ = dx * height / distance\n                tryCandidate(baseX + offsetX, baseZ + offsetZ)\n                tryCandidate(baseX - offsetX, baseZ - offsetZ)\n            end\n        end\n    end\nend\n\nlocal player = TensorCore.mGetPlayer()\nif player and best then\n    local sourcePos = player.pos\n    local heading = TensorCore.getHeadingToTarget(sourcePos, best)\n    local totalDistance = TensorCore.getDistance2d(sourcePos, best)\n\n    if totalDistance > 0.2 then\n        local tipLength = math.min(1.25, totalDistance * 0.5)\n        local baseLength = totalDistance - tipLength\n        local drawer = TensorCore.getCachedDrawer(0xFF00FFFF, 0xFF0088FF, 0xFF0000FF, 0xFFFFFFFF, 2)\n        drawer:addTimedArrow(4000, sourcePos.x, sourcePos.y, sourcePos.z,\n            heading, baseLength, 0.9, tipLength, 1.8, 0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\n    end\nend\n\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"bfeb244c-4b38-ca41-aeda-820a17c91c17",
+									true,
+								},
+							},
+							name = "Boss-side Safe Arrow",
+							uuid = "88317f58-3e67-efe8-92cc-2f585da84c55",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.aoeID == 11073 or eventArgs.aoeID == 11085",
+							dequeueIfLuaFalse = true,
+							name = "Grand or Feather AOE",
+							uuid = "bfeb244c-4b38-ca41-aeda-820a17c91c17",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Garuda",
+				eventType = 18,
+				mechanicTime = 104,
+				name = "[Draw] Feather + Whirlwind Safe Arrow",
+				timeRange = true,
+				timelineIndex = 22,
+				timerEndOffset = 2,
+				timerStartOffset = -3,
+				uuid = "a3501327-195f-143e-973f-dee0cc8e9180",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 2500,
+							alertPriority = 3,
+							alertTTS = true,
+							alertText = "Move: Feather Rain",
+							alertVolume = 81,
+							conditions = 
+							{
+								
+								{
+									"c12ab2b4-d3fc-a7d9-86a6-dbae1d4085ee",
+									true,
+								},
+								
+								{
+									"3f30ade1-2a4f-1b39-b1c2-39f0f836ece3",
+									true,
+								},
+								
+								{
+									"e8ed94e4-d731-8c32-8ab7-a2a69fe5c5af",
+									true,
+								},
+								
+								{
+									"8f02c4da-c647-07b1-a2ea-dd6e66a2e734",
+									true,
+								},
+							},
+							uuid = "3fa2b07a-dff9-e95c-b72b-0fb00a00bdf3",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs and eventArgs.aoeID == 11085 and eventArgs.contentID == 1644 and eventArgs.friendly == false",
+							dequeueIfLuaFalse = true,
+							name = "Feather Rain AOE",
+							uuid = "55a767d4-275f-73d6-9e5b-c7c8da368709",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							comparator = 3,
+							dequeueIfLuaFalse = true,
+							eventArgType = 4,
+							eventIntValue = 7738,
+							name = "jump",
+							uuid = "c12ab2b4-d3fc-a7d9-86a6-dbae1d4085ee",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							comparator = 3,
+							dequeueIfLuaFalse = true,
+							eventArgType = 2,
+							eventIntValue = 1,
+							name = "animationSlot",
+							uuid = "3f30ade1-2a4f-1b39-b1c2-39f0f836ece3",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.entityContentID == 1644 or eventArgs.entityContentID == 1645 or eventArgs.entityContentID == 1646",
+							dequeueIfLuaFalse = true,
+							name = "Garuda / sisters",
+							uuid = "e8ed94e4-d731-8c32-8ab7-a2a69fe5c5af",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "if self.claimed then return true end\nif data.uwu_p1_feather_called_4 then return false end\ndata.uwu_p1_feather_called_4=true\nself.claimed=true\nreturn true",
+							dequeueIfLuaFalse = true,
+							name = "One call per wave",
+							uuid = "8f02c4da-c647-07b1-a2ea-dd6e66a2e734",
+							version = 3,
+						},
+					},
+				},
+				eventType = 23,
+				mechanicTime = 104,
+				name = "[NAUR] P1 Feather Rain 4 - Move at jump",
+				timeRange = true,
+				timelineIndex = 22,
+				timerEndOffset = 2,
+				timerOffset = -1.5,
+				timerStartOffset = -5,
+				uuid = "7f48da43-3f8d-d9f0-a412-de548f2ce168",
+				version = 2,
+			},
+		},
+	},
+	[23] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Garuda",
+				uuid = "ab4c4ed8-6e0a-a51b-b049-f8b0e2598833",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Garuda",
+							uuid = "c638b37f-bf33-c35a-807f-3aa5109b8399",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player = TensorCore.mGetPlayer()\nif not player or not player.pos then\n    self.used = true\n    return\nend\n\nlocal slot = AnyoneCore.Roster.mySlot()\nlocal targetPos\nlocal label\nlocal colorStart\nlocal colorEnd\n\nif slot == \"T1\" then\n    -- Stand just north of marker 4 while keeping the requested north-facing setup.\n    targetPos = {\n        x = 99.99,\n        y = 0.0,\n        z = 102.0\n    }\n    label = \"MT JUST NORTH OF 4 / FACE GARUDA NORTH\"\n    colorStart = 0xFF66DDFF\n    colorEnd = 0xFF0088FF\nelse\n    -- Use the live position of waymark 4 so the stack arrow lands on the marker.\n    local markX, markY, markZ, markActive = Argus.getWaymarkInfo(8)\n    if markActive and markX and markY and markZ then\n        targetPos = {\n            x = markX,\n            y = markY,\n            z = markZ\n        }\n    else\n        -- Fallback for pulls where waymarks have not been placed yet.\n        targetPos = {\n            x = 99.99,\n            y = 0.0,\n            z = 103.11\n        }\n    end\n    label = \"STACK TIGHT ON 4 (MT EXCLUDED)\"\n    colorStart = 0xFF66FF99\n    colorEnd = 0xFF00AA66\nend\n\nlocal sourcePos = player.pos\nlocal distance = TensorCore.getDistance2d(sourcePos, targetPos)\nif distance > 0.25 then\n    local heading = TensorCore.getHeadingToTarget(sourcePos, targetPos)\n    local tipLength = math.min(2.5, distance * 0.35)\n    local baseLength = math.max(0.1, distance - tipLength)\n    local drawer = TensorCore.getCachedDrawer(\n        colorStart, colorEnd, 0xFFFFFFFF, 0xFF000000, 3\n    )\n    drawer:addTimedArrow(\n        8000,\n        sourcePos.x, sourcePos.y, sourcePos.z,\n        heading,\n        baseLength, 1.25, tipLength, 2.8,\n        0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n    )\nend\n\nAnyoneCore.addTimedWorldText(\n    8000,\n    label,\n    {x = targetPos.x, y = targetPos.y + 1.5, z = targetPos.z},\n    colorStart,\n    true,\n    1.15\n)\n\nself.used = true",
+							displayPath = "Draws - Garuda",
+							name = "MT North / Party 4 Guidance",
+							uuid = "12a158a7-f4d5-9549-927a-c4fb59a9b249",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "Draws - Garuda",
+				mechanicTime = 105,
+				name = "[Draw] Before Second Satin Plumes - MT North / Party 4",
+				timeRange = true,
+				timelineIndex = 23,
+				timerEndOffset = 7,
+				timerStartOffset = 4,
+				uuid = "ca9d74b9-2689-ba1e-aafe-cd665fcb139f",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Cooldown Holds",
+				uuid = "a710bf59-9652-50f6-95c5-cb63d840e226",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							gVar = "ACR_RikuDNC3_CD",
+							gVarValue = 2,
+							name = "CD Off",
+							uuid = "5a60008a-0bad-8310-b10b-c2e41f1a045b",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							gVar = "ACR_RikuDNC3_Flourish",
+							gVarValue = 2,
+							name = "Flourish Off",
+							uuid = "54a697e9-1526-d59a-bac0-6eb1918a56b4",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "Cooldown Holds",
+				enabled = false,
+				mechanicTime = 105,
+				name = "[CD] Disable (105) - disabled for AutoSim",
+				timelineIndex = 23,
+				uuid = "015ac8e1-e188-72b4-923e-58b2da24bca5",
+				version = 2,
+			},
+		},
+	},
+	[26] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "14bcdf09-2d98-107d-5572-06c78363e819",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "[Raid calls]",
+				uuid = "4856cb4e-93a9-714b-9f42-e99e31d54358",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 8000,
+							alertPriority = 2,
+							alertTTS = true,
+							alertText = "Caster take west tether",
+							conditions = 
+							{
+								
+								{
+									"799dfc4e-c873-f1fd-b00d-f5a73c189eea",
+									true,
+								},
+							},
+							uuid = "17ccdb0f-7f7c-158c-b5cb-9f252ac8578c",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore.Roster\nif not Roster or not Roster.current() then return false end\nlocal slot = Roster.mySlot()\nreturn slot == \"R2\"",
+							name = "R2 only",
+							uuid = "799dfc4e-c873-f1fd-b00d-f5a73c189eea",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "[Raid calls]",
+				mechanicTime = 124,
+				name = "[Raid Call][Garuda] Mesohigh",
+				timelineIndex = 26,
+				timerOffset = -1,
+				uuid = "2bc7ce40-829a-1e5d-8791-50992f76d1e7",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 8000,
+							alertPriority = 2,
+							alertTTS = true,
+							alertText = "Tank take East Tether",
+							conditions = 
+							{
+								
+								{
+									"105aa17b-27b9-f298-8c2e-ad12b3d436e1",
+									true,
+								},
+							},
+							uuid = "6a861670-424e-bba8-8195-091ad38d9b77",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore.Roster\nif not Roster or not Roster.current() then return false end\nlocal slot = Roster.mySlot()\nreturn slot == \"T2\"",
+							name = "T2 only",
+							uuid = "105aa17b-27b9-f298-8c2e-ad12b3d436e1",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "[Raid calls]",
+				mechanicTime = 124,
+				name = "[Raid Call][Garuda] Mesohigh - OT",
+				timelineIndex = 26,
+				timerOffset = -1,
+				uuid = "4514e727-5740-a6a2-bf4e-4ce6e7137062",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Garuda",
+				uuid = "91dba304-5bb8-d785-8d37-a6cff17891c0",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player = TensorCore.mGetPlayer()\nif not player or not player.pos then self.used = true; return end\nlocal target = {x = 85, y = 0, z = 100}\nlocal distance = TensorCore.getDistance2d(player.pos, target)\nif distance > 0.25 then\n    local tipLength = math.min(2.0, distance * 0.4)\n    local drawer = TensorCore.getCachedDrawer(0xFFB8FF88, 0xFF55FF55, 0xFF2A8A2A, 0xFFFFFFFF, 3)\n    drawer:addTimedArrow(6000, player.pos.x, player.pos.y, player.pos.z,\n        TensorCore.getHeadingToTarget(player.pos, target),\n        math.max(0.1, distance - tipLength), 1.4, tipLength, 2.6, 0, false,\n        Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"fdaea4a6-7b04-3482-a31c-75b1aee86687",
+									true,
+								},
+							},
+							name = "Arrow to west tether",
+							uuid = "4ea9358b-2c6e-e98e-813b-ceac8b04b0cb",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local roster = AnyoneCore.Roster.current()\nreturn roster ~= nil and AnyoneCore.Roster.mySlot() == \"R2\"",
+							name = "R2 Party Roster",
+							uuid = "fdaea4a6-7b04-3482-a31c-75b1aee86687",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Garuda",
+				mechanicTime = 124,
+				name = "[Draw][Garuda] R2 West Tether Arrow",
+				timeRange = true,
+				timelineIndex = 26,
+				timerEndOffset = 3,
+				timerStartOffset = -1,
+				uuid = "6ad085ab-a8f3-d89b-9cc6-6e3ad1846cd0",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR Guidance",
+				uuid = "fd6c7ad6-be73-54c7-b0f8-b39345c2f695",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "NAUR Guidance",
+				name = "Mesohigh",
+				uuid = "bd9d9d7b-ab61-1ca9-886f-9ea01d9fa37a",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local a = eventArgs\nlocal state = data.uwu_personal_mesohigh_p1\nif not state then state = {}; data.uwu_personal_mesohigh_p1 = state end\nlocal tether = state[a.sourceEntityID]\nif not tether then tether = {}; state[a.sourceEntityID] = tether end\nif a.newTetherID == 4 and a.newTargetID and a.newTargetID > 0 then\n tether.target = a.newTargetID\n tether.expires = Now() + 10000\nelse\n tether.target = nil\nend\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"65e3b07a-372e-01f6-802d-a6247bb381d6",
+									true,
+								},
+							},
+							name = "Track source and current holder",
+							uuid = "cfc5968b-a204-f55e-808e-7b4dbc0ed230",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return (eventArgs.sourceEntityContentID == 1645 or eventArgs.sourceEntityContentID == 1646) and (eventArgs.newTetherID == 4 or eventArgs.oldTetherID == 4)",
+							dequeueIfLuaFalse = true,
+							name = "Mesohigh source / change",
+							uuid = "65e3b07a-372e-01f6-802d-a6247bb381d6",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance/Mesohigh",
+				eventType = 15,
+				loop = true,
+				mechanicTime = 124,
+				name = "[NAUR] Mesohigh P1 - Capture personal tether",
+				timeRange = true,
+				timelineIndex = 26,
+				timerEndOffset = 4,
+				timerStartOffset = -8,
+				uuid = "e5a4b346-f075-0386-b2b1-3ac85d602265",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+				},
+				conditions = 
+				{
+				},
+				displayPath = "NAUR Guidance/Mesohigh",
+				eventType = 12,
+				execute = "local state = data.uwu_personal_mesohigh_p1\nif not state then return end\nlocal Roster = AnyoneCore.Roster\nif not Roster or not Roster.current() or not Roster.isReady() then return end\nlocal slot = Roster.mySlot()\nlocal player = TensorCore.mGetPlayer()\nif not player then return end\nlocal allowed = slot == \"R2\" or slot == \"T2\"\nif not allowed then return end\nlocal now = Now()\nfor sourceID,tether in pairs(state) do\n if tether.target and not tether.done and now < tether.expires then\n  local source = TensorCore.mGetEntity(sourceID)\n  local holder = TensorCore.mGetEntity(tether.target)\n  if source and holder then\n  local onSide = (slot == \"R2\" and source.pos.x < 100) or (slot == \"T2\" and source.pos.x > 100)\n   if onSide then\n    if holder.id == player.id then\n     tether.done = true\n    else\n     local drawer = TensorCore.getStaticDrawer(0xFF00FF00,3)\n     local p,q = source.pos,holder.pos\n     drawer:addLine(p.x,p.y+0.8,p.z,q.x,q.y+0.8,q.z,4,6)\n     drawer:addCircle(p.x,p.y+0.05,p.z,2,false)\n    end\n   end\n  end\n end\nend\nself.used = true",
+				executeType = 2,
+				loop = true,
+				mechanicTime = 124,
+				name = "[NAUR] Mesohigh P1 - Assigned green tether/source",
+				timeRange = true,
+				timelineIndex = 26,
+				timerEndOffset = 4,
+				timerStartOffset = -8,
+				uuid = "def33460-915e-cab1-8c4a-eaa71a7e9ff0",
+				version = 2,
+			},
+		},
+	},
+	[27] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertPriority = 3,
+							alertTTS = true,
+							alertText = "Kill adds & stack middle.",
+							alertVolume = 81,
+							uuid = "8d25e8ad-1263-0299-a7f1-51f9deed2666",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				mechanicTime = 124,
+				name = "MOVE!",
+				timelineIndex = 27,
+				timerOffset = -7.5,
+				uuid = "ce907935-d722-6345-871f-151417190aec",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local boss = TensorCore.mGetEntity(eventArgs.detectionTargetID)\nif not boss or not boss.targetable then return end\n-- Cast cones have their own fixed-direction draw.\nif boss.channelingid == 11091 then return end\nlocal target = TensorCore.mGetEntity(boss.targetid)\nif not target then return end\nlocal heading = TensorCore.getHeadingToTarget(boss.pos, target.pos)\nlocal drawer = TensorCore.getMoogleDrawer()\ndrawer:addCone(boss.pos.x,boss.pos.y,boss.pos.z,11.7,math.rad(90),heading)\n",
+							conditions = 
+							{
+								
+								{
+									"58509288-9d10-94d8-94ab-52de8e211afe",
+									true,
+								},
+							},
+							name = "Short cleave warning",
+							uuid = "4da0798f-f34e-45c5-b11a-91ece69470b0",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Filter",
+							filterTargetType = "ContentID",
+							name = "Garuda Downburst",
+							partyTargetContentID = 1644,
+							uuid = "58509288-9d10-94d8-94ab-52de8e211afe",
+							version = 3,
+						},
+					},
+				},
+				eventType = 12,
+				mechanicTime = 124,
+				name = "[Draw][NAUR] Downburst cone - 124",
+				timeRange = true,
+				timelineIndex = 27,
+				timerStartOffset = -3,
+				uuid = "4cfe1915-01ef-b69e-80fa-06bcbeccc0ea",
+				version = 2,
+			},
+		},
+	},
+	[28] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "2a41c017-de8d-f253-e2eb-bab989005527",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Garuda",
+				uuid = "8a27b6f8-3c5d-396a-ae76-319a2e952326",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Garuda",
+							uuid = "f47df1c0-0c4d-e7c2-81f5-9a35fabfb34b",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player = TensorCore.mGetPlayer()\nif not player or not player.pos then\n    self.used = true\n    return\nend\n\nlocal target = {x = x, y = y, z = z}\nlocal distance = TensorCore.getDistance2d(player.pos, target)\nif distance > 0.25 then\n    local tipLength = math.min(2.0, distance * 0.4)\n    local drawer = TensorCore.getCachedDrawer(\n        0xFFB8FF88,\n        0xFF55FF55,\n        0xFF2A8A2A,\n        0xFFFFFFFF,\n        3\n    )\n    drawer:addTimedArrow(\n        8000,\n        player.pos.x, player.pos.y, player.pos.z,\n        TensorCore.getHeadingToTarget(player.pos, target),\n        math.max(0.1, distance - tipLength),\n        1.4,\n        tipLength,\n        2.6,\n        0,\n        false,\n        Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n    )\n    drawer:addTimedCircle(\n        8000,\n        target.x, target.y, target.z,\n        1.7,\n        0,\n        false,\n        true\n    )\nend\n\nTensorCore.addAlertText(5000, \"PICK UP LIGHT PUDDLE\", 1.0, 2, false)\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"40d0eb71-a56d-4b7f-9e9f-e8788975391b",
+									true,
+								},
+							},
+							displayPath = "Draws - Garuda",
+							name = "Alert and arrow to light puddle",
+							uuid = "01dce23e-3b58-d3ac-a3f6-743b26d1cdcf",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Garuda",
+							uuid = "b1b03c55-17cb-f142-a74c-ebd29fc543db",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local role = AnyoneCore.Roster.mySlot()\nreturn (role == \"H1\" or role == \"H2\")\n    and entityContentID == 2009481\n    and keyID == 2009481\n    and type == 7\n    and flags == 5\n    and state == 0",
+							dequeueIfLuaFalse = true,
+							displayPath = "Draws - Garuda",
+							name = "Light puddle for H1/H2",
+							uuid = "40d0eb71-a56d-4b7f-9e9f-e8788975391b",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Garuda",
+				eventType = 29,
+				mechanicTime = 129,
+				name = "[Draw] Garuda Light Puddle - Healer Pickup",
+				timeRange = true,
+				timelineIndex = 28,
+				timerEndOffset = 6,
+				timerStartOffset = -1,
+				uuid = "3f231c85-552f-df20-908c-eb28810836f1",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ifrit",
+				uuid = "14b06d9f-aee1-0298-b1ec-ed3d5bcef470",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "data.uwu_ifrit_transition_player_arrow = data.uwu_ifrit_transition_player_arrow or {\n    cyclones = {},\n    plumes = {},\n    drawn = false\n}\nlocal state = data.uwu_ifrit_transition_player_arrow\n\nif eventArgs.aoeID == 11103 then\n    state.cyclones[eventArgs.entityID] = {\n        x = eventArgs.x,\n        z = eventArgs.z,\n        heading = eventArgs.heading,\n        length = eventArgs.aoeLength,\n        width = eventArgs.aoeWidth\n    }\nelse\n    state.plumes[eventArgs.entityID] = {\n        x = eventArgs.x,\n        z = eventArgs.z,\n        radius = eventArgs.aoeLength\n    }\nend\n\nlocal cycloneCount = 0\nfor _ in pairs(state.cyclones) do\n    cycloneCount = cycloneCount + 1\nend\n\nlocal plumeCount = 0\nfor _ in pairs(state.plumes) do\n    plumeCount = plumeCount + 1\nend\n\nif state.drawn or cycloneCount < 1 or plumeCount < 10 then\n    self.used = true\n    return\nend\nstate.drawn = true\n\nlocal candidates = {\n    { x = 83.5, y = 0, z = 100 },\n    { x = 116.5, y = 0, z = 100 },\n    { x = 100, y = 0, z = 83.5 },\n    { x = 100, y = 0, z = 116.5 }\n}\n\nlocal best\nlocal bestClearance\n\nfor _, candidate in ipairs(candidates) do\n    local clearance = math.huge\n\n    for _, plume in pairs(state.plumes) do\n        local dx = candidate.x - plume.x\n        local dz = candidate.z - plume.z\n        local distance = math.sqrt(dx * dx + dz * dz)\n        clearance = math.min(clearance, distance - plume.radius - 1)\n    end\n\n    for _, cyclone in pairs(state.cyclones) do\n        local forwardX = math.sin(cyclone.heading)\n        local forwardZ = math.cos(cyclone.heading)\n        local relativeX = candidate.x - cyclone.x\n        local relativeZ = candidate.z - cyclone.z\n        local along = relativeX * forwardX + relativeZ * forwardZ\n        local across = -relativeX * forwardZ + relativeZ * forwardX\n        local halfWidth = cyclone.width / 2\n        local closestAlong = math.max(0, math.min(cyclone.length, along))\n        local closestAcross = math.max(-halfWidth, math.min(halfWidth, across))\n        local deltaAlong = along - closestAlong\n        local deltaAcross = across - closestAcross\n        local distance = math.sqrt(deltaAlong * deltaAlong + deltaAcross * deltaAcross)\n        clearance = math.min(clearance, distance - 1)\n    end\n\n    if clearance >= 0 and (not best or clearance > bestClearance) then\n        best = candidate\n        bestClearance = clearance\n    end\nend\n\nlocal player = TensorCore.mGetPlayer()\nif player and best then\n    local heading = TensorCore.getHeadingToTarget(player.pos, best)\n    local drawer = TensorCore.getCachedDrawer(0xFFB6FFB6, 0xFF55FF55, 0xFFFFFFFF, 0xFF000000, 4)\n    drawer:addTimedArrow(\n        5000,\n        player.pos.x, player.pos.y, player.pos.z,\n        heading,\n        11, 3,\n        4.5, 6,\n        0, false,\n        Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n    )\nend\n\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"3389d81d-362e-fd52-9cb1-6dd9e731890a",
+									true,
+								},
+							},
+							name = "Wide Player Safe-Side Arrow",
+							uuid = "49f24296-b50e-dfe6-896b-982d99bb23f0",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.aoeID == 11103 or eventArgs.aoeID == 11105",
+							dequeueIfLuaFalse = true,
+							name = "Transition Plume or Cyclone",
+							uuid = "3389d81d-362e-fd52-9cb1-6dd9e731890a",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				eventType = 18,
+				loop = true,
+				mechanicTime = 129,
+				name = "[Draw] Ifrit Transition - Player Safe Side Arrow",
+				timeRange = true,
+				timelineIndex = 28,
+				timerEndOffset = 45,
+				timerStartOffset = -10,
+				uuid = "fd6dd169-23ea-ba63-a252-d37a22ef62bf",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 2500,
+							alertPriority = 3,
+							alertTTS = true,
+							alertText = "Move: Feather Rain",
+							alertVolume = 81,
+							conditions = 
+							{
+								
+								{
+									"24a8b2dc-93f7-35d3-ac94-9f525be45022",
+									true,
+								},
+								
+								{
+									"359c6176-1958-8e5a-a78f-2221e9406f50",
+									true,
+								},
+								
+								{
+									"f0e2bd1c-0ae5-e7e1-ae19-323f63bbb383",
+									true,
+								},
+								
+								{
+									"b7d98140-f053-d4b6-9f47-2c830239a2ab",
+									true,
+								},
+							},
+							uuid = "d264fd39-7a80-917b-a2ae-42867ab601bc",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs and eventArgs.aoeID == 11085 and eventArgs.contentID == 1644 and eventArgs.friendly == false",
+							dequeueIfLuaFalse = true,
+							name = "Feather Rain AOE",
+							uuid = "b3db334e-b65f-49f5-b24c-6d54d73323e0",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							comparator = 3,
+							dequeueIfLuaFalse = true,
+							eventArgType = 4,
+							eventIntValue = 7738,
+							name = "jump",
+							uuid = "24a8b2dc-93f7-35d3-ac94-9f525be45022",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							comparator = 3,
+							dequeueIfLuaFalse = true,
+							eventArgType = 2,
+							eventIntValue = 1,
+							name = "animationSlot",
+							uuid = "359c6176-1958-8e5a-a78f-2221e9406f50",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.entityContentID == 1644 or eventArgs.entityContentID == 1645 or eventArgs.entityContentID == 1646",
+							dequeueIfLuaFalse = true,
+							name = "Garuda / sisters",
+							uuid = "f0e2bd1c-0ae5-e7e1-ae19-323f63bbb383",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "if self.claimed then return true end\nif data.uwu_p1_feather_called_5 then return false end\ndata.uwu_p1_feather_called_5=true\nself.claimed=true\nreturn true",
+							dequeueIfLuaFalse = true,
+							name = "One call per wave",
+							uuid = "b7d98140-f053-d4b6-9f47-2c830239a2ab",
+							version = 3,
+						},
+					},
+				},
+				eventType = 23,
+				mechanicTime = 129,
+				name = "[NAUR] P1 Feather Rain 5 - Move at jump",
+				timeRange = true,
+				timelineIndex = 28,
+				timerEndOffset = 2,
+				timerOffset = -2.5,
+				timerStartOffset = -5,
+				uuid = "f4b8ece1-a7a1-ff53-96e8-7d270ffd8fc1",
+				version = 2,
+			},
+		},
+	},
+	[30] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "94877f38-9bb2-9604-37be-842aed08a4c8",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+	},
+	[32] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local boss = TensorCore.mGetEntity(eventArgs.detectionTargetID)\nif not boss or not boss.targetable then return end\n-- Cast cones have their own fixed-direction draw.\nif boss.channelingid == 11091 then return end\nlocal target = TensorCore.mGetEntity(boss.targetid)\nif not target then return end\nlocal heading = TensorCore.getHeadingToTarget(boss.pos, target.pos)\nlocal drawer = TensorCore.getMoogleDrawer()\ndrawer:addCone(boss.pos.x,boss.pos.y,boss.pos.z,11.7,math.rad(90),heading)\n",
+							conditions = 
+							{
+								
+								{
+									"1fd23b42-2228-1ef3-b225-37944ade6d35",
+									true,
+								},
+							},
+							name = "Short cleave warning",
+							uuid = "f41afaf3-a41d-ed90-998f-0f805609301f",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Filter",
+							filterTargetType = "ContentID",
+							name = "Garuda Downburst",
+							partyTargetContentID = 1644,
+							uuid = "1fd23b42-2228-1ef3-b225-37944ade6d35",
+							version = 3,
+						},
+					},
+				},
+				eventType = 12,
+				mechanicTime = 156,
+				name = "[Draw][NAUR] Downburst cone - 156",
+				timeRange = true,
+				timelineIndex = 32,
+				timerStartOffset = -3,
+				uuid = "fd206647-093b-d5b8-82b6-6571403fb062",
+				version = 2,
+			},
+		},
+	},
+	[36] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\optimization",
+				uuid = "b4e70e82-2d00-fd5e-7900-ebf0171f7012",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\optimization",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ifrit",
+				uuid = "82f923dc-cfcd-9dc1-b198-5563abf158ad",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ifrit",
+							uuid = "e1082ccd-d6d6-2fd4-9b09-5ba35ce7df7b",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 4500,
+							alertPriority = 3,
+							alertScale = 0.9,
+							alertTTS = true,
+							alertText = "OT: PROVOKE IFRIT / MOVE TO C",
+							conditions = 
+							{
+								
+								{
+									"0f1a35e8-1b7c-5970-800a-de16f94545d4",
+									true,
+								},
+							},
+							displayPath = "Draws - Ifrit",
+							name = "OT Provoke and Move to C",
+							uuid = "a9fd9459-1991-edb4-b584-b121495dcc1b",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player = TensorCore.mGetPlayer()\nif not player or not player.pos then\n    self.used = true\n    return\nend\n\nlocal markX, markY, markZ, markActive = Argus.getWaymarkInfo(3)\nif not markActive or not markX or not markY or not markZ then\n    self.used = true\n    return\nend\n\nlocal targetPos = {\n    x = markX,\n    y = player.pos.y,\n    z = markZ\n}\nlocal distance = TensorCore.getDistance2d(player.pos, targetPos)\nif distance and distance > 0.25 then\n    local heading = TensorCore.getHeadingToTarget(player.pos, targetPos)\n    local tipLength = math.min(2.5, distance * 0.35)\n    local baseLength = math.max(0.1, distance - tipLength)\n    local drawer = TensorCore.getCachedDrawer(\n        0xFFCC99FF,\n        0xFF8833CC,\n        0xFFFFFFFF,\n        0xFF000000,\n        3\n    )\n    drawer:addTimedArrow(\n        4500,\n        player.pos.x, player.pos.y, player.pos.z,\n        heading,\n        baseLength, 1.25, tipLength, 2.8,\n        0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n    )\nend\n\nAnyoneCore.addTimedWorldText(\n    4500,\n    \"OT: PROVOKE IFRIT / MOVE TO C\",\n    {x = markX, y = markY + 1.5, z = markZ},\n    0xFFCC99FF,\n    true,\n    1.1\n)\n\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"0f1a35e8-1b7c-5970-800a-de16f94545d4",
+									true,
+								},
+							},
+							displayPath = "Draws - Ifrit",
+							name = "Arrow to C Marker",
+							uuid = "95313cf7-3d3b-9f7f-96ef-4641ad2bd86f",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ifrit",
+							uuid = "fa99252c-cd2a-ca71-aabf-5b93303abb71",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return AnyoneCore.Roster.mySlot() == \"T2\"",
+							dequeueIfLuaFalse = true,
+							displayPath = "Draws - Ifrit",
+							name = "Off Tank (T2)",
+							uuid = "0f1a35e8-1b7c-5970-800a-de16f94545d4",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				mechanicTime = 300,
+				name = "[Alert] Ifrit Start - OT Provoke and Move to C",
+				timeRange = true,
+				timelineIndex = 36,
+				timerEndOffset = 4,
+				timerStartOffset = 1,
+				uuid = "1261791d-ec4a-6546-8ab8-d7d54c1205f1",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Cooldown Holds",
+				uuid = "09b70b71-5be4-f0db-a898-3b2da66eb512",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							gVar = "ACR_RikuDNC3_CD",
+							name = "CD On",
+							uuid = "396bfa3f-bb6c-3950-80ec-a2034cab07a8",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							gVar = "ACR_RikuDNC3_Flourish",
+							name = "Flourish On",
+							uuid = "c4e9f1c3-b2bb-7d15-ba51-0a4ca5874680",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "Cooldown Holds",
+				mechanicTime = 300,
+				name = "[CD] Enable at 300",
+				timelineIndex = 36,
+				uuid = "712f6ecc-347e-0a46-9112-1e32eaf1994f",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Titan NAUR",
+				uuid = "8db3468e-1c3b-9d9a-9845-c566c974a34e",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local Roster = AnyoneCore.Roster\nif Roster and Roster.current() ~= nil and Roster.isReady() then\n  local slot = Roster.mySlot()\n\n  if slot == \"T1\" or slot == \"T2\" then\n    self.used = true\n  elseif slot then\n    local playerID = Roster.idOf(slot)\n    local player = Roster.entOf(slot)\n\n    if playerID and player and player.pos then\n      local x, y, z, isActive = Argus.getWaymarkInfo(1)\n\n      if isActive then\n        local sourcePos = player.pos\n        local targetPos = { x = x, y = sourcePos.y, z = z }\n        local heading = TensorCore.getHeadingToTarget(sourcePos, targetPos)\n        local totalDistance = TensorCore.getDistance2d(sourcePos, targetPos)\n\n        if totalDistance > 0.2 then\n          local tipLength = math.min(3.0, totalDistance * 0.4)\n          local baseLength = totalDistance - tipLength\n          local drawer = TensorCore.getStaticDrawer(0xFFFF00FF, 3.0, 0)\n\n          if drawer then\n            drawer:addTimedArrow(\n              5000,\n              sourcePos.x, sourcePos.y, sourcePos.z,\n              heading,\n              baseLength, 1.2, tipLength, 2.0,\n              0, false\n            )\n            self.used = true\n          end\n        else\n          self.used = true\n        end\n      end\n    end\n  end\nend",
+							name = "Arrow to A",
+							uuid = "c724fc03-1647-43f1-8600-2f2a8035037c",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "Draws - Titan NAUR",
+				mechanicTime = 300,
+				name = "[Draw][NAUR] Non-tanks to A at 302",
+				timeRange = true,
+				timelineIndex = 36,
+				timerEndOffset = 5,
+				timerStartOffset = 2,
+				uuid = "4ced9432-a97e-b246-8ee6-1e23cf4174e2",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local boss = TensorCore.mGetEntity(eventArgs.detectionTargetID)\nif not boss or not boss.targetable then return end\n-- Cast cones have their own fixed-direction draw.\nif boss.channelingid == 11091 then return end\nlocal target = TensorCore.mGetEntity(boss.targetid)\nif not target then return end\nlocal heading = TensorCore.getHeadingToTarget(boss.pos, target.pos)\nlocal drawer = TensorCore.getMoogleDrawer()\ndrawer:addCone(boss.pos.x,boss.pos.y,boss.pos.z,15,math.rad(120),heading)\n",
+							conditions = 
+							{
+								
+								{
+									"238a3303-ef7f-c9b6-8f4e-1523be2142f6",
+									true,
+								},
+							},
+							name = "Mechanic geometry",
+							uuid = "201a6fe0-eec9-09d3-8acf-443096b82656",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Filter",
+							filterTargetType = "ContentID",
+							name = "Ifrit Incinerate",
+							partyTargetContentID = 1185,
+							uuid = "238a3303-ef7f-c9b6-8f4e-1523be2142f6",
+							version = 3,
+						},
+					},
+				},
+				enabled = false,
+				eventType = 12,
+				mechanicTime = 300,
+				name = "[Draw][NAUR] Ifrit Incinerate target cone",
+				timeRange = true,
+				timelineIndex = 36,
+				timerEndOffset = 110,
+				timerStartOffset = -120,
+				uuid = "92c5bc24-a22d-b671-9749-1cdf80c69c0a",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR ",
+				uuid = "47ea1d6c-ba76-c145-97ac-1531840dada0",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "NAUR ",
+				name = " Automation",
+				uuid = "a06c7f6f-7b7d-fa8b-9771-55c111545cbe",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Misc",
+							conditions = 
+							{
+								
+								{
+									"d19a4980-34d7-c84f-8790-e853a6bc27df",
+									true,
+								},
+								
+								{
+									"ad88e8d3-732e-0c0c-ab1a-d80f2a89cf32",
+									true,
+								},
+								
+								{
+									"58983914-1bbe-ae66-830b-d674513f9ee8",
+									true,
+								},
+							},
+							name = "Target Ifrit",
+							setTarget = true,
+							targetType = "Event Entity",
+							uuid = "a91c7afb-d488-68a5-b790-6ea9da906ea6",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "-- Independent UWU settings; available before GUI or targeting reads.\nif not _G.UWU_NAURSettingsIOReady then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UWU-NAUR.lua]]\n local saved={}\n if FileExists(path) then\n  local loaded=FileLoad(path)\n  if type(loaded)==\"table\" then saved=loaded end\n end\n local current=_G.UWU_NAURGuiState\n local old=_G.UWU_NAUR_AnnihilationAssignments or {}\n local defaults={automaticOpen=true,ultimaOpen=true,orbsOpen=true,autoTarget=_G.NAUR_UWU_AutoTarget~=false,melee=(old.melee==2 and 2 or 1),solo=old.solo or 0}\n local keys={\"automaticOpen\",\"ultimaOpen\",\"orbsOpen\",\"autoTarget\",\"melee\",\"solo\"}\n local C={}\n for _,key in ipairs(keys) do\n  local value=current and current[key]\n  if value==nil then value=saved[key] end\n  if type(defaults[key])==\"boolean\" then\n   C[key]=type(value)==\"boolean\" and value or defaults[key]\n   if value==false then C[key]=false end\n  else\n   C[key]=type(value)==\"number\" and value>=0 and value<=2 and value%1==0 and value or defaults[key]\n  end\n end\n if C.melee==0 then C.melee=1 end\n function C.save()\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local values={}\n  for _,key in ipairs(keys) do values[key]=C[key] end\n  FileSave(path,values)\n end\n _G.UWU_NAURGuiState=C\n _G.UWU_NAUR_AnnihilationAssignments={melee=C.melee,solo=C.solo}\n _G.NAUR_UWU_AutoTarget=C.autoTarget\n C.save()\n _G.UWU_NAURSettingsIOReady=true\nend\n-- Upgrade only an unset melee assignment; preserve either explicit role choice.\ndo\n local preferences=_G.UWU_NAURGuiState\n if preferences and preferences.melee==0 then\n  preferences.melee=1\n  local assignment=_G.UWU_NAUR_AnnihilationAssignments\n  if assignment then assignment.melee=1 end\n  preferences.save()\n end\nend\nif data.uwuAutoSim or data.uwuBRDAutoSim or data.uwuBLMAutoSim or data.uwuRPRAutoSim then return false end\nreturn (_G.UWU_NAURGuiState.autoTarget~=false)",
+							name = "Shared targeting enabled / no AutoSim owner",
+							uuid = "d19a4980-34d7-c84f-8790-e853a6bc27df",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgType = 3,
+							name = "Became targetable",
+							uuid = "58983914-1bbe-ae66-830b-d674513f9ee8",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgOptionType = 2,
+							eventEntityContentID = 1185,
+							name = "Ifrit",
+							uuid = "ad88e8d3-732e-0c0c-ab1a-d80f2a89cf32",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR / Automation",
+				eventType = 26,
+				loop = true,
+				mechanicTime = 300,
+				name = "[NAUR] [Target] Ifrit - Acquire",
+				timeRange = true,
+				timelineIndex = 36,
+				timerEndOffset = 12,
+				timerStartOffset = -8,
+				uuid = "99916c62-fe6b-16cf-bc20-9c1b4644b3b6",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Misc",
+							conditions = 
+							{
+								
+								{
+									"3c0743a2-614b-235d-977e-58aa025d0483",
+									true,
+								},
+								
+								{
+									"4eaef795-bbcd-3c92-85e3-8c95d49ea364",
+									true,
+								},
+								
+								{
+									"40ef1d13-59c7-ccdd-b103-43edd07915cb",
+									true,
+								},
+							},
+							endIfUsed = true,
+							name = "Target - Ifrit",
+							setTarget = true,
+							targetContentID = 1185,
+							targetType = "ContentID",
+							uuid = "579974b0-375e-03ec-9279-a65965a2dd7a",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "-- Independent UWU settings; available before GUI or targeting reads.\nif not _G.UWU_NAURSettingsIOReady then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UWU-NAUR.lua]]\n local saved={}\n if FileExists(path) then\n  local loaded=FileLoad(path)\n  if type(loaded)==\"table\" then saved=loaded end\n end\n local current=_G.UWU_NAURGuiState\n local old=_G.UWU_NAUR_AnnihilationAssignments or {}\n local defaults={automaticOpen=true,ultimaOpen=true,orbsOpen=true,autoTarget=_G.NAUR_UWU_AutoTarget~=false,melee=(old.melee==2 and 2 or 1),solo=old.solo or 0}\n local keys={\"automaticOpen\",\"ultimaOpen\",\"orbsOpen\",\"autoTarget\",\"melee\",\"solo\"}\n local C={}\n for _,key in ipairs(keys) do\n  local value=current and current[key]\n  if value==nil then value=saved[key] end\n  if type(defaults[key])==\"boolean\" then\n   C[key]=type(value)==\"boolean\" and value or defaults[key]\n   if value==false then C[key]=false end\n  else\n   C[key]=type(value)==\"number\" and value>=0 and value<=2 and value%1==0 and value or defaults[key]\n  end\n end\n if C.melee==0 then C.melee=1 end\n function C.save()\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local values={}\n  for _,key in ipairs(keys) do values[key]=C[key] end\n  FileSave(path,values)\n end\n _G.UWU_NAURGuiState=C\n _G.UWU_NAUR_AnnihilationAssignments={melee=C.melee,solo=C.solo}\n _G.NAUR_UWU_AutoTarget=C.autoTarget\n C.save()\n _G.UWU_NAURSettingsIOReady=true\nend\n-- Upgrade only an unset melee assignment; preserve either explicit role choice.\ndo\n local preferences=_G.UWU_NAURGuiState\n if preferences and preferences.melee==0 then\n  preferences.melee=1\n  local assignment=_G.UWU_NAUR_AnnihilationAssignments\n  if assignment then assignment.melee=1 end\n  preferences.save()\n end\nend\nif data.uwuAutoSim or data.uwuBRDAutoSim or data.uwuBLMAutoSim or data.uwuRPRAutoSim then return false end\nreturn (_G.UWU_NAURGuiState.autoTarget~=false)",
+							name = "Shared targeting enabled / no AutoSim owner",
+							uuid = "3c0743a2-614b-235d-977e-58aa025d0483",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local t=TensorCore.mGetTarget()\nreturn t==nil or not t.alive or not t.targetable",
+							name = "No living hostile target",
+							uuid = "4eaef795-bbcd-3c92-85e3-8c95d49ea364",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Filter",
+							filterTargetType = "ContentID",
+							name = "Ifrit",
+							partyTargetContentID = 1185,
+							uuid = "40ef1d13-59c7-ccdd-b103-43edd07915cb",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR / Automation",
+				loop = true,
+				mechanicTime = 300,
+				name = "[NAUR] [Target] Ifrit Reacquire",
+				throttleTime = 250,
+				timeRange = true,
+				timelineIndex = 36,
+				timerEndOffset = 153,
+				uuid = "9ad811e0-df68-45c2-a4d2-f57b2bcf0583",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"fd073fb4-c561-2ec4-8ccd-ac308be5732a",
+									true,
+								},
+								
+								{
+									"1d479f13-79a4-4cc2-acb0-669d8dd61a6d",
+									true,
+								},
+								
+								{
+									"9400a390-a0e7-292a-ab35-21fae175f382",
+									true,
+								},
+							},
+							gVar = "ACR_TensorNuke4_Potion",
+							uuid = "7d235db8-82eb-a7c5-8ef5-177112ec50f2",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 8,
+							dequeueIfLuaFalse = true,
+							localmapid = 777,
+							name = "UWU only",
+							uuid = "fd073fb4-c561-2ec4-8ccd-ac308be5732a",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgOptionType = 2,
+							eventEntityContentID = 1185,
+							name = "Ifrit",
+							uuid = "1d479f13-79a4-4cc2-acb0-669d8dd61a6d",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgType = 3,
+							name = "Became targetable",
+							uuid = "9400a390-a0e7-292a-ab35-21fae175f382",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR / Automation",
+				eventType = 26,
+				loop = true,
+				mechanicTime = 300,
+				name = "[NAUR] Potion on at Ifrit",
+				timeRange = true,
+				timelineIndex = 36,
+				timerEndOffset = 20,
+				timerStartOffset = -15,
+				uuid = "b02e864a-f17d-6f73-b01b-e3876d9dedb5",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR Guidance",
+				uuid = "8891db78-980b-1d5d-a6da-b0177f616dda",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertPriority = 3,
+							alertScale = 0.85,
+							alertTTS = true,
+							alertText = "Move to A",
+							conditions = 
+							{
+								
+								{
+									"467e04ec-b666-26f5-ae60-e03cc9f46496",
+									true,
+								},
+							},
+							uuid = "29c3a91d-baf1-4a87-998c-3234d55796f7",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster=AnyoneCore.Roster\nif not Roster or not Roster.current() then return false end\nlocal slot=Roster.mySlot()\nreturn slot==\"H1\" or slot==\"H2\" or slot==\"M1\" or slot==\"M2\" or slot==\"R1\" or slot==\"R2\"",
+							name = "Roster non-tank",
+							uuid = "467e04ec-b666-26f5-ae60-e03cc9f46496",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance",
+				mechanicTime = 300,
+				name = "[NAUR] Ifrit 300 - Non-tanks move to A",
+				timeRange = true,
+				timelineIndex = 36,
+				timerEndOffset = 1,
+				uuid = "94e71b80-bf97-9eda-b52a-0f25e8a49d9a",
+				version = 2,
+			},
+		},
+	},
+	[38] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\mitigation",
+				uuid = "d6e9c9a2-52ab-e506-fe44-d450cb81ecf2",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\mitigation",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ifrit",
+				uuid = "9bd384a7-44a0-ddb8-b7f2-e6b7eba2228b",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local roster = AnyoneCore and AnyoneCore.Roster\nif roster == nil or roster.current() == nil or not roster.isReady() then\n  return\nend\nlocal slot = roster.mySlot()\nif slot == nil then\n  return\nend\nif slot == \"T1\" or slot == \"T2\" then\n  self.used = true\n  return\nend\n\nlocal state = data.uwu_hellfire_waymark_guidance\nif state ~= nil and state.aDrawn then\n  self.used = true\n  return\nend\nlocal player = TensorCore.mGetPlayer()\nif not player or not player.pos then\n  return\nend\nlocal x, y, z, active = Argus.getWaymarkInfo(1)\nif not active then\n  return\nend\nlocal sourcePos = player.pos\nlocal targetPos = { x = x, y = y, z = z }\nlocal heading = TensorCore.getHeadingToTarget(sourcePos, targetPos)\nlocal totalDistance = TensorCore.getDistance2d(sourcePos, targetPos)\nif totalDistance < 0.1 then\n  self.used = true\n  return\nend\nlocal scale = math.min(1, totalDistance / 15)\nlocal tipLength = math.min(totalDistance, math.max(2, 3 * scale))\nlocal baseLength = totalDistance - tipLength\nlocal baseWidth = math.max(0.5, scale)\nlocal tipWidth = math.max(1.5, 3 * scale)\nlocal drawer = TensorCore.getCachedDrawer(0xFF00FFFF, 0xFF0088FF, 0xFF0000FF, 0xFFFFFFFF, 2)\ndrawer:addTimedArrow(4000, sourcePos.x, sourcePos.y, sourcePos.z, heading, baseLength, baseWidth, tipLength, tipWidth, 0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nstate = state or {}\ndata.uwu_hellfire_waymark_guidance = state\nstate.aDrawn = true\nself.used = true",
+							name = "Guide Non-Tanks to A",
+							uuid = "2507ea9f-e8f0-e682-a1bc-3a3aeadb8e6f",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local roster = AnyoneCore and AnyoneCore.Roster\nif roster == nil or roster.current() == nil or not roster.isReady() then\n  return\nend\nlocal slot = roster.mySlot()\nif slot == nil then\n  return\nend\nif slot ~= \"T1\" then\n  self.used = true\n  return\nend\n\nlocal state = data.uwu_hellfire_waymark_guidance\nif state ~= nil and state.mtDrawn then\n  self.used = true\n  return\nend\nlocal player = TensorCore.mGetPlayer()\nif not player or not player.pos then\n  return\nend\nlocal x, y, z, active = Argus.getWaymarkInfo(3)\nif not active then\n  return\nend\nlocal sourcePos = player.pos\nlocal targetPos = { x = x, y = y, z = z }\nlocal heading = TensorCore.getHeadingToTarget(sourcePos, targetPos)\nlocal totalDistance = TensorCore.getDistance2d(sourcePos, targetPos)\nif totalDistance < 0.1 then\n  self.used = true\n  return\nend\nlocal scale = math.min(1, totalDistance / 15)\nlocal tipLength = math.min(totalDistance, math.max(2, 3 * scale))\nlocal baseLength = totalDistance - tipLength\nlocal baseWidth = math.max(0.5, scale)\nlocal tipWidth = math.max(1.5, 3 * scale)\nlocal drawer = TensorCore.getCachedDrawer(0xFF00FFFF, 0xFF0088FF, 0xFF0000FF, 0xFFFFFFFF, 2)\ndrawer:addTimedArrow(4000, sourcePos.x, sourcePos.y, sourcePos.z, heading, baseLength, baseWidth, tipLength, tipWidth, 0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nstate = state or {}\ndata.uwu_hellfire_waymark_guidance = state\nstate.mtDrawn = true\nself.used = true",
+							name = "Guide MT to C",
+							uuid = "b99f2add-1e10-6d3b-9927-fb1cf348fb9c",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "Draws - Ifrit",
+				mechanicTime = 307,
+				name = "[Draw] Hellfire - Non-Tanks to A / MT to C",
+				timeRange = true,
+				timelineIndex = 38,
+				timerEndOffset = 5,
+				timerStartOffset = 1,
+				uuid = "ffd1e756-3b61-63eb-bab9-2c13c4088f6c",
+				version = 2,
+			},
+		},
+	},
+	[39] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\optimization",
+				uuid = "0269065f-775a-6b73-4ee3-ea115eacd66f",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\optimization",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Knockback",
+				uuid = "80440b9b-babb-9595-84b7-cdee3af10db5",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 7548,
+							endIfUsed = true,
+							name = "Arm's Length before Vulcan Burst",
+							uuid = "930008cd-f06f-b10d-8775-4892522c38fb",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "Knockback",
+				mechanicTime = 315,
+				name = "[CD] Arm's Length - Vulcan Burst",
+				timelineIndex = 39,
+				timerOffset = -2,
+				uuid = "358c5d0a-ba4f-36ee-a9c5-765eef5b4d0f",
+				version = 2,
+			},
+		},
+	},
+	[40] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ifrit",
+				uuid = "eb8f94a2-9930-11f9-bc4e-16e77c1e1cf8",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ifrit",
+							uuid = "04a57abc-c44a-4c51-b650-af6c938bbdfd",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 4000,
+							alertPriority = 3,
+							alertScale = 0.9,
+							alertTTS = true,
+							alertText = "OT: INVULN BEFORE INCINERATE",
+							conditions = 
+							{
+								
+								{
+									"249e8570-f3f1-00fb-97ac-d361f49ae166",
+									true,
+								},
+							},
+							displayPath = "Draws - Ifrit",
+							name = "OT Invuln Before Incinerate",
+							uuid = "a5d8f600-eca7-3705-8996-2375a38446f9",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ifrit",
+							uuid = "0811b95c-2aef-68d4-9261-e79df7f3f63a",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return AnyoneCore.Roster.mySlot() == \"T2\"",
+							dequeueIfLuaFalse = true,
+							displayPath = "Draws - Ifrit",
+							name = "Off Tank (T2)",
+							uuid = "249e8570-f3f1-00fb-97ac-d361f49ae166",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				mechanicTime = 318,
+				name = "[Alert] Ifrit - OT Invuln Before Incinerate",
+				timeRange = true,
+				timelineIndex = 40,
+				timerEndOffset = -2,
+				timerStartOffset = -5,
+				uuid = "d828d796-88c5-4603-992f-0bc731936c75",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local boss = TensorCore.mGetEntity(eventArgs.detectionTargetID)\nif not boss or not boss.targetable then return end\n-- Cast cones have their own fixed-direction draw.\nif boss.channelingid == 11091 then return end\nlocal target = TensorCore.mGetEntity(boss.targetid)\nif not target then return end\nlocal heading = TensorCore.getHeadingToTarget(boss.pos, target.pos)\nlocal drawer = TensorCore.getMoogleDrawer()\ndrawer:addCone(boss.pos.x,boss.pos.y,boss.pos.z,15,math.rad(120),heading)\n",
+							conditions = 
+							{
+								
+								{
+									"cb9ff6ef-2cb0-e8c9-b862-bcc8b77f574d",
+									true,
+								},
+							},
+							name = "Short cleave warning",
+							uuid = "3295d41d-26a4-fd8e-a475-fe53b2b430cc",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Filter",
+							filterTargetType = "ContentID",
+							name = "Ifrit Incinerate",
+							partyTargetContentID = 1185,
+							uuid = "cb9ff6ef-2cb0-e8c9-b862-bcc8b77f574d",
+							version = 3,
+						},
+					},
+				},
+				eventType = 12,
+				mechanicTime = 318,
+				name = "[Draw][NAUR] Ifrit opening Incinerate sequence - until 330",
+				timeRange = true,
+				timelineIndex = 40,
+				timerEndOffset = 12,
+				timerStartOffset = -18,
+				uuid = "d86c1c53-9606-9395-8f74-cf2850430731",
+				version = 2,
+			},
+		},
+	},
+	[41] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local boss = TensorCore.mGetEntity(eventArgs.detectionTargetID)\nif not boss or not boss.targetable then return end\n-- Cast cones have their own fixed-direction draw.\nif boss.channelingid == 11091 then return end\nlocal target = TensorCore.mGetEntity(boss.targetid)\nif not target then return end\nlocal heading = TensorCore.getHeadingToTarget(boss.pos, target.pos)\nlocal drawer = TensorCore.getMoogleDrawer()\ndrawer:addCone(boss.pos.x,boss.pos.y,boss.pos.z,15,math.rad(120),heading)\n",
+							conditions = 
+							{
+								
+								{
+									"3fdcbe80-273d-6705-9a90-86810677c64e",
+									true,
+								},
+							},
+							name = "Short cleave warning",
+							uuid = "edc0da88-2828-480f-ae6b-a19583a72c75",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Filter",
+							filterTargetType = "ContentID",
+							name = "Ifrit Incinerate",
+							partyTargetContentID = 1185,
+							uuid = "3fdcbe80-273d-6705-9a90-86810677c64e",
+							version = 3,
+						},
+					},
+				},
+				enabled = false,
+				eventType = 12,
+				mechanicTime = 321,
+				name = "[Draw][NAUR] Incinerate cone - 321",
+				timeRange = true,
+				timelineIndex = 41,
+				timerStartOffset = -3,
+				uuid = "547da2f2-679d-b35b-ad5e-cbf2adf339ef",
+				version = 2,
+			},
+		},
+	},
+	[42] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ifrit",
+				uuid = "d5616de0-055d-964e-9a15-fface97d57a8",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ifrit",
+							uuid = "61fefd67-3394-6186-9930-4eb8d859de8c",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 4500,
+							alertPriority = 3,
+							alertScale = 0.9,
+							alertTTS = true,
+							alertText = "MT: PROVOKE IFRIT, MOVE TO C",
+							conditions = 
+							{
+								
+								{
+									"2f636932-171e-725f-92fc-59a7223b4e43",
+									true,
+								},
+							},
+							displayPath = "Draws - Ifrit",
+							name = "MT Provoke and Move to C",
+							uuid = "73990ebd-2f6f-90ee-8457-80f60d071fcd",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ifrit",
+							uuid = "6cc312cc-e3da-5fa3-aebd-5b6389c05b97",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return AnyoneCore.Roster.mySlot() == \"T1\"",
+							dequeueIfLuaFalse = true,
+							displayPath = "Draws - Ifrit",
+							name = "Main Tank (T1)",
+							uuid = "2f636932-171e-725f-92fc-59a7223b4e43",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				mechanicTime = 325,
+				name = "[Alert] Ifrit - MT Provoke and Move to C",
+				timeRange = true,
+				timelineIndex = 42,
+				timerEndOffset = 3,
+				uuid = "1c110363-9b68-6178-9d98-421e55f4fa09",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local boss = TensorCore.mGetEntity(eventArgs.detectionTargetID)\nif not boss or not boss.targetable then return end\n-- Cast cones have their own fixed-direction draw.\nif boss.channelingid == 11091 then return end\nlocal target = TensorCore.mGetEntity(boss.targetid)\nif not target then return end\nlocal heading = TensorCore.getHeadingToTarget(boss.pos, target.pos)\nlocal drawer = TensorCore.getMoogleDrawer()\ndrawer:addCone(boss.pos.x,boss.pos.y,boss.pos.z,15,math.rad(120),heading)\n",
+							conditions = 
+							{
+								
+								{
+									"353abb17-f530-28db-a36f-8326a6142210",
+									true,
+								},
+							},
+							name = "Short cleave warning",
+							uuid = "a03dce94-1f45-cda5-9077-788c2a206e87",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Filter",
+							filterTargetType = "ContentID",
+							name = "Ifrit Incinerate",
+							partyTargetContentID = 1185,
+							uuid = "353abb17-f530-28db-a36f-8326a6142210",
+							version = 3,
+						},
+					},
+				},
+				enabled = false,
+				eventType = 12,
+				mechanicTime = 325,
+				name = "[Draw][NAUR] Incinerate cone - 325",
+				timeRange = true,
+				timelineIndex = 42,
+				timerStartOffset = -3,
+				uuid = "50d501c3-473d-b356-a11d-e584b784395e",
+				version = 2,
+			},
+		},
+	},
+	[43] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\core",
+				uuid = "6ce48008-48b3-cde4-9ebe-513e7632f9f8",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\core",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "53ba4ac6-19bc-d2aa-60d3-50e0d678bb96",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\optimization",
+				uuid = "7ffe5782-4509-112e-f1ca-c424e236b912",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\optimization",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ifrit",
+				uuid = "e62126ac-9218-ef61-ab99-e88d08ca4b00",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local e = TensorCore.mGetEntity(eventArgs.entityID)\nif not e or not e.pos or not (e.pos.x > 100 and e.pos.z <= 103) then\n    self.used = true\n    return\nend\nAnyoneCore.addTimedWorldTextOnEnt(45000, \"NE\", eventArgs.entityID, 0xFFFFFFFF, true, 2.5, 2.5)\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"3beebc8f-db73-8be6-b225-23b059ecc9b7",
+									true,
+								},
+							},
+							name = "World Text - NE",
+							uuid = "77fc6c9d-9893-2ad1-b647-1c5c59316f60",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.entityContentID == 1186 and eventArgs.isTargetable == true",
+							dequeueIfLuaFalse = true,
+							name = "Infernal Nail",
+							uuid = "3beebc8f-db73-8be6-b225-23b059ecc9b7",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				enabled = false,
+				eventType = 26,
+				loop = true,
+				mechanicTime = 328,
+				name = "[Draw] Infernal Nail NE Text",
+				timeRange = true,
+				timelineIndex = 43,
+				timerEndOffset = 12,
+				timerStartOffset = -8,
+				uuid = "73e6d15f-704e-04ab-891f-e2abd2b06dd6",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local e = TensorCore.mGetEntity(eventArgs.entityID)\nif not e or not e.pos then\n    self.used = true\n    return\nend\n\ndata.uwu_relative_nails = data.uwu_relative_nails or { nails = {}, drawn = false }\nlocal state = data.uwu_relative_nails\nif state.drawn then\n    self.used = true\n    return\nend\n\nif not state.nails[eventArgs.entityID] then\n    state.nails[eventArgs.entityID] = { id = eventArgs.entityID, x = e.pos.x, z = e.pos.z }\nend\n\nlocal count = 0\nfor _ in pairs(state.nails) do\n    count = count + 1\nend\nif count < 4 then\n    self.used = true\n    return\nend\n\nlocal list = {}\nfor _, nail in pairs(state.nails) do\n    list[#list + 1] = nail\nend\n\nlocal northAIndex, northBIndex = 1, 2\nlocal minDistanceSquared = math.huge\nfor i = 1, 3 do\n    for j = i + 1, 4 do\n        local dx = list[i].x - list[j].x\n        local dz = list[i].z - list[j].z\n        local distanceSquared = dx * dx + dz * dz\n        if distanceSquared < minDistanceSquared then\n            minDistanceSquared = distanceSquared\n            northAIndex = i\n            northBIndex = j\n        end\n    end\nend\n\nlocal northA = list[northAIndex]\nlocal northB = list[northBIndex]\nlocal southA\nlocal southB\nfor i = 1, 4 do\n    if i ~= northAIndex and i ~= northBIndex then\n        if not southA then\n            southA = list[i]\n        else\n            southB = list[i]\n        end\n    end\nend\n\nlocal northCenterX = (northA.x + northB.x) * 0.5\nlocal northCenterZ = (northA.z + northB.z) * 0.5\nlocal southCenterX = (southA.x + southB.x) * 0.5\nlocal southCenterZ = (southA.z + southB.z) * 0.5\nlocal northX = northCenterX - southCenterX\nlocal northZ = northCenterZ - southCenterZ\nlocal northLength = math.sqrt(northX * northX + northZ * northZ)\nif northLength < 0.01 then\n    self.used = true\n    return\nend\n\nlocal eastX = -northZ / northLength\nlocal eastZ = northX / northLength\n\nlocal northASide = (northA.x - northCenterX) * eastX + (northA.z - northCenterZ) * eastZ\nlocal northALabel = northASide >= 0 and \"NE\" or \"NW\"\nlocal northANumber = northASide >= 0 and \"3\" or \"4\"\nlocal northBSide = (northB.x - northCenterX) * eastX + (northB.z - northCenterZ) * eastZ\nlocal northBLabel = northBSide >= 0 and \"NE\" or \"NW\"\nlocal northBNumber = northBSide >= 0 and \"3\" or \"4\"\n\nlocal southASide = (southA.x - southCenterX) * eastX + (southA.z - southCenterZ) * eastZ\nlocal southALabel = southASide >= 0 and \"SE\" or \"SW\"\nlocal southANumber = southASide >= 0 and \"1\" or \"2\"\nlocal southBSide = (southB.x - southCenterX) * eastX + (southB.z - southCenterZ) * eastZ\nlocal southBLabel = southBSide >= 0 and \"SE\" or \"SW\"\nlocal southBNumber = southBSide >= 0 and \"1\" or \"2\"\n\nstate.textIDs = state.textIDs or {}\nstate.textIDs[northA.id] = {\n    direction = AnyoneCore.addTimedWorldTextOnEnt(45000, northALabel, northA.id, 0xFFFFFFFF, true, 2.5, 3.65),\n    number = AnyoneCore.addTimedWorldTextOnEnt(45000, northANumber, northA.id, 0xFFFFFFFF, true, 2.5, 5.0)\n}\nstate.textIDs[northB.id] = {\n    direction = AnyoneCore.addTimedWorldTextOnEnt(45000, northBLabel, northB.id, 0xFFFFFFFF, true, 2.5, 3.65),\n    number = AnyoneCore.addTimedWorldTextOnEnt(45000, northBNumber, northB.id, 0xFFFFFFFF, true, 2.5, 5.0)\n}\nstate.textIDs[southA.id] = {\n    direction = AnyoneCore.addTimedWorldTextOnEnt(45000, southALabel, southA.id, 0xFFFFFFFF, true, 2.5, 3.65),\n    number = AnyoneCore.addTimedWorldTextOnEnt(45000, southANumber, southA.id, 0xFFFFFFFF, true, 2.5, 5.0)\n}\nstate.textIDs[southB.id] = {\n    direction = AnyoneCore.addTimedWorldTextOnEnt(45000, southBLabel, southB.id, 0xFFFFFFFF, true, 2.5, 3.65),\n    number = AnyoneCore.addTimedWorldTextOnEnt(45000, southBNumber, southB.id, 0xFFFFFFFF, true, 2.5, 5.0)\n}\n\nstate.drawn = true\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"b7f340a5-f23a-258a-a939-6919979debb9",
+									true,
+								},
+							},
+							name = "World Text - Relative Labels",
+							uuid = "405d2db1-5216-5811-b1b5-fceb270a037c",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.entityContentID == 1186 and eventArgs.isTargetable == true",
+							dequeueIfLuaFalse = true,
+							name = "Targetable Nail",
+							uuid = "b7f340a5-f23a-258a-a939-6919979debb9",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				eventType = 26,
+				loop = true,
+				mechanicTime = 328,
+				name = "[Draw] Infernal Nail Relative Labels",
+				timeRange = true,
+				timelineIndex = 43,
+				timerEndOffset = 12,
+				timerStartOffset = -8,
+				uuid = "7ae0d341-24aa-8504-a159-dcd64f229b8b",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local state = data.uwu_ifrit_last_nail\nif not state or (state.spawnCount or 0) >= 4 or (state.count or 0) > 0 then\n    state = { nails = {}, spawnCount = 0, dead = {}, count = 0, order = {} }\n    data.uwu_ifrit_last_nail = state\nend\nif not state.nails[eventArgs.entityID] then\n    local nail = TensorCore.mGetEntity(eventArgs.entityID)\n    if nail and nail.pos then\n        state.nails[eventArgs.entityID] = { x = nail.pos.x, z = nail.pos.z }\n        state.spawnCount = state.spawnCount + 1\n    end\nend\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"4c6f52b2-d0b9-0e6e-bf58-26d3431f803d",
+									true,
+								},
+							},
+							name = "Reset Last Nail",
+							uuid = "e84a5e01-fa00-ea7d-b211-02e4c26bc9e5",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.entityContentID == 1186",
+							dequeueIfLuaFalse = true,
+							name = "Infernal Nail",
+							uuid = "4c6f52b2-d0b9-0e6e-bf58-26d3431f803d",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				eventType = 5,
+				loop = true,
+				mechanicTime = 328,
+				name = "[Core] Reset Last Nail Direction",
+				timeRange = true,
+				timelineIndex = 43,
+				timerEndOffset = 10,
+				timerStartOffset = -8,
+				uuid = "0b8c74ef-d40f-aae1-89f5-64488b25ced8",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local state = data.uwu_ifrit_last_nail\nif not state or state.dead[eventArgs.entityID] then\n    self.used = true\n    return\nend\n\nlocal nail = state.nails and state.nails[eventArgs.entityID]\nif not nail then\n    local labels = data.uwu_relative_nails\n    nail = labels and labels.nails and labels.nails[eventArgs.entityID]\nend\nif not nail then\n    local entity = TensorCore.mGetEntity(eventArgs.entityID)\n    if entity and entity.pos then\n        nail = { x = entity.pos.x, z = entity.pos.z }\n    end\nend\nif not nail then\n    self.used = true\n    return\nend\n\nstate.order = state.order or {}\nstate.dead[eventArgs.entityID] = true\nstate.count = state.count + 1\nstate.order[state.count] = { x = nail.x, z = nail.z }\nif state.count == 4 then\n    state.last = { x = nail.x, z = nail.z }\nend\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"996f11de-6b13-9867-9e4c-470afa842eb0",
+									true,
+								},
+							},
+							name = "Capture Fourth Nail",
+							uuid = "3e5faec9-89ad-2774-8f9f-154bc20f38fb",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.entityContentID == 1186 and eventArgs.wasTargetable == true and eventArgs.isTargetable == false",
+							dequeueIfLuaFalse = true,
+							name = "Nail Died",
+							uuid = "996f11de-6b13-9867-9e4c-470afa842eb0",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				eventType = 26,
+				loop = true,
+				mechanicTime = 328,
+				name = "[Core] Capture Last Nail Direction",
+				timeRange = true,
+				timelineIndex = 43,
+				timerEndOffset = 40,
+				timerStartOffset = -8,
+				uuid = "524d7dab-54f9-2688-b67d-db8a388722fc",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local labels = data.uwu_relative_nails\nif not labels or not labels.nails or not labels.textIDs then\n    self.used = true\n    return\nend\n\nlocal list = {}\nfor _, nail in pairs(labels.nails) do\n    list[#list + 1] = nail\nend\nif #list ~= 4 then\n    self.used = true\n    return\nend\n\nlocal northAIndex, northBIndex = 1, 2\nlocal minDistanceSquared = math.huge\nfor i = 1, 3 do\n    for j = i + 1, 4 do\n        local dx = list[i].x - list[j].x\n        local dz = list[i].z - list[j].z\n        local distanceSquared = dx * dx + dz * dz\n        if distanceSquared < minDistanceSquared then\n            minDistanceSquared = distanceSquared\n            northAIndex = i\n            northBIndex = j\n        end\n    end\nend\n\nlocal northA = list[northAIndex]\nlocal northB = list[northBIndex]\nlocal southA\nlocal southB\nfor i = 1, 4 do\n    if i ~= northAIndex and i ~= northBIndex then\n        if not southA then\n            southA = list[i]\n        else\n            southB = list[i]\n        end\n    end\nend\n\nlocal northCenterX = (northA.x + northB.x) * 0.5\nlocal northCenterZ = (northA.z + northB.z) * 0.5\nlocal southCenterX = (southA.x + southB.x) * 0.5\nlocal southCenterZ = (southA.z + southB.z) * 0.5\nlocal northX = northCenterX - southCenterX\nlocal northZ = northCenterZ - southCenterZ\nlocal northLength = math.sqrt(northX * northX + northZ * northZ)\nif northLength < 0.01 then\n    self.used = true\n    return\nend\n\nlocal eastX = -northZ / northLength\nlocal eastZ = northX / northLength\nlocal numbers = {}\n\nlocal northASide = (northA.x - northCenterX) * eastX + (northA.z - northCenterZ) * eastZ\nnumbers[northA.id] = northASide >= 0 and 3 or 4\nlocal northBSide = (northB.x - northCenterX) * eastX + (northB.z - northCenterZ) * eastZ\nnumbers[northB.id] = northBSide >= 0 and 3 or 4\nlocal southASide = (southA.x - southCenterX) * eastX + (southA.z - southCenterZ) * eastZ\nnumbers[southA.id] = southASide >= 0 and 1 or 2\nlocal southBSide = (southB.x - southCenterX) * eastX + (southB.z - southCenterZ) * eastZ\nnumbers[southB.id] = southBSide >= 0 and 1 or 2\n\nlocal role = AnyoneCore.Roster.mySlot()\nlocal meleeOrTank = role == \"T1\" or role == \"T2\" or role == \"M1\" or role == \"M2\" or role == \"MT\" or role == \"OT\"\nlocal living = {}\nlocal lowestLivingNumber = 5\nlocal northAboveForty = false\n\nfor entityID, number in pairs(numbers) do\n    local entity = TensorCore.mGetEntity(entityID)\n    local percent = entity and entity.hp and entity.hp.percent or 0\n    if labels.textIDs[entityID] and entity and entity.hp and entity.hp.current > 0 then\n        living[entityID] = { entity = entity, number = number, percent = percent }\n        if number < lowestLivingNumber then\n            lowestLivingNumber = number\n        end\n        if meleeOrTank and (number == 3 or number == 4) and percent > 45 then\n            northAboveForty = true\n        end\n    end\nend\n\nif lowestLivingNumber == 5 then\n    self.used = true\n    return\nend\n\nlocal greenDrawer = TensorCore.getCachedDrawer(\n    0x6600FF00, 0xBB00FF00, 0xFF00FF00, 0xFF000000, 3\n)\nlocal redDrawer = TensorCore.getCachedDrawer(\n    0x660000FF, 0xBB0000FF, 0xFF0000FF, 0xFF000000, 3\n)\n\nfor _, entry in pairs(living) do\n    local isActive\n    if meleeOrTank and northAboveForty then\n        isActive = (entry.number == 3 or entry.number == 4) and entry.percent > 45\n    else\n        isActive = entry.number == lowestLivingNumber\n    end\n    local drawer = isActive and greenDrawer or redDrawer\n    local radius = isActive and 2.6 or 1.25\n    drawer:addTimedCircleOnEnt(\n        700, entry.entity.id, radius,\n        0, false, true, Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n    )\nend\n\nself.used = true",
+							name = "Nail Prep and Priority Circles",
+							uuid = "6c87a696-e415-cdae-a841-227915a4f1e1",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "Draws - Ifrit",
+				loop = true,
+				mechanicTime = 328,
+				name = "[Draw] Infernal Nail Prep & Priority Circles",
+				throttleTime = 400,
+				timeRange = true,
+				timelineIndex = 43,
+				timerEndOffset = 41,
+				uuid = "6feb6300-5b79-f5ac-ae88-2068513d1208",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local e = TensorCore.mGetEntity(eventArgs.entityID)\nif not e or not e.pos or not (e.pos.x < 100 and e.pos.z < 100) then\n    self.used = true\n    return\nend\nAnyoneCore.addTimedWorldTextOnEnt(45000, \"NW\", eventArgs.entityID, 0xFFFFFFFF, true, 2.5, 2.5)\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"c070f871-0b63-5a11-8633-f6508bcd5bf8",
+									true,
+								},
+							},
+							name = "World Text - NW",
+							uuid = "f1a84a69-5106-5d43-96ca-9688f3f86b15",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.entityContentID == 1186 and eventArgs.isTargetable == true",
+							dequeueIfLuaFalse = true,
+							name = "Infernal Nail",
+							uuid = "c070f871-0b63-5a11-8633-f6508bcd5bf8",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				enabled = false,
+				eventType = 26,
+				loop = true,
+				mechanicTime = 328,
+				name = "[Draw] Infernal Nail NW Text",
+				timeRange = true,
+				timelineIndex = 43,
+				timerEndOffset = 12,
+				timerStartOffset = -8,
+				uuid = "bbe651e7-3d58-40f3-9200-b670e7f2822e",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local state = data.uwu_relative_nails\nif not state or not state.textIDs then\n    self.used = true\n    return\nend\n\nlocal textIDs = state.textIDs[eventArgs.entityID]\nif not textIDs then\n    self.used = true\n    return\nend\n\nif textIDs.direction then\n    AnyoneCore.removeTimedWorldText(textIDs.direction)\nend\nif textIDs.number then\n    AnyoneCore.removeTimedWorldText(textIDs.number)\nend\nstate.textIDs[eventArgs.entityID] = nil\n\nstate.deadNailCount = (state.deadNailCount or 0) + 1\nif state.deadNailCount == 4 and not state.relativeNorthTextID then\n    local lastNail = state.nails and state.nails[eventArgs.entityID]\n    if lastNail then\n        state.relativeNorthTextID = AnyoneCore.addTimedWorldText(\n            60000,\n            \"N\",\n            { x = lastNail.x, y = 2.5, z = lastNail.z },\n            0xFFFFFFFF,\n            true,\n            3.0\n        )\n    end\nend\n\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"76bbfa2a-f21b-ea51-844c-22af3110e378",
+									true,
+								},
+							},
+							name = "Remove Nail Text",
+							uuid = "3b43b960-d3d8-e433-8941-1207f121f2ea",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.entityContentID == 1186 and eventArgs.wasTargetable == true and eventArgs.isTargetable == false",
+							dequeueIfLuaFalse = true,
+							name = "Nail Died",
+							uuid = "76bbfa2a-f21b-ea51-844c-22af3110e378",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				eventType = 26,
+				loop = true,
+				mechanicTime = 328,
+				name = "[Draw] Infernal Nail Text Cleanup",
+				timeRange = true,
+				timelineIndex = 43,
+				timerEndOffset = 40,
+				timerStartOffset = -8,
+				uuid = "37f30830-7312-a22e-ac64-87e79232622e",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ifrit",
+							uuid = "870ffe55-627b-cd49-8a31-15acf1728166",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertPriority = 3,
+							alertScale = 0.9,
+							alertTTS = true,
+							alertText = "MT: MOVE NORTH BETWEEN SHORT NAILS",
+							conditions = 
+							{
+								
+								{
+									"e3e1ca31-8788-20c4-9310-202fcf207718",
+									true,
+								},
+							},
+							displayPath = "Draws - Ifrit",
+							name = "MT Move North Between Nails",
+							uuid = "27f6abfc-8e80-d7e8-933a-7be2e0670b90",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player = TensorCore.mGetPlayer()\nlocal labels = data.uwu_relative_nails\nif not player or not player.pos or not labels or not labels.nails then return end\nlocal nails = {}\nfor _, nail in pairs(labels.nails) do if nail and nail.x and nail.z then nails[#nails + 1] = nail end end\nif #nails < 4 then return end\nlocal northA, northB\nlocal closest = math.huge\nfor i = 1, #nails - 1 do\n    for j = i + 1, #nails do\n        local dx = nails[i].x - nails[j].x\n        local dz = nails[i].z - nails[j].z\n        local q = dx * dx + dz * dz\n        if q < closest then closest = q; northA = nails[i]; northB = nails[j] end\n    end\nend\nif not northA or not northB then return end\nlocal destination = {x=(northA.x+northB.x)*0.5,y=player.pos.y,z=(northA.z+northB.z)*0.5}\nlocal distance = TensorCore.getDistance2d(player.pos,destination)\nif distance and distance > 0.2 then\n    local heading = TensorCore.getHeadingToTarget(player.pos,destination)\n    local tipLength = math.min(2.5,distance*0.4)\n    local drawer = TensorCore.getCachedDrawer(0xFFCC99FF,0xFF8833CC,0xFFFFFFFF,0xFF000000,4)\n    drawer:addTimedArrow(7000,player.pos.x,player.pos.y,player.pos.z,heading,math.max(0.1,distance-tipLength),1.4,tipLength,3.0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nAnyoneCore.addTimedWorldText(7000,\"MT: BETWEEN SHORT NAILS\",{x=destination.x,y=destination.y+2.5,z=destination.z},0xFFCC99FF,true,1.8)\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"e3e1ca31-8788-20c4-9310-202fcf207718",
+									true,
+								},
+							},
+							displayPath = "Draws - Ifrit",
+							name = "Arrow Between Short Nails",
+							uuid = "0798e2da-41eb-9e69-8497-376a62a15730",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ifrit",
+							uuid = "f0ee295d-44cc-850d-b600-f7f79c55ce69",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return AnyoneCore.Roster.mySlot() == \"T1\"",
+							dequeueIfLuaFalse = true,
+							displayPath = "Draws - Ifrit",
+							name = "Main Tank (T1)",
+							uuid = "e3e1ca31-8788-20c4-9310-202fcf207718",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				loop = true,
+				mechanicTime = 328,
+				name = "[Draw] Ifrit - MT Relative North Between Nails",
+				throttleTime = 400,
+				timeRange = true,
+				timelineIndex = 43,
+				timerEndOffset = 12,
+				timerStartOffset = 1,
+				uuid = "b71ce91f-66bf-f4d6-ba8f-2e899cb582a2",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ifrit",
+							uuid = "8e0e237a-fe1e-4ce5-85b5-6b10530ccdde",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 6000,
+							alertPriority = 2,
+							alertScale = 0.89999997615814,
+							alertTTS = true,
+							alertText = "DPS-CLOSE NAIL TO 40%, THEN FOLLOW ORDER",
+							conditions = 
+							{
+								
+								{
+									"8cd7b876-a24f-4998-acf9-af82951b7e27",
+									true,
+								},
+							},
+							displayPath = "Draws - Ifrit",
+							name = "Melee DPS Close Nail",
+							uuid = "244dd9a1-40f5-5dc0-a2b1-209d825c6ecf",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ifrit",
+							uuid = "0092a3cf-258f-6c75-a9c3-9e54dcf4466b",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local role = AnyoneCore.Roster.mySlot()\nreturn role == \"M1\" or role == \"M2\"",
+							dequeueIfLuaFalse = true,
+							displayPath = "Draws - Ifrit",
+							name = "Melee (M1/M2)",
+							uuid = "8cd7b876-a24f-4998-acf9-af82951b7e27",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				mechanicTime = 328,
+				name = "[Alert] Ifrit - Melee DPS Close Nail",
+				timeRange = true,
+				timelineIndex = 43,
+				timerEndOffset = 6,
+				uuid = "425b653b-3684-14cf-97f0-8a07d7117577",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertPriority = 2,
+							alertText = "Ranged starts SW",
+							conditions = 
+							{
+								
+								{
+									"beef7864-70b8-090a-b0e6-69b657574994",
+									true,
+								},
+							},
+							gVar = "ACR_RikuMNK3_CD",
+							name = "R1: Ranged starts SW",
+							uuid = "2012bfac-34b1-d064-a9a7-c73896519fa0",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertPriority = 2,
+							alertText = "Caster start SE",
+							conditions = 
+							{
+								
+								{
+									"ad0cb64f-7205-4e7f-89c7-50dd235dcfd0",
+									true,
+								},
+							},
+							name = "R2: Caster start SE",
+							uuid = "e8afcf30-7773-7775-af0a-ec9ad85ca53f",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster=AnyoneCore.Roster\nif not Roster or not Roster.current() then return false end\nreturn Roster.mySlot()==\"R1\"",
+							name = "Roster R1",
+							uuid = "beef7864-70b8-090a-b0e6-69b657574994",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster=AnyoneCore.Roster\nif not Roster or not Roster.current() then return false end\nreturn Roster.mySlot()==\"R2\"",
+							name = "Roster R2",
+							uuid = "ad0cb64f-7205-4e7f-89c7-50dd235dcfd0",
+							version = 3,
+						},
+					},
+				},
+				mechanicTime = 328,
+				name = "[Call][Ifrit] R1/R2 starting positions",
+				timelineIndex = 43,
+				timerOffset = 3,
+				uuid = "3f19af91-6517-294d-a6a0-7cad90b71e4d",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "[Raid calls]",
+				uuid = "844abfe1-1154-706b-a437-576e5d7cf524",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 8000,
+							alertPriority = 2,
+							alertTTS = true,
+							alertText = "DPS nails low then follow order",
+							conditions = 
+							{
+								
+								{
+									"6608616e-a34c-28a0-b982-3b5879bf6cdb",
+									true,
+								},
+							},
+							uuid = "ff67f309-11bd-9c44-8a0d-467f368abeef",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current() or not Roster.isReady() then return false end\nlocal slot = Roster.mySlot()\nif not slot then return false end\nreturn slot ~= \"M1\" and slot ~= \"M2\"",
+							name = "Roster: Everyone except M1/M2",
+							uuid = "6608616e-a34c-28a0-b982-3b5879bf6cdb",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "[Raid calls]",
+				mechanicTime = 328,
+				name = "[Raid Call][Ifrit] Reverse Z Nails",
+				timelineIndex = 43,
+				timerOffset = -1,
+				uuid = "ecc05467-4e29-34b6-9449-fa97df47a5b8",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR Guidance",
+				uuid = "2ae7a193-4855-1d88-9d38-5981970739d4",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+				},
+				conditions = 
+				{
+				},
+				displayPath = "NAUR Guidance",
+				execute = "local labels=data.uwu_relative_nails\nif not labels or not labels.drawn then return end\nlocal r=AnyoneCore.Roster\nif r.current()==nil or not r.isReady() then return end\nlocal slot=r.mySlot()\nif slot~=\"M1\" and slot~=\"M2\" and slot~=\"R1\" and slot~=\"R2\" then self.used=true;return end\nlocal s=data.lpdu_nail_40\nif not s then\n s={list={}};data.lpdu_nail_40=s\n for _,n in pairs(labels.nails) do s.list[#s.list+1]=n end\n if #s.list~=4 then data.lpdu_nail_40=nil;return end\n local list=s.list;local ai,bi,q=1,2,math.huge\n for i=1,3 do for j=i+1,4 do\n  local dx,dz=list[i].x-list[j].x,list[i].z-list[j].z;local d=dx*dx+dz*dz\n  if d<q then ai,bi,q=i,j,d end\n end end\n s.northA=list[ai].id;s.northB=list[bi].id\n local south={};for i=1,4 do if i~=ai and i~=bi then south[#south+1]=list[i] end end\n s.southA=south[1].id;s.southB=south[2].id\n local nx=(list[ai].x+list[bi].x-south[1].x-south[2].x)*.5\n local nz=(list[ai].z+list[bi].z-south[1].z-south[2].z)*.5\n local ex,ez=-nz,nx\n local side=(south[1].x-south[2].x)*ex+(south[1].z-south[2].z)*ez\n s.first=side>=0 and south[1].id or south[2].id\nend\nif s.done then self.used=true;return end\nlocal a,b=TensorCore.mGetEntity(s.northA),TensorCore.mGetEntity(s.northB)\nlocal c,d=TensorCore.mGetEntity(s.southA),TensorCore.mGetEntity(s.southB)\nif not a or not b or not c or not d then return end\nif c.hp.current<=0 or d.hp.current<=0 then self.used=true;return end\nif not (a.hp.current>0 and a.hp.percent<40 or b.hp.current>0 and b.hp.percent<40) then return end\nlocal target=TensorCore.mGetEntity(s.first)\nif not target then return end\nlocal p=TensorCore.mGetPlayer()\nlocal drawer=TensorCore.getStaticDrawer(0xFF66FF99,2)\ndrawer:addTimedCircleOnEnt(6000,target.id,1,0,false,true)\nif p then\n local dist=TensorCore.getDistance2d(p.pos,target.pos)\n if dist>1 then drawer:addTimedArrow(6000,p.pos.x,p.pos.y+.05,p.pos.z,TensorCore.getHeadingToTarget(p.pos,target.pos),math.max(.1,dist-1),1,1,1.5,0,false) end\nend\nAnyoneCore.addTimedWorldTextOnEnt(6000,\"KILL ORDER: 1 SE > 2 SW > 3 NE > 4 NW\",target.id,0xFFFFFFFF,true,1.3,3)\ns.done=true;self.used=true",
+				executeType = 2,
+				loop = true,
+				mechanicTime = 328,
+				name = "[NAUR] Nails - Below 40 Percent Kill Order",
+				timeRange = true,
+				timelineIndex = 43,
+				timerEndOffset = 65,
+				uuid = "d394afa9-032d-f512-a07f-abe0091a8e4c",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "data.lpdu_nail_eruption_count = 0\nself.used = true",
+							name = "Reset owned eruption counter",
+							uuid = "eae36938-0d9e-1739-bf5c-f1ecbb3d81cb",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				eventType = 9,
+				mechanicTime = 328,
+				name = "[State][NAUR] Reset nail eruption count",
+				timeRange = true,
+				timelineIndex = 43,
+				timerEndOffset = 1000,
+				timerStartOffset = -328,
+				uuid = "548a0a7b-8f4a-ab16-831f-5a6e55a763ba",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "data.lpdu_nail_eruption_count = (data.lpdu_nail_eruption_count or 0) + 1\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"01321d7c-b3dc-e1d4-b850-9ab184f6aaaf",
+									true,
+								},
+							},
+							name = "Count bait cast start",
+							uuid = "bffc9fc6-07e1-619b-83e0-d660c0620fc4",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 4000,
+							alertTTS = true,
+							alertText = "Kill nail order",
+							conditions = 
+							{
+								
+								{
+									"01321d7c-b3dc-e1d4-b850-9ab184f6aaaf",
+									true,
+								},
+								
+								{
+									"45696666-1428-fcaf-a2bc-6545ec9ba81f",
+									true,
+								},
+							},
+							uuid = "8e2c2f4b-59e1-1bc4-bb21-350fdbf634c9",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgType = 2,
+							eventSpellID = 11098,
+							name = "Bait eruption start",
+							uuid = "01321d7c-b3dc-e1d4-b850-9ab184f6aaaf",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return data.lpdu_nail_eruption_count == 7",
+							dequeueIfLuaFalse = true,
+							name = "Seventh cast = fourth paired drop",
+							uuid = "45696666-1428-fcaf-a2bc-6545ec9ba81f",
+							version = 3,
+						},
+					},
+				},
+				eventType = 3,
+				loop = true,
+				mechanicTime = 328,
+				name = "[Call][NAUR] Kill nail order on fourth eruption drop",
+				timeRange = true,
+				timelineIndex = 43,
+				timerEndOffset = 32,
+				uuid = "4972a617-c863-4feb-a32d-57013c5004ec",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR ",
+				uuid = "2787e3c9-4bf3-9eff-a0cb-bf9a44f4877f",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "NAUR ",
+				name = " Automation",
+				uuid = "4c256265-277a-3604-925c-6864f4040111",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+				},
+				conditions = 
+				{
+				},
+				displayPath = "NAUR / Automation",
+				execute = "local acr=TensorCore.API.TensorACR\nif type(acr.addBlacklistEntry)~=\"function\" then self.used=true;return end\nlocal entry=acr.addBlacklistEntry(1186,\"Infernal Nail\")\nif entry then\n entry.enabled=true\n entry.allowIfTarget=false\n entry.allowSmartDoT=false\nend\nself.used=true",
+				executeType = 2,
+				mechanicTime = 328,
+				name = "[NAUR] Nails - Shared DoT blacklist",
+				throttleTime = 1000,
+				timeRange = true,
+				timelineIndex = 43,
+				timerEndOffset = 47,
+				timerStartOffset = -38,
+				uuid = "7b7d3b62-3a30-34e4-9f02-987df2feca42",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+				},
+				conditions = 
+				{
+				},
+				displayPath = "NAUR / Automation",
+				execute = "-- Independent UWU settings; available before GUI or targeting reads.\nif not _G.UWU_NAURSettingsIOReady then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UWU-NAUR.lua]]\n local saved={}\n if FileExists(path) then\n  local loaded=FileLoad(path)\n  if type(loaded)==\"table\" then saved=loaded end\n end\n local current=_G.UWU_NAURGuiState\n local old=_G.UWU_NAUR_AnnihilationAssignments or {}\n local defaults={automaticOpen=true,ultimaOpen=true,orbsOpen=true,autoTarget=_G.NAUR_UWU_AutoTarget~=false,melee=(old.melee==2 and 2 or 1),solo=old.solo or 0}\n local keys={\"automaticOpen\",\"ultimaOpen\",\"orbsOpen\",\"autoTarget\",\"melee\",\"solo\"}\n local C={}\n for _,key in ipairs(keys) do\n  local value=current and current[key]\n  if value==nil then value=saved[key] end\n  if type(defaults[key])==\"boolean\" then\n   C[key]=type(value)==\"boolean\" and value or defaults[key]\n   if value==false then C[key]=false end\n  else\n   C[key]=type(value)==\"number\" and value>=0 and value<=2 and value%1==0 and value or defaults[key]\n  end\n end\n if C.melee==0 then C.melee=1 end\n function C.save()\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local values={}\n  for _,key in ipairs(keys) do values[key]=C[key] end\n  FileSave(path,values)\n end\n _G.UWU_NAURGuiState=C\n _G.UWU_NAUR_AnnihilationAssignments={melee=C.melee,solo=C.solo}\n _G.NAUR_UWU_AutoTarget=C.autoTarget\n C.save()\n _G.UWU_NAURSettingsIOReady=true\nend\n-- Upgrade only an unset melee assignment; preserve either explicit role choice.\ndo\n local preferences=_G.UWU_NAURGuiState\n if preferences and preferences.melee==0 then\n  preferences.melee=1\n  local assignment=_G.UWU_NAUR_AnnihilationAssignments\n  if assignment then assignment.melee=1 end\n  preferences.save()\n end\nend\n-- The BLM AutoSim profile retains its own independent nail controller.\nif data.uwuAutoSim or data.uwuBLMAutoSim or data.uwuBRDAutoSim or data.uwuRPRAutoSim then return end\nlocal p=TensorCore.mGetPlayer()\nif not p or not p.alive then return end\nlocal roster=AnyoneCore.Roster\nif not roster or not roster.current() or not roster.isReady() then return end\nlocal role=roster.mySlot()\nif role~=\"R1\" and role~=\"R2\" and role~=\"M1\" and role~=\"M2\" then return end\nlocal N=data.uwuGenericNails\nlocal api=TensorCore.API.TensorACR\nlocal function restore()\n if N and N.options then for k,v in pairs(N.options) do _G[k]=v end;N.options=nil end\nend\nif not (_G.UWU_NAURGuiState.autoTarget~=false) then restore();return end\nif not N then N={ids={},awake={}};data.uwuGenericNails=N end\nif N.done then return end\nlocal entities,count,alive={},0,0\nfor _,e in pairs(TensorCore.getEntityGroupList(\"ContentID\",1186) or {}) do\n if e.alive and e.targetable then N.ids[e.id]=true;entities[e.id]=e;alive=alive+1 end\nend\nfor id in pairs(N.ids) do\n count=count+1\n local buff=TensorCore.getBuff(id,1544)\n if buff and buff.stacks>=2 then N.awake[id]=true end\nend\nif count<4 then return end\nif alive==0 then\n if N.options then for k in pairs(N.options) do _G[k]=true end;N.options=nil end\n N.done=true;return\nend\nif not N.options then\n N.options={}\n for _,toggle in ipairs(api.getQuickToggles() or {}) do\n  if string.match(toggle.var,\"_AOE$\") or string.match(toggle.var,\"_SmartAOE$\") then\n   if type(_G[toggle.var])==\"boolean\" then N.options[toggle.var]=_G[toggle.var] end\n  end\n end\nend\nif not N.order then\n if alive~=4 then return end\n local list={};for id,e in pairs(entities) do list[#list+1]=e end\n local best=math.huge;local ni,nj\n for i=1,3 do for j=i+1,4 do\n  local a,b=list[i].pos,list[j].pos\n  local d=(a.x-b.x)^2+(a.z-b.z)^2\n  if d<best then best=d;ni=i;nj=j end\n end end\n local north,south={},{}\n for i,e in ipairs(list) do\n  if i==ni or i==nj then north[#north+1]=e else south[#south+1]=e end\n end\n local nx=(north[1].pos.x+north[2].pos.x-south[1].pos.x-south[2].pos.x)/2\n local nz=(north[1].pos.z+north[2].pos.z-south[1].pos.z-south[2].pos.z)/2\n local len=math.sqrt(nx*nx+nz*nz)\n if len<1 then return end\n local ex,ez=-nz/len,nx/len\n local function eastFirst(pair)\n  local a,b=pair[1].pos,pair[2].pos\n  if (a.x-b.x)*ex+(a.z-b.z)*ez<0 then pair[1],pair[2]=pair[2],pair[1] end\n end\n eastFirst(north);eastFirst(south)\n N.order={south[1].id,south[2].id,north[1].id,north[2].id}\n local slot=roster.mySlot()\n if slot==\"R2\" then N.softenID=N.order[1]\n elseif slot==\"R1\" then N.softenID=N.order[2]\n else\n  local a,b=entities[N.order[3]],entities[N.order[4]]\n  N.softenID=TensorCore.getDistance2d(p.pos,a.pos)<=TensorCore.getDistance2d(p.pos,b.pos) and a.id or b.id\n end\nend\nlocal nail=entities[N.softenID]\nlocal reached=nail and nail.hp.percent<=40\nif role==\"M1\" or role==\"M2\" then\n for i=3,4 do local e=entities[N.order[i]];if e and e.hp.percent<=40 then reached=true end end\nend\nif not N.softened and (reached or not nail) then\n N.softened=true\n local cast=p.castinginfo\n if cast.castingid>0 or cast.channelingid>0 then\n  for _,id in ipairs(cast.castingtargets) do\n   if id==N.softenID then ActionList:StopCasting();break end\n  end\n end\nend\nlocal awakened=0\nfor id in pairs(N.ids) do if N.awake[id] then awakened=awakened+1 end end\nlocal kill=N.softened and awakened==4\nlocal desired\nif not N.softened then desired=N.softenID\nelseif kill then for _,id in ipairs(N.order) do if entities[id] then desired=id;break end end\nelse for _,e in pairs(TensorCore.getEntityGroupList(\"ContentID\",1185) or {}) do desired=e.id;break end end\nlocal close=kill and not entities[N.order[1]] and not entities[N.order[2]]\nlocal meleeSoftening=(role==\"M1\" or role==\"M2\") and not N.softened\nlocal aoe=meleeSoftening or close\nfor k in pairs(N.options) do _G[k]=aoe end\nif desired then\n local target=TensorCore.mGetTarget()\n if not target or target.id~=desired then Player:SetTarget(desired) end\nend\n",
+				executeType = 2,
+				loop = true,
+				mechanicTime = 328,
+				name = "[NAUR] Nails - Role softening and ordered targeting",
+				throttleTime = 250,
+				timeRange = true,
+				timelineIndex = 43,
+				timerEndOffset = 67,
+				timerStartOffset = -12,
+				uuid = "03ca1422-7b8d-e5a7-850d-a5b357d04282",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+				},
+				conditions = 
+				{
+				},
+				displayPath = "NAUR / Automation",
+				execute = "local N=data.uwuGenericNails\nif N and N.options then for k,v in pairs(N.options) do _G[k]=v end;N.options=nil end\nif N then N.done=true end\nself.used=true",
+				executeType = 2,
+				mechanicTime = 328,
+				name = "[NAUR] Nails - Restore targeting options after nails",
+				throttleTime = 250,
+				timeRange = true,
+				timelineIndex = 43,
+				timerEndOffset = 90,
+				timerStartOffset = 68,
+				uuid = "e6343da4-6a77-aa16-ab65-23f6820ca79f",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+				},
+				conditions = 
+				{
+				},
+				displayPath = "NAUR / Automation",
+				eventType = 9,
+				execute = "local N=data.uwuGenericNails\nif N and N.options then for k,v in pairs(N.options) do _G[k]=v end;N.options=nil end\nif N then N.done=true end\nself.used=true",
+				executeType = 2,
+				mechanicTime = 328,
+				name = "[NAUR] Nails - Restore targeting options on wipe",
+				timeRange = true,
+				timelineIndex = 43,
+				timerEndOffset = 1400,
+				timerStartOffset = -328,
+				uuid = "496ae7fe-8729-db35-bf99-a458659c2ff8",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+				},
+				conditions = 
+				{
+				},
+				displayPath = "NAUR / Automation",
+				eventType = 11,
+				execute = "local N=data.uwuGenericNails\nif N and N.options then for k,v in pairs(N.options) do _G[k]=v end;N.options=nil end\nif N then N.done=true end\nself.used=true",
+				executeType = 2,
+				mechanicTime = 328,
+				name = "[NAUR] Nails - Restore targeting options on map change",
+				timeRange = true,
+				timelineIndex = 43,
+				timerEndOffset = 1400,
+				timerStartOffset = -328,
+				uuid = "4fc16b57-2a49-884a-a967-f6592197f4eb",
+				version = 2,
+			},
+		},
+	},
+	[44] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ifrit",
+				uuid = "84df90f4-52e1-b6bf-a803-5c90c0067186",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ifrit",
+							uuid = "9717c177-8579-7d2f-8a9e-da50b8d41ede",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player = TensorCore.mGetPlayer()\nif not player or not player.id or not player.pos or not eventArgs then\n    self.used = true\n    return\nend\n\nlocal partnerID\nif eventArgs.sourceEntityID == player.id then\n    partnerID = eventArgs.newTargetID\nelseif eventArgs.newTargetID == player.id then\n    partnerID = eventArgs.sourceEntityID\nelse\n    self.used = true\n    return\nend\n\nif not partnerID or partnerID == player.id then\n    self.used = true\n    return\nend\n\nlocal partner = TensorCore.mGetEntity(partnerID)\nif not partner or not partner.pos then\n    self.used = true\n    return\nend\n\nlocal drawer = TensorCore.getCachedDrawer(\n    0x6633CCFF,\n    0xCC33CCFF,\n    0xFFFFCC33,\n    0xFF000000,\n    3\n)\n\ndrawer:addTimedCircleOnEnt(\n    20000, player.id, 1.8,\n    0, false, true, Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n)\ndrawer:addTimedCircleOnEnt(\n    20000, partner.id, 2.2,\n    0, false, true, Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n)\n\nlocal sourcePos = player.pos\nlocal targetPos = partner.pos\nlocal distance = TensorCore.getDistance2d(sourcePos, targetPos)\nif distance and distance > 0.25 then\n    drawer:addTimedLine(\n        20000,\n        sourcePos.x, sourcePos.y, sourcePos.z,\n        targetPos.x, targetPos.y, targetPos.z,\n        1.0, 2.4, 0\n    )\nend\n\nAnyoneCore.addTimedWorldTextOnEnt(\n    20000,\n    \"FETTER PARTNER\",\n    partner.id,\n    0xFFFFCC33,\n    true,\n    1.2,\n    2.0\n)\n\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"d309487d-b33b-a48e-97e0-995ed53f9da3",
+									true,
+								},
+							},
+							displayPath = "Draws - Ifrit",
+							name = "Tethered Partner Marker",
+							uuid = "42fa7e19-9015-d0e7-93c7-1fc51e8e5b0f",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ifrit",
+							uuid = "589a28d1-946a-37c5-8d12-97ac6e8eddd1",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.newTetherID == 9 and eventArgs.sourceEntityContentID == 0 and eventArgs.newTargetContentID == 0 and eventArgs.sourceEntityID ~= eventArgs.newTargetID",
+							dequeueIfLuaFalse = true,
+							displayPath = "Draws - Ifrit",
+							name = "Player Infernal Fetter",
+							uuid = "d309487d-b33b-a48e-97e0-995ed53f9da3",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				eventType = 15,
+				loop = true,
+				mechanicTime = 337,
+				name = "[Draw] Ifrit Infernal Fetters - Partner Link",
+				timeRange = true,
+				timelineIndex = 44,
+				timerEndOffset = 27,
+				timerStartOffset = -2,
+				uuid = "e94c583e-afa1-36e0-8795-1c891e2f9d77",
+				version = 2,
+			},
+		},
+	},
+	[45] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ifrit",
+				uuid = "714beb86-d8eb-36b1-bf1e-ea959eadef47",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local s=data.uwu_relative_north_nails or {nails={},drawn=false};data.uwu_relative_north_nails=s\nlocal e=TensorCore.mGetEntity(eventArgs.entityID)\nif e then s.nails[eventArgs.entityID]={x=e.pos.x,y=e.pos.y,z=e.pos.z} end\nlocal p={};for _,v in pairs(s.nails) do p[#p+1]=v end\nif s.drawn or #p<4 then self.used=true return end\nlocal a,b,d=nil,nil,math.huge\nfor i=1,3 do for j=i+1,4 do local x=p[i].x-p[j].x;local z=p[i].z-p[j].z;local q=x*x+z*z;if q<d then a,b,d=p[i],p[j],q end end end\nlocal m={x=(a.x+b.x)/2,y=(a.y+b.y)/2,z=(a.z+b.z)/2};local c={x=0,y=0,z=0}\nfor _,v in ipairs(p) do c.x=c.x+v.x;c.y=c.y+v.y;c.z=c.z+v.z end;c.x=c.x/4;c.y=c.y/4;c.z=c.z/4\nlocal x,z=m.x-c.x,m.z-c.z;d=math.sqrt(x*x+z*z)\nif d>0 then m.x=m.x+x/d*2.5;m.z=m.z+z/d*2.5 end;m.y=m.y+2.5\nAnyoneCore.addTimedWorldText(10000,\"N\",m,0xFFFFFFFF,true,2.5)\ns.drawn=true;self.used=true",
+							conditions = 
+							{
+								
+								{
+									"1ef1d40f-eaf1-57cc-bdc2-42a1157c5318",
+									true,
+								},
+							},
+							name = "Relative North - Tapered End",
+							uuid = "c92b86bc-0608-0326-9713-977bb7dfb75b",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.entityContentID == 1186",
+							dequeueIfLuaFalse = true,
+							name = "Infernal Nail",
+							uuid = "1ef1d40f-eaf1-57cc-bdc2-42a1157c5318",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				eventType = 5,
+				mechanicTime = 339,
+				name = "[Draw] Infernal Nail Relative North",
+				timeRange = true,
+				timelineIndex = 45,
+				timerEndOffset = 8,
+				uuid = "cec51c16-5d8d-3a9c-89a6-3b27771ac027",
+				version = 2,
+			},
+		},
+	},
+	[46] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "7c39474f-f7bd-130b-bb83-e5414876f31f",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ifrit",
+				uuid = "f5daecfb-636d-4792-9a22-3aae9dc0b4ea",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ifrit",
+							uuid = "f8234056-dee6-769a-b6c6-598ee2c26966",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertPriority = 3,
+							alertScale = 0.9,
+							alertTTS = true,
+							alertText = "SEARING WIND: MOVE SOUTH, CLOSE TO WALL",
+							conditions = 
+							{
+								
+								{
+									"f6933eb4-3cd6-df29-83e2-27355fd08a35",
+									true,
+								},
+								
+								{
+									"dbbf79f7-a66f-e23c-97e9-3df0afa35310",
+									true,
+								},
+								
+								{
+									"45c55041-c3c4-dbdd-9c39-7b88068807ac",
+									true,
+								},
+							},
+							displayPath = "Draws - Ifrit",
+							name = "Searing Wind South Wall",
+							uuid = "52237276-b16c-f78f-9108-ec2871547055",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player = TensorCore.mGetPlayer()\nlocal state = data.uwu_ifrit_last_nail\nlocal last = state and state.last\nif not player or not player.pos or not last then return end\nlocal northX = last.x - 100\nlocal northZ = last.z - 100\nlocal length = math.sqrt(northX * northX + northZ * northZ)\nif length < 0.1 then return end\nlocal destination = {x=100-northX/length*18,y=player.pos.y,z=100-northZ/length*18}\nlocal distance = TensorCore.getDistance2d(player.pos,destination)\nif distance and distance > 0.2 then\n    local heading = TensorCore.getHeadingToTarget(player.pos,destination)\n    local tipLength = math.min(2.5,distance*0.4)\n    local drawer = TensorCore.getCachedDrawer(0xFFCC99FF,0xFF8833CC,0xFFFFFFFF,0xFF000000,4)\n    drawer:addTimedArrow(7000,player.pos.x,player.pos.y,player.pos.z,heading,math.max(0.1,distance-tipLength),1.4,tipLength,3.0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nAnyoneCore.addTimedWorldText(7000,\"SEARING: SOUTH WALL\",{x=destination.x,y=destination.y+2.5,z=destination.z},0xFFCC99FF,true,1.8)\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"f6933eb4-3cd6-df29-83e2-27355fd08a35",
+									true,
+								},
+								
+								{
+									"dbbf79f7-a66f-e23c-97e9-3df0afa35310",
+									true,
+								},
+								
+								{
+									"45c55041-c3c4-dbdd-9c39-7b88068807ac",
+									true,
+								},
+							},
+							displayPath = "Draws - Ifrit",
+							name = "Arrow to Relative South Wall",
+							uuid = "2c4b142e-f76b-60c9-be71-7109b5e2eef1",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ifrit",
+							uuid = "bb03d02e-e753-3a10-be33-7555dd31bcdd",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.buffID == 1578 and eventArgs.ownerContentID == 1185",
+							dequeueIfLuaFalse = true,
+							displayPath = "Draws - Ifrit",
+							name = "Searing Wind",
+							uuid = "f6933eb4-3cd6-df29-83e2-27355fd08a35",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local role = AnyoneCore.Roster.mySlot()\nreturn role == \"H1\" or role == \"H2\"",
+							dequeueIfLuaFalse = true,
+							displayPath = "Draws - Ifrit",
+							name = "Healer (H1/H2)",
+							uuid = "dbbf79f7-a66f-e23c-97e9-3df0afa35310",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local player = TensorCore.mGetPlayer()\nreturn player and player.id == eventArgs.entityID",
+							dequeueIfLuaFalse = true,
+							displayPath = "Draws - Ifrit",
+							name = "Searing Target",
+							uuid = "45c55041-c3c4-dbdd-9c39-7b88068807ac",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				eventType = 8,
+				loop = true,
+				mechanicTime = 345,
+				name = "[Draw] Ifrit - Searing Wind South Wall",
+				throttleTime = 500,
+				timeRange = true,
+				timelineIndex = 46,
+				timerEndOffset = 18,
+				timerStartOffset = -1,
+				uuid = "713e491e-9139-b238-aac4-698405956c3d",
+				version = 2,
+			},
+		},
+	},
+	[47] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "0c9ccfe2-1f53-b54e-1497-b7f47a4b9df2",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ifrit",
+				uuid = "949fca65-5ee6-206f-805a-a36c3e3009a9",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current() or not Roster.isReady() then self.used = true; return end\nlocal role = Roster.mySlot()\nif role ~= \"R1\" and role ~= \"R2\" then self.used = true; return end\n\n\nlocal state = data.uwu_relative_nails\nif not state or not state.nails then self.used = true; return end\n\nlocal nails = {}\nfor _, nail in pairs(state.nails) do\n    if nail and nail.id and nail.x and nail.z then\n        nails[#nails + 1] = { id = nail.id, x = nail.x, z = nail.z }\n    end\nend\nif #nails ~= 4 then self.used = true; return end\n\nlocal northAIndex, northBIndex = 1, 2\nlocal minDistanceSquared = math.huge\nfor i = 1, 3 do\n    for j = i + 1, 4 do\n        local dx = nails[i].x - nails[j].x\n        local dz = nails[i].z - nails[j].z\n        local distanceSquared = dx * dx + dz * dz\n        if distanceSquared < minDistanceSquared then\n            minDistanceSquared = distanceSquared\n            northAIndex = i\n            northBIndex = j\n        end\n    end\nend\n\nlocal northA = nails[northAIndex]\nlocal northB = nails[northBIndex]\nlocal southA, southB\nfor i = 1, 4 do\n    if i ~= northAIndex and i ~= northBIndex then\n        if not southA then southA = nails[i] else southB = nails[i] end\n    end\nend\n\nlocal northCenterX = (northA.x + northB.x) * 0.5\nlocal northCenterZ = (northA.z + northB.z) * 0.5\nlocal southCenterX = (southA.x + southB.x) * 0.5\nlocal southCenterZ = (southA.z + southB.z) * 0.5\nlocal northX = northCenterX - southCenterX\nlocal northZ = northCenterZ - southCenterZ\nlocal northLength = math.sqrt(northX * northX + northZ * northZ)\nif northLength < 0.01 then self.used = true; return end\n\nlocal eastX = -northZ / northLength\nlocal eastZ = northX / northLength\nlocal relative = {}\n\nlocal northASide = (northA.x - northCenterX) * eastX + (northA.z - northCenterZ) * eastZ\nlocal northBSide = (northB.x - northCenterX) * eastX + (northB.z - northCenterZ) * eastZ\nlocal southASide = (southA.x - southCenterX) * eastX + (southA.z - southCenterZ) * eastZ\nlocal southBSide = (southB.x - southCenterX) * eastX + (southB.z - southCenterZ) * eastZ\n\nrelative[northASide >= 0 and \"NE\" or \"NW\"] = northA\nrelative[northBSide >= 0 and \"NE\" or \"NW\"] = northB\nrelative[southASide >= 0 and \"SE\" or \"SW\"] = southA\nrelative[southBSide >= 0 and \"SE\" or \"SW\"] = southB\n\nlocal first = role == \"R1\" and relative.SW or relative.SE\nlocal second = role == \"R1\" and relative.NW or relative.NE\nlocal player = TensorCore.mGetPlayer()\nif not first or not second or not player or not player.pos then self.used = true; return end\n\nlocal currentRoute = data.uwu_eruption_bait_route\nif currentRoute and currentRoute.drawIds and Argus and Argus.deleteTimedShape then\n    for _, drawID in ipairs(currentRoute.drawIds) do\n        if drawID then pcall(Argus.deleteTimedShape, drawID) end\n    end\nend\n\nlocal centerX, centerZ = 100, 100\nlocal edgeRadius = 17.0\nlocal middleX = role == \"R1\" and -eastX or eastX\nlocal middleZ = role == \"R1\" and -eastZ or eastZ\n\nlocal function outerEdgePosition(nail, tangentOffset)\n    local dx = nail.x - centerX\n    local dz = nail.z - centerZ\n    local radialLength = math.sqrt(dx * dx + dz * dz)\n    if radialLength < 0.1 then return nil end\n\n    local radialX = dx / radialLength\n    local radialZ = dz / radialLength\n    local projection = middleX * radialX + middleZ * radialZ\n    local tangentX = middleX - projection * radialX\n    local tangentZ = middleZ - projection * radialZ\n    local tangentLength = math.sqrt(tangentX * tangentX + tangentZ * tangentZ)\n    if tangentLength < 0.1 then return nil end\n\n    local radialAtPoint = math.sqrt(edgeRadius * edgeRadius - tangentOffset * tangentOffset)\n    return {\n        x = centerX + radialX * radialAtPoint + tangentX / tangentLength * tangentOffset,\n        y = player.pos.y,\n        z = centerZ + radialZ * radialAtPoint + tangentZ / tangentLength * tangentOffset\n    }\nend\n\nlocal hit1 = outerEdgePosition(first, -2.0)\nlocal hit2 = outerEdgePosition(first, 2.0)\nlocal hit3 = outerEdgePosition(second, 2.0)\nlocal hit4 = outerEdgePosition(second, -2.0)\nif not hit1 or not hit2 or not hit3 or not hit4 then self.used = true; return end\n\nlocal startPosition = { x = player.pos.x, y = player.pos.y, z = player.pos.z }\nlocal middlePosition = {\n    x = centerX + middleX * edgeRadius,\n    y = player.pos.y,\n    z = centerZ + middleZ * edgeRadius\n}\nlocal groupPosition = { x = centerX, y = player.pos.y, z = centerZ }\n\nlocal duration = 12000\nlocal drawer = TensorCore.getCachedDrawer(\n    0xFF66FF99, 0xFF00AA66, 0xFF006644, 0xFFFFFFFF, 2,\n    nil, Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n)\nlocal route = {\n    role = role,\n    firstID = first.id,\n    secondID = second.id,\n    step = 1,\n    hit1 = hit1,\n    hit2 = hit2,\n    hit3 = hit3,\n    hit4 = hit4,\n    middle = middlePosition,\n    group = groupPosition,\n    drawIds = {}\n}\ndata.uwu_eruption_bait_route = route\n\nlocal function keepDraw(drawID)\n    if drawID then route.drawIds[#route.drawIds + 1] = drawID end\nend\nlocal function drawMoveArrow(fromPosition, toPosition)\n    local distance = TensorCore.getDistance2d(fromPosition, toPosition)\n    if not distance or distance <= 0.25 then return end\n    local tipLength = math.min(1.5, distance * 0.35)\n    keepDraw(drawer:addTimedArrow(\n        duration, fromPosition.x, fromPosition.y, fromPosition.z,\n        TensorCore.getHeadingToTarget(fromPosition, toPosition),\n        math.max(0.1, distance - tipLength), 1.0, tipLength, 2.3, 0, false,\n        Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n    ))\nend\n\nkeepDraw(drawer:addTimedCircle(\n    duration, startPosition.x, startPosition.y, startPosition.z, 0.85, 0, false, true,\n    Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n))\ndrawMoveArrow(startPosition, hit1)\n\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"7156ff68-ed31-b21f-b280-fbae4b3aa5b2",
+									true,
+								},
+							},
+							name = "Draw - Four eruption positions on outer edge",
+							uuid = "049fec56-c008-b98c-b9c2-afa8a900095d",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current() or not Roster.isReady() then return false end\nlocal role = Roster.mySlot()\nreturn role == \"R1\" or role == \"R2\"",
+							name = "R1/R2 only",
+							uuid = "7156ff68-ed31-b21f-b280-fbae4b3aa5b2",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				mechanicTime = 345,
+				name = "[Draw] Eruption Bait Route - R1/R2",
+				timelineIndex = 47,
+				timerOffset = -4,
+				uuid = "8aafec30-970f-8806-b17e-8932d35cc4ee",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current() or not Roster.isReady() then self.used = true; return end\nlocal role = Roster.mySlot()\nif role ~= \"R1\" and role ~= \"R2\" then self.used = true; return end\nif role ~= \"R1\" and role ~= \"R2\" then self.used = true; return end\n\nlocal route = data.uwu_eruption_bait_route\nif not route or route.role ~= role or not route.step or route.step < 1 or route.step > 4 then\n    self.used = true\n    return\nend\n\nif route.drawIds and Argus and Argus.deleteTimedShape then\n    for _, drawID in ipairs(route.drawIds) do\n        if drawID then pcall(Argus.deleteTimedShape, drawID) end\n    end\nend\nroute.drawIds = {}\n\nlocal duration = 12000\nlocal drawer = TensorCore.getCachedDrawer(\n    0xFF66FF99, 0xFF00AA66, 0xFF006644, 0xFFFFFFFF, 2,\n    nil, Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n)\nlocal function keepDraw(drawID)\n    if drawID then route.drawIds[#route.drawIds + 1] = drawID end\nend\nlocal function drawCircle(position)\n    keepDraw(drawer:addTimedCircle(\n        duration, position.x, position.y, position.z, 0.85, 0, false, true,\n        Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n    ))\nend\nlocal function drawMoveArrow(fromPosition, toPosition)\n    local distance = TensorCore.getDistance2d(fromPosition, toPosition)\n    if not distance or distance <= 0.25 then return end\n    local tipLength = math.min(1.5, distance * 0.35)\n    keepDraw(drawer:addTimedArrow(\n        duration, fromPosition.x, fromPosition.y, fromPosition.z,\n        TensorCore.getHeadingToTarget(fromPosition, toPosition),\n        math.max(0.1, distance - tipLength), 1.0, tipLength, 2.3, 0, false,\n        Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n    ))\nend\n\nlocal completedStep = route.step\nroute.step = completedStep + 1\nif completedStep == 1 then\n    drawCircle(route.hit1)\n    drawMoveArrow(route.hit1, route.hit2)\nelseif completedStep == 2 then\n    drawCircle(route.hit2)\n    keepDraw(drawer:addTimedLine(\n        duration,\n        route.hit2.x, route.hit2.y, route.hit2.z,\n        route.middle.x, route.middle.y, route.middle.z,\n        1.0, 1.0, 0\n    ))\n    drawMoveArrow(route.middle, route.hit3)\nelseif completedStep == 3 then\n    drawCircle(route.hit3)\n    drawMoveArrow(route.hit3, route.hit4)\nelse\n    drawCircle(route.hit4)\n    drawMoveArrow(route.hit4, route.group)\nend\n\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"97c62ab5-e712-45b6-bf88-a413ec416718",
+									true,
+								},
+							},
+							name = "Advance one bait step",
+							uuid = "a41e4808-6fb5-cd9e-8a2e-91506f0f044b",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "if eventArgs.aoeID ~= 11098 then return false end\nlocal route = data.uwu_eruption_bait_route\nlocal startTime = eventArgs.startTime\nif not route or not startTime or route.lastAOEStartTime == startTime then\n    return false\nend\nroute.lastAOEStartTime = startTime\nreturn true",
+							dequeueIfLuaFalse = true,
+							eventArgType = 2,
+							eventSpellID = 11098,
+							name = "Eruption AOE created",
+							uuid = "97c62ab5-e712-45b6-bf88-a413ec416718",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				eventType = 18,
+				loop = true,
+				mechanicTime = 345,
+				name = "[Draw] Advance Eruption Bait Route - R1/R2",
+				throttleTime = 150,
+				timeRange = true,
+				timelineIndex = 47,
+				timerEndOffset = 16,
+				timerStartOffset = -4,
+				uuid = "4b77dad5-d8fb-b37e-a3cc-c1126a317d7c",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Movement - Eruption",
+				uuid = "6084409c-bb96-045c-a943-4a3a0b7e9d68",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "TensorDrift_SlidecastForceHold = true\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"34b8d9e9-e44c-1a43-9ea9-742876b314ad",
+									true,
+								},
+							},
+							name = "Force Slidecast",
+							uuid = "3c6a1b1f-b80a-2790-91cf-dc022f960e7e",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "TensorDrift_SlidecastForceHold = false\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"34b8d9e9-e44c-1a43-9ea9-742876b314ad",
+									true,
+								},
+							},
+							name = "End Slide",
+							uuid = "184f9458-99dc-92ed-928a-527a66dec954",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore.Roster\nif not Roster or not Roster.current() then return false end\nlocal slot = Roster.mySlot()\nreturn slot == \"R1\" or slot == \"R2\"",
+							name = "Roster R1/R2",
+							uuid = "34b8d9e9-e44c-1a43-9ea9-742876b314ad",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Movement - Eruption",
+				mechanicTime = 345,
+				name = "[Drift] Eruption R1/R2 345",
+				throttleTime = 10500,
+				timeRange = true,
+				timelineIndex = 47,
+				timerEndOffset = 7,
+				timerStartOffset = -4,
+				uuid = "0810e1c1-f532-09a1-bb4c-50b920f56513",
+				version = 2,
+			},
+		},
+	},
+	[48] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "0c401171-73fa-7da5-41e0-5c1fc21a7c41",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+	},
+	[52] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\optimization",
+				uuid = "5487e4bc-6aef-b528-58dc-bcdea2b51e4c",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\optimization",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ifrit",
+				uuid = "ae3e8e68-75ee-923f-8c5c-78abbbb8cc02",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local function ljArrow(ms, from, to)\n local dist = TensorCore.getDistance2d(from, to)\n local scale = math.min(1, dist / 15)\n local tip = math.max(2, 3 * scale)\n if dist - tip <= 1 then return end\n local d = TensorCore.getCachedDrawer(0xFF0000FF, nil, 0xFF0000FF, 0xFFFFFFFF, 2)\n d:addTimedArrow(ms, from.x, from.y, from.z, TensorCore.getHeadingToTarget(from, to),\n  dist - tip, math.max(0.5, scale), tip, math.max(1.5, 3 * scale), 0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\n\nlocal function uwuNaurPartyBearing()\n local state = data.uwu_ifrit_last_nail\n local last = state and state.last\n if not last then return nil end\n local b = math.deg(math.atan2(last.x - 100, -(last.z - 100))) % 360\n local k = math.floor(b / 45 + 0.5) % 8\n if k % 2 == 0 then k = (k + 1) % 8 end\n return k * 45\nend\nlocal function uwuNaurSpot(bearing, radius, y)\n local r = math.rad(bearing)\n return {x = 100 + math.sin(r) * radius, y = y, z = 100 - math.cos(r) * radius}\nend\n\nlocal player = TensorCore.mGetPlayer()\nlocal b = uwuNaurPartyBearing()\nif player and b then\n local dest = uwuNaurSpot(b, 18, player.pos.y)\n ljArrow(6500, player.pos, dest)\n AnyoneCore.addTimedWorldText(6500, \"MT: INTERCARD\", {x = dest.x, y = dest.y + 1.5, z = dest.z}, 0xFF66DDFF, true, 1.1)\nend\nself.used = true\n",
+							conditions = 
+							{
+								
+								{
+									"3881608b-0ac3-aca4-996d-5924a4a1f74c",
+									true,
+								},
+								
+								{
+									"121ade5e-eeff-3c36-8919-193356d82cb8",
+									true,
+								},
+							},
+							name = "Relative North Wall Arrow",
+							uuid = "521f0e6e-c8f1-b03c-b669-3bd2e6de848f",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.entityContentID == 1185 and eventArgs.spellID == 11102",
+							dequeueIfLuaFalse = true,
+							name = "Hellfire",
+							uuid = "3881608b-0ac3-aca4-996d-5924a4a1f74c",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return AnyoneCore.Roster.mySlot() == \"T1\"",
+							dequeueIfLuaFalse = true,
+							name = "Anyone Roster: T1 (MT)",
+							uuid = "121ade5e-eeff-3c36-8919-193356d82cb8",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				eventType = 2,
+				mechanicTime = 369,
+				name = "[Draw] Ifrit Post-Nails - MT Intercard Wall",
+				timeRange = true,
+				timelineIndex = 52,
+				timerEndOffset = 5,
+				timerStartOffset = -1,
+				uuid = "640ad4a6-1e32-5a94-82a0-d1835b8bf890",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "data.uwu_ifrit_dash2 = data.uwu_ifrit_dash2 or {}\nlocal state = data.uwu_ifrit_dash2\nif state.startArrowID then Argus.deleteTimedShape(state.startArrowID) end\nif state.arrowID then Argus.deleteTimedShape(state.arrowID) end\nif state.stopCircleID then Argus.deleteTimedShape(state.stopCircleID) end\nstate.startArrowID = nil\nstate.arrowID = nil\nstate.stopCircleID = nil\nstate.route = nil\nstate.dashOctants = nil\nstate.startIndex = nil\nstate.wokenNumber = nil\nstate.wokenOctant = nil\nstate.stage = nil\nstate.lastCasterID = nil\nstate.channelOctants = nil\nstate.channelIDs = nil\nstate.channelCount = nil\nstate.lastChannelID = nil\nstate.bossID = eventArgs.entityID\nstate.drawn = false\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"4fdc244c-e8b8-34d4-a0aa-f62e41494092",
+									true,
+								},
+							},
+							name = "Remember Woken Ifrit",
+							uuid = "34fefc5f-a42f-f2c1-837c-54ccc050b767",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.entityContentID == 1185 and eventArgs.spellID == 11102",
+							dequeueIfLuaFalse = true,
+							name = "Post-Nails Hellfire",
+							uuid = "4fdc244c-e8b8-34d4-a0aa-f62e41494092",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				eventType = 2,
+				mechanicTime = 369,
+				name = "[Core] Ifrit Dash 2 - Track Woken Ifrit",
+				timeRange = true,
+				timelineIndex = 52,
+				timerEndOffset = 5,
+				timerStartOffset = -1,
+				uuid = "c009dcf8-2dac-66e0-a0cf-f559aa67f7a1",
+				version = 2,
+			},
+		},
+	},
+	[53] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ifrit",
+				uuid = "cdf3976f-293b-88eb-8b18-d2f5ac1f8300",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local function ljArrow(ms, from, to)\n local dist = TensorCore.getDistance2d(from, to)\n local scale = math.min(1, dist / 15)\n local tip = math.max(2, 3 * scale)\n if dist - tip <= 1 then return end\n local d = TensorCore.getCachedDrawer(0xFF0000FF, nil, 0xFF0000FF, 0xFFFFFFFF, 2)\n d:addTimedArrow(ms, from.x, from.y, from.z, TensorCore.getHeadingToTarget(from, to),\n  dist - tip, math.max(0.5, scale), tip, math.max(1.5, 3 * scale), 0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\n\nlocal function uwuNaurPartyBearing()\n local state = data.uwu_ifrit_last_nail\n local last = state and state.last\n if not last then return nil end\n local b = math.deg(math.atan2(last.x - 100, -(last.z - 100))) % 360\n local k = math.floor(b / 45 + 0.5) % 8\n if k % 2 == 0 then k = (k + 1) % 8 end\n return k * 45\nend\nlocal function uwuNaurSpot(bearing, radius, y)\n local r = math.rad(bearing)\n return {x = 100 + math.sin(r) * radius, y = y, z = 100 - math.cos(r) * radius}\nend\n\nlocal player = TensorCore.mGetPlayer()\nlocal role = AnyoneCore.Roster.mySlot()\nif not player or not player.pos or (role ~= \"R1\" and role ~= \"R2\") then self.used = true return end\nlocal b = uwuNaurPartyBearing()\nif not b then self.used = true return end\nlocal y = player.pos.y\nlocal route = {uwuNaurSpot(b + 105, 17, y), uwuNaurSpot(b + 85, 17, y), uwuNaurSpot(b + 65, 17, y), uwuNaurSpot(b + 45, 17, y)}\nlocal ring = TensorCore.getCachedDrawer(0x5530E080, 0x5530E080, 0x5530E080, 0xFF30E080, 2.0)\nfor i = 1, #route do ring:addTimedCircle(9000, route[i].x, route[i].y, route[i].z, 0.8, 0, false, true) end\nljArrow(9000, player.pos, route[1])\nfor i = 1, #route - 1 do ljArrow(9000, route[i], route[i + 1]) end\nAnyoneCore.addTimedWorldText(9000, \"ERUPTIONS: END ON CARDINAL\", {x = route[4].x, y = y + 1.5, z = route[4].z}, 0xFF70F0FF, true, 1.1)\nself.used = true\n",
+							conditions = 
+							{
+								
+								{
+									"9f4c33c5-ec51-1a79-8e4b-f07a789cbf40",
+									true,
+								},
+							},
+							name = "Farthest Eruption Bait Route",
+							uuid = "ff322d53-4c8f-1d40-a3e4-d31ecab7141d",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.buffID == 1578 and eventArgs.ownerContentID == 1185",
+							dequeueIfLuaFalse = true,
+							name = "Post-Nails Searing Wind",
+							uuid = "9f4c33c5-ec51-1a79-8e4b-f07a789cbf40",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				eventType = 8,
+				mechanicTime = 377,
+				name = "[Draw] Ifrit Post-Nails - Eruption Bait Route",
+				timeRange = true,
+				timelineIndex = 53,
+				timerEndOffset = 5,
+				timerStartOffset = -1,
+				uuid = "32a379f9-241d-2661-adca-3713516c7683",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local function ljArrow(ms, from, to)\n local dist = TensorCore.getDistance2d(from, to)\n local scale = math.min(1, dist / 15)\n local tip = math.max(2, 3 * scale)\n if dist - tip <= 1 then return end\n local d = TensorCore.getCachedDrawer(0xFF0000FF, nil, 0xFF0000FF, 0xFFFFFFFF, 2)\n d:addTimedArrow(ms, from.x, from.y, from.z, TensorCore.getHeadingToTarget(from, to),\n  dist - tip, math.max(0.5, scale), tip, math.max(1.5, 3 * scale), 0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\n\nlocal function uwuNaurPartyBearing()\n local state = data.uwu_ifrit_last_nail\n local last = state and state.last\n if not last then return nil end\n local b = math.deg(math.atan2(last.x - 100, -(last.z - 100))) % 360\n local k = math.floor(b / 45 + 0.5) % 8\n if k % 2 == 0 then k = (k + 1) % 8 end\n return k * 45\nend\nlocal function uwuNaurSpot(bearing, radius, y)\n local r = math.rad(bearing)\n return {x = 100 + math.sin(r) * radius, y = y, z = 100 - math.cos(r) * radius}\nend\n\nlocal player = TensorCore.mGetPlayer()\nlocal b = uwuNaurPartyBearing()\nif player and b then\n local dest = uwuNaurSpot(b - 90, 18, player.pos.y)\n ljArrow(7000, player.pos, dest)\n AnyoneCore.addTimedWorldText(7000, \"SEARING: CCW INTERCARD\", {x = dest.x, y = dest.y + 1.5, z = dest.z}, 0xFFFFD080, true, 1.1)\nend\nself.used = true\n",
+							conditions = 
+							{
+								
+								{
+									"4306a399-6af0-7947-be24-fa58b93580cf",
+									true,
+								},
+								
+								{
+									"8f9798fb-bcba-1569-b98b-c840eb7435c6",
+									true,
+								},
+								
+								{
+									"cd0197bf-9356-81ad-9c34-32215fd13368",
+									true,
+								},
+							},
+							name = "Relative West Arrow",
+							uuid = "441ddbeb-89dd-42ef-a944-41814bafddab",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.buffID == 1578 and eventArgs.ownerContentID == 1185",
+							dequeueIfLuaFalse = true,
+							name = "Searing Wind",
+							uuid = "4306a399-6af0-7947-be24-fa58b93580cf",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local role = AnyoneCore.Roster.mySlot()\nreturn role == \"H1\" or role == \"H2\"",
+							dequeueIfLuaFalse = true,
+							name = "Anyone Roster: H1/H2",
+							uuid = "8f9798fb-bcba-1569-b98b-c840eb7435c6",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local player = TensorCore.mGetPlayer()\nreturn player and player.id == eventArgs.entityID",
+							dequeueIfLuaFalse = true,
+							name = "Searing Target",
+							uuid = "cd0197bf-9356-81ad-9c34-32215fd13368",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				eventType = 8,
+				mechanicTime = 377,
+				name = "[Draw] Ifrit Post-Nails - Searing Wind CCW Intercard",
+				timeRange = true,
+				timelineIndex = 53,
+				timerEndOffset = 5,
+				timerStartOffset = -1,
+				uuid = "922f2822-dd5a-9f07-893a-c73301c878d6",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ifrit",
+							uuid = "3661add5-2f22-45b2-8467-666203854426",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "if eventArgs and eventArgs.entityID then\n    data.uwu_ifrit_searing_wind_target = eventArgs.entityID\nend\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"80d721be-c565-649e-adf4-0a13d76aef0b",
+									true,
+								},
+							},
+							displayPath = "Draws - Ifrit",
+							name = "Store debuffed party member",
+							uuid = "565b79ab-5e9f-9534-867a-4938942ffffb",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ifrit",
+							uuid = "459caf18-44c4-17bb-8a3e-ab1907201876",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs and eventArgs.buffID == 1578 and eventArgs.ownerContentID == 1185",
+							dequeueIfLuaFalse = true,
+							displayPath = "Draws - Ifrit",
+							name = "Searing Wind from Ifrit",
+							uuid = "80d721be-c565-649e-adf4-0a13d76aef0b",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				eventType = 8,
+				mechanicTime = 377,
+				name = "[State][Ifrit] Capture Searing Wind target",
+				timeRange = true,
+				timelineIndex = 53,
+				timerEndOffset = 5,
+				timerStartOffset = -1,
+				uuid = "5e11dbcc-c275-7a8d-8523-0c5c15394a88",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ifrit",
+							uuid = "ee2267b1-29ef-bef7-b0b0-c7701d0f73e4",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current or not Roster.current() then return end\nif not Roster.isReady or not Roster.isReady() then return end\n\nlocal slot = Roster.mySlot()\nif not slot or slot == \"T1\" or slot == \"R1\" or slot == \"R2\" then\n    self.used = true\n    return\nend\n\nlocal playerID = Roster.idOf(slot)\nlocal searingTarget = data.uwu_ifrit_searing_wind_target\nif not playerID or not searingTarget or playerID == searingTarget then\n    self.used = true\n    return\nend\n\nlocal player = Roster.entOf(slot)\nlocal mt = Roster.entOf(\"T1\")\nif not player or not player.pos or not mt or not mt.pos then return end\n\nlocal distance = TensorCore.getDistance2d(player.pos, mt.pos)\nif distance and distance > 0.2 then\n    local heading = TensorCore.getHeadingToTarget(player.pos, mt.pos)\n    local tipLength = math.min(2.5, distance * 0.4)\n    local drawer = TensorCore.getCachedDrawer(\n        0xFFFFCC33, 0xFFFFA000, 0xFFFFFFFF, 0xFF000000, 4\n    )\n    drawer:addTimedArrow(\n        4000,\n        player.pos.x, player.pos.y, player.pos.z,\n        heading,\n        distance - tipLength, 1.4, tipLength, 3.0,\n        0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n    )\nend\n\nAnyoneCore.addTimedWorldTextOnEnt(\n    4000,\n    \"Follow Tank to safespot\",\n    player.id,\n    0xFFFFCC33,\n    true,\n    1.2,\n    2.0\n)\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"da44a798-1b13-9edb-b5ba-d3bf919b0457",
+									true,
+								},
+							},
+							displayPath = "Draws - Ifrit",
+							name = "Arrow and overhead text to MT",
+							uuid = "37ffe85b-b9f3-f918-95ca-42ca14c874fd",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ifrit",
+							uuid = "a3f1958c-33d6-4f8d-a27b-8bdfd34242fa",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current or not Roster.current() then return false end\nlocal slot = Roster.mySlot()\nif not slot or slot == \"T1\" or slot == \"R1\" or slot == \"R2\" then return false end\nlocal playerID = Roster.idOf(slot)\nlocal searingTarget = data.uwu_ifrit_searing_wind_target\nreturn playerID ~= nil and searingTarget ~= nil and playerID ~= searingTarget",
+							dequeueIfLuaFalse = true,
+							displayPath = "Draws - Ifrit",
+							name = "Party member except MT, ranged, and Searing target",
+							uuid = "da44a798-1b13-9edb-b5ba-d3bf919b0457",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				mechanicTime = 377,
+				name = "[Draw] Follow MT to Safespot 379 - Group",
+				throttleTime = 1000,
+				timeRange = true,
+				timelineIndex = 53,
+				timerEndOffset = 3,
+				timerStartOffset = 2,
+				uuid = "0b77854a-8c37-c575-b2c3-890f38188cde",
+				version = 2,
+			},
+		},
+	},
+	[55] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "4106bf13-eae3-afdf-05be-5bd15abefae3",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Movement - Eruption",
+				uuid = "b4101758-6e48-e9b7-b30b-74b5c8440c9f",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "TensorDrift_SlidecastForceHold = true\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"d9f66ed7-d023-9075-9443-732e1c196aba",
+									true,
+								},
+							},
+							name = "Force Slidecast",
+							uuid = "f0475f80-c63f-8878-bd22-e85733e6d390",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "TensorDrift_SlidecastForceHold = false\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"d9f66ed7-d023-9075-9443-732e1c196aba",
+									true,
+								},
+							},
+							name = "End Slide",
+							uuid = "96388716-0abb-e5a4-9cb8-4222690933b5",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore.Roster\nif not Roster or not Roster.current() then return false end\nlocal slot = Roster.mySlot()\nreturn slot == \"R1\" or slot == \"R2\"",
+							name = "Roster R1/R2",
+							uuid = "d9f66ed7-d023-9075-9443-732e1c196aba",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Movement - Eruption",
+				mechanicTime = 383,
+				name = "[Drift] Eruption R1/R2 383",
+				throttleTime = 10500,
+				timeRange = true,
+				timelineIndex = 55,
+				timerEndOffset = 7,
+				timerStartOffset = -4,
+				uuid = "56da5322-3bb5-7353-8dc5-25c192780130",
+				version = 2,
+			},
+		},
+	},
+	[57] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "30f8efa9-3c9b-b5c5-18cf-0e3b0da0c6b9",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ifrit",
+				uuid = "a91ae58a-ba9d-e055-a944-7bc596d80f26",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ifrit",
+							uuid = "e097f0e7-ce96-6446-aaf4-146e0e9661a9",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player = TensorCore.mGetPlayer()\nlocal boss = TensorCore.mGetEntity(eventArgs.entityID)\nif not player or not player.pos or not boss or not boss.pos then\n    self.used = true\n    return\nend\nlocal h = eventArgs.heading or boss.pos.h or 0\nlocal sx = math.cos(h)\nlocal sz = -math.sin(h)\nlocal right = { x = boss.pos.x + sx * 18, y = player.pos.y, z = boss.pos.z + sz * 18 }\nlocal left = { x = boss.pos.x - sx * 18, y = player.pos.y, z = boss.pos.z - sz * 18 }\nlocal dest = right\nif TensorCore.getDistance2d(player.pos, left) < TensorCore.getDistance2d(player.pos, right) then\n    dest = left\nend\nlocal distance = TensorCore.getDistance2d(player.pos, dest)\nif distance > 0.2 then\n    local tip = math.min(2.5, distance * 0.35)\n    local drawer = TensorCore.getCachedDrawer(0xFFFFD080, 0xFFFFA000, 0xFFFFFFFF, 0xFF000000, 4)\n    drawer:addTimedArrow(7000, player.pos.x, player.pos.y, player.pos.z, TensorCore.getHeadingToTarget(player.pos, dest), math.max(0.1, distance - tip), 1.4, tip, 3.0, 0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nAnyoneCore.addTimedWorldText(7000, \"CRIMSON: SAFE SIDE\", { x = dest.x, y = dest.y + 1.2, z = dest.z }, 0xFFFFD080, true, 1.1)\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"924b1eed-2cda-72e3-8df4-78b8c46c4c3b",
+									true,
+								},
+							},
+							displayPath = "Draws - Ifrit",
+							name = "Crimson Safe Side 390",
+							uuid = "f4f8c464-d03a-a7a3-be1e-d5a0326e0136",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.spellID==11103 and eventArgs.entityContentID==1185",
+							dequeueIfLuaFalse = true,
+							name = "Crimson Cyclone Cast",
+							uuid = "924b1eed-2cda-72e3-8df4-78b8c46c4c3b",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				eventType = 3,
+				mechanicTime = 390,
+				name = "[Draw][NAUR][Ifrit] Crimson Cyclone Safe Side 390",
+				timeRange = true,
+				timelineIndex = 57,
+				timerEndOffset = 5,
+				timerStartOffset = -1,
+				uuid = "118d7beb-dfb5-b32b-9478-06c778502941",
+				version = 2,
+			},
+		},
+	},
+	[58] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ifrit",
+				uuid = "7937d595-eb53-0f97-ad6f-8715220a0e8c",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local state = data.uwu_relative_nails\nif state and state.relativeNorthTextID then\n    AnyoneCore.removeTimedWorldText(state.relativeNorthTextID)\n    state.relativeNorthTextID = nil\nend\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"0afdac2f-494a-b7f9-9aec-97c9acd61fad",
+									true,
+								},
+							},
+							name = "Remove Relative North",
+							uuid = "820553be-be66-1b9d-8671-9231563b8128",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.entityContentID == 1185 and eventArgs.wasTargetable == true and eventArgs.isTargetable == false",
+							dequeueIfLuaFalse = true,
+							name = "Ifrit Phase End",
+							uuid = "0afdac2f-494a-b7f9-9aec-97c9acd61fad",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				eventType = 26,
+				mechanicTime = 395,
+				name = "[Draw] Infernal Nail Relative North Cleanup",
+				timeRange = true,
+				timelineIndex = 58,
+				timerEndOffset = 10,
+				timerStartOffset = -5,
+				uuid = "9088761c-2854-1e01-a92b-f2642c14c852",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player = TensorCore.mGetPlayer()\nif not player then\n    self.used = true\n    return\nend\n\nlocal radialX = player.pos.x - 100\nlocal radialZ = player.pos.z - 100\nlocal radialLength = math.sqrt(radialX * radialX + radialZ * radialZ)\nif radialLength < 1 then\n    self.used = true\n    return\nend\n\nlocal point1 = {\n    x = 100 + radialX * 0.8660254 - radialZ * 0.5,\n    y = player.pos.y,\n    z = 100 + radialX * 0.5 + radialZ * 0.8660254\n}\nlocal point2 = {\n    x = 100 + radialX * 0.5 - radialZ * 0.8660254,\n    y = player.pos.y,\n    z = 100 + radialX * 0.8660254 + radialZ * 0.5\n}\nlocal point3 = {\n    x = 100 - radialZ,\n    y = player.pos.y,\n    z = 100 + radialX\n}\n\nlocal drawer = TensorCore.getCachedDrawer(\n    0xFFFFD080, 0xFFFF9800, 0xFFFFFFFF, 0xFF000000, 4\n)\n\nlocal distance1 = TensorCore.getDistance2d(player.pos, point1)\nif distance1 > 0.2 then\n    local tip = math.min(2.3, distance1 * 0.4)\n    drawer:addTimedArrow(\n        3000, player.pos.x, player.pos.y, player.pos.z,\n        TensorCore.getHeadingToTarget(player.pos, point1),\n        math.max(0.1, distance1 - tip), 1.35, tip, 3.0,\n        0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n    )\nend\n\nlocal distance2 = TensorCore.getDistance2d(point1, point2)\nif distance2 > 0.2 then\n    local tip = math.min(2.3, distance2 * 0.4)\n    drawer:addTimedArrow(\n        3000, point1.x, point1.y, point1.z,\n        TensorCore.getHeadingToTarget(point1, point2),\n        math.max(0.1, distance2 - tip), 1.35, tip, 3.0,\n        2500, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n    )\nend\n\nlocal distance3 = TensorCore.getDistance2d(point2, point3)\nif distance3 > 0.2 then\n    local tip = math.min(2.3, distance3 * 0.4)\n    drawer:addTimedArrow(\n        3800, point2.x, point2.y, point2.z,\n        TensorCore.getHeadingToTarget(point2, point3),\n        math.max(0.1, distance3 - tip), 1.35, tip, 3.0,\n        5000, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n    )\nend\n\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"365abf6d-0538-ed18-b2b2-12cfbf8596eb",
+									true,
+								},
+								
+								{
+									"97008323-df0a-f29c-a6fd-ea98dc81cbc4",
+									true,
+								},
+								
+								{
+									"33b131c0-974c-e126-b871-fd65fe74475a",
+									true,
+								},
+							},
+							name = "Clockwise Quarter-Turn Route",
+							uuid = "bcfe1083-7ed2-51e2-a99f-6476753e9b23",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.buffID == 1578 and eventArgs.ownerContentID == 1185",
+							dequeueIfLuaFalse = true,
+							name = "Second Searing Wind",
+							uuid = "365abf6d-0538-ed18-b2b2-12cfbf8596eb",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local role = AnyoneCore.Roster.mySlot()\nreturn role == \"H1\" or role == \"H2\"",
+							dequeueIfLuaFalse = true,
+							name = "Anyone Roster: H1/H2",
+							uuid = "97008323-df0a-f29c-a6fd-ea98dc81cbc4",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local player = TensorCore.mGetPlayer()\nreturn player and player.id == eventArgs.entityID",
+							dequeueIfLuaFalse = true,
+							name = "Searing Target",
+							uuid = "33b131c0-974c-e126-b871-fd65fe74475a",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				eventType = 8,
+				mechanicTime = 395,
+				name = "[Draw] Ifrit Post-Eruptions - H2 Clockwise Route",
+				timeRange = true,
+				timelineIndex = 58,
+				timerEndOffset = 5,
+				timerStartOffset = -1,
+				uuid = "07cf2f7e-b6f7-6b7b-ba0a-01371865f786",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "data.uwu_ifrit_dash2 = data.uwu_ifrit_dash2 or {}\ndata.uwu_ifrit_dash2.secondHealerID = eventArgs.entityID\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"1b70b93e-b353-aecf-8619-b7c5aac59986",
+									true,
+								},
+							},
+							name = "Remember Second Healer",
+							uuid = "57d7f07e-795b-d6ab-9926-08f3382db3a9",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.buffID == 1578 and eventArgs.ownerContentID == 1185",
+							dequeueIfLuaFalse = true,
+							name = "Second Searing Wind",
+							uuid = "1b70b93e-b353-aecf-8619-b7c5aac59986",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				eventType = 8,
+				mechanicTime = 395,
+				name = "[Core] Ifrit Dash 2 - Track Second Searing",
+				timeRange = true,
+				timelineIndex = 58,
+				timerEndOffset = 5,
+				timerStartOffset = -1,
+				uuid = "80280ee0-4e6e-a44c-b22d-be6208463815",
+				version = 2,
+			},
+		},
+	},
+	[61] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "1132ae7e-2bf1-c302-21be-b5a8680a72ce",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 3000,
+							alertTTS = true,
+							alertText = "Stack",
+							conditions = 
+							{
+								
+								{
+									"f8861ae0-27f0-80ae-b8e5-caf0d514d9c8",
+									true,
+								},
+							},
+							uuid = "e8df8c0e-2310-bd7d-8c36-0b2625272f70",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							buffCheckType = 2,
+							buffID = 1578,
+							category = "Self",
+							dequeueIfLuaFalse = true,
+							name = "No Searing Wind",
+							uuid = "f8861ae0-27f0-80ae-b8e5-caf0d514d9c8",
+							version = 3,
+						},
+					},
+				},
+				mechanicTime = 405,
+				name = "[Call][NAUR] Stack except Searing Wind",
+				timeRange = true,
+				timelineIndex = 61,
+				timerEndOffset = -2,
+				timerStartOffset = -3,
+				uuid = "6baf5f94-462f-3cb9-b02f-bee1551989ae",
+				version = 2,
+			},
+		},
+	},
+	[63] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ifrit",
+				uuid = "782743bd-a757-d0a1-b5bc-46edbf837720",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player = TensorCore.mGetPlayer()\nlocal lastState = data.uwu_ifrit_last_nail\nlocal last = lastState and lastState.last\nif not player or not last then\n    self.used = true\n    return\nend\n\nlocal dashState = data.uwu_ifrit_dash2\nlocal secondSearing = dashState and dashState.secondHealerID == player.id\nlocal destination\nlocal label\nlocal color\n\nif secondSearing then\n    destination = { x = 200 - last.x, y = player.pos.y, z = 200 - last.z }\n    label = \"SEARING: OPPOSITE\"\n    color = 0xFFFFB347\nelse\n    destination = { x = last.x, y = player.pos.y, z = last.z }\n    label = \"PARTY START\"\n    color = 0xFFB6E8FF\nend\n\nlocal distance = TensorCore.getDistance2d(player.pos, destination)\nif distance > 0.2 then\n    local tip = math.min(2.6, distance * 0.38)\n    local drawer = TensorCore.getCachedDrawer(\n        color, color, 0xFFFFFFFF, 0xFF000000, 5\n    )\n    drawer:addTimedArrow(\n        7500, player.pos.x, player.pos.y, player.pos.z,\n        TensorCore.getHeadingToTarget(player.pos, destination),\n        math.max(0.1, distance - tip), 1.5, tip, 3.2,\n        0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n    )\nend\n\nAnyoneCore.addTimedWorldText(\n    7500, label,\n    { x = destination.x, y = destination.y + 0.5, z = destination.z },\n    color, true, 1.3\n)\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"34282848-5bb4-6f7c-880d-6694b8f1f481",
+									true,
+								},
+							},
+							name = "Last-Dash Start Arrow",
+							uuid = "c722132c-32e3-4183-992b-3721cdc55514",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local state = data.uwu_ifrit_last_nail\nreturn state and state.last ~= nil",
+							name = "Last Nail Known",
+							uuid = "34282848-5bb4-6f7c-880d-6694b8f1f481",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				mechanicTime = 409,
+				name = "[Draw] Ifrit Dash 2 - Party and Searing Start",
+				throttleTime = 10000,
+				timeRange = true,
+				timelineIndex = 63,
+				timerEndOffset = 4,
+				timerStartOffset = -0.5,
+				uuid = "1827bf3f-c813-7f48-85fb-c66297724787",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local state = data.uwu_ifrit_dash2\nlocal nails = data.uwu_ifrit_last_nail\nlocal player = TensorCore.mGetPlayer()\nif not state or not nails or not nails.order or not nails.order[4] or not player then\n    return\nend\nlocal nail = nails.order[4]\nlocal dx, dz = nail.x - 100, nail.z - 100\nlocal ax, az = math.abs(dx), math.abs(dz)\nlocal index\nif ax > az * 2.414214 then index = dx >= 0 and 0 or 4\nelseif az > ax * 2.414214 then index = dz >= 0 and 2 or 6\nelseif dx >= 0 then index = dz >= 0 and 1 or 7\nelse index = dz >= 0 and 3 or 5 end\nif state.secondHealerID == player.id then\n    index = (index + 4) % 8\nend\nlocal radius = 17.5\nlocal diagonal = radius * 0.7071068\nlocal y = player.pos.y\nlocal to\nif index == 0 then to = { x = 100 + radius, y = y, z = 100 }\nelseif index == 1 then to = { x = 100 + diagonal, y = y, z = 100 + diagonal }\nelseif index == 2 then to = { x = 100, y = y, z = 100 + radius }\nelseif index == 3 then to = { x = 100 - diagonal, y = y, z = 100 + diagonal }\nelseif index == 4 then to = { x = 100 - radius, y = y, z = 100 }\nelseif index == 5 then to = { x = 100 - diagonal, y = y, z = 100 - diagonal }\nelseif index == 6 then to = { x = 100, y = y, z = 100 - radius }\nelse to = { x = 100 + diagonal, y = y, z = 100 - diagonal } end\nlocal from = player.pos\nlocal distance = TensorCore.getDistance2d(from, to)\nif distance > 0.2 then\n    local drawer = TensorCore.getCachedDrawer(\n        0xFFCBFFB8, 0xFF5DF27B, 0xFFFFFFFF, 0xFF000000, 5\n    )\n    local tip = math.min(2.8, distance * 0.38)\n    state.startArrowID = drawer:addTimedArrow(\n        8000, from.x, from.y, from.z,\n        TensorCore.getHeadingToTarget(from, to),\n        math.max(0.1, distance - tip), 1.35, tip, 2.8,\n        0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n    )\nend\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"275d29f6-eda8-392b-8d82-995badd7515c",
+									true,
+								},
+							},
+							name = "To Fourth Nail Start",
+							uuid = "d6ddd118-c98f-1046-bab9-8d7a05e1aef4",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local nails = data.uwu_ifrit_last_nail\nreturn data.uwu_ifrit_dash2 ~= nil and nails ~= nil and nails.order ~= nil and nails.order[4] ~= nil",
+							name = "Fourth Nail Known",
+							uuid = "275d29f6-eda8-392b-8d82-995badd7515c",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				mechanicTime = 409,
+				name = "[Draw] Ifrit Dash 2 - Starting Position",
+				timeRange = true,
+				timelineIndex = 63,
+				timerEndOffset = 4,
+				uuid = "a4a4bb81-3827-3b6b-b6a9-1310d445bd5b",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Cooldown Holds",
+				uuid = "91182116-9514-bcf7-9871-25fb68d88218",
+			},
+			objectType = "folder",
+		},
+	},
+	[65] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ifrit",
+				uuid = "89ddb827-40be-9b6a-97c7-2e6f33ad6305",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local state = data.uwu_ifrit_dash2\nlocal nails = data.uwu_ifrit_last_nail\nlocal player = TensorCore.mGetPlayer()\nif not state or state.stage or not nails or not nails.order or not nails.order[4] or not player then self.used=true; return end\nlocal function octant(x, z)\n    local dx, dz = x - 100, z - 100\n    local ax, az = math.abs(dx), math.abs(dz)\n    if ax > az * 2.414214 then return dx >= 0 and 0 or 4 end\n    if az > ax * 2.414214 then return dz >= 0 and 2 or 6 end\n    if dx >= 0 then return dz >= 0 and 1 or 7 end\n    return dz >= 0 and 3 or 5\nend\nlocal boss=state.bossID and TensorCore.mGetEntity(state.bossID)\nif not boss or not boss.pos or state.channelCount~=3 or not state.channelOctants or not state.channelIDs or state.channelIDs[1]~=eventArgs.entityID then\n    if state.startArrowID then Argus.deleteTimedShape(state.startArrowID); state.startArrowID=nil end\n    self.used=true; return\nend\nlocal wokenOctant=octant(boss.pos.x,boss.pos.z)\nlocal searing=state.secondHealerID==player.id\nlocal startIndex=(octant(nails.order[4].x,nails.order[4].z)+(searing and 4 or 0))%8\nlocal dash={state.channelOctants[1],state.channelOctants[2],state.channelOctants[3]}\nlocal seen={}\nfor i=1,3 do\n    if dash[i]==nil or seen[dash[i]] then self.used=true; return end\n    seen[dash[i]]=true\nend\nlocal remainder\nfor i=1,4 do\n    local nail=nails.order[i]\n    if not nail then self.used=true; return end\n    local index=octant(nail.x,nail.z)\n    if not seen[index] then\n        if remainder and remainder~=index then self.used=true; return end\n        remainder=index\n    end\nend\nif remainder==nil then self.used=true; return end\ndash[4]=remainder\nlocal function safe(index,origin)\n    local diff=(index-origin)%4\n    return diff ~= 0\nend\nif not safe(startIndex,dash[1]) then self.used=true; return end\nlocal best, bestCost\nlocal function search(stage,index,cost,path)\n    if stage==5 then\n        if index%2 == wokenOctant%2 and (not bestCost or cost<bestCost) then\n            bestCost=cost\n            best={path[1],path[2],path[3],path[4]}\n        end\n        return\n    end\n    for turn=0,2 do\n        local nextIndex=(index+(turn==1 and 7 or turn==2 and 1 or 0))%8\n        if stage==4 or safe(nextIndex,dash[stage+1]) then\n            path[stage]=nextIndex\n            local penalty=turn==0 and 0 or 10+(turn==2 and 2 or 0)+stage*0.1\n            search(stage+1,nextIndex,cost+penalty,path)\n        end\n    end\nend\nsearch(1,startIndex,0,{})\nif not best then self.used=true; return end\nstate.route=best\nstate.dashOctants=dash\nstate.startIndex=startIndex\nstate.wokenOctant=wokenOctant\nif state.startArrowID then Argus.deleteTimedShape(state.startArrowID); state.startArrowID=nil end\nlocal stage=1\nlocal targetIndex = state.route[stage]\nlocal from = player.pos\nlocal px, pz = from.x - 100, from.z - 100\nlocal radius = math.max(16, math.min(18, math.sqrt(px * px + pz * pz)))\nlocal diagonal = radius * 0.7071068\nlocal y = from.y\nlocal to\nif targetIndex == 0 then to = {x=100+radius,y=y,z=100}\nelseif targetIndex == 1 then to = {x=100+diagonal,y=y,z=100+diagonal}\nelseif targetIndex == 2 then to = {x=100,y=y,z=100+radius}\nelseif targetIndex == 3 then to = {x=100-diagonal,y=y,z=100+diagonal}\nelseif targetIndex == 4 then to = {x=100-radius,y=y,z=100}\nelseif targetIndex == 5 then to = {x=100-diagonal,y=y,z=100-diagonal}\nelseif targetIndex == 6 then to = {x=100,y=y,z=100-radius}\nelse to = {x=100+diagonal,y=y,z=100-diagonal} end\nif state.arrowID then Argus.deleteTimedShape(state.arrowID); state.arrowID = nil end\nif state.stopCircleID then Argus.deleteTimedShape(state.stopCircleID); state.stopCircleID = nil end\nlocal drawer = TensorCore.getCachedDrawer(0xFFCBFFB8,0xFF5DF27B,0xFFFFFFFF,0xFF000000,5)\nlocal distance = TensorCore.getDistance2d(from,to)\nlocal previous = stage == 1 and state.startIndex or state.route[stage-1]\nif targetIndex ~= previous and distance > 0.2 then\n    local tip = math.min(2.8,distance*0.38)\n    state.arrowID = drawer:addTimedArrow(4300,from.x,from.y,from.z,\n        TensorCore.getHeadingToTarget(from,to),math.max(0.1,distance-tip),\n        1.35,tip,2.8,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nlocal final = true\nfor k=stage+1,4 do if state.route[k] ~= targetIndex then final=false; break end end\nif final then\n    state.stopCircleID = drawer:addTimedCircle(8500-stage*1400,\n        to.x,to.y,to.z,1.15,0,false,true,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nstate.stage = stage\nstate.lastCasterID = eventArgs.entityID\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"a378b693-f4d0-eea6-8a42-5993a559d74a",
+									true,
+								},
+							},
+							name = "Safe Step 1",
+							uuid = "253e2d53-42bb-0343-8190-67e670c01829",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local state=data.uwu_ifrit_dash2\nlocal nails=data.uwu_ifrit_last_nail\nreturn state~=nil and state.stage==nil and nails~=nil and nails.order~=nil and nails.order[4]~=nil and eventArgs.entityContentID==1185 and eventArgs.spellID==11103",
+							dequeueIfLuaFalse = true,
+							name = "Crimson Cyclone",
+							uuid = "a378b693-f4d0-eea6-8a42-5993a559d74a",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				eventType = 2,
+				mechanicTime = 416,
+				name = "[Draw] Ifrit Dash 2 - Safe Step 1",
+				timeRange = true,
+				timelineIndex = 65,
+				timerEndOffset = 5,
+				timerStartOffset = -1,
+				uuid = "531f391a-7ec2-b820-af7c-31355ac29301",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local state=data.uwu_ifrit_dash2\nlocal player=TensorCore.mGetPlayer()\nif not state or state.stage~=1 or not state.route or not player then self.used=true; return end\nlocal function octant(x, z)\n    local dx, dz = x - 100, z - 100\n    local ax, az = math.abs(dx), math.abs(dz)\n    if ax > az * 2.414214 then return dx >= 0 and 0 or 4 end\n    if az > ax * 2.414214 then return dz >= 0 and 2 or 6 end\n    if dx >= 0 then return dz >= 0 and 1 or 7 end\n    return dz >= 0 and 3 or 5\nend\nlocal caster=TensorCore.mGetEntity(eventArgs.entityID)\nif not caster or not caster.pos or octant(caster.pos.x,caster.pos.z) ~= state.dashOctants[2] then\n    if state.arrowID then Argus.deleteTimedShape(state.arrowID); state.arrowID=nil end\n    if state.stopCircleID then Argus.deleteTimedShape(state.stopCircleID); state.stopCircleID=nil end\n    state.stage=4\n    self.used=true\n    return\nend\nlocal stage=2\nlocal targetIndex = state.route[stage]\nlocal from = player.pos\nlocal px, pz = from.x - 100, from.z - 100\nlocal radius = math.max(16, math.min(18, math.sqrt(px * px + pz * pz)))\nlocal diagonal = radius * 0.7071068\nlocal y = from.y\nlocal to\nif targetIndex == 0 then to = {x=100+radius,y=y,z=100}\nelseif targetIndex == 1 then to = {x=100+diagonal,y=y,z=100+diagonal}\nelseif targetIndex == 2 then to = {x=100,y=y,z=100+radius}\nelseif targetIndex == 3 then to = {x=100-diagonal,y=y,z=100+diagonal}\nelseif targetIndex == 4 then to = {x=100-radius,y=y,z=100}\nelseif targetIndex == 5 then to = {x=100-diagonal,y=y,z=100-diagonal}\nelseif targetIndex == 6 then to = {x=100,y=y,z=100-radius}\nelse to = {x=100+diagonal,y=y,z=100-diagonal} end\nif state.arrowID then Argus.deleteTimedShape(state.arrowID); state.arrowID = nil end\nif state.stopCircleID then Argus.deleteTimedShape(state.stopCircleID); state.stopCircleID = nil end\nlocal drawer = TensorCore.getCachedDrawer(0xFFCBFFB8,0xFF5DF27B,0xFFFFFFFF,0xFF000000,5)\nlocal distance = TensorCore.getDistance2d(from,to)\nlocal previous = stage == 1 and state.startIndex or state.route[stage-1]\nif targetIndex ~= previous and distance > 0.2 then\n    local tip = math.min(2.8,distance*0.38)\n    state.arrowID = drawer:addTimedArrow(4300,from.x,from.y,from.z,\n        TensorCore.getHeadingToTarget(from,to),math.max(0.1,distance-tip),\n        1.35,tip,2.8,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nlocal final = true\nfor k=stage+1,4 do if state.route[k] ~= targetIndex then final=false; break end end\nif final then\n    state.stopCircleID = drawer:addTimedCircle(8500-stage*1400,\n        to.x,to.y,to.z,1.15,0,false,true,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nstate.stage = stage\nstate.lastCasterID = eventArgs.entityID\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"40bc8b9b-53a9-0916-b377-ca4602633a98",
+									true,
+								},
+							},
+							name = "Safe Step 2",
+							uuid = "cb543621-3c67-03ca-9165-b9c43c1ff1e4",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local state=data.uwu_ifrit_dash2\nreturn state~=nil and state.stage==1 and state.route~=nil and eventArgs.entityContentID==1185 and eventArgs.spellID==11103 and eventArgs.entityID~=state.lastCasterID",
+							dequeueIfLuaFalse = true,
+							name = "Second Crimson Cyclone",
+							uuid = "40bc8b9b-53a9-0916-b377-ca4602633a98",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				eventType = 2,
+				mechanicTime = 416,
+				name = "[Draw] Ifrit Dash 2 - Safe Step 2",
+				timeRange = true,
+				timelineIndex = 65,
+				timerEndOffset = 9,
+				timerStartOffset = 1,
+				uuid = "ac89ce9b-70a7-49f4-ab1a-1ff7cb1b2cc4",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local state=data.uwu_ifrit_dash2\nlocal player=TensorCore.mGetPlayer()\nif not state or state.stage~=2 or not state.route or not player then self.used=true; return end\nlocal function octant(x, z)\n    local dx, dz = x - 100, z - 100\n    local ax, az = math.abs(dx), math.abs(dz)\n    if ax > az * 2.414214 then return dx >= 0 and 0 or 4 end\n    if az > ax * 2.414214 then return dz >= 0 and 2 or 6 end\n    if dx >= 0 then return dz >= 0 and 1 or 7 end\n    return dz >= 0 and 3 or 5\nend\nlocal caster=TensorCore.mGetEntity(eventArgs.entityID)\nif not caster or not caster.pos or octant(caster.pos.x,caster.pos.z) ~= state.dashOctants[3] then\n    if state.arrowID then Argus.deleteTimedShape(state.arrowID); state.arrowID=nil end\n    if state.stopCircleID then Argus.deleteTimedShape(state.stopCircleID); state.stopCircleID=nil end\n    state.stage=4\n    self.used=true\n    return\nend\nlocal stage=3\nlocal targetIndex = state.route[stage]\nlocal from = player.pos\nlocal px, pz = from.x - 100, from.z - 100\nlocal radius = math.max(16, math.min(18, math.sqrt(px * px + pz * pz)))\nlocal diagonal = radius * 0.7071068\nlocal y = from.y\nlocal to\nif targetIndex == 0 then to = {x=100+radius,y=y,z=100}\nelseif targetIndex == 1 then to = {x=100+diagonal,y=y,z=100+diagonal}\nelseif targetIndex == 2 then to = {x=100,y=y,z=100+radius}\nelseif targetIndex == 3 then to = {x=100-diagonal,y=y,z=100+diagonal}\nelseif targetIndex == 4 then to = {x=100-radius,y=y,z=100}\nelseif targetIndex == 5 then to = {x=100-diagonal,y=y,z=100-diagonal}\nelseif targetIndex == 6 then to = {x=100,y=y,z=100-radius}\nelse to = {x=100+diagonal,y=y,z=100-diagonal} end\nif state.arrowID then Argus.deleteTimedShape(state.arrowID); state.arrowID = nil end\nif state.stopCircleID then Argus.deleteTimedShape(state.stopCircleID); state.stopCircleID = nil end\nlocal drawer = TensorCore.getCachedDrawer(0xFFCBFFB8,0xFF5DF27B,0xFFFFFFFF,0xFF000000,5)\nlocal distance = TensorCore.getDistance2d(from,to)\nlocal previous = stage == 1 and state.startIndex or state.route[stage-1]\nif targetIndex ~= previous and distance > 0.2 then\n    local tip = math.min(2.8,distance*0.38)\n    state.arrowID = drawer:addTimedArrow(4300,from.x,from.y,from.z,\n        TensorCore.getHeadingToTarget(from,to),math.max(0.1,distance-tip),\n        1.35,tip,2.8,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nlocal final = true\nfor k=stage+1,4 do if state.route[k] ~= targetIndex then final=false; break end end\nif final then\n    state.stopCircleID = drawer:addTimedCircle(8500-stage*1400,\n        to.x,to.y,to.z,1.15,0,false,true,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nstate.stage = stage\nstate.lastCasterID = eventArgs.entityID\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"a510d972-a5c8-e0ee-bb24-37b466884d82",
+									true,
+								},
+							},
+							name = "Safe Step 3",
+							uuid = "d0e27849-5e14-8266-9d03-17809f1ecd18",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local state=data.uwu_ifrit_dash2\nreturn state~=nil and state.stage==2 and state.route~=nil and eventArgs.entityContentID==1185 and eventArgs.spellID==11103 and eventArgs.entityID~=state.lastCasterID",
+							dequeueIfLuaFalse = true,
+							name = "Crimson Cyclone 3",
+							uuid = "a510d972-a5c8-e0ee-bb24-37b466884d82",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				eventType = 2,
+				mechanicTime = 416,
+				name = "[Draw] Ifrit Dash 2 - Safe Step 3",
+				timeRange = true,
+				timelineIndex = 65,
+				timerEndOffset = 9,
+				timerStartOffset = 2,
+				uuid = "d3a7222f-d953-9804-8ec0-7aca6f5cc2bb",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local state=data.uwu_ifrit_dash2\nlocal player=TensorCore.mGetPlayer()\nif not state or state.stage~=3 or not state.route or not player then self.used=true; return end\nlocal function octant(x, z)\n    local dx, dz = x - 100, z - 100\n    local ax, az = math.abs(dx), math.abs(dz)\n    if ax > az * 2.414214 then return dx >= 0 and 0 or 4 end\n    if az > ax * 2.414214 then return dz >= 0 and 2 or 6 end\n    if dx >= 0 then return dz >= 0 and 1 or 7 end\n    return dz >= 0 and 3 or 5\nend\nlocal caster=TensorCore.mGetEntity(eventArgs.entityID)\nif not caster or not caster.pos or octant(caster.pos.x,caster.pos.z) ~= state.dashOctants[4] then\n    if state.arrowID then Argus.deleteTimedShape(state.arrowID); state.arrowID=nil end\n    if state.stopCircleID then Argus.deleteTimedShape(state.stopCircleID); state.stopCircleID=nil end\n    state.stage=4\n    self.used=true\n    return\nend\nlocal stage=4\nlocal targetIndex = state.route[stage]\nlocal from = player.pos\nlocal px, pz = from.x - 100, from.z - 100\nlocal radius = math.max(16, math.min(18, math.sqrt(px * px + pz * pz)))\nlocal diagonal = radius * 0.7071068\nlocal y = from.y\nlocal to\nif targetIndex == 0 then to = {x=100+radius,y=y,z=100}\nelseif targetIndex == 1 then to = {x=100+diagonal,y=y,z=100+diagonal}\nelseif targetIndex == 2 then to = {x=100,y=y,z=100+radius}\nelseif targetIndex == 3 then to = {x=100-diagonal,y=y,z=100+diagonal}\nelseif targetIndex == 4 then to = {x=100-radius,y=y,z=100}\nelseif targetIndex == 5 then to = {x=100-diagonal,y=y,z=100-diagonal}\nelseif targetIndex == 6 then to = {x=100,y=y,z=100-radius}\nelse to = {x=100+diagonal,y=y,z=100-diagonal} end\nif state.arrowID then Argus.deleteTimedShape(state.arrowID); state.arrowID = nil end\nif state.stopCircleID then Argus.deleteTimedShape(state.stopCircleID); state.stopCircleID = nil end\nlocal drawer = TensorCore.getCachedDrawer(0xFFCBFFB8,0xFF5DF27B,0xFFFFFFFF,0xFF000000,5)\nlocal distance = TensorCore.getDistance2d(from,to)\nlocal previous = stage == 1 and state.startIndex or state.route[stage-1]\nif targetIndex ~= previous and distance > 0.2 then\n    local tip = math.min(2.8,distance*0.38)\n    state.arrowID = drawer:addTimedArrow(4300,from.x,from.y,from.z,\n        TensorCore.getHeadingToTarget(from,to),math.max(0.1,distance-tip),\n        1.35,tip,2.8,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nlocal final = true\nfor k=stage+1,4 do if state.route[k] ~= targetIndex then final=false; break end end\nif final then\n    state.stopCircleID = drawer:addTimedCircle(8500-stage*1400,\n        to.x,to.y,to.z,1.15,0,false,true,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nstate.stage = stage\nstate.lastCasterID = eventArgs.entityID\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"a44acc7a-ac03-55bf-bf11-34f225fd2bb2",
+									true,
+								},
+							},
+							name = "Safe Step 4",
+							uuid = "ae3ec59c-496e-8e04-8cf2-0fd3a5f4b43f",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local state=data.uwu_ifrit_dash2\nreturn state~=nil and state.stage==3 and state.route~=nil and eventArgs.entityContentID==1185 and eventArgs.spellID==11103 and eventArgs.entityID~=state.lastCasterID",
+							dequeueIfLuaFalse = true,
+							name = "Crimson Cyclone 4",
+							uuid = "a44acc7a-ac03-55bf-bf11-34f225fd2bb2",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				eventType = 2,
+				mechanicTime = 416,
+				name = "[Draw] Ifrit Dash 2 - Safe Step 4",
+				timeRange = true,
+				timelineIndex = 65,
+				timerEndOffset = 9,
+				timerStartOffset = 3,
+				uuid = "dfde9ae0-829e-0a16-9470-025077181d6f",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local state=data.uwu_ifrit_dash2\nlocal entity=TensorCore.mGetEntity(eventArgs.entityID)\nif not state or not entity or not entity.pos then self.used=true; return end\nlocal dx,dz=entity.pos.x-100,entity.pos.z-100\nlocal ax,az=math.abs(dx),math.abs(dz)\nlocal index\nif ax>az*2.414214 then index=dx>=0 and 0 or 4\nelseif az>ax*2.414214 then index=dz>=0 and 2 or 6\nelseif dx>=0 then index=dz>=0 and 1 or 7\nelse index=dz>=0 and 3 or 5 end\nstate.channelOctants=state.channelOctants or {}\nstate.channelIDs=state.channelIDs or {}\nstate.channelOctants[1]=index\nstate.channelIDs[1]=eventArgs.entityID\nstate.channelCount=1\nstate.lastChannelID=eventArgs.entityID\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"81ce37b4-18af-edeb-a18d-b802cfa8e3a6",
+									true,
+								},
+							},
+							name = "Record Charge 1",
+							uuid = "a88aec25-ba50-0a92-ac1f-894e91d69b9f",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local state=data.uwu_ifrit_dash2\nreturn state~=nil and state.bossID~=nil and (state.channelCount or 0)==0 and eventArgs.entityContentID==1185 and eventArgs.spellID==11103 and eventArgs.entityID~=state.lastChannelID",
+							dequeueIfLuaFalse = true,
+							name = "Crimson Cyclone Channel 1",
+							uuid = "81ce37b4-18af-edeb-a18d-b802cfa8e3a6",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				eventType = 3,
+				mechanicTime = 416,
+				name = "[Core] Ifrit Dash 2 - Record Charge 1",
+				timeRange = true,
+				timelineIndex = 65,
+				timerEndOffset = 3,
+				timerStartOffset = -6,
+				uuid = "a338eb41-8296-3122-a6f9-4b3a712a5be7",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local state=data.uwu_ifrit_dash2\nlocal entity=TensorCore.mGetEntity(eventArgs.entityID)\nif not state or not entity or not entity.pos then self.used=true; return end\nlocal dx,dz=entity.pos.x-100,entity.pos.z-100\nlocal ax,az=math.abs(dx),math.abs(dz)\nlocal index\nif ax>az*2.414214 then index=dx>=0 and 0 or 4\nelseif az>ax*2.414214 then index=dz>=0 and 2 or 6\nelseif dx>=0 then index=dz>=0 and 1 or 7\nelse index=dz>=0 and 3 or 5 end\nstate.channelOctants=state.channelOctants or {}\nstate.channelIDs=state.channelIDs or {}\nstate.channelOctants[2]=index\nstate.channelIDs[2]=eventArgs.entityID\nstate.channelCount=2\nstate.lastChannelID=eventArgs.entityID\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"0c5106be-bfde-5c32-8674-4aed7fb2e134",
+									true,
+								},
+							},
+							name = "Record Charge 2",
+							uuid = "5a8688d3-a8c4-e532-ad62-553b6887fe8f",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local state=data.uwu_ifrit_dash2\nreturn state~=nil and state.bossID~=nil and (state.channelCount or 0)==1 and eventArgs.entityContentID==1185 and eventArgs.spellID==11103 and eventArgs.entityID~=state.lastChannelID",
+							dequeueIfLuaFalse = true,
+							name = "Crimson Cyclone Channel 2",
+							uuid = "0c5106be-bfde-5c32-8674-4aed7fb2e134",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				eventType = 3,
+				mechanicTime = 416,
+				name = "[Core] Ifrit Dash 2 - Record Charge 2",
+				timeRange = true,
+				timelineIndex = 65,
+				timerEndOffset = 3,
+				timerStartOffset = -6,
+				uuid = "d4a7ceb1-f679-666a-bd98-08b4b4c96ba0",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local state=data.uwu_ifrit_dash2\nlocal entity=TensorCore.mGetEntity(eventArgs.entityID)\nif not state or not entity or not entity.pos then self.used=true; return end\nlocal dx,dz=entity.pos.x-100,entity.pos.z-100\nlocal ax,az=math.abs(dx),math.abs(dz)\nlocal index\nif ax>az*2.414214 then index=dx>=0 and 0 or 4\nelseif az>ax*2.414214 then index=dz>=0 and 2 or 6\nelseif dx>=0 then index=dz>=0 and 1 or 7\nelse index=dz>=0 and 3 or 5 end\nstate.channelOctants=state.channelOctants or {}\nstate.channelIDs=state.channelIDs or {}\nstate.channelOctants[3]=index\nstate.channelIDs[3]=eventArgs.entityID\nstate.channelCount=3\nstate.lastChannelID=eventArgs.entityID\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"f77d6360-151e-6199-9085-3988dfbf3f69",
+									true,
+								},
+							},
+							name = "Record Charge 3",
+							uuid = "e9448dda-f05a-7f0a-bdc4-ed258aa80998",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local state=data.uwu_ifrit_dash2\nreturn state~=nil and state.bossID~=nil and (state.channelCount or 0)==2 and eventArgs.entityContentID==1185 and eventArgs.spellID==11103 and eventArgs.entityID~=state.lastChannelID",
+							dequeueIfLuaFalse = true,
+							name = "Crimson Cyclone Channel 3",
+							uuid = "f77d6360-151e-6199-9085-3988dfbf3f69",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				eventType = 3,
+				mechanicTime = 416,
+				name = "[Core] Ifrit Dash 2 - Record Charge 3",
+				timeRange = true,
+				timelineIndex = 65,
+				timerEndOffset = 3,
+				timerStartOffset = -6,
+				uuid = "fd7c98ac-3fc7-d5db-b2d5-303f3f1727b6",
+				version = 2,
+			},
+		},
+	},
+	[66] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "3dafaf4d-18fa-be79-1a54-c5b33cf7a89d",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+	},
+	[69] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local boss = TensorCore.mGetEntity(eventArgs.detectionTargetID)\nif not boss or not boss.targetable then return end\n-- Cast cones have their own fixed-direction draw.\nif boss.channelingid == 11091 then return end\nlocal target = TensorCore.mGetEntity(boss.targetid)\nif not target then return end\nlocal heading = TensorCore.getHeadingToTarget(boss.pos, target.pos)\nlocal drawer = TensorCore.getMoogleDrawer()\ndrawer:addCone(boss.pos.x,boss.pos.y,boss.pos.z,15,math.rad(120),heading)\n",
+							conditions = 
+							{
+								
+								{
+									"a674d1d1-9694-ba0f-8d96-3db023cbf517",
+									true,
+								},
+							},
+							name = "Short cleave warning",
+							uuid = "796e5432-3286-8059-a0fb-0e86415afa2d",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Filter",
+							filterTargetType = "ContentID",
+							name = "Ifrit Incinerate",
+							partyTargetContentID = 1185,
+							uuid = "a674d1d1-9694-ba0f-8d96-3db023cbf517",
+							version = 3,
+						},
+					},
+				},
+				eventType = 12,
+				mechanicTime = 428,
+				name = "[Draw][NAUR] Incinerate cone - 428",
+				timeRange = true,
+				timelineIndex = 69,
+				timerStartOffset = -3,
+				uuid = "2dc50cce-228a-cf40-88ed-4a87dbee110d",
+				version = 2,
+			},
+		},
+	},
+	[70] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local boss = TensorCore.mGetEntity(eventArgs.detectionTargetID)\nif not boss or not boss.targetable then return end\n-- Cast cones have their own fixed-direction draw.\nif boss.channelingid == 11091 then return end\nlocal target = TensorCore.mGetEntity(boss.targetid)\nif not target then return end\nlocal heading = TensorCore.getHeadingToTarget(boss.pos, target.pos)\nlocal drawer = TensorCore.getMoogleDrawer()\ndrawer:addCone(boss.pos.x,boss.pos.y,boss.pos.z,15,math.rad(120),heading)\n",
+							conditions = 
+							{
+								
+								{
+									"ee9a2c51-d4d2-732f-ac02-16cf284ea6b4",
+									true,
+								},
+							},
+							name = "Short cleave warning",
+							uuid = "a64829b6-4ab6-0402-ba43-e695b0a073a9",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Filter",
+							filterTargetType = "ContentID",
+							name = "Ifrit Incinerate",
+							partyTargetContentID = 1185,
+							uuid = "ee9a2c51-d4d2-732f-ac02-16cf284ea6b4",
+							version = 3,
+						},
+					},
+				},
+				eventType = 12,
+				mechanicTime = 431,
+				name = "[Draw][NAUR] Incinerate cone - 431",
+				timeRange = true,
+				timelineIndex = 70,
+				timerStartOffset = -3,
+				uuid = "167d431e-557b-4cf3-971a-9dfefc83e6a1",
+				version = 2,
+			},
+		},
+	},
+	[71] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ifrit",
+				uuid = "743d76ca-3596-a29c-9c65-19e3a179e6ff",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current or not Roster.current() or Roster.mySlot() ~= \"R2\" then\n    self.used = true\n    return\nend\nif not x or not y or not z then\n    self.used = true\n    return\nend\ndata.uwu_ifrit_light_puddle = { x = x, y = y, z = z }\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"51657952-cfc7-1d60-8a74-49568e422c2e",
+									true,
+								},
+							},
+							name = "Remember R2 Light Puddle location",
+							uuid = "92de1288-127b-5ba8-8ef8-ff7b15fdda05",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local roster = AnyoneCore.Roster.current()\nreturn roster ~= nil\n    and AnyoneCore.Roster.mySlot() == \"R2\"\n    and entityContentID == 2009481\n    and keyID == 2009481\n    and type == 7\n    and flags == 5\n    and state == 0",
+							name = "R2 light puddle event",
+							uuid = "51657952-cfc7-1d60-8a74-49568e422c2e",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				eventType = 29,
+				mechanicTime = 435,
+				name = "[Draw][Ifrit] R2 Light Puddle Arrow",
+				timeRange = true,
+				timelineIndex = 71,
+				timerEndOffset = 8,
+				uuid = "103ae72e-07b2-cfa0-8e89-b2bec4670226",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local boss = TensorCore.mGetEntity(eventArgs.detectionTargetID)\nif not boss or not boss.targetable then return end\n-- Cast cones have their own fixed-direction draw.\nif boss.channelingid == 11091 then return end\nlocal target = TensorCore.mGetEntity(boss.targetid)\nif not target then return end\nlocal heading = TensorCore.getHeadingToTarget(boss.pos, target.pos)\nlocal drawer = TensorCore.getMoogleDrawer()\ndrawer:addCone(boss.pos.x,boss.pos.y,boss.pos.z,15,math.rad(120),heading)\n",
+							conditions = 
+							{
+								
+								{
+									"9c724185-4280-deab-910f-84c7ad806733",
+									true,
+								},
+							},
+							name = "Short cleave warning",
+							uuid = "c7ead8f6-4694-29ee-92f8-0b0d36b1ed7d",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Filter",
+							filterTargetType = "ContentID",
+							name = "Ifrit Incinerate",
+							partyTargetContentID = 1185,
+							uuid = "9c724185-4280-deab-910f-84c7ad806733",
+							version = 3,
+						},
+					},
+				},
+				eventType = 12,
+				mechanicTime = 435,
+				name = "[Draw][NAUR] Incinerate cone - 435",
+				timeRange = true,
+				timelineIndex = 71,
+				timerStartOffset = -3,
+				uuid = "be44f8f3-efd7-4adb-8dfd-8cc69f769aa6",
+				version = 2,
+			},
+		},
+	},
+	[72] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "787d140e-53a4-84d2-1464-88e4badb095e",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Movement - Eruption",
+				uuid = "10b0e189-d799-bc52-a1e0-2ce6a76c275e",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "TensorDrift_SlidecastForceHold = true\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"c57b6cf1-74ca-24a5-a6c3-06eb6e33226c",
+									true,
+								},
+							},
+							name = "Force Slidecast",
+							uuid = "c1529bf6-7158-f6a1-bf6e-ce0e1a34b64e",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "TensorDrift_SlidecastForceHold = false\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"c57b6cf1-74ca-24a5-a6c3-06eb6e33226c",
+									true,
+								},
+							},
+							name = "End Slide",
+							uuid = "0d94459e-bb09-d904-a4be-c56aed9ea146",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore.Roster\nif not Roster or not Roster.current() then return false end\nlocal slot = Roster.mySlot()\nreturn slot == \"R1\" or slot == \"R2\"",
+							name = "Roster R1/R2",
+							uuid = "c57b6cf1-74ca-24a5-a6c3-06eb6e33226c",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Movement - Eruption",
+				mechanicTime = 444,
+				name = "[Drift] Eruption R1/R2 444",
+				throttleTime = 10500,
+				timeRange = true,
+				timelineIndex = 72,
+				timerEndOffset = 7,
+				timerStartOffset = -4,
+				uuid = "587d9df0-6a4f-71c4-a00c-73a1e20942ea",
+				version = 2,
+			},
+		},
+	},
+	[74] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\optimization",
+				uuid = "b8c86a84-b28d-83c8-9860-633e92c42c94",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\optimization",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Titan NAUR",
+				uuid = "c0bd4aec-4fb3-8217-83b0-a6044b2d8ada",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Cooldown Holds",
+				uuid = "a490ecd0-d1a8-34ab-bbe9-cbe0f9eef86d",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local api = TensorCore.API.TensorACR\nlocal toggles = api and api.getQuickToggles and api.getQuickToggles()\n\nfor _, toggle in ipairs(toggles or {}) do\n  local toggleName = toggle.name\n  if type(toggleName) == \"function\" then\n    toggleName = toggleName()\n  end\n\n  if toggleName == \"CD\" and toggle.var then\n    _G[toggle.var] = false\n    break\n  end\nend\n\nself.used = true",
+							name = "Disable active ACR CD QT",
+							uuid = "aa9db296-e641-d4e3-963b-2bb957ef0558",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "Cooldown Holds",
+				enabled = false,
+				mechanicTime = 600,
+				name = "[ACR][UWU] Disable CD Quick Toggle at 602 - disabled",
+				timelineIndex = 74,
+				timerOffset = 2,
+				uuid = "02bd9099-3567-69f6-84e3-6bd5709902f9",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Movement - Titan",
+				uuid = "88dfbb16-bbd1-a2d1-b94c-7ae242cb7c07",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 25762,
+							conditions = 
+							{
+								
+								{
+									"a92fb0da-5cb4-b57c-9de7-99cf3fea2c8c",
+									true,
+								},
+								
+								{
+									"dbfd922a-51ac-588b-9959-a4253058f9f2",
+									true,
+								},
+								
+								{
+									"d9293184-5a40-8bd1-8c2d-b0ea0c9e8d6f",
+									true,
+								},
+							},
+							ignoreWeaveRules = true,
+							name = "Thunderclap to Titan",
+							targetContentID = 1801,
+							targetType = "ContentID",
+							uuid = "b789c8df-1065-2788-a44e-c0c10a29d95c",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 14,
+							jobIDList = 
+							{
+								20,
+							},
+							name = "Job = MNK",
+							uuid = "a92fb0da-5cb4-b57c-9de7-99cf3fea2c8c",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							eventArgOptionType = 2,
+							eventEntityContentID = 1801,
+							name = "Event entity = Titan",
+							uuid = "dbfd922a-51ac-588b-9959-a4253058f9f2",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.isTargetable == true",
+							dequeueIfLuaFalse = true,
+							name = "Titan became targetable",
+							uuid = "d9293184-5a40-8bd1-8c2d-b0ea0c9e8d6f",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Movement - Titan",
+				eventType = 26,
+				mechanicTime = 600,
+				name = "[Dash][NAUR][Titan] Land - MNK Thunderclap",
+				timeRange = true,
+				timelineIndex = 74,
+				timerEndOffset = 2.7000000476837,
+				timerStartOffset = 2.2999999523163,
+				uuid = "658ab00f-36cc-f214-98a1-effd45307379",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 34646,
+							conditions = 
+							{
+								
+								{
+									"e182fc6b-30dc-426b-8fd7-4d6908729c44",
+									true,
+								},
+								
+								{
+									"97621fa7-13a1-bf37-9a59-e5df4e974920",
+									true,
+								},
+								
+								{
+									"1001aacc-556c-e8f1-8bc1-d27ea38f2466",
+									true,
+								},
+							},
+							ignoreWeaveRules = true,
+							name = "Slither to Titan",
+							targetContentID = 1801,
+							targetType = "ContentID",
+							uuid = "8aaa304c-b515-6d14-9ffc-5f3fe10e5b02",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 14,
+							jobIDList = 
+							{
+								41,
+							},
+							name = "Job = VPR",
+							uuid = "e182fc6b-30dc-426b-8fd7-4d6908729c44",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							eventArgOptionType = 2,
+							eventEntityContentID = 1801,
+							name = "Event entity = Titan",
+							uuid = "97621fa7-13a1-bf37-9a59-e5df4e974920",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.isTargetable == true",
+							dequeueIfLuaFalse = true,
+							name = "Titan became targetable",
+							uuid = "1001aacc-556c-e8f1-8bc1-d27ea38f2466",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Movement - Titan",
+				eventType = 26,
+				mechanicTime = 600,
+				name = "[Dash][NAUR][Titan] Land - VPR Slither",
+				timeRange = true,
+				timelineIndex = 74,
+				timerEndOffset = 2.7,
+				timerStartOffset = 2.3,
+				uuid = "76154c81-e140-e2a8-a7da-0903962d94e5",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ifrit",
+				uuid = "cbdbadb1-b3bc-baf3-97e7-a240b7cffc5e",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 8000,
+							alertPriority = 2,
+							alertTTS = true,
+							alertText = "R2 pick up Light Puddle",
+							conditions = 
+							{
+								
+								{
+									"bac29148-406f-18ee-971a-839dd49690ae",
+									true,
+								},
+							},
+							uuid = "6b1f4d6d-cd60-e611-879a-82e36535002d",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current or not Roster.current() or not Roster.isReady or not Roster.isReady() or Roster.mySlot() ~= \"R2\" then\n    self.used = true\n    return\nend\nlocal target = data.uwu_ifrit_light_puddle\ndata.uwu_ifrit_light_puddle = nil\nif not target or not target.x or not target.y or not target.z then\n    self.used = true\n    return\nend\nlocal player = Roster.entOf(\"R2\")\nif not player or not player.pos then\n    self.used = true\n    return\nend\nlocal distance = TensorCore.getDistance2d(player.pos, target)\nif distance and distance > 0.25 then\n    local tipLength = math.min(2.0, distance * 0.4)\n    local drawer = TensorCore.getCachedDrawer(0xFFB8FF88, 0xFF55FF55, 0xFF2A8A2A, 0xFFFFFFFF, 3)\n    drawer:addTimedArrow(8000, player.pos.x, player.pos.y, player.pos.z,\n        TensorCore.getHeadingToTarget(player.pos, target),\n        math.max(0.1, distance - tipLength), 1.4, tipLength, 2.6, 0, false,\n        Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\n    drawer:addTimedCircle(8000, target.x, target.y, target.z, 1.7, 0, false, true)\nend\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"bac29148-406f-18ee-971a-839dd49690ae",
+									true,
+								},
+							},
+							name = "Arrow to captured Light Puddle",
+							uuid = "a3cd1468-ff00-c36b-9732-a0b902964e0f",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local roster = AnyoneCore.Roster.current()\nreturn roster ~= nil and AnyoneCore.Roster.mySlot() == \"R2\"",
+							name = "R2 Party Roster",
+							uuid = "bac29148-406f-18ee-971a-839dd49690ae",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				mechanicTime = 600,
+				name = "[Call][Ifrit] R2 Pick Up Light Puddle",
+				timelineIndex = 74,
+				uuid = "3012fb03-95bc-3f12-b444-224bc2fb64a6",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local boss = TensorCore.mGetEntity(eventArgs.detectionTargetID)\nif not boss or not boss.targetable then return end\n-- Cast cones have their own fixed-direction draw.\nif boss.channelingid == 11091 then return end\nlocal target = TensorCore.mGetEntity(boss.targetid)\nif not target then return end\nlocal heading = TensorCore.getHeadingToTarget(boss.pos, target.pos)\nlocal drawer = TensorCore.getMoogleDrawer()\ndrawer:addCone(boss.pos.x,boss.pos.y,boss.pos.z,10.55,math.rad(120),heading)\ndrawer:addCone(boss.pos.x,boss.pos.y,boss.pos.z,15.55,math.rad(90),heading)\n",
+							conditions = 
+							{
+								
+								{
+									"89c114fb-292a-75dc-a10f-0aad954b5590",
+									true,
+								},
+							},
+							name = "Mechanic geometry",
+							uuid = "ae4ce833-d673-1423-8b4b-f873ba007840",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Filter",
+							filterTargetType = "ContentID",
+							name = "Titan cleaves",
+							partyTargetContentID = 1801,
+							uuid = "89c114fb-292a-75dc-a10f-0aad954b5590",
+							version = 3,
+						},
+					},
+				},
+				enabled = false,
+				eventType = 12,
+				mechanicTime = 600,
+				name = "[Draw][NAUR] Titan cleaves target cone",
+				timeRange = true,
+				timelineIndex = 74,
+				timerEndOffset = 31,
+				uuid = "a2819d95-ac84-8106-aef3-94df40af4828",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local boss = TensorCore.mGetEntity(eventArgs.entityID)\nif not boss then return end\nlocal ms=eventArgs.channelTimeMax*1000\nTensorCore.getMoogleDrawer():addTimedCircle(ms,boss.pos.x,boss.pos.y,boss.pos.z,18)\n-- First Geocrush is central: the arena's outer 18-20y band is the safe edge.\nTensorCore.getStaticDrawer(0x6630E080,2):addTimedDonut(ms,100,boss.pos.y,100,18,20,0,false,true)\nAnyoneCore.addWorldTextCountdown(ms,{x=100,y=boss.pos.y+1.5,z=100},0xFFFFFFFF,true,1.4)\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"27f21cdb-823d-925a-a977-9212dccf5f9b",
+									true,
+								},
+							},
+							name = "Mechanic geometry",
+							uuid = "d13ef56b-a97f-f6c7-957e-b191aafe09aa",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgType = 2,
+							eventSpellID = 11517,
+							name = "Attack ID",
+							uuid = "27f21cdb-823d-925a-a977-9212dccf5f9b",
+							version = 3,
+						},
+					},
+				},
+				eventType = 3,
+				mechanicTime = 600,
+				name = "[Draw][NAUR] Titan arrival danger and safe edge",
+				timeRange = true,
+				timelineIndex = 74,
+				timerEndOffset = 5,
+				timerStartOffset = -600,
+				uuid = "24180c47-6e12-8c36-bbec-4b885b6b22fa",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR ",
+				uuid = "f357ce7f-05fc-a21b-939d-99638baea398",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "NAUR ",
+				name = " Automation",
+				uuid = "23b830fb-d5fd-af1c-99cc-9346d0b71fb9",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Misc",
+							conditions = 
+							{
+								
+								{
+									"89b150c8-a844-8e7f-89c8-d59b55d5e261",
+									true,
+								},
+								
+								{
+									"88c2a763-0516-c3ad-b6bf-af4cb3122805",
+									true,
+								},
+								
+								{
+									"bc3e5222-8b2c-0fd1-9266-c3e2d224fef3",
+									true,
+								},
+							},
+							name = "Target Titan",
+							setTarget = true,
+							targetType = "Event Entity",
+							uuid = "8ca1bf4d-7860-740d-b512-7326754b0aca",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "-- Independent UWU settings; available before GUI or targeting reads.\nif not _G.UWU_NAURSettingsIOReady then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UWU-NAUR.lua]]\n local saved={}\n if FileExists(path) then\n  local loaded=FileLoad(path)\n  if type(loaded)==\"table\" then saved=loaded end\n end\n local current=_G.UWU_NAURGuiState\n local old=_G.UWU_NAUR_AnnihilationAssignments or {}\n local defaults={automaticOpen=true,ultimaOpen=true,orbsOpen=true,autoTarget=_G.NAUR_UWU_AutoTarget~=false,melee=(old.melee==2 and 2 or 1),solo=old.solo or 0}\n local keys={\"automaticOpen\",\"ultimaOpen\",\"orbsOpen\",\"autoTarget\",\"melee\",\"solo\"}\n local C={}\n for _,key in ipairs(keys) do\n  local value=current and current[key]\n  if value==nil then value=saved[key] end\n  if type(defaults[key])==\"boolean\" then\n   C[key]=type(value)==\"boolean\" and value or defaults[key]\n   if value==false then C[key]=false end\n  else\n   C[key]=type(value)==\"number\" and value>=0 and value<=2 and value%1==0 and value or defaults[key]\n  end\n end\n if C.melee==0 then C.melee=1 end\n function C.save()\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local values={}\n  for _,key in ipairs(keys) do values[key]=C[key] end\n  FileSave(path,values)\n end\n _G.UWU_NAURGuiState=C\n _G.UWU_NAUR_AnnihilationAssignments={melee=C.melee,solo=C.solo}\n _G.NAUR_UWU_AutoTarget=C.autoTarget\n C.save()\n _G.UWU_NAURSettingsIOReady=true\nend\n-- Upgrade only an unset melee assignment; preserve either explicit role choice.\ndo\n local preferences=_G.UWU_NAURGuiState\n if preferences and preferences.melee==0 then\n  preferences.melee=1\n  local assignment=_G.UWU_NAUR_AnnihilationAssignments\n  if assignment then assignment.melee=1 end\n  preferences.save()\n end\nend\nif data.uwuAutoSim or data.uwuBRDAutoSim or data.uwuBLMAutoSim or data.uwuRPRAutoSim then return false end\nreturn (_G.UWU_NAURGuiState.autoTarget~=false)",
+							name = "Shared targeting enabled / no AutoSim owner",
+							uuid = "89b150c8-a844-8e7f-89c8-d59b55d5e261",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgType = 3,
+							name = "Became targetable",
+							uuid = "bc3e5222-8b2c-0fd1-9266-c3e2d224fef3",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgOptionType = 2,
+							eventEntityContentID = 1801,
+							name = "Titan",
+							uuid = "88c2a763-0516-c3ad-b6bf-af4cb3122805",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR / Automation",
+				eventType = 26,
+				loop = true,
+				mechanicTime = 600,
+				name = "[NAUR] [Target] Titan - Acquire",
+				timeRange = true,
+				timelineIndex = 74,
+				timerEndOffset = 12,
+				timerStartOffset = -8,
+				uuid = "b28bd491-da37-6fc1-8963-0121757cb1e9",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Misc",
+							conditions = 
+							{
+								
+								{
+									"c255bc11-558b-3074-b96d-4c3aa08a8ae6",
+									true,
+								},
+								
+								{
+									"ce459769-ca5c-cbcd-8244-aacd680d5f38",
+									true,
+								},
+								
+								{
+									"77cd1ec3-ea1d-8608-950c-23ed56a640e0",
+									true,
+								},
+							},
+							endIfUsed = true,
+							name = "Target - Titan",
+							setTarget = true,
+							targetContentID = 1801,
+							targetType = "ContentID",
+							uuid = "7ec81312-9e7e-9f00-b51a-9fc6c1d19cd7",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "-- Independent UWU settings; available before GUI or targeting reads.\nif not _G.UWU_NAURSettingsIOReady then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UWU-NAUR.lua]]\n local saved={}\n if FileExists(path) then\n  local loaded=FileLoad(path)\n  if type(loaded)==\"table\" then saved=loaded end\n end\n local current=_G.UWU_NAURGuiState\n local old=_G.UWU_NAUR_AnnihilationAssignments or {}\n local defaults={automaticOpen=true,ultimaOpen=true,orbsOpen=true,autoTarget=_G.NAUR_UWU_AutoTarget~=false,melee=(old.melee==2 and 2 or 1),solo=old.solo or 0}\n local keys={\"automaticOpen\",\"ultimaOpen\",\"orbsOpen\",\"autoTarget\",\"melee\",\"solo\"}\n local C={}\n for _,key in ipairs(keys) do\n  local value=current and current[key]\n  if value==nil then value=saved[key] end\n  if type(defaults[key])==\"boolean\" then\n   C[key]=type(value)==\"boolean\" and value or defaults[key]\n   if value==false then C[key]=false end\n  else\n   C[key]=type(value)==\"number\" and value>=0 and value<=2 and value%1==0 and value or defaults[key]\n  end\n end\n if C.melee==0 then C.melee=1 end\n function C.save()\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local values={}\n  for _,key in ipairs(keys) do values[key]=C[key] end\n  FileSave(path,values)\n end\n _G.UWU_NAURGuiState=C\n _G.UWU_NAUR_AnnihilationAssignments={melee=C.melee,solo=C.solo}\n _G.NAUR_UWU_AutoTarget=C.autoTarget\n C.save()\n _G.UWU_NAURSettingsIOReady=true\nend\n-- Upgrade only an unset melee assignment; preserve either explicit role choice.\ndo\n local preferences=_G.UWU_NAURGuiState\n if preferences and preferences.melee==0 then\n  preferences.melee=1\n  local assignment=_G.UWU_NAUR_AnnihilationAssignments\n  if assignment then assignment.melee=1 end\n  preferences.save()\n end\nend\nif data.uwuAutoSim or data.uwuBRDAutoSim or data.uwuBLMAutoSim or data.uwuRPRAutoSim then return false end\nreturn (_G.UWU_NAURGuiState.autoTarget~=false)",
+							name = "Shared targeting enabled / no AutoSim owner",
+							uuid = "c255bc11-558b-3074-b96d-4c3aa08a8ae6",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local t=TensorCore.mGetTarget()\nreturn t==nil or not t.alive or not t.targetable",
+							name = "No living hostile target",
+							uuid = "ce459769-ca5c-cbcd-8244-aacd680d5f38",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Filter",
+							filterTargetType = "ContentID",
+							name = "Titan",
+							partyTargetContentID = 1801,
+							uuid = "77cd1ec3-ea1d-8608-950c-23ed56a640e0",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR / Automation",
+				loop = true,
+				mechanicTime = 600,
+				name = "[NAUR] [Target] Titan Reacquire",
+				throttleTime = 250,
+				timeRange = true,
+				timelineIndex = 74,
+				timerEndOffset = 168,
+				uuid = "22c03763-a6e0-5bfe-b8fd-0936ea14324a",
+				version = 2,
+			},
+		},
+	},
+	[76] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Titan NAUR",
+				uuid = "078238be-8308-a83c-9d6b-c45af77434bd",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local Roster = AnyoneCore.Roster\nif not Roster or not Roster.current() or not Roster.isReady() then\n  self.used = true\n  return\nend\n\nlocal slot = Roster.mySlot()\nif not slot or slot == \"T1\" or slot == \"T2\" then\n  self.used = true\n  return\nend\n\nlocal targetID = eventArgs and eventArgs.targetID\nlocal target = targetID and TensorCore.mGetEntity(targetID)\nif targetID and target and target.pos then\n  local drawer = TensorCore.getCachedDrawer(\n    0xFFFF3333, 0xFFFF0000, 0xFFAA0000, 0xFFFFFFFF, 3\n  )\n  if drawer then\n    drawer:addTimedCircleOnEnt(\n      7000,\n      targetID,\n      1.5,\n      0,\n      false,\n      true,\n      Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n    )\n  end\nend\n\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"0f430a0e-dcc3-60d2-876c-605d93355b85",
+									true,
+								},
+								
+								{
+									"5f222429-2355-574c-abf9-6804acd7557c",
+									true,
+								},
+							},
+							name = "Red circle around Titan aggro target",
+							uuid = "47f854bb-2155-270c-8065-9f143c3a1363",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							eventArgOptionType = 2,
+							eventEntityContentID = 1801,
+							name = "Event entity = Titan",
+							uuid = "0f430a0e-dcc3-60d2-876c-605d93355b85",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							eventArgType = 2,
+							eventSpellID = 872,
+							name = "Spell = attack",
+							uuid = "5f222429-2355-574c-abf9-6804acd7557c",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Titan NAUR",
+				eventType = 2,
+				mechanicTime = 613,
+				name = "[Draw][NAUR][Titan] Aggro target circle - non-tanks",
+				throttleTime = 9000,
+				timeRange = true,
+				timelineIndex = 76,
+				timerEndOffset = 5,
+				timerStartOffset = -4,
+				uuid = "5610e57a-0734-3355-943f-850247f18b31",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local boss = TensorCore.mGetEntity(eventArgs.detectionTargetID)\nif not boss or not boss.targetable then return end\n-- Cast cones have their own fixed-direction draw.\nif boss.channelingid == 11091 then return end\nlocal target = TensorCore.mGetEntity(boss.targetid)\nif not target then return end\nlocal heading = TensorCore.getHeadingToTarget(boss.pos, target.pos)\nlocal drawer = TensorCore.getMoogleDrawer()\ndrawer:addCone(boss.pos.x,boss.pos.y,boss.pos.z,10.55,math.rad(120),heading)",
+							conditions = 
+							{
+								
+								{
+									"5e8ee93c-50cc-9606-b2ac-9767729d97a8",
+									true,
+								},
+							},
+							name = "Short cleave warning",
+							uuid = "ccdd0493-4cd4-1081-98d7-e37c19dfbd7f",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Filter",
+							filterTargetType = "ContentID",
+							name = "Titan cleaves",
+							partyTargetContentID = 1801,
+							uuid = "5e8ee93c-50cc-9606-b2ac-9767729d97a8",
+							version = 3,
+						},
+					},
+				},
+				eventType = 12,
+				mechanicTime = 613,
+				name = "[Draw][NAUR] Rock Buster cone - 613",
+				timeRange = true,
+				timelineIndex = 76,
+				timerStartOffset = -3,
+				uuid = "b0cfc463-68bd-35a4-80c9-7873b15f16d9",
+				version = 2,
+			},
+		},
+	},
+	[77] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local boss = TensorCore.mGetEntity(eventArgs.detectionTargetID)\nif not boss or not boss.targetable then return end\n-- Cast cones have their own fixed-direction draw.\nif boss.channelingid == 11091 then return end\nlocal target = TensorCore.mGetEntity(boss.targetid)\nif not target then return end\nlocal heading = TensorCore.getHeadingToTarget(boss.pos, target.pos)\nlocal drawer = TensorCore.getMoogleDrawer()\ndrawer:addCone(boss.pos.x,boss.pos.y,boss.pos.z,15.55,math.rad(90),heading)",
+							conditions = 
+							{
+								
+								{
+									"b1258d81-200b-61e9-bf47-ef536e89611d",
+									true,
+								},
+							},
+							name = "Short cleave warning",
+							uuid = "aec81ff5-8fa9-b55c-8681-73ccfb309f4b",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Filter",
+							filterTargetType = "ContentID",
+							name = "Titan cleaves",
+							partyTargetContentID = 1801,
+							uuid = "b1258d81-200b-61e9-bf47-ef536e89611d",
+							version = 3,
+						},
+					},
+				},
+				eventType = 12,
+				mechanicTime = 616,
+				name = "[Draw][NAUR] Mountain Buster cone - 616",
+				timeRange = true,
+				timelineIndex = 77,
+				timerStartOffset = -3,
+				uuid = "36bd5bd5-18ff-bdbd-b9e1-c38381f9ea0b",
+				version = 2,
+			},
+		},
+	},
+	[78] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "1e00aa5c-4781-3340-e1d8-bc86da63856c",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertPriority = 3,
+							alertTTS = true,
+							alertText = "Dodge twice",
+							alertVolume = 81,
+							uuid = "ebb9c709-68be-a091-95d0-9aa3044dd1bd",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				mechanicTime = 621,
+				name = "MOVE!",
+				timelineIndex = 78,
+				timerOffset = -2.9000000953674,
+				uuid = "5ca6e7a9-d879-7a17-b3cc-7de6f8c29b6e",
+				version = 2,
+			},
+		},
+	},
+	[79] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "24dfc3c9-fe2b-5e5d-a2ab-bd432f5e42d9",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+	},
+	[82] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Titan NAUR",
+				uuid = "89a41a09-52dd-d1a5-94b4-d1cc102ce17e",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local titan=TensorCore.mGetEntity(eventArgs.entityID)\nif not titan then return end\nlocal state=data.uwu_geocrush_first\nif not state then state={draws={}};data.uwu_geocrush_first=state end\nfor _,id in ipairs(state.draws) do Argus.deleteTimedShape(id) end\nstate.draws={};state.channelled=true\nlocal sourceX,sourceZ=titan.pos.x,titan.pos.z\nlocal duration=math.max(100,eventArgs.channelTimeMax*1000+300)\nlocal hazard=TensorCore.getMoogleDrawer()\nlocal hazardID=hazard:addTimedCircle(duration,sourceX,titan.pos.y,sourceZ,24,0,false,true)\nif hazardID then state.draws[#state.draws+1]=hazardID end\nhazardID=hazard:addTimedDonut(duration,100,titan.pos.y,100,16,19.5,0,false,true)\nif hazardID then state.draws[#state.draws+1]=hazardID end\nlocal player=TensorCore.mGetPlayer()\nif not player then return end\nlocal dx,dz=sourceX-100,sourceZ-100\nlocal length=math.sqrt(dx*dx+dz*dz)\nif length<1 then self.used=true;return end\nlocal target={x=100-dx/length*15,y=player.pos.y,z=100-dz/length*15}\nlocal green=TensorCore.getCachedDrawer(0x5533FF66,0xCC33FF66,0xFF33FF66,0xFF000000,3)\nlocal id=green:addTimedCircle(duration,target.x,target.y,target.z,0.5,0,false,true,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nif id then state.draws[#state.draws+1]=id end\nlocal distance=TensorCore.getDistance2d(player.pos,target)\nif distance>0.5 then\n id=green:addTimedArrow(duration,player.pos.x,player.pos.y,player.pos.z,TensorCore.getHeadingToTarget(player.pos,target),math.max(0.1,distance-1),1,1,2.4,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\n if id then state.draws[#state.draws+1]=id end\nend\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"4fa9f41b-f331-e07a-ac82-5e56e7a8b08f",
+									true,
+								},
+								
+								{
+									"1ec24ac4-92e8-6c37-bf0d-cdf5259d2e92",
+									true,
+								},
+							},
+							name = "Confirmed safe opposite edge",
+							uuid = "3524e5b8-2863-ab54-93fa-e740f72b127d",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgOptionType = 2,
+							eventEntityContentID = 1801,
+							name = "Titan channel",
+							uuid = "4fa9f41b-f331-e07a-ac82-5e56e7a8b08f",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgType = 2,
+							eventSpellID = 11110,
+							name = "Geocrush cast",
+							uuid = "1ec24ac4-92e8-6c37-bf0d-cdf5259d2e92",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Titan NAUR",
+				eventType = 3,
+				mechanicTime = 631,
+				name = "[Draw][NAUR][Titan] Geocrush 2 Opposite Edge",
+				timeRange = true,
+				timelineIndex = 82,
+				timerEndOffset = 3,
+				timerStartOffset = -8,
+				uuid = "cd7b21e1-6c6d-29b9-b419-e83b2e73b258",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertPriority = 3,
+							alertTTS = true,
+							alertText = "Go opposite of Titan ",
+							alertVolume = 81,
+							uuid = "1cf5df1d-68f6-aec1-b949-8f2e3f39e09a",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				mechanicTime = 631,
+				name = "MOVE!",
+				timelineIndex = 82,
+				timerOffset = -3.7999999523163,
+				uuid = "44fad792-05cc-d9e9-9cd5-e43b5204e24b",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "[Raid calls]",
+				uuid = "69121152-60a8-0f50-9ed2-371d266e94f1",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR Guidance",
+				uuid = "edb1aa99-a4e1-8798-a46c-2d73ab18f2af",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local titan=TensorCore.mGetEntity(eventArgs.entityID)\nif not titan then return end\nlocal old=data.uwu_geocrush_first\nif old and old.draws then for _,id in ipairs(old.draws) do Argus.deleteTimedShape(id) end end\ndata.uwu_geocrush_first={id=eventArgs.entityID,x=titan.pos.x,z=titan.pos.z,start=Now(),draws={}}\nTensorCore.timelineLogToFile(string.format(\"[UWU Geocrush] jump id=%d source=(%.2f,%.2f) heading=%.3f\\n\",eventArgs.entityID,titan.pos.x,titan.pos.z,titan.pos.h))\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"8b865ded-0ab3-9e79-a961-9eb102209ad7",
+									true,
+								},
+								
+								{
+									"e367283f-00e0-b972-9299-d7b499033d34",
+									true,
+								},
+								
+								{
+									"686174d2-9549-9955-948a-1ba347ecf114",
+									true,
+								},
+							},
+							name = "Remember jump source",
+							uuid = "d49e9161-6465-7a9c-b735-a530ab606d11",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							comparator = 3,
+							dequeueIfLuaFalse = true,
+							eventArgType = 4,
+							eventIntValue = 7737,
+							name = "jump",
+							uuid = "8b865ded-0ab3-9e79-a961-9eb102209ad7",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							comparator = 3,
+							dequeueIfLuaFalse = true,
+							eventArgType = 2,
+							eventIntValue = 1,
+							name = "animationSlot",
+							uuid = "e367283f-00e0-b972-9299-d7b499033d34",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgOptionType = 2,
+							eventEntityContentID = 1801,
+							name = "Titan",
+							uuid = "686174d2-9549-9955-948a-1ba347ecf114",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance",
+				eventType = 23,
+				mechanicTime = 631,
+				name = "[NAUR] Titan first Geocrush - Jump capture",
+				timeRange = true,
+				timelineIndex = 82,
+				timerEndOffset = 3,
+				timerStartOffset = -8,
+				uuid = "1f486f9c-1058-be73-b6e7-ac6f08e9a116",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local state=data.uwu_geocrush_first\nif Now()-state.start<650 then return end\nlocal titan=TensorCore.mGetEntity(state.id)\nif not titan then return end\nlocal vx,vz=math.sin(titan.pos.h),math.cos(titan.pos.h)\nlocal ox,oz=state.x-100,state.z-100\nlocal b=ox*vx+oz*vz\nlocal discriminant=b*b+196-ox*ox-oz*oz\nif discriminant<0 then self.used=true;return end\nlocal distance=-b+math.sqrt(discriminant)\nlocal sourceX,sourceZ=state.x+vx*distance,state.z+vz*distance\nlocal duration=math.max(100,5200-(Now()-state.start))\nlocal drawer=TensorCore.getMoogleDrawer()\nlocal id=drawer:addTimedCircle(duration,sourceX,titan.pos.y,sourceZ,24,0,false,true)\nif id then state.draws[#state.draws+1]=id end\nid=drawer:addTimedDonut(duration,100,titan.pos.y,100,16,19.5,0,false,true)\nif id then state.draws[#state.draws+1]=id end\nlocal player=TensorCore.mGetPlayer()\nif not player then return end\nlocal dx,dz=sourceX-100,sourceZ-100\nlocal length=math.sqrt(dx*dx+dz*dz)\nif length<1 then self.used=true;return end\nlocal target={x=100-dx/length*15,y=player.pos.y,z=100-dz/length*15}\nlocal green=TensorCore.getCachedDrawer(0x5533FF66,0xCC33FF66,0xFF33FF66,0xFF000000,3)\nlocal id=green:addTimedCircle(duration,target.x,target.y,target.z,0.5,0,false,true,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nif id then state.draws[#state.draws+1]=id end\nlocal distance=TensorCore.getDistance2d(player.pos,target)\nif distance>0.5 then\n id=green:addTimedArrow(duration,player.pos.x,player.pos.y,player.pos.z,TensorCore.getHeadingToTarget(player.pos,target),math.max(0.1,distance-1),1,1,2.4,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\n if id then state.draws[#state.draws+1]=id end\nend\nTensorCore.timelineLogToFile(string.format(\"[UWU Geocrush] preview source=(%.2f,%.2f) safe=(%.2f,%.2f) elapsed=%d\\n\",sourceX,sourceZ,target.x,target.z,Now()-state.start))\nstate.predicted=true\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"f0cdf789-e59e-ba7d-950a-3615bb84c63d",
+									true,
+								},
+							},
+							name = "Preview proximity and safe edge",
+							uuid = "d75548e1-963c-e5db-aea9-72b53fd0381e",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local s=data.uwu_geocrush_first\nreturn s ~= nil and not s.predicted and not s.channelled and not s.finished",
+							name = "Pending jump prediction",
+							uuid = "f0cdf789-e59e-ba7d-950a-3615bb84c63d",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance",
+				mechanicTime = 631,
+				name = "[NAUR] Titan first Geocrush - Early preview",
+				timeRange = true,
+				timelineIndex = 82,
+				timerEndOffset = 3,
+				timerStartOffset = -8,
+				uuid = "536bd0f7-ed14-76cf-82ca-74cb29403aa8",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local s=data.uwu_geocrush_first\nif s then\n s.finished=true\n for _,id in ipairs(s.draws) do Argus.deleteTimedShape(id) end\n s.draws={}\nend\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"8dfaa69d-ea2f-81a1-8524-7338b979c643",
+									true,
+								},
+							},
+							name = "Clear completed Geocrush",
+							uuid = "6d576aa8-49cd-54ae-b13b-d0d4750031b9",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.entityContentID == 1801 and eventArgs.spellID == 11110",
+							dequeueIfLuaFalse = true,
+							name = "Geocrush resolved",
+							uuid = "8dfaa69d-ea2f-81a1-8524-7338b979c643",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance",
+				eventType = 2,
+				mechanicTime = 631,
+				name = "[NAUR] Titan first Geocrush - Resolution cleanup",
+				timeRange = true,
+				timelineIndex = 82,
+				timerEndOffset = 3,
+				timerStartOffset = -8,
+				uuid = "db9316ad-6d90-4e87-b6c0-317f93df18b2",
+				version = 2,
+			},
+		},
+	},
+	[84] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "f51e1c39-3347-516d-180f-5e97e4dc8ec9",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Titan NAUR",
+				uuid = "671e1e3b-b0b4-57c0-b290-f44b7a4e0ba0",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Titan NAUR",
+							uuid = "6b06bc3c-0ebe-8986-9174-04167b286231",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "if data.uwu_upheaval_completed then self.used=true;return end\nif not self.waitUntil then self.waitUntil=Now()+350 end\nif Now()<self.waitUntil then return end\nlocal player=TensorCore.mGetPlayer()\nlocal titan=TensorCore.mGetEntity(eventArgs.entityID)\nif not player or not titan then return end\nlocal captured=data.uwu_upheaval_bombs\nlocal count=captured and captured.count or 0\nif count<5 then\n if self.lastBombCount~=count then\n  TensorCore.timelineLogToFile(string.format(\"[UWU Upheaval] waiting for bomb spawns: %d/5\\n\",count))\n  self.lastBombCount=count\n end\n return\nend\nlocal bombs=captured.byID\nlocal bestScore,bestX,bestZ,bestLandingX,bestLandingZ=-math.huge,nil,nil,nil,nil\nfor degree=0,359 do\n local angle=degree*math.pi/180\n local ux,uz=math.sin(angle),math.cos(angle)\n local lx,lz=titan.pos.x+ux*28,titan.pos.z+uz*28\n local dx,dz=lx-100,lz-100\n local score=16-math.sqrt(dx*dx+dz*dz)\n if score>0 then\n  for _,bomb in pairs(bombs) do\n   local bx,bz=lx-bomb.pos.x,lz-bomb.pos.z\n   score=math.min(score,math.sqrt(bx*bx+bz*bz)-6.3)\n  end\n  if score>bestScore then bestScore,bestX,bestZ,bestLandingX,bestLandingZ=score,titan.pos.x+ux*4,titan.pos.z+uz*4,lx,lz end\n end\nend\nif not bestX or bestScore<1.5 then\n if not self.reportedNoGap then\n  TensorCore.timelineLogToFile(string.format(\"[UWU Upheaval] no validated gap: count=%d score=%.3f\\n\",count,bestScore))\n  self.reportedNoGap=true\n end\n return\nend\nlocal duration=math.max(100,eventArgs.channelTimeMax*1000+300-(Now()-self.waitUntil+350))\nlocal state={draws={}};data.uwu_upheaval_guidance=state\nlocal target={x=bestX,y=player.pos.y,z=bestZ}\nlocal drawer=TensorCore.getCachedDrawer(0x5530E080,0xCC30E080,0xFF30E080,0xFF30E080,3)\nlocal id=drawer:addTimedCircle(duration,target.x,target.y,target.z,0.18,0,false,true,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nif id then state.draws[#state.draws+1]=id end\nlocal distance=TensorCore.getDistance2d(player.pos,target)\nif distance>0.3 then\n id=drawer:addTimedArrow(duration,player.pos.x,player.pos.y,player.pos.z,TensorCore.getHeadingToTarget(player.pos,target),math.max(0.1,distance-0.5),0.6,0.5,1.5,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\n if id then state.draws[#state.draws+1]=id end\nend\nlocal landing={draws={},x=bestLandingX,z=bestLandingZ};data.uwu_upheaval_landing=landing\nlocal landingID=drawer:addTimedCircle(duration+2500,bestLandingX,player.pos.y,bestLandingZ,1,0,false,true,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nif landingID then landing.draws[#landing.draws+1]=landingID end\nTensorCore.timelineLogToFile(string.format(\"[UWU Upheaval] bombs=%d score=%.3f boss=(%.2f,%.2f) start=(%.2f,%.2f) landing=(%.2f,%.2f)\\n\",count,bestScore,titan.pos.x,titan.pos.z,bestX,bestZ,bestLandingX,bestLandingZ))\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"a9203cba-b267-dc88-a7da-f4e20692c694",
+									true,
+								},
+							},
+							displayPath = "Draws - Titan NAUR",
+							name = "Bomb-gap knockback setup",
+							uuid = "8fed7728-1ef2-1479-b126-a5ae87b33953",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.entityContentID == 1801 and eventArgs.spellID == 11111",
+							dequeueIfLuaFalse = true,
+							name = "Upheaval cast",
+							uuid = "a9203cba-b267-dc88-a7da-f4e20692c694",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Titan NAUR",
+				eventType = 3,
+				mechanicTime = 637,
+				name = "[Draw][NAUR][Titan] Upheaval Safe Knockback Spot",
+				timeRange = true,
+				timelineIndex = 84,
+				timerEndOffset = 2,
+				timerStartOffset = -6,
+				uuid = "9521059d-3b6a-244e-abb6-0129f350e8d2",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local state=data.uwu_upheaval_bombs\nif not state then state={byID={},count=0};data.uwu_upheaval_bombs=state end\nif state.byID[eventArgs.entityID] then self.used=true;return end\nlocal bomb=TensorCore.mGetEntity(eventArgs.entityID)\nif not bomb then return end\nstate.byID[eventArgs.entityID]={id=bomb.id,pos={x=bomb.pos.x,y=bomb.pos.y,z=bomb.pos.z}}\nstate.count=state.count+1\nTensorCore.timelineLogToFile(string.format(\"[UWU Upheaval] captured bomb %d id=%d position=(%.2f,%.2f)\\n\",state.count,bomb.id,bomb.pos.x,bomb.pos.z))\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"4689a13a-9b84-f4f6-82f4-3381786a9a3e",
+									true,
+								},
+							},
+							name = "Titan Upheaval - Capture five bomb spawns",
+							uuid = "d9d6b382-4ca8-b4ad-9f4f-0603c27d18d8",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgOptionType = 2,
+							eventEntityContentID = 1803,
+							name = "Bomb Boulder",
+							uuid = "4689a13a-9b84-f4f6-82f4-3381786a9a3e",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Titan NAUR",
+				eventType = 5,
+				loop = true,
+				mechanicTime = 637,
+				name = "[NAUR] Titan Upheaval - Capture five bomb spawns",
+				timeRange = true,
+				timelineIndex = 84,
+				timerEndOffset = 1,
+				timerStartOffset = -6,
+				uuid = "0c2156e4-595a-0b58-9529-038f2d832622",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR Guidance",
+				uuid = "d724f989-026b-34ab-929d-4cd401c3c2e5",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "data.uwu_upheaval_completed=true\nlocal s=data.uwu_upheaval_guidance\nif s then for _,id in ipairs(s.draws) do Argus.deleteTimedShape(id) end;data.uwu_upheaval_guidance=nil end\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"cd1beff6-db11-4ecc-8111-0311ee6b94c9",
+									true,
+								},
+							},
+							name = "Clear completed knockback",
+							uuid = "255d4f18-c449-899c-b728-3ffa442b9b80",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.entityContentID == 1801 and eventArgs.spellID == 11111",
+							dequeueIfLuaFalse = true,
+							name = "Upheaval resolved",
+							uuid = "cd1beff6-db11-4ecc-8111-0311ee6b94c9",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance",
+				eventType = 2,
+				mechanicTime = 637,
+				name = "[NAUR] Titan Upheaval - Resolution cleanup",
+				timeRange = true,
+				timelineIndex = 84,
+				timerEndOffset = 3,
+				timerStartOffset = -6,
+				uuid = "dc2e2c47-720c-184a-8adb-ca1c0b532d21",
+				version = 2,
+			},
+		},
+	},
+	[85] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\core",
+				uuid = "d4d679d2-5b50-ee0e-4f5b-6f641744af02",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\core",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "7ca9074c-4b34-f410-13a0-0f2addfd755c",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\optimization",
+				uuid = "12f946f8-46a7-9d54-0713-62aeca3c0748",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\optimization",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Titan NAUR",
+				uuid = "d741b3f0-ea6c-5bbf-bb78-c0a6c3ffe3ae",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+				},
+				conditions = 
+				{
+				},
+				displayPath = "Draws - Titan NAUR",
+				eventType = 12,
+				execute = "local player = TensorCore.mGetPlayer()\nif not player or not player.pos then return end\nlocal titan\nfor _, e in pairs(TensorCore.getEntityGroupList(\"ContentID\", 1801) or {}) do\n if e and e.pos then titan = e break end\nend\nif not titan then return end\nlocal L = data.uwu_upheaval_landing\nlocal sx, sz\nif L and L.x and L.z then sx, sz = L.x, L.z else sx, sz = 200 - titan.pos.x, 200 - titan.pos.z end\nlocal tx, tz = titan.pos.x, titan.pos.z\nlocal ux, uz = sx - tx, sz - tz\nlocal len = math.sqrt(ux * ux + uz * uz)\nif len < 1 then return end\nux, uz = ux / len, uz / len\nlocal y = player.pos.y\nlocal m = player.marker or 0\nlocal dest, label\nif m >= 1 and m <= 3 then\n local f = ({0.30, 0.55, 0.80})[m]\n dest = {x = tx + ux * len * f, y = y, z = tz + uz * len * f}\n label = \"GAOL \" .. m\nelse\n -- party dodges to the side away from the safe spot (left in the cheat sheet)\n local cx, cz = 100 - tx, 100 - tz\n local side = cx * (sz - tz) - cz * (sx - tx)\n local px, pz = -uz, ux\n if side > 0 then px, pz = uz, -ux end\n dest = {x = tx + ux * len * 0.41 + px * len * 0.31, y = y, z = tz + uz * len * 0.41 + pz * len * 0.31}\n label = \"PARTY\"\nend\nlocal d = TensorCore.getStaticDrawer(0xFF30E080, 2)\nd:addCircle(dest.x, dest.y + 0.05, dest.z, 1.0, false)\nlocal dist = TensorCore.getDistance2d(player.pos, dest)\nlocal scale = math.min(1, dist / 15)\nlocal tip = math.max(2, 3 * scale)\nif dist - tip > 1 then\n local a = TensorCore.getCachedDrawer(0xFF00FFFF, 0xFF0088FF, 0xFF0000FF, 0xFFFFFFFF, 2)\n a:addArrow(player.pos.x, player.pos.y, player.pos.z, TensorCore.getHeadingToTarget(player.pos, dest),\n  dist - tip, math.max(0.5, scale), tip, math.max(1.5, 3 * scale), 0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nself.used = true\n",
+				executeType = 2,
+				loop = true,
+				mechanicTime = 639,
+				name = "[Draw][NAUR][Titan] Gaol 1 line-up (Attack 1 nearest Titan)",
+				timeRange = true,
+				timelineIndex = 85,
+				timerEndOffset = 4,
+				timerStartOffset = -10,
+				uuid = "4bfa9bb3-8c67-4240-95dc-e9391205876e",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player=TensorCore.mGetPlayer()\nif not player or not player.pos then self.used=true return end\nlocal center={x=100,y=player.pos.y,z=100}\nlocal target=TensorCore.mGetTarget()\nlocal dx,dz=0,-1\nif target and target.pos then dx=target.pos.x-center.x dz=target.pos.z-center.z end\nlocal length=math.sqrt(dx*dx+dz*dz)\nif length<0.1 then dx=0 dz=-1 length=1 end\ndx=dx/length dz=dz/length\nlocal markers={{x=center.x+dx*6.0,y=center.y,z=center.z+dz*6.0},{x=center.x,y=center.y,z=center.z},{x=center.x-dx*7.0,y=center.y,z=center.z-dz*7.0}}\nlocal drawer=TensorCore.getCachedDrawer(0xFF66DDFF,0xFF0088FF,0xFF0044AA,0xFFFFFFFF,2)\nfor i,p in ipairs(markers) do\n drawer:addTimedCircle(12000,p.x,p.y,p.z,1.0,0,false,true)\n AnyoneCore.addTimedWorldText(12000,tostring(i),{x=p.x,y=p.y+1.5,z=p.z},0xFF66DDFF,true,1.2)\nend\nself.used=true",
+							name = "Guide",
+							uuid = "17d01ec4-d323-feec-9f0a-cc10c2e090a7",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "Draws - Titan NAUR",
+				enabled = false,
+				mechanicTime = 639,
+				name = "[Draw][NAUR][Titan] Gaol 1 Floor Markers",
+				timeRange = true,
+				timelineIndex = 85,
+				timerEndOffset = 10,
+				timerStartOffset = -2,
+				uuid = "dcfa8746-420a-0db8-9daf-e5c4f14b6aed",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Titan NAUR",
+							uuid = "0ec387db-d47f-cb44-99b4-d67a67800b25",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "if not eventArgs or not eventArgs.entityID then self.used = true; return end\nlocal drawer = TensorCore.getMoogleDrawer()\ndrawer:addTimedCircleOnEnt(7000, eventArgs.entityID, 6, 0, false, true)\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"d0f9bb89-f3e9-55d1-b328-f859f0acc17e",
+									true,
+								},
+							},
+							displayPath = "Draws - Titan NAUR",
+							name = "Show 6-yalm Gaol blast range",
+							uuid = "45213fcd-c3bc-43c8-b416-65f9d77185c7",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Titan NAUR",
+							uuid = "4d4fcb35-da34-ef48-abe0-bb3b674fc573",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local player = TensorCore.mGetPlayer(); return eventArgs ~= nil and eventArgs.entityContentID == 1804 and player ~= nil and player.marker == 0",
+							displayPath = "Draws - Titan NAUR",
+							name = "Gaol entity and no overhead marker",
+							uuid = "d0f9bb89-f3e9-55d1-b328-f859f0acc17e",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Titan NAUR",
+				eventType = 5,
+				loop = true,
+				mechanicTime = 639,
+				name = "[Draw][NAUR][Titan] Gaol blast range for unmarked",
+				timeRange = true,
+				timelineIndex = 85,
+				timerEndOffset = 61,
+				uuid = "d3d012a2-c734-0173-820b-816f2b597bbe",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "[Raid calls]",
+				uuid = "6dc82761-4bb9-76b0-ba6f-17451cf773c3",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 8000,
+							alertPriority = 2,
+							alertTTS = true,
+							alertText = "1 closest Titan, 3 furthest",
+							uuid = "cf5933a6-60c7-6c7d-96a3-4c9784a16321",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "[Raid calls]",
+				enabled = false,
+				mechanicTime = 639,
+				name = "[Raid Call][Titan] Gaols 1",
+				timelineIndex = 85,
+				timerOffset = -1,
+				uuid = "4772929e-21de-1a4c-b18d-faca2de54c30",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR ",
+				uuid = "bb5b14eb-f9d9-b961-988c-5a63435491fa",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "NAUR ",
+				name = " Automation",
+				uuid = "30031b5f-cebd-eb78-9e70-cd338db119c4",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Misc",
+							conditions = 
+							{
+								
+								{
+									"7329f44e-2b16-407d-b4e3-0fe526965077",
+									true,
+								},
+								
+								{
+									"6067a43b-1d6d-51d0-9462-d7aff72dc26a",
+									true,
+								},
+								
+								{
+									"1505053e-8439-0230-bd9b-f5ea365fc59d",
+									true,
+								},
+							},
+							name = "Target nearest Granite Gaol",
+							setTarget = true,
+							targetContentID = 1804,
+							targetType = "ContentID",
+							uuid = "c5d1adb0-4034-4966-b06e-95f91a377fe4",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "-- Independent UWU settings; available before GUI or targeting reads.\nif not _G.UWU_NAURSettingsIOReady then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UWU-NAUR.lua]]\n local saved={}\n if FileExists(path) then\n  local loaded=FileLoad(path)\n  if type(loaded)==\"table\" then saved=loaded end\n end\n local current=_G.UWU_NAURGuiState\n local old=_G.UWU_NAUR_AnnihilationAssignments or {}\n local defaults={automaticOpen=true,ultimaOpen=true,orbsOpen=true,autoTarget=_G.NAUR_UWU_AutoTarget~=false,melee=(old.melee==2 and 2 or 1),solo=old.solo or 0}\n local keys={\"automaticOpen\",\"ultimaOpen\",\"orbsOpen\",\"autoTarget\",\"melee\",\"solo\"}\n local C={}\n for _,key in ipairs(keys) do\n  local value=current and current[key]\n  if value==nil then value=saved[key] end\n  if type(defaults[key])==\"boolean\" then\n   C[key]=type(value)==\"boolean\" and value or defaults[key]\n   if value==false then C[key]=false end\n  else\n   C[key]=type(value)==\"number\" and value>=0 and value<=2 and value%1==0 and value or defaults[key]\n  end\n end\n if C.melee==0 then C.melee=1 end\n function C.save()\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local values={}\n  for _,key in ipairs(keys) do values[key]=C[key] end\n  FileSave(path,values)\n end\n _G.UWU_NAURGuiState=C\n _G.UWU_NAUR_AnnihilationAssignments={melee=C.melee,solo=C.solo}\n _G.NAUR_UWU_AutoTarget=C.autoTarget\n C.save()\n _G.UWU_NAURSettingsIOReady=true\nend\n-- Upgrade only an unset melee assignment; preserve either explicit role choice.\ndo\n local preferences=_G.UWU_NAURGuiState\n if preferences and preferences.melee==0 then\n  preferences.melee=1\n  local assignment=_G.UWU_NAUR_AnnihilationAssignments\n  if assignment then assignment.melee=1 end\n  preferences.save()\n end\nend\nif data.uwuAutoSim or data.uwuBRDAutoSim or data.uwuBLMAutoSim or data.uwuRPRAutoSim then return false end\nreturn (_G.UWU_NAURGuiState.autoTarget~=false)",
+							name = "Shared targeting enabled / no AutoSim owner",
+							uuid = "7329f44e-2b16-407d-b4e3-0fe526965077",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgType = 3,
+							name = "Became targetable",
+							uuid = "1505053e-8439-0230-bd9b-f5ea365fc59d",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgOptionType = 2,
+							eventEntityContentID = 1804,
+							name = "Event entity",
+							uuid = "6067a43b-1d6d-51d0-9462-d7aff72dc26a",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR / Automation",
+				enabled = false,
+				eventType = 26,
+				loop = true,
+				mechanicTime = 639,
+				name = "[NAUR] [Target] Titan Gaols - Acquire",
+				timeRange = true,
+				timelineIndex = 85,
+				timerEndOffset = 12,
+				timerStartOffset = -8,
+				uuid = "3c458cae-15bf-61f5-8f04-330964005df9",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Misc",
+							conditions = 
+							{
+								
+								{
+									"97db59c6-83ea-ad19-8116-ef08e2e950c9",
+									true,
+								},
+								
+								{
+									"2bbf9e56-54b6-d79e-a806-a019b3369446",
+									true,
+								},
+								
+								{
+									"a96b705f-1c76-116f-a4ff-d2ce3610e2f0",
+									true,
+								},
+								
+								{
+									"b658f0bd-33d5-fae1-b21a-5af44236df1d",
+									true,
+								},
+							},
+							name = "Target next Granite Gaol",
+							setTarget = true,
+							targetType = "Detection Target",
+							uuid = "45308629-f3ea-1e82-9e30-5c7c85e32a55",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "Misc",
+							conditions = 
+							{
+								
+								{
+									"97db59c6-83ea-ad19-8116-ef08e2e950c9",
+									true,
+								},
+								
+								{
+									"2bbf9e56-54b6-d79e-a806-a019b3369446",
+									true,
+								},
+								
+								{
+									"a96b705f-1c76-116f-a4ff-d2ce3610e2f0",
+									true,
+								},
+								
+								{
+									"b658f0bd-33d5-fae1-b21a-5af44236df1d",
+									false,
+								},
+							},
+							name = "Restore Titan target",
+							setTarget = true,
+							targetContentID = 1801,
+							targetType = "ContentID",
+							uuid = "148d1653-11e9-e5dd-9775-216de29e088d",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "-- Independent UWU settings; available before GUI or targeting reads.\nif not _G.UWU_NAURSettingsIOReady then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UWU-NAUR.lua]]\n local saved={}\n if FileExists(path) then\n  local loaded=FileLoad(path)\n  if type(loaded)==\"table\" then saved=loaded end\n end\n local current=_G.UWU_NAURGuiState\n local old=_G.UWU_NAUR_AnnihilationAssignments or {}\n local defaults={automaticOpen=true,ultimaOpen=true,orbsOpen=true,autoTarget=_G.NAUR_UWU_AutoTarget~=false,melee=(old.melee==2 and 2 or 1),solo=old.solo or 0}\n local keys={\"automaticOpen\",\"ultimaOpen\",\"orbsOpen\",\"autoTarget\",\"melee\",\"solo\"}\n local C={}\n for _,key in ipairs(keys) do\n  local value=current and current[key]\n  if value==nil then value=saved[key] end\n  if type(defaults[key])==\"boolean\" then\n   C[key]=type(value)==\"boolean\" and value or defaults[key]\n   if value==false then C[key]=false end\n  else\n   C[key]=type(value)==\"number\" and value>=0 and value<=2 and value%1==0 and value or defaults[key]\n  end\n end\n if C.melee==0 then C.melee=1 end\n function C.save()\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local values={}\n  for _,key in ipairs(keys) do values[key]=C[key] end\n  FileSave(path,values)\n end\n _G.UWU_NAURGuiState=C\n _G.UWU_NAUR_AnnihilationAssignments={melee=C.melee,solo=C.solo}\n _G.NAUR_UWU_AutoTarget=C.autoTarget\n C.save()\n _G.UWU_NAURSettingsIOReady=true\nend\n-- Upgrade only an unset melee assignment; preserve either explicit role choice.\ndo\n local preferences=_G.UWU_NAURGuiState\n if preferences and preferences.melee==0 then\n  preferences.melee=1\n  local assignment=_G.UWU_NAUR_AnnihilationAssignments\n  if assignment then assignment.melee=1 end\n  preferences.save()\n end\nend\nif data.uwuAutoSim or data.uwuBRDAutoSim or data.uwuBLMAutoSim or data.uwuRPRAutoSim then return false end\nreturn (_G.UWU_NAURGuiState.autoTarget~=false)",
+							name = "Shared targeting enabled / no AutoSim owner",
+							uuid = "97db59c6-83ea-ad19-8116-ef08e2e950c9",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Filter",
+							filterTargetType = "ContentID",
+							name = "Targetable gaol remains",
+							partyTargetContentID = 1804,
+							uuid = "b658f0bd-33d5-fae1-b21a-5af44236df1d",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgOptionType = 2,
+							eventEntityContentID = 1804,
+							name = "Event entity",
+							uuid = "2bbf9e56-54b6-d79e-a806-a019b3369446",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgType = 3,
+							eventBoolValue = 2,
+							name = "Became untargetable",
+							uuid = "a96b705f-1c76-116f-a4ff-d2ce3610e2f0",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR / Automation",
+				enabled = false,
+				eventType = 26,
+				loop = true,
+				mechanicTime = 639,
+				name = "[NAUR] [Target] Titan Gaols - Advance",
+				timeRange = true,
+				timelineIndex = 85,
+				timerEndOffset = 12,
+				timerStartOffset = -8,
+				uuid = "bd640c69-5bcd-75c9-a5c4-1e0d08898cda",
+				version = 2,
+			},
+		},
+	},
+	[86] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "[Raid calls]",
+				uuid = "f299b56d-872a-2aa9-a9e5-601e3b379caa",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertPriority = 3,
+							alertScale = 0.85,
+							alertTTS = true,
+							alertText = "Dodge Landslide, then move into position",
+							conditions = 
+							{
+								
+								{
+									"79cc86fc-c692-d8cf-80e4-59e87313b453",
+									true,
+								},
+								
+								{
+									"d5159105-0928-ba0c-b381-a3e050b0cfeb",
+									true,
+								},
+							},
+							uuid = "967af0df-5b77-b361-bc13-71ab4361e514",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgType = 2,
+							eventSpellID = 11119,
+							name = "Main Landslide",
+							uuid = "79cc86fc-c692-d8cf-80e4-59e87313b453",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Party",
+							channelCheckSpellID = 11119,
+							conditionType = 5,
+							name = "Landslide still casting",
+							partyTargetType = "Event Entity",
+							uuid = "d5159105-0928-ba0c-b381-a3e050b0cfeb",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "[Raid calls]",
+				eventType = 3,
+				mechanicTime = 642,
+				name = "[Raid Call][Titan] Landslide - Dodge then Reposition",
+				timeRange = true,
+				timelineIndex = 86,
+				timerEndOffset = 2.5,
+				timerStartOffset = -2.5,
+				uuid = "7c96465c-7de5-de8c-907f-4a266ed42e5d",
+				version = 2,
+			},
+		},
+	},
+	[87] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "b18c37a6-f318-b87a-4e5f-028098545f76",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+	},
+	[89] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\mitigation",
+				uuid = "d0f38e82-d0b2-b266-a8de-473cc76a7052",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\mitigation",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\optimization",
+				uuid = "41b97bf4-0055-6e58-1955-bc3235977384",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\optimization",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Titan NAUR",
+				uuid = "4353a724-d5c5-8500-9e0d-c8644ff0112b",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Titan NAUR",
+							uuid = "ab492049-0915-3b14-8507-9a70290e8ace",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current or not Roster.current() then return end\nif not Roster.isReady or not Roster.isReady() then return end\n\nlocal slot = Roster.mySlot()\nif not slot or slot == \"T1\" then\n    self.used = true\n    return\nend\n\nlocal playerID = Roster.idOf(slot)\nif not playerID then return end\nlocal player = Roster.entOf(slot)\nif not player or not player.pos then return end\n\n-- Successful pulls stack near marker 3 around x=107, z=109.4.\nlocal target = { x = 107.0, y = player.pos.y, z = 109.4 }\nlocal distance = TensorCore.getDistance2d(player.pos, target)\nif distance and distance > 0.2 then\n    local heading = TensorCore.getHeadingToTarget(player.pos, target)\n    local tipLength = math.min(2.5, distance * 0.4)\n    local drawer = TensorCore.getCachedDrawer(\n        0xFFFFCC33, 0xFFFFA000, 0xFFFFFFFF, 0xFF000000, 4\n    )\n    drawer:addTimedArrow(\n        5000,\n        player.pos.x, player.pos.y, player.pos.z,\n        heading,\n        distance - tipLength, 1.4, tipLength, 3.0,\n        0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n    )\nend\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"b5e63e61-2325-7cba-b4a8-24213b4c1fe4",
+									true,
+								},
+							},
+							displayPath = "Draws - Titan NAUR",
+							name = "Guide to group near marker 3 from rocks",
+							uuid = "6b1f268f-49b8-5434-86d5-eb41055b0cac",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Titan NAUR",
+							uuid = "c1942206-1d82-0059-b5ef-1a3542c798bd",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current or not Roster.current() then return false end\nlocal slot = Roster.mySlot()\nreturn slot ~= nil and slot ~= \"T1\"",
+							dequeueIfLuaFalse = true,
+							displayPath = "Draws - Titan NAUR",
+							name = "Everyone except MT",
+							uuid = "b5e63e61-2325-7cba-b4a8-24213b4c1fe4",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Titan NAUR",
+				mechanicTime = 651,
+				name = "[Draw][NAUR][Titan] Guide to group near marker 3",
+				throttleTime = 1000,
+				timeRange = true,
+				timelineIndex = 89,
+				timerEndOffset = 3,
+				timerStartOffset = -1,
+				uuid = "e7638d70-3e19-7dc1-a5ca-6b89da59cce8",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR ",
+				uuid = "00633a2d-e0dd-9a2c-a0ee-41efc3795449",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "NAUR ",
+				name = " Automation",
+				uuid = "b92df741-05c7-668b-8bed-979bcd392723",
+			},
+			objectType = "folder",
+		},
+	},
+	[90] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Titan NAUR",
+				uuid = "999472bf-aef5-68b3-9e0a-bfa6f8888243",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "[Raid calls]",
+				uuid = "daee94f3-f2a7-dbd2-b64d-5cc0f70041c1",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertTTS = true,
+							alertText = "Dodge 2x + landslides",
+							uuid = "dd364a2e-4391-2895-ab8f-1f1d9ef7af30",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				mechanicTime = 666,
+				name = "[Raid Call][UWU] Dodge 2x + Landslides 664",
+				timelineIndex = 90,
+				timerOffset = -2,
+				uuid = "b95ec6d9-9d3a-4ce1-895a-7651729fcbb9",
+				version = 2,
+			},
+		},
+	},
+	[92] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\optimization",
+				uuid = "caf08470-fad7-bba4-63ba-c70ab2a4aec0",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\optimization",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR ",
+				uuid = "54436faa-ced2-c2ff-84b0-fb80a7634adf",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "NAUR ",
+				name = " Automation",
+				uuid = "31c686cb-1e8e-2399-b8d7-78e3e0bfd6ab",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							gVar = "ACR_TensorNuke4_Hotbar_Sprint",
+							name = "Use Sprint",
+							uuid = "5c39e41e-f02f-f6a6-9726-0540b6ce97db",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "NAUR / Automation",
+				mechanicTime = 671,
+				name = "[NAUR] [Utility][Titan] Sprint - Mario Kart",
+				timeRange = true,
+				timelineIndex = 92,
+				timerStartOffset = -11,
+				uuid = "d8d2db34-ef79-222a-8ff1-f42ad5cf68e1",
+				version = 2,
+			},
+		},
+	},
+	[94] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "49f0e5aa-546f-452e-d027-d2505fedeafa",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+	},
+	[95] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "4e603517-f9ab-fd6b-eba7-16adad1eca27",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\optimization",
+				uuid = "3b41c6f9-1a90-78b5-b079-6ddfa2c84209",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\optimization",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Titan NAUR",
+				uuid = "69729b48-59af-0ad2-9ca7-f57b42aa090d",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player=TensorCore.mGetPlayer()\nif not player or not player.pos then self.used=true return end\nlocal center={x=100,y=player.pos.y,z=100}\nlocal target=TensorCore.mGetTarget()\nlocal dx,dz=0,-1\nif target and target.pos then dx=target.pos.x-center.x dz=target.pos.z-center.z end\nlocal length=math.sqrt(dx*dx+dz*dz)\nif length<0.1 then dx=0 dz=-1 length=1 end\ndx=dx/length dz=dz/length\nlocal markers={{x=center.x+dx*6.0,y=center.y,z=center.z+dz*6.0},{x=center.x,y=center.y,z=center.z},{x=center.x-dx*7.0,y=center.y,z=center.z-dz*7.0}}\nlocal drawer=TensorCore.getCachedDrawer(0xFF66DDFF,0xFF0088FF,0xFF0044AA,0xFFFFFFFF,2)\nfor i,p in ipairs(markers) do\n drawer:addTimedCircle(12000,p.x,p.y,p.z,1.0,0,false,true)\n AnyoneCore.addTimedWorldText(12000,tostring(i),{x=p.x,y=p.y+1.5,z=p.z},0xFF66DDFF,true,1.2)\nend\nself.used=true",
+							name = "Guide",
+							uuid = "9c4abc92-49a7-36c4-bb59-544368b542b2",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "Draws - Titan NAUR",
+				enabled = false,
+				mechanicTime = 684,
+				name = "[Draw][NAUR][Titan] Gaol 2 Floor Markers",
+				timeRange = true,
+				timelineIndex = 95,
+				timerEndOffset = 10,
+				timerStartOffset = -2,
+				uuid = "3a62c2d9-6a87-d926-a359-7010f9f1da11",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Titan NAUR",
+							uuid = "2d440832-219c-ce15-ac34-7897ad686bc7",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current or not Roster.current() then return end\nif not Roster.isReady or not Roster.isReady() then return end\nif not eventArgs or not eventArgs.entityID then return end\n\nlocal gaol = TensorCore.mGetEntity(eventArgs.entityID)\nif not gaol or not gaol.pos then return end\n\nlocal slots = data.uwu_titan_gaol_slots\nif not slots then\n    slots = {\"T1\", \"T2\", \"H1\", \"H2\", \"M1\", \"M2\", \"R1\", \"R2\"}\n    data.uwu_titan_gaol_slots = slots\nend\n\nlocal nearest\nlocal nearestDistance = 1.5\nfor i = 1, #slots do\n    local member = Roster.entOf(slots[i])\n    if member and member.pos then\n        local distance = TensorCore.getDistance2d(gaol.pos, member.pos)\n        if distance and distance < nearestDistance then\n            nearestDistance = distance\n            nearest = member\n        end\n    end\nend\n\nif not nearest then return end\n\nlocal drawer = TensorCore.getCachedDrawer(\n    0xFF35FF55, 0xFF00CC33, 0xFFFFFFFF, 0xFF000000, 4\n)\ndrawer:addTimedCircleOnEnt(\n    4000,\n    nearest.id,\n    1.35,\n    0,\n    false,\n    true,\n    Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n)\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"a4ac7572-d2ef-2957-bf56-a222bd2c0ebb",
+									true,
+								},
+							},
+							displayPath = "Draws - Titan NAUR",
+							name = "Green circle on nearest Gaol target",
+							uuid = "88091fcb-189e-b191-a7fc-dee99fdc1253",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Titan NAUR",
+							uuid = "0ead2252-da54-ed01-a22e-7a83c010c52c",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs and eventArgs.entityContentID == 1804",
+							displayPath = "Draws - Titan NAUR",
+							name = "Granite Gaol entity",
+							uuid = "a4ac7572-d2ef-2957-bf56-a222bd2c0ebb",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Titan NAUR",
+				eventType = 5,
+				loop = true,
+				mechanicTime = 684,
+				name = "[Draw][NAUR][Titan] Early Granite Gaol Target Marker",
+				timeRange = true,
+				timelineIndex = 95,
+				timerEndOffset = 8,
+				timerStartOffset = 1,
+				uuid = "5455ca3e-11bd-cd62-8886-36ec3ef65b46",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertPriority = 3,
+							alertTTS = true,
+							alertText = "Opposite of purple",
+							alertVolume = 81,
+							uuid = "2b718efa-38a4-585d-a464-9e9b0cb10ef9",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				mechanicTime = 684,
+				name = "MOVE!",
+				timelineIndex = 95,
+				timerOffset = -3.5,
+				uuid = "4ec54fac-927f-b3c8-b26c-f147e58e68c6",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "[Raid calls]",
+				uuid = "196ac706-e2f9-626f-a1e2-e67e8f386a80",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 8000,
+							alertPriority = 2,
+							alertTTS = true,
+							alertText = "Break rock once formed",
+							uuid = "5a088776-6156-abaf-867e-d4a8528d9e59",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "[Raid calls]",
+				mechanicTime = 684,
+				name = "[Raid Call][Titan] Gaols 2",
+				timelineIndex = 95,
+				timerOffset = -1,
+				uuid = "d494470c-4b37-5705-9b04-124ccb78a25f",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Targeting - Titan",
+				uuid = "accc93a7-b89a-07f2-a129-bfeb4f1171b6",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Misc",
+							conditions = 
+							{
+								
+								{
+									"5fc49abd-7d08-ac8c-8569-f521a7f26ed9",
+									true,
+								},
+								
+								{
+									"93e40f5b-071f-4197-b829-1455210e1f8f",
+									true,
+								},
+								
+								{
+									"61502a12-6156-b646-ac41-59e7e764a3db",
+									true,
+								},
+								
+								{
+									"06f6ec2f-1c9e-68c5-a97b-c4450f49e50f",
+									true,
+								},
+							},
+							name = "Target newly targetable gaol",
+							setTarget = true,
+							targetType = "Event Entity",
+							uuid = "017978a7-09b9-830c-958a-902f3621c899",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgOptionType = 2,
+							eventEntityContentID = 1804,
+							name = "Granite Gaol 1804",
+							uuid = "93e40f5b-071f-4197-b829-1455210e1f8f",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgType = 3,
+							name = "Became targetable",
+							uuid = "61502a12-6156-b646-ac41-59e7e764a3db",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore.Roster\nif not Roster or not Roster.current() then return false end\nlocal slot = Roster.mySlot()\nif not slot then return false end\nreturn slot == \"H1\" or slot == \"H2\" or slot == \"M1\" or slot == \"M2\" or slot == \"R1\" or slot == \"R2\"",
+							conditionType = 9,
+							name = "Roster: DPS/healers",
+							partyTargetType = "Tank",
+							uuid = "06f6ec2f-1c9e-68c5-a97b-c4450f49e50f",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "-- Independent UWU settings; available before GUI or targeting reads.\nif not _G.UWU_NAURSettingsIOReady then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UWU-NAUR.lua]]\n local saved={}\n if FileExists(path) then\n  local loaded=FileLoad(path)\n  if type(loaded)==\"table\" then saved=loaded end\n end\n local current=_G.UWU_NAURGuiState\n local old=_G.UWU_NAUR_AnnihilationAssignments or {}\n local defaults={automaticOpen=true,ultimaOpen=true,orbsOpen=true,autoTarget=_G.NAUR_UWU_AutoTarget~=false,melee=(old.melee==2 and 2 or 1),solo=old.solo or 0}\n local keys={\"automaticOpen\",\"ultimaOpen\",\"orbsOpen\",\"autoTarget\",\"melee\",\"solo\"}\n local C={}\n for _,key in ipairs(keys) do\n  local value=current and current[key]\n  if value==nil then value=saved[key] end\n  if type(defaults[key])==\"boolean\" then\n   C[key]=type(value)==\"boolean\" and value or defaults[key]\n   if value==false then C[key]=false end\n  else\n   C[key]=type(value)==\"number\" and value>=0 and value<=2 and value%1==0 and value or defaults[key]\n  end\n end\n if C.melee==0 then C.melee=1 end\n function C.save()\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local values={}\n  for _,key in ipairs(keys) do values[key]=C[key] end\n  FileSave(path,values)\n end\n _G.UWU_NAURGuiState=C\n _G.UWU_NAUR_AnnihilationAssignments={melee=C.melee,solo=C.solo}\n _G.NAUR_UWU_AutoTarget=C.autoTarget\n C.save()\n _G.UWU_NAURSettingsIOReady=true\nend\n-- Upgrade only an unset melee assignment; preserve either explicit role choice.\ndo\n local preferences=_G.UWU_NAURGuiState\n if preferences and preferences.melee==0 then\n  preferences.melee=1\n  local assignment=_G.UWU_NAUR_AnnihilationAssignments\n  if assignment then assignment.melee=1 end\n  preferences.save()\n end\nend\nif data.uwuAutoSim or data.uwuBRDAutoSim or data.uwuBLMAutoSim or data.uwuRPRAutoSim then return false end\nreturn (_G.UWU_NAURGuiState.autoTarget~=false)",
+							name = "Shared targeting enabled / no AutoSim owner",
+							uuid = "5fc49abd-7d08-ac8c-8569-f521a7f26ed9",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Targeting - Titan",
+				eventType = 26,
+				mechanicTime = 684,
+				name = "[Target][Titan] Granite Gaol - Non-Tanks",
+				timeRange = true,
+				timelineIndex = 95,
+				timerEndOffset = 13,
+				timerStartOffset = 3,
+				uuid = "f3a58d6e-49a7-0bae-ab1f-4017bc7aa453",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR ",
+				uuid = "b7dfd436-38ab-5c77-9ac1-b1e4344fefcc",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "NAUR ",
+				name = " Automation",
+				uuid = "612e7379-6251-2438-bd8e-fc4da4821d3a",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Misc",
+							conditions = 
+							{
+								
+								{
+									"9451ac98-4d56-5bbd-8001-4c04dcc2f715",
+									true,
+								},
+								
+								{
+									"43ee7ce4-b9c4-66b8-977c-f5d237b18af3",
+									true,
+								},
+								
+								{
+									"ccdb24d4-b73b-337e-887f-06eb55676cf6",
+									true,
+								},
+								
+								{
+									"efc659d9-9b4a-6615-a70b-643566805fcc",
+									true,
+								},
+							},
+							name = "Target next Granite Gaol",
+							setTarget = true,
+							targetType = "Detection Target",
+							uuid = "79ae567b-188a-8ffa-9e24-3c4d55bd601e",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "Misc",
+							conditions = 
+							{
+								
+								{
+									"9451ac98-4d56-5bbd-8001-4c04dcc2f715",
+									true,
+								},
+								
+								{
+									"43ee7ce4-b9c4-66b8-977c-f5d237b18af3",
+									true,
+								},
+								
+								{
+									"ccdb24d4-b73b-337e-887f-06eb55676cf6",
+									true,
+								},
+								
+								{
+									"efc659d9-9b4a-6615-a70b-643566805fcc",
+									false,
+								},
+							},
+							name = "Restore Titan target",
+							setTarget = true,
+							targetContentID = 1801,
+							targetType = "ContentID",
+							uuid = "2b8b4a2f-87e9-37c6-8335-be0b23e05302",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "-- Independent UWU settings; available before GUI or targeting reads.\nif not _G.UWU_NAURSettingsIOReady then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UWU-NAUR.lua]]\n local saved={}\n if FileExists(path) then\n  local loaded=FileLoad(path)\n  if type(loaded)==\"table\" then saved=loaded end\n end\n local current=_G.UWU_NAURGuiState\n local old=_G.UWU_NAUR_AnnihilationAssignments or {}\n local defaults={automaticOpen=true,ultimaOpen=true,orbsOpen=true,autoTarget=_G.NAUR_UWU_AutoTarget~=false,melee=(old.melee==2 and 2 or 1),solo=old.solo or 0}\n local keys={\"automaticOpen\",\"ultimaOpen\",\"orbsOpen\",\"autoTarget\",\"melee\",\"solo\"}\n local C={}\n for _,key in ipairs(keys) do\n  local value=current and current[key]\n  if value==nil then value=saved[key] end\n  if type(defaults[key])==\"boolean\" then\n   C[key]=type(value)==\"boolean\" and value or defaults[key]\n   if value==false then C[key]=false end\n  else\n   C[key]=type(value)==\"number\" and value>=0 and value<=2 and value%1==0 and value or defaults[key]\n  end\n end\n if C.melee==0 then C.melee=1 end\n function C.save()\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local values={}\n  for _,key in ipairs(keys) do values[key]=C[key] end\n  FileSave(path,values)\n end\n _G.UWU_NAURGuiState=C\n _G.UWU_NAUR_AnnihilationAssignments={melee=C.melee,solo=C.solo}\n _G.NAUR_UWU_AutoTarget=C.autoTarget\n C.save()\n _G.UWU_NAURSettingsIOReady=true\nend\n-- Upgrade only an unset melee assignment; preserve either explicit role choice.\ndo\n local preferences=_G.UWU_NAURGuiState\n if preferences and preferences.melee==0 then\n  preferences.melee=1\n  local assignment=_G.UWU_NAUR_AnnihilationAssignments\n  if assignment then assignment.melee=1 end\n  preferences.save()\n end\nend\nif data.uwuAutoSim or data.uwuBRDAutoSim or data.uwuBLMAutoSim or data.uwuRPRAutoSim then return false end\nreturn (_G.UWU_NAURGuiState.autoTarget~=false)",
+							name = "Shared targeting enabled / no AutoSim owner",
+							uuid = "9451ac98-4d56-5bbd-8001-4c04dcc2f715",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgOptionType = 2,
+							eventEntityContentID = 1804,
+							name = "Event entity",
+							uuid = "43ee7ce4-b9c4-66b8-977c-f5d237b18af3",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgType = 3,
+							eventBoolValue = 2,
+							name = "Became untargetable",
+							uuid = "ccdb24d4-b73b-337e-887f-06eb55676cf6",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Filter",
+							filterTargetType = "ContentID",
+							name = "Targetable gaol remains",
+							partyTargetContentID = 1804,
+							uuid = "efc659d9-9b4a-6615-a70b-643566805fcc",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR / Automation",
+				eventType = 26,
+				loop = true,
+				mechanicTime = 684,
+				name = "[NAUR] [Target] Healer Gaol - Advance",
+				timeRange = true,
+				timelineIndex = 95,
+				timerEndOffset = 12,
+				timerStartOffset = -8,
+				uuid = "f52aa7a9-b2f8-6d6b-a0e8-309e24fe209c",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR Guidance",
+				uuid = "26684039-0a0b-b97e-a694-be8f87370bb9",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local titan=TensorCore.mGetEntity(eventArgs.entityID)\nif not titan then return end\nlocal old=data.uwu_geocrush_last\nif old and old.draws then for _,id in ipairs(old.draws) do Argus.deleteTimedShape(id) end end\ndata.uwu_geocrush_last={id=eventArgs.entityID,x=titan.pos.x,z=titan.pos.z,start=Now(),draws={}}\nTensorCore.timelineLogToFile(string.format(\"[UWU Geocrush] jump id=%d source=(%.2f,%.2f) heading=%.3f\\n\",eventArgs.entityID,titan.pos.x,titan.pos.z,titan.pos.h))\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"105c1c22-a4ca-6a7b-ad86-b112e9a22703",
+									true,
+								},
+								
+								{
+									"9e57966b-e45b-05f7-a832-5d63eee71a4b",
+									true,
+								},
+								
+								{
+									"84a59526-0554-07d7-999e-0bd6ea92bb11",
+									true,
+								},
+							},
+							name = "Remember jump source",
+							uuid = "fb2408ba-ebf7-d901-958c-e3bb80f17ac9",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							comparator = 3,
+							dequeueIfLuaFalse = true,
+							eventArgType = 4,
+							eventIntValue = 7737,
+							name = "jump",
+							uuid = "105c1c22-a4ca-6a7b-ad86-b112e9a22703",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							comparator = 3,
+							dequeueIfLuaFalse = true,
+							eventArgType = 2,
+							eventIntValue = 1,
+							name = "animationSlot",
+							uuid = "9e57966b-e45b-05f7-a832-5d63eee71a4b",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgOptionType = 2,
+							eventEntityContentID = 1801,
+							name = "Titan",
+							uuid = "84a59526-0554-07d7-999e-0bd6ea92bb11",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance",
+				eventType = 23,
+				mechanicTime = 684,
+				name = "[NAUR] Titan last Geocrush - Jump capture",
+				timeRange = true,
+				timelineIndex = 95,
+				timerEndOffset = 1,
+				timerStartOffset = -8,
+				uuid = "80ae144c-5ac5-11f8-9dc5-7c0600929306",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local state=data.uwu_geocrush_last\nif Now()-state.start<650 then return end\nlocal titan=TensorCore.mGetEntity(state.id)\nif not titan then return end\nlocal vx,vz=math.sin(titan.pos.h),math.cos(titan.pos.h)\nlocal ox,oz=state.x-100,state.z-100\nlocal b=ox*vx+oz*vz\nlocal discriminant=b*b+196-ox*ox-oz*oz\nif discriminant<0 then self.used=true;return end\nlocal distance=-b+math.sqrt(discriminant)\nlocal sourceX,sourceZ=state.x+vx*distance,state.z+vz*distance\nlocal duration=math.max(100,5200-(Now()-state.start))\nlocal drawer=TensorCore.getMoogleDrawer()\nlocal id=drawer:addTimedCircle(duration,sourceX,titan.pos.y,sourceZ,24,0,false,true)\nif id then state.draws[#state.draws+1]=id end\nid=drawer:addTimedDonut(duration,100,titan.pos.y,100,12,16,0,false,true)\nif id then state.draws[#state.draws+1]=id end\nlocal player=TensorCore.mGetPlayer()\nif not player then return end\nlocal dx,dz=sourceX-100,sourceZ-100\nlocal length=math.sqrt(dx*dx+dz*dz)\nif length<1 then self.used=true;return end\nlocal target={x=100-dx/length*11.25,y=player.pos.y,z=100-dz/length*11.25}\nlocal green=TensorCore.getCachedDrawer(0x5533FF66,0xCC33FF66,0xFF33FF66,0xFF000000,3)\nlocal id=green:addTimedCircle(duration,target.x,target.y,target.z,0.35,0,false,true,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nif id then state.draws[#state.draws+1]=id end\nlocal distance=TensorCore.getDistance2d(player.pos,target)\nif distance>0.5 then\n id=green:addTimedArrow(duration,player.pos.x,player.pos.y,player.pos.z,TensorCore.getHeadingToTarget(player.pos,target),math.max(0.1,distance-1),1,1,2.4,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\n if id then state.draws[#state.draws+1]=id end\nend\nTensorCore.timelineLogToFile(string.format(\"[UWU Geocrush] preview source=(%.2f,%.2f) safe=(%.2f,%.2f) elapsed=%d\\n\",sourceX,sourceZ,target.x,target.z,Now()-state.start))\nstate.predicted=true\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"e61154f8-456a-f775-8a0c-199766c727a2",
+									true,
+								},
+							},
+							name = "Preview proximity and safe edge",
+							uuid = "3221d55b-12a2-4b00-b816-d976ad6206cd",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local s=data.uwu_geocrush_last\nreturn s ~= nil and not s.predicted and not s.channelled and not s.finished",
+							name = "Pending jump prediction",
+							uuid = "e61154f8-456a-f775-8a0c-199766c727a2",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance",
+				mechanicTime = 684,
+				name = "[NAUR] Titan last Geocrush - Early preview",
+				timeRange = true,
+				timelineIndex = 95,
+				timerEndOffset = 1,
+				timerStartOffset = -8,
+				uuid = "71c90498-94c6-f285-a777-6c42f7c4db41",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local titan=TensorCore.mGetEntity(eventArgs.entityID)\nif not titan then return end\nlocal state=data.uwu_geocrush_last\nif not state then state={draws={}};data.uwu_geocrush_last=state end\nfor _,id in ipairs(state.draws) do Argus.deleteTimedShape(id) end\nstate.draws={};state.channelled=true\nlocal sourceX,sourceZ=titan.pos.x,titan.pos.z\nlocal duration=math.max(100,eventArgs.channelTimeMax*1000+300)\nlocal hazard=TensorCore.getMoogleDrawer()\nlocal hazardID=hazard:addTimedCircle(duration,sourceX,titan.pos.y,sourceZ,24,0,false,true)\nif hazardID then state.draws[#state.draws+1]=hazardID end\nhazardID=hazard:addTimedDonut(duration,100,titan.pos.y,100,12,16,0,false,true)\nif hazardID then state.draws[#state.draws+1]=hazardID end\nlocal player=TensorCore.mGetPlayer()\nif not player then return end\nlocal dx,dz=sourceX-100,sourceZ-100\nlocal length=math.sqrt(dx*dx+dz*dz)\nif length<1 then self.used=true;return end\nlocal target={x=100-dx/length*11.25,y=player.pos.y,z=100-dz/length*11.25}\nlocal green=TensorCore.getCachedDrawer(0x5533FF66,0xCC33FF66,0xFF33FF66,0xFF000000,3)\nlocal id=green:addTimedCircle(duration,target.x,target.y,target.z,0.35,0,false,true,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nif id then state.draws[#state.draws+1]=id end\nlocal distance=TensorCore.getDistance2d(player.pos,target)\nif distance>0.5 then\n id=green:addTimedArrow(duration,player.pos.x,player.pos.y,player.pos.z,TensorCore.getHeadingToTarget(player.pos,target),math.max(0.1,distance-1),1,1,2.4,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\n if id then state.draws[#state.draws+1]=id end\nend\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"657f1469-8929-a591-8540-475915045631",
+									true,
+								},
+							},
+							name = "Confirmed safe opposite edge",
+							uuid = "1fa3dcf1-fb92-4b23-9fa2-f4edf1cc1ac3",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.entityContentID == 1801 and eventArgs.spellID == 11110",
+							dequeueIfLuaFalse = true,
+							name = "Geocrush cast",
+							uuid = "657f1469-8929-a591-8540-475915045631",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance",
+				eventType = 3,
+				mechanicTime = 684,
+				name = "[NAUR] Titan last Geocrush - Confirm safe edge",
+				timeRange = true,
+				timelineIndex = 95,
+				timerEndOffset = 1,
+				timerStartOffset = -8,
+				uuid = "8623a21f-158c-208f-8368-465967bca6ad",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local s=data.uwu_geocrush_last\nif s then\n s.finished=true\n for _,id in ipairs(s.draws) do Argus.deleteTimedShape(id) end\n s.draws={}\nend\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"6202581a-fe0a-c811-a520-733c7dc48538",
+									true,
+								},
+							},
+							name = "Clear completed Geocrush",
+							uuid = "18c6f6c1-ae5a-6346-92c8-a62782b92403",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.entityContentID == 1801 and eventArgs.spellID == 11110",
+							dequeueIfLuaFalse = true,
+							name = "Geocrush resolved",
+							uuid = "6202581a-fe0a-c811-a520-733c7dc48538",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance",
+				eventType = 2,
+				mechanicTime = 684,
+				name = "[NAUR] Titan last Geocrush - Resolution cleanup",
+				timeRange = true,
+				timelineIndex = 95,
+				timerEndOffset = 1,
+				timerStartOffset = -8,
+				uuid = "e3952b79-0f24-9c5c-9b9e-f68306d3eb64",
+				version = 2,
+			},
+		},
+	},
+	[96] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "[Raid calls]",
+				uuid = "0bcf385d-cc45-3ef2-98af-34eadd0469a1",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertTTS = true,
+							alertText = "Dodge Landslide",
+							uuid = "f7d833fc-fcdb-359b-9dbb-71c19250ac73",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "[Raid calls]",
+				mechanicTime = 699,
+				name = "[Raid Call][Titan] Dodge Landslide 2s early",
+				timelineIndex = 96,
+				timerOffset = -2,
+				uuid = "8ea152dd-978b-b1d4-9b71-396236ad9eea",
+				version = 2,
+			},
+		},
+	},
+	[98] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\mitigation",
+				uuid = "616f2abc-66d8-db30-4f3e-b9a6d33e010c",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\mitigation",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\optimization",
+				uuid = "a02e0bb2-4639-26c6-d806-0b983ba61c42",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\optimization",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Titan NAUR",
+				uuid = "db0b1aea-7d58-f185-b445-52cb914581db",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local roster = AnyoneCore and AnyoneCore.Roster\nlocal slot = roster and roster.mySlot()\nif slot == \"T1\" or slot == \"T2\" then\n    self.used = true\n    return\nend\n\nlocal player = TensorCore.mGetPlayer()\nif not player or not player.pos then\n    self.used = true\n    return\nend\n\nlocal center = { x = 100, y = player.pos.y, z = 100 }\nlocal distance = TensorCore.getDistance2d(player.pos, center)\nif distance > 0.2 then\n    local tipLength = math.min(1.8, distance * 0.35)\n    local drawer = TensorCore.getCachedDrawer(\n        0xFF66FFCC,\n        0xFF00AA88,\n        0xFF006655,\n        0xFFFFFFFF,\n        2\n    )\n    drawer:addTimedArrow(\n        12000,\n        player.pos.x, player.pos.y, player.pos.z,\n        TensorCore.getHeadingToTarget(player.pos, center),\n        math.max(0.1, distance - tipLength),\n        1.0,\n        tipLength,\n        2.3,\n        0,\n        false,\n        Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n    )\nend\n\nlocal drawer = TensorCore.getCachedDrawer(\n    0x5533CCAA,\n    0x5533CCAA,\n    0xAA00AA88,\n    0xFFFFFFFF,\n    2\n)\ndrawer:addTimedCircle(12000, center.x, center.y, center.z, 4.5, 0, false, true)\nAnyoneCore.addTimedWorldText(\n    12000,\n    \"SIX TUMULTS: STACK CENTER\",\n    { x = center.x, y = center.y + 1.5, z = center.z },\n    0xFF66FFCC,\n    true,\n    1.0\n)\n\nself.used = true",
+							name = "Guide",
+							uuid = "940138df-388e-8ebc-81a8-16536d13c064",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "Draws - Titan NAUR",
+				mechanicTime = 704,
+				name = "[Draw][NAUR][Titan] Six Tumults Stack",
+				timeRange = true,
+				timelineIndex = 98,
+				timerEndOffset = 8,
+				timerStartOffset = -3.5,
+				uuid = "6af9e6ec-42ea-47bd-850c-0bd4e9006ace",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "[Raid calls]",
+				uuid = "fd21e0e5-76d1-c257-b06f-2b8834ea804a",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 8000,
+							alertPriority = 2,
+							alertTTS = true,
+							alertText = "Take Tankbuster alone",
+							conditions = 
+							{
+								
+								{
+									"9de440ae-f6b9-9643-a390-83e59aafc59f",
+									true,
+								},
+							},
+							uuid = "e7f71382-0468-7e71-aea1-91ea2df3b844",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore.Roster\nif not Roster or not Roster.current() then return false end\nlocal slot = Roster.mySlot()\nreturn slot == \"T1\" or slot == \"T2\"",
+							name = "T1 / T2",
+							uuid = "9de440ae-f6b9-9643-a390-83e59aafc59f",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "[Raid calls]",
+				mechanicTime = 704,
+				name = "[Raid Call][Titan] Six Tumults",
+				timelineIndex = 98,
+				timerOffset = -1,
+				uuid = "f526509c-ce0f-c60f-aa87-1a319a794337",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR ",
+				uuid = "03c6567a-2f88-fd0a-bfab-ebd26a99d591",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "NAUR ",
+				name = " Automation",
+				uuid = "63552195-6d66-b278-8fd2-a02d829f2db8",
+			},
+			objectType = "folder",
+		},
+	},
+	[100] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\core",
+				uuid = "79cdccec-6898-1388-b676-3d9a22135d1c",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\core",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR Guidance",
+				uuid = "096495e4-5eb5-4b03-9626-45e060bc6e23",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 4000,
+							alertPriority = 3,
+							alertScale = 0.85,
+							alertTTS = true,
+							alertText = "Go in front of Titan",
+							conditions = 
+							{
+								
+								{
+									"0634d7e3-fa01-0cd1-8924-049109e9825a",
+									true,
+								},
+								
+								{
+									"23804938-7ae8-dd45-908a-56c6f91fa883",
+									true,
+								},
+							},
+							name = "Go in front of Titan",
+							uuid = "ab16162d-d497-8ba9-b846-afa139394873",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local r=AnyoneCore.Roster;if r.current()==nil then return false end;local s=r.mySlot();return s==\"T1\" or s==\"T2\" or s==\"M1\" or s==\"M2\"",
+							name = "Party Roster roles",
+							uuid = "0634d7e3-fa01-0cd1-8924-049109e9825a",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							eventArgType = 2,
+							eventSpellID = 11107,
+							name = "Mechanic hit",
+							uuid = "23804938-7ae8-dd45-908a-56c6f91fa883",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance",
+				eventType = 2,
+				mechanicTime = 715,
+				name = "[NAUR] Titan - Front Baits - Tanks/Melee",
+				timeRange = true,
+				timelineIndex = 100,
+				timerEndOffset = 2,
+				timerStartOffset = -1,
+				uuid = "52253a51-1522-22c7-9bb2-abb4397925fd",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 4000,
+							alertPriority = 3,
+							alertScale = 0.85,
+							alertTTS = true,
+							alertText = "Stack on MT in front of Titan",
+							conditions = 
+							{
+								
+								{
+									"3c5fda43-a195-7630-9188-3dc0247cc00d",
+									true,
+								},
+								
+								{
+									"dbc4376c-c726-a4da-9d0c-8f0261754fd9",
+									true,
+								},
+							},
+							name = "Go opposite of Titan",
+							uuid = "ac764954-e76f-bacb-8953-ba4c7a376073",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local r=AnyoneCore.Roster;if r.current()==nil then return false end;local s=r.mySlot();return s==\"H1\" or s==\"H2\" or s==\"R1\" or s==\"R2\"",
+							name = "Party Roster roles",
+							uuid = "3c5fda43-a195-7630-9188-3dc0247cc00d",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							eventArgType = 2,
+							eventSpellID = 11107,
+							name = "Mechanic hit",
+							uuid = "dbc4376c-c726-a4da-9d0c-8f0261754fd9",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance",
+				eventType = 2,
+				mechanicTime = 715,
+				name = "[NAUR] Titan - Opposite Side - Healers/Ranged",
+				timeRange = true,
+				timelineIndex = 100,
+				timerEndOffset = 2,
+				timerStartOffset = -1,
+				uuid = "d5caf2b3-e6ac-bae4-bcf2-9bf71ea79eb1",
+				version = 2,
+			},
+		},
+	},
+	[101] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\optimization",
+				uuid = "fda3cdf1-9b5c-3b7d-0ae2-344b1abda901",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\optimization",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR ",
+				uuid = "c12b753b-ff97-ae2e-8d8f-04755a00a3b1",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "NAUR ",
+				name = " Automation",
+				uuid = "0aa42ec1-7109-e926-880d-e09f28c6b93b",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							gVar = "ACR_TensorNuke4_Hotbar_Sprint",
+							name = "Use Sprint",
+							uuid = "ddf7bbed-4bad-ad0d-8db1-e0efcfa09ddf",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "NAUR / Automation",
+				mechanicTime = 720,
+				name = "[NAUR] [Utility][Titan] Sprint - Bury",
+				timeRange = true,
+				timelineIndex = 101,
+				timerEndOffset = 6,
+				timerStartOffset = 1,
+				uuid = "6bb4aedc-9b83-93c0-a94c-28d2832f8e95",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Titan NAUR",
+				uuid = "62425e6d-75f9-d497-8c51-6bc4c670eb17",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local state=data.uwu_titan_late_rocks\nif not state then state={seen={},draws={},count=0};data.uwu_titan_late_rocks=state end\nif state.seen[eventArgs.entityID] or state.count>=4 then self.used=true;return end\nlocal bomb=TensorCore.mGetEntity(eventArgs.entityID)\nif not bomb then return end\nlocal id=TensorCore.getMoogleDrawer():addTimedCircle(6500,bomb.pos.x,bomb.pos.y,bomb.pos.z,6.3,0,false,true)\nstate.seen[bomb.id]=true;state.count=state.count+1\nif id then state.draws[bomb.id]=id end\nTensorCore.timelineLogToFile(string.format(\"[UWU Titan late rocks] preview %d id=%d at=(%.2f,%.2f)\\n\",state.count,bomb.id,bomb.pos.x,bomb.pos.z))\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"7762246a-3dc1-2c58-90f4-2614528148fa",
+									true,
+								},
+							},
+							name = "Titan late rocks 720 - Early burst preview",
+							uuid = "58c5e7db-c3b6-063d-9cc0-cc11840605a2",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgOptionType = 2,
+							eventEntityContentID = 1803,
+							name = "Bomb Boulder",
+							uuid = "7762246a-3dc1-2c58-90f4-2614528148fa",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Titan NAUR",
+				eventType = 5,
+				loop = true,
+				mechanicTime = 720,
+				name = "[NAUR] Titan late rocks 720 - Early burst preview",
+				timeRange = true,
+				timelineIndex = 101,
+				timerEndOffset = 7,
+				timerStartOffset = -3,
+				uuid = "1f0fa9b4-b11c-abaf-8d0a-e15359b705ee",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local state=data.uwu_titan_late_rocks\nlocal id=state and state.draws[eventArgs.entityID]\nif id then Argus.deleteTimedShape(id);state.draws[eventArgs.entityID]=nil end\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"e459a6cc-32f4-1114-b3de-c3b48a4ec639",
+									true,
+								},
+							},
+							name = "Titan late rocks 720 - Native AoE handover",
+							uuid = "f7d89dbc-ccd0-3172-be3a-0b09acb891eb",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.entityContentID == 1803 and eventArgs.spellID == 11114",
+							dequeueIfLuaFalse = true,
+							name = "Burst cast",
+							uuid = "e459a6cc-32f4-1114-b3de-c3b48a4ec639",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Titan NAUR",
+				eventType = 3,
+				loop = true,
+				mechanicTime = 720,
+				name = "[NAUR] Titan late rocks 720 - Native AoE handover",
+				timeRange = true,
+				timelineIndex = 101,
+				timerEndOffset = 13,
+				timerStartOffset = -3,
+				uuid = "551c375b-2da2-68a8-8304-695f5dfe54df",
+				version = 2,
+			},
+		},
+	},
+	[102] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Titan NAUR",
+				uuid = "9d666afd-e8c8-5a15-9737-082e145c59c7",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player = TensorCore.mGetPlayer()\nif not player or not player.pos then self.used = true return end\nlocal titan\nfor _, e in pairs(TensorCore.getEntityGroupList(\"ContentID\", 1801) or {}) do\n if e and e.pos then titan = e break end\nend\nif not titan then\n local t = TensorCore.mGetTarget()\n if t and t.pos then titan = t end\nend\nif not titan then self.used = true return end\nlocal slot = AnyoneCore.Roster.mySlot()\nlocal ranged = (slot == \"H1\" or slot == \"H2\" or slot == \"R1\" or slot == \"R2\")\nlocal h = titan.pos.h -- Titan faces the MT; heading h points along (sin h, cos h)\nlocal function at(dh, r) return {x = titan.pos.x + math.sin(h + dh) * r, y = player.pos.y, z = titan.pos.z + math.cos(h + dh) * r} end\nlocal d = math.rad(1)\nlocal spots\nif ranged then -- clockwise = decreasing heading\n spots = {at(0, 8), at(-75 * d, 9), at(-125 * d, 11), at(-152 * d, 13)}\nelse\n spots = {at(0, 8), at(75 * d, 9), at(0, 8), at(70 * d, 9)}\nend\nlocal function arrow(ms, delay, from, to)\n local dist = TensorCore.getDistance2d(from, to)\n local scale = math.min(1, dist / 15)\n local tip = math.max(2, 3 * scale)\n if dist - tip <= 0.5 then return end\n local a = TensorCore.getCachedDrawer(0xFF0000FF, nil, 0xFF0000FF, 0xFFFFFFFF, 2)\n a:addTimedArrow(ms, from.x, from.y, from.z, TensorCore.getHeadingToTarget(from, to),\n  dist - tip, math.max(0.5, scale), tip, math.max(1.5, 3 * scale), delay, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\narrow(1800, 0, player.pos, spots[1])\narrow(2000, 3800, spots[1], spots[2])\narrow(2000, 5800, spots[2], spots[3])\narrow(2000, 7800, spots[3], spots[4])\nlocal ring = TensorCore.getCachedDrawer(0x5530E080, 0x5530E080, 0x5530E080, 0xFF30E080, 2.0)\nring:addTimedCircle(1800, spots[1].x, spots[1].y, spots[1].z, 0.8, 0, false, true)\nAnyoneCore.addTimedWorldText(1800, ranged and \"STACK ON MT, THEN CLOCKWISE x3\" or \"STACK ON MT, THEN CCW / CW / CCW\",\n {x = spots[1].x, y = spots[1].y + 1.5, z = spots[1].z}, 0xFF99FF99, true, 0.9)\nself.used = true\n",
+							name = "Guide",
+							uuid = "eb61ff72-81f6-6917-bf66-7be072ff92d3",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "Draws - Titan NAUR",
+				mechanicTime = 722,
+				name = "[Draw][NAUR][Titan] Mario Kart 2",
+				timeRange = true,
+				timelineIndex = 102,
+				timerEndOffset = 8,
+				timerStartOffset = -5,
+				uuid = "f9fab7e4-908e-c846-aa91-c590a9f89caf",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "[Raid calls]",
+				uuid = "57cee788-863b-1700-91a8-951657ca4199",
+			},
+			objectType = "folder",
+		},
+	},
+	[107] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Titan NAUR",
+				uuid = "63203d8c-0ac3-257d-a88f-db4ef4058f93",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player=TensorCore.mGetPlayer()\nif not player or not player.pos then self.used=true return end\nlocal center={x=100,y=player.pos.y,z=100}\nlocal channel=Argus2.getNextUnusedChannel(true)\nArgus2.addTimedCircleFilled(6000,center.x,center.y,center.z,17.5,64,0x5533CC66,0x5533CC66,0xAA22FF66,0,nil,0,0,0,0,0,false,true,Argus2.RenderFlags.FLAG_OCCLUSION_BASE,channel,0,0,0)\nArgus2.addTimedDonutFilled(6000,center.x,center.y,center.z,5.5,25.0,64,0,0,0,0,nil,0,0,0,0,0,false,true,Argus2.RenderFlags.FLAG_OCCLUDE,channel,0,0,0)\nlocal distance=TensorCore.getDistance2d(player.pos,center)\nif distance>0.2 then\n local tip=math.min(2.0,distance*0.35)\n local drawer=TensorCore.getCachedDrawer(0xFF99FF99,0xFF33CC66,0xFF168844,0xFFFFFFFF,2)\n drawer:addTimedArrow(6000,player.pos.x,player.pos.y,player.pos.z,TensorCore.getHeadingToTarget(player.pos,center),math.max(0.1,distance-tip),1.0,tip,2.4,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nAnyoneCore.addTimedWorldText(6000,\"STACK CENTER\",{x=center.x,y=center.y+1.5,z=center.z},0xFF99FF99,true,1.0)\nself.used=true",
+							name = "Guide",
+							uuid = "cba219cc-fadf-0689-b0a4-c2b4bb9c0042",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "Draws - Titan NAUR",
+				mechanicTime = 735,
+				name = "[Draw][NAUR][Titan] Four AOE Safe Center",
+				timeRange = true,
+				timelineIndex = 107,
+				timerEndOffset = 5,
+				timerStartOffset = -1,
+				uuid = "eb339f3b-25e1-fcb8-b1e7-c10670aaf949",
+				version = 2,
+			},
+		},
+	},
+	[109] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Titan NAUR",
+				uuid = "b82e4854-6d62-cc1c-9254-9224a6fea3fc",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "[Raid calls]",
+				uuid = "e5bcbff2-b320-97e7-a133-fadc0951b215",
+			},
+			objectType = "folder",
+		},
+	},
+	[113] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR",
+				uuid = "a968d5cd-3fe1-1626-8eb8-0d748e0fa5ff",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "NAUR",
+				name = "Titan",
+				uuid = "8c1e01f3-ea26-b2ad-98d8-339489052bb1",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 6000,
+							alertTTS = true,
+							alertText = "Melee: take the light orb",
+							conditions = 
+							{
+								
+								{
+									"99d9d46b-eb29-f92c-9810-0c6dc83523b2",
+									true,
+								},
+								
+								{
+									"c7d800ae-adbe-9523-b256-2e22676059e6",
+									true,
+								},
+								
+								{
+									"bf9cbfe8-a136-6067-9b62-9d6d1f499216",
+									true,
+								},
+								
+								{
+									"bd30ba5b-7c56-1785-81cc-de10c23da385",
+									true,
+								},
+							},
+							name = "Melee light orb pickup",
+							uuid = "3bd2fa0d-7619-e3dc-9688-c2b41eb1247c",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 8,
+							localmapid = 777,
+							name = "UWU only",
+							uuid = "99d9d46b-eb29-f92c-9810-0c6dc83523b2",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgOptionType = 2,
+							eventEntityContentID = 2009481,
+							name = "Beyond Limits orb",
+							uuid = "c7d800ae-adbe-9523-b256-2e22676059e6",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster=AnyoneCore.Roster\nif not Roster or not Roster.current() then return false end\nlocal slot=Roster.mySlot()\nreturn slot == \"M1\" or slot == \"M2\"",
+							conditionType = 14,
+							jobIDList = 
+							{
+								20,
+								22,
+								30,
+								34,
+								39,
+								41,
+							},
+							name = "Roster M1 / M2",
+							uuid = "bf9cbfe8-a136-6067-9b62-9d6d1f499216",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							buffCheckType = 2,
+							buffID = 1530,
+							category = "Self",
+							name = "Still needs orb",
+							uuid = "bd30ba5b-7c56-1785-81cc-de10c23da385",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR/Titan",
+				eventType = 29,
+				mechanicTime = 768,
+				name = "[NAUR] Titan light orb - Melee pickup",
+				timeRange = true,
+				timelineIndex = 113,
+				timerEndOffset = 25,
+				timerStartOffset = -170,
+				uuid = "d5311e93-dfa9-7910-8cc7-540b62e15909",
+				version = 2,
+			},
+		},
+	},
+	[114] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\core",
+				uuid = "1b9d099d-148c-9471-e0ff-ac2bb2b7f84d",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\core",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\optimization",
+				uuid = "ded772d7-e58d-15bb-b024-91e94dde9ae7",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\optimization",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Movement - Magitek Bits",
+				uuid = "cf8c33e2-5537-8e55-851e-d4b2c299c845",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 25762,
+							conditions = 
+							{
+								
+								{
+									"71ea367a-d2a3-e159-a1e5-b97a8b024e03",
+									true,
+								},
+							},
+							ignoreWeaveRules = true,
+							name = "Thunderclap to nearest targetable Magitek Bit",
+							targetContentID = 5563,
+							targetType = "ContentID",
+							uuid = "a9f2c335-b2dc-59af-9d3a-3d443b04d683",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 14,
+							jobIDList = 
+							{
+								20,
+							},
+							name = "Job = MNK",
+							uuid = "71ea367a-d2a3-e159-a1e5-b97a8b024e03",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Movement - Magitek Bits",
+				mechanicTime = 800,
+				name = "[Dash] Magitek Bit - MNK Thunderclap",
+				timeRange = true,
+				timelineIndex = 114,
+				timerEndOffset = 7,
+				timerStartOffset = 2,
+				uuid = "db8cdbc3-3c05-812e-8fb3-5278d827999f",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 34646,
+							conditions = 
+							{
+								
+								{
+									"f8a36a2c-7622-de26-b509-a31ff1c7deaa",
+									true,
+								},
+							},
+							ignoreWeaveRules = true,
+							name = "Slither to nearest targetable Magitek Bit",
+							targetContentID = 5563,
+							targetType = "ContentID",
+							uuid = "a3160751-5993-f085-9276-022d3de8c0ab",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 14,
+							jobIDList = 
+							{
+								41,
+							},
+							name = "Job = VPR",
+							uuid = "f8a36a2c-7622-de26-b509-a31ff1c7deaa",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Movement - Magitek Bits",
+				mechanicTime = 800,
+				name = "[Dash] Magitek Bit - VPR Slither",
+				timeRange = true,
+				timelineIndex = 114,
+				timerEndOffset = 7,
+				timerStartOffset = 2,
+				uuid = "741258f4-4603-a8c2-8498-bcf9ed644b7e",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 36951,
+							conditions = 
+							{
+								
+								{
+									"eba6ae16-6349-d20d-8823-1d2e03362cb7",
+									true,
+								},
+							},
+							ignoreWeaveRules = true,
+							name = "Winged Glide to nearest targetable Magitek Bit",
+							targetContentID = 5563,
+							targetType = "ContentID",
+							uuid = "95e322b7-f1cc-1231-8985-b7992c1e9383",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 14,
+							jobIDList = 
+							{
+								22,
+							},
+							name = "Job = DRG",
+							uuid = "eba6ae16-6349-d20d-8823-1d2e03362cb7",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Movement - Magitek Bits",
+				mechanicTime = 800,
+				name = "[Dash] Magitek Bit - DRG Winged Glide",
+				timeRange = true,
+				timelineIndex = 114,
+				timerEndOffset = 7,
+				timerStartOffset = 2,
+				uuid = "6a27ba0c-f8d5-fbbf-9f2c-859d8c14da7f",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR ",
+				uuid = "952ff35e-497a-761f-958f-e2cc707b1511",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "NAUR ",
+				name = " Automation",
+				uuid = "a978cb30-579f-8cb8-a71d-54ac74ef572b",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Misc",
+							conditions = 
+							{
+								
+								{
+									"419da3bb-0690-538a-be47-6017bb3a41ab",
+									true,
+								},
+								
+								{
+									"51133d18-67b2-1e3b-bb25-933be6c698f6",
+									true,
+								},
+								
+								{
+									"1b2059fb-cac0-510d-b0ba-4c6ede3b2203",
+									true,
+								},
+							},
+							name = "Target nearest Magitek Bit",
+							setTarget = true,
+							targetContentID = 5563,
+							targetType = "ContentID",
+							uuid = "6d461126-e2aa-7593-8cec-49e6a9aac019",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "-- Independent UWU settings; available before GUI or targeting reads.\nif not _G.UWU_NAURSettingsIOReady then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UWU-NAUR.lua]]\n local saved={}\n if FileExists(path) then\n  local loaded=FileLoad(path)\n  if type(loaded)==\"table\" then saved=loaded end\n end\n local current=_G.UWU_NAURGuiState\n local old=_G.UWU_NAUR_AnnihilationAssignments or {}\n local defaults={automaticOpen=true,ultimaOpen=true,orbsOpen=true,autoTarget=_G.NAUR_UWU_AutoTarget~=false,melee=(old.melee==2 and 2 or 1),solo=old.solo or 0}\n local keys={\"automaticOpen\",\"ultimaOpen\",\"orbsOpen\",\"autoTarget\",\"melee\",\"solo\"}\n local C={}\n for _,key in ipairs(keys) do\n  local value=current and current[key]\n  if value==nil then value=saved[key] end\n  if type(defaults[key])==\"boolean\" then\n   C[key]=type(value)==\"boolean\" and value or defaults[key]\n   if value==false then C[key]=false end\n  else\n   C[key]=type(value)==\"number\" and value>=0 and value<=2 and value%1==0 and value or defaults[key]\n  end\n end\n if C.melee==0 then C.melee=1 end\n function C.save()\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local values={}\n  for _,key in ipairs(keys) do values[key]=C[key] end\n  FileSave(path,values)\n end\n _G.UWU_NAURGuiState=C\n _G.UWU_NAUR_AnnihilationAssignments={melee=C.melee,solo=C.solo}\n _G.NAUR_UWU_AutoTarget=C.autoTarget\n C.save()\n _G.UWU_NAURSettingsIOReady=true\nend\n-- Upgrade only an unset melee assignment; preserve either explicit role choice.\ndo\n local preferences=_G.UWU_NAURGuiState\n if preferences and preferences.melee==0 then\n  preferences.melee=1\n  local assignment=_G.UWU_NAUR_AnnihilationAssignments\n  if assignment then assignment.melee=1 end\n  preferences.save()\n end\nend\nif data.uwuAutoSim or data.uwuBRDAutoSim or data.uwuBLMAutoSim or data.uwuRPRAutoSim then return false end\nreturn (_G.UWU_NAURGuiState.autoTarget~=false)",
+							name = "Shared targeting enabled / no AutoSim owner",
+							uuid = "419da3bb-0690-538a-be47-6017bb3a41ab",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgOptionType = 2,
+							eventEntityContentID = 5563,
+							name = "Event entity",
+							uuid = "51133d18-67b2-1e3b-bb25-933be6c698f6",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgType = 3,
+							name = "Became targetable",
+							uuid = "1b2059fb-cac0-510d-b0ba-4c6ede3b2203",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR / Automation",
+				eventType = 26,
+				loop = true,
+				mechanicTime = 800,
+				name = "[NAUR] [Target] Magitek Bits",
+				timeRange = true,
+				timelineIndex = 114,
+				timerEndOffset = 12,
+				timerStartOffset = -8,
+				uuid = "04c63c85-f0de-c91d-8623-e4122ac6470c",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ultima",
+				uuid = "6547e246-c91b-2911-8ed5-3429216eb45f",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local state=data.uwu_intermission_meteors\nif not state then state={seen={},shapes={},count=0};data.uwu_intermission_meteors=state end\nif state.seen[eventArgs.entityID] or state.count>=4 then self.used=true;return end\nlocal actor=TensorCore.mGetEntity(eventArgs.entityID)\nif not actor then return end\nlocal id=TensorCore.getMoogleDrawer():addTimedCircle(5900,actor.pos.x,actor.pos.y+0.05,actor.pos.z,17,0,false,true)\nif not id then return end\nstate.seen[eventArgs.entityID]=true\nstate.shapes[eventArgs.entityID]=id\nstate.count=state.count+1\nTensorCore.timelineLogToFile(string.format(\"[UWU Freefire] meteor %d id=%d preview=(%.2f,%.2f) radius=17\\n\",state.count,eventArgs.entityID,actor.pos.x,actor.pos.z))\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"4eb3e16b-d021-30f4-b163-0d1940d1be4f",
+									true,
+								},
+								
+								{
+									"72bc7d79-ade4-4371-9221-fef71d874f12",
+									true,
+								},
+								
+								{
+									"01416549-40ff-3b45-96ba-b383e0b66f81",
+									true,
+								},
+							},
+							name = "Intermission meteors - Early proximity circles",
+							uuid = "422ccd0a-8749-421f-b48c-55c781784d53",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							comparator = 3,
+							dequeueIfLuaFalse = true,
+							eventArgType = 4,
+							eventIntValue = 1097,
+							name = "Freefire landing omen",
+							uuid = "4eb3e16b-d021-30f4-b163-0d1940d1be4f",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							comparator = 3,
+							dequeueIfLuaFalse = true,
+							eventArgType = 2,
+							eventIntValue = 1,
+							name = "Animation slot 1",
+							uuid = "72bc7d79-ade4-4371-9221-fef71d874f12",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.entityContentID==1801 or eventArgs.entityContentID==2137",
+							dequeueIfLuaFalse = true,
+							name = "Intermission helper",
+							uuid = "01416549-40ff-3b45-96ba-b383e0b66f81",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ultima",
+				eventType = 23,
+				loop = true,
+				mechanicTime = 800,
+				name = "[NAUR] Intermission meteors - Early proximity circles",
+				timeRange = true,
+				timelineIndex = 114,
+				timerEndOffset = 3,
+				timerStartOffset = -220,
+				uuid = "2c7ff152-9144-9c9d-a528-98ae8f827594",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local state=data.uwu_intermission_meteors\nlocal id=state and state.shapes[eventArgs.entityID]\nif id then Argus.deleteTimedShape(id);state.shapes[eventArgs.entityID]=nil end\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"882e3292-7556-71e4-9500-4cf3ae51b7d8",
+									true,
+								},
+							},
+							name = "Intermission meteors - Impact cleanup",
+							uuid = "ea1b8ece-5973-d00d-91eb-ac8a65ebab07",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.spellID==11509",
+							dequeueIfLuaFalse = true,
+							name = "Freefire impact",
+							uuid = "882e3292-7556-71e4-9500-4cf3ae51b7d8",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ultima",
+				eventType = 2,
+				loop = true,
+				mechanicTime = 800,
+				name = "[NAUR] Intermission meteors - Impact cleanup",
+				timeRange = true,
+				timelineIndex = 114,
+				timerEndOffset = 3,
+				timerStartOffset = -220,
+				uuid = "6231967f-32af-a092-a12a-df3594616cdd",
+				version = 2,
+			},
+		},
+	},
+	[115] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\core",
+				uuid = "b1b1eb36-3d01-83ea-7ba0-6bf4593f33a6",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\core",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ultima",
+				uuid = "0466e0d5-9048-8b78-89b1-107d451107be",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player=TensorCore.mGetPlayer()\nif not player or not player.pos then self.used=true return end\nlocal duration=6000\nlocal dest={x=100,y=player.pos.y,z=100}\nlocal distance=TensorCore.getDistance2d(player.pos,dest)\nif distance>0.3 then\n local tip=math.min(1.7,distance*0.35)\n local drawer=TensorCore.getCachedDrawer(0xFF33FF66,0xFF00CC44,0xFFFFFFFF,0xFF000000,4)\n drawer:addTimedArrow(duration,player.pos.x,player.pos.y,player.pos.z,TensorCore.getHeadingToTarget(player.pos,dest),math.max(0.1,distance-tip),1.2,tip,2.5,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nAnyoneCore.addTimedWorldText(duration,\"MOVE TO MIDDLE\",{x=dest.x,y=dest.y+1.1,z=dest.z},0xFF33FF66,true,1.1)\nself.used=true",
+							name = "Move to Middle Arrow",
+							uuid = "dc04d8cd-7087-1154-ab20-f48382c4e625",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "Draws - Ultima",
+				mechanicTime = 815,
+				name = "[Draw][NAUR] Post-Blight Move to Middle",
+				timeRange = true,
+				timelineIndex = 115,
+				timerEndOffset = 4.5,
+				timerStartOffset = 2.5,
+				uuid = "75831493-090b-daf2-a87e-10710e25179f",
+				version = 2,
+			},
+		},
+	},
+	[116] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\core",
+				uuid = "afa39073-7c0e-1fa7-9686-f655f4f676e3",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\core",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Monk Opti",
+				uuid = "74b38a97-4a87-820f-8e12-88a26e35cef3",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Monk Opti",
+							uuid = "0915b51e-b4fb-be01-b050-4836027343b7",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							actionID = 25762,
+							conditions = 
+							{
+								
+								{
+									"0c977b68-3151-380a-aae9-9fa72688708f",
+									true,
+								},
+							},
+							displayPath = "Monk Opti",
+							ignoreWeaveRules = true,
+							name = "Thunderclap to targetable Lahabrea",
+							targetContentID = 2143,
+							targetType = "ContentID",
+							uuid = "66d26b66-1e40-4022-8495-448afb849c08",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Monk Opti",
+							uuid = "990bc96d-ecbb-6784-be2c-90e6645828b2",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local e = TensorCore.getEntityByGroup(\"ContentID\", {contentid=2143, subgroup=\"Nearest\"})\nreturn e ~= nil and e.targetable == true",
+							name = "Lahabrea targetable",
+							uuid = "0c977b68-3151-380a-aae9-9fa72688708f",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Monk Opti",
+				mechanicTime = 840,
+				name = "[Dash] Lahabrea Targetable - MNK Thunderclap",
+				timeRange = true,
+				timelineIndex = 116,
+				timerEndOffset = -10,
+				timerOffset = -17,
+				timerStartOffset = -19,
+				uuid = "ea58ca33-d1c6-3b0d-b165-e140afce6751",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Movement - Lahabrea",
+				uuid = "7e407e3e-17d8-bc11-935d-db08f0065829",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Misc",
+							conditions = 
+							{
+								
+								{
+									"37d9aab2-6722-6835-a0a8-e2934bba0abf",
+									true,
+								},
+								
+								{
+									"0d880dca-e2e9-10ce-a28e-b38548457d93",
+									true,
+								},
+							},
+							name = "Target Lahabrea",
+							setTarget = true,
+							targetContentID = 2143,
+							targetType = "ContentID",
+							uuid = "df841f09-81dc-df5c-b498-c3abe31a7364",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local e = TensorCore.getEntityByGroup(\"ContentID\", {contentid=2143, subgroup=\"Nearest\"})\nreturn e ~= nil and e.targetable == true",
+							name = "Lahabrea targetable",
+							uuid = "0d880dca-e2e9-10ce-a28e-b38548457d93",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "-- Independent UWU settings; available before GUI or targeting reads.\nif not _G.UWU_NAURSettingsIOReady then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UWU-NAUR.lua]]\n local saved={}\n if FileExists(path) then\n  local loaded=FileLoad(path)\n  if type(loaded)==\"table\" then saved=loaded end\n end\n local current=_G.UWU_NAURGuiState\n local old=_G.UWU_NAUR_AnnihilationAssignments or {}\n local defaults={automaticOpen=true,ultimaOpen=true,orbsOpen=true,autoTarget=_G.NAUR_UWU_AutoTarget~=false,melee=(old.melee==2 and 2 or 1),solo=old.solo or 0}\n local keys={\"automaticOpen\",\"ultimaOpen\",\"orbsOpen\",\"autoTarget\",\"melee\",\"solo\"}\n local C={}\n for _,key in ipairs(keys) do\n  local value=current and current[key]\n  if value==nil then value=saved[key] end\n  if type(defaults[key])==\"boolean\" then\n   C[key]=type(value)==\"boolean\" and value or defaults[key]\n   if value==false then C[key]=false end\n  else\n   C[key]=type(value)==\"number\" and value>=0 and value<=2 and value%1==0 and value or defaults[key]\n  end\n end\n if C.melee==0 then C.melee=1 end\n function C.save()\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local values={}\n  for _,key in ipairs(keys) do values[key]=C[key] end\n  FileSave(path,values)\n end\n _G.UWU_NAURGuiState=C\n _G.UWU_NAUR_AnnihilationAssignments={melee=C.melee,solo=C.solo}\n _G.NAUR_UWU_AutoTarget=C.autoTarget\n C.save()\n _G.UWU_NAURSettingsIOReady=true\nend\n-- Upgrade only an unset melee assignment; preserve either explicit role choice.\ndo\n local preferences=_G.UWU_NAURGuiState\n if preferences and preferences.melee==0 then\n  preferences.melee=1\n  local assignment=_G.UWU_NAUR_AnnihilationAssignments\n  if assignment then assignment.melee=1 end\n  preferences.save()\n end\nend\nif data.uwuAutoSim or data.uwuBRDAutoSim or data.uwuBLMAutoSim or data.uwuRPRAutoSim then return false end\nreturn (_G.UWU_NAURGuiState.autoTarget~=false)",
+							name = "Shared targeting enabled / no AutoSim owner",
+							uuid = "37d9aab2-6722-6835-a0a8-e2934bba0abf",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Movement - Lahabrea",
+				mechanicTime = 840,
+				name = "[Target] Lahabrea on Targetable",
+				timeRange = true,
+				timelineIndex = 116,
+				timerEndOffset = -10,
+				timerStartOffset = -19,
+				uuid = "c4aa0742-6c6c-2dac-81f9-d8ff3e635e36",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 34646,
+							conditions = 
+							{
+								
+								{
+									"18e16505-830a-01e2-8601-b112f0adde98",
+									true,
+								},
+								
+								{
+									"7674cb6b-ab92-1c52-b0f5-dc8219cb13cd",
+									true,
+								},
+							},
+							ignoreWeaveRules = true,
+							name = "Slither to targetable Lahabrea",
+							targetContentID = 2143,
+							targetType = "ContentID",
+							uuid = "69fdaf1e-7592-e653-a95a-903161dd1de0",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 14,
+							jobIDList = 
+							{
+								41,
+							},
+							name = "Job = VPR",
+							uuid = "18e16505-830a-01e2-8601-b112f0adde98",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local e = TensorCore.getEntityByGroup(\"ContentID\", {contentid=2143, subgroup=\"Nearest\"})\nreturn e ~= nil and e.targetable == true",
+							name = "Lahabrea targetable",
+							uuid = "7674cb6b-ab92-1c52-b0f5-dc8219cb13cd",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Movement - Lahabrea",
+				mechanicTime = 840,
+				name = "[Dash] Lahabrea Targetable - VPR Slither",
+				timeRange = true,
+				timelineIndex = 116,
+				timerEndOffset = -10,
+				timerStartOffset = -19,
+				uuid = "5f4a5d75-d01d-ecdf-ab60-7484de80e374",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 36951,
+							conditions = 
+							{
+								
+								{
+									"1c09a391-7633-98ef-add2-35c5a8202e1b",
+									true,
+								},
+								
+								{
+									"986db038-f978-b011-8bd4-c68acce089c8",
+									true,
+								},
+							},
+							ignoreWeaveRules = true,
+							name = "Winged Glide to targetable Lahabrea",
+							targetContentID = 2143,
+							targetType = "ContentID",
+							uuid = "1b6cc9c4-9382-98e5-8eeb-6ae9d6f04b9d",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 14,
+							jobIDList = 
+							{
+								22,
+							},
+							name = "Job = DRG",
+							uuid = "1c09a391-7633-98ef-add2-35c5a8202e1b",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local e = TensorCore.getEntityByGroup(\"ContentID\", {contentid=2143, subgroup=\"Nearest\"})\nreturn e ~= nil and e.targetable == true",
+							name = "Lahabrea targetable",
+							uuid = "986db038-f978-b011-8bd4-c68acce089c8",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Movement - Lahabrea",
+				mechanicTime = 840,
+				name = "[Dash] Lahabrea Targetable - DRG Winged Glide",
+				timeRange = true,
+				timelineIndex = 116,
+				timerEndOffset = -10,
+				timerStartOffset = -19,
+				uuid = "42300c25-9f9c-0c17-9eb5-f1c4a4ccf87d",
+				version = 2,
+			},
+		},
+	},
+	[117] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\core",
+				uuid = "2778d87c-9bef-8960-2f69-98ee56a0186c",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\core",
+			objectType = "folder",
+		},
+	},
+	[118] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\optimization",
+				uuid = "31d0199b-4e9c-e3f7-b649-a69d0267836b",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\optimization",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ultima",
+				uuid = "0321d080-7fdc-c0e5-9c27-04cc84617cba",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player = TensorCore.mGetPlayer()\nif not player or not player.pos then return end\nlocal Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current() or not Roster.isReady() then return end\nlocal slot = Roster.mySlot()\nif not slot then return end\nlocal dest\nif slot == \"T1\" then dest = { x = 95.5, y = 0, z = 90 }\nelseif slot == \"T2\" then dest = { x = 104.5, y = 0, z = 90 }\nelse\n    local x, y, z, isActive = Argus.getWaymarkInfo(8)\n    if not isActive or type(x) ~= \"number\" or type(y) ~= \"number\" or type(z) ~= \"number\" then return end\n    dest = { x = x, y = y, z = z }\nend\nlocal distance = TensorCore.getDistance2d(player.pos, dest)\nif type(distance) ~= \"number\" then return end\nif distance > 0.2 then\n    local tip = math.min(1.7, distance * 0.35)\n    local drawer = TensorCore.getCachedDrawer(0xFF33FF66, 0xFF00CC44, 0xFFFFFFFF, 0xFF000000, 4)\n    drawer:addTimedArrow(5000, player.pos.x, player.pos.y, player.pos.z, TensorCore.getHeadingToTarget(player.pos, dest), math.max(0.1, distance - tip), 1.2, tip, 2.5, 0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nself.used = true",
+							name = "Guide to assigned 1000 position",
+							uuid = "166e607a-1481-28c4-8905-f011aab5560e",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "Draws - Ultima",
+				mechanicTime = 1000,
+				name = "[Draw][NAUR][Ultima] Tank and party positions at 1000",
+				timeRange = true,
+				timelineIndex = 118,
+				timerEndOffset = 5,
+				uuid = "6f1eb624-f581-b3d4-9c61-f59c7fe16e61",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR ",
+				uuid = "a20fb686-3eb5-ecaf-b89d-6f9802bcac46",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "NAUR ",
+				name = " Automation",
+				uuid = "bc50e4a0-9a9e-885d-aaf1-449e85b23f4e",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Misc",
+							conditions = 
+							{
+								
+								{
+									"9330a02b-c77b-7a09-a85c-5996987e8dee",
+									true,
+								},
+								
+								{
+									"0591a422-4503-24b5-9ded-6ebfce548ffe",
+									true,
+								},
+								
+								{
+									"cce06260-746a-0014-ba3c-242b6b05ab33",
+									true,
+								},
+							},
+							name = "Target Ultima",
+							setTarget = true,
+							targetType = "Event Entity",
+							uuid = "383b2ebe-2516-61b4-b156-99d3531cc4b6",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "-- Independent UWU settings; available before GUI or targeting reads.\nif not _G.UWU_NAURSettingsIOReady then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UWU-NAUR.lua]]\n local saved={}\n if FileExists(path) then\n  local loaded=FileLoad(path)\n  if type(loaded)==\"table\" then saved=loaded end\n end\n local current=_G.UWU_NAURGuiState\n local old=_G.UWU_NAUR_AnnihilationAssignments or {}\n local defaults={automaticOpen=true,ultimaOpen=true,orbsOpen=true,autoTarget=_G.NAUR_UWU_AutoTarget~=false,melee=(old.melee==2 and 2 or 1),solo=old.solo or 0}\n local keys={\"automaticOpen\",\"ultimaOpen\",\"orbsOpen\",\"autoTarget\",\"melee\",\"solo\"}\n local C={}\n for _,key in ipairs(keys) do\n  local value=current and current[key]\n  if value==nil then value=saved[key] end\n  if type(defaults[key])==\"boolean\" then\n   C[key]=type(value)==\"boolean\" and value or defaults[key]\n   if value==false then C[key]=false end\n  else\n   C[key]=type(value)==\"number\" and value>=0 and value<=2 and value%1==0 and value or defaults[key]\n  end\n end\n if C.melee==0 then C.melee=1 end\n function C.save()\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local values={}\n  for _,key in ipairs(keys) do values[key]=C[key] end\n  FileSave(path,values)\n end\n _G.UWU_NAURGuiState=C\n _G.UWU_NAUR_AnnihilationAssignments={melee=C.melee,solo=C.solo}\n _G.NAUR_UWU_AutoTarget=C.autoTarget\n C.save()\n _G.UWU_NAURSettingsIOReady=true\nend\n-- Upgrade only an unset melee assignment; preserve either explicit role choice.\ndo\n local preferences=_G.UWU_NAURGuiState\n if preferences and preferences.melee==0 then\n  preferences.melee=1\n  local assignment=_G.UWU_NAUR_AnnihilationAssignments\n  if assignment then assignment.melee=1 end\n  preferences.save()\n end\nend\nif data.uwuAutoSim or data.uwuBRDAutoSim or data.uwuBLMAutoSim or data.uwuRPRAutoSim then return false end\nreturn (_G.UWU_NAURGuiState.autoTarget~=false)",
+							name = "Shared targeting enabled / no AutoSim owner",
+							uuid = "9330a02b-c77b-7a09-a85c-5996987e8dee",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgOptionType = 2,
+							eventEntityContentID = 2137,
+							name = "Ultima",
+							uuid = "0591a422-4503-24b5-9ded-6ebfce548ffe",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgType = 3,
+							name = "Became targetable",
+							uuid = "cce06260-746a-0014-ba3c-242b6b05ab33",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR / Automation",
+				eventType = 26,
+				loop = true,
+				mechanicTime = 1000,
+				name = "[NAUR] [Target] Ultima - Acquire",
+				timeRange = true,
+				timelineIndex = 118,
+				timerEndOffset = 12,
+				timerStartOffset = -8,
+				uuid = "5876feae-5cb1-80a6-ba03-d90f72c61f8f",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Misc",
+							conditions = 
+							{
+								
+								{
+									"e277ff04-382d-c17f-8c26-49b747c0c707",
+									true,
+								},
+								
+								{
+									"d7dca45e-4856-824b-907a-113e46fffcdb",
+									true,
+								},
+								
+								{
+									"54a07148-ba58-2415-8c54-264930bcf0e2",
+									true,
+								},
+							},
+							endIfUsed = true,
+							name = "Target - Ultima",
+							setTarget = true,
+							targetContentID = 2137,
+							targetType = "ContentID",
+							uuid = "a9b4aac2-55c8-291c-8380-d0ea86c53060",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "-- Independent UWU settings; available before GUI or targeting reads.\nif not _G.UWU_NAURSettingsIOReady then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UWU-NAUR.lua]]\n local saved={}\n if FileExists(path) then\n  local loaded=FileLoad(path)\n  if type(loaded)==\"table\" then saved=loaded end\n end\n local current=_G.UWU_NAURGuiState\n local old=_G.UWU_NAUR_AnnihilationAssignments or {}\n local defaults={automaticOpen=true,ultimaOpen=true,orbsOpen=true,autoTarget=_G.NAUR_UWU_AutoTarget~=false,melee=(old.melee==2 and 2 or 1),solo=old.solo or 0}\n local keys={\"automaticOpen\",\"ultimaOpen\",\"orbsOpen\",\"autoTarget\",\"melee\",\"solo\"}\n local C={}\n for _,key in ipairs(keys) do\n  local value=current and current[key]\n  if value==nil then value=saved[key] end\n  if type(defaults[key])==\"boolean\" then\n   C[key]=type(value)==\"boolean\" and value or defaults[key]\n   if value==false then C[key]=false end\n  else\n   C[key]=type(value)==\"number\" and value>=0 and value<=2 and value%1==0 and value or defaults[key]\n  end\n end\n if C.melee==0 then C.melee=1 end\n function C.save()\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local values={}\n  for _,key in ipairs(keys) do values[key]=C[key] end\n  FileSave(path,values)\n end\n _G.UWU_NAURGuiState=C\n _G.UWU_NAUR_AnnihilationAssignments={melee=C.melee,solo=C.solo}\n _G.NAUR_UWU_AutoTarget=C.autoTarget\n C.save()\n _G.UWU_NAURSettingsIOReady=true\nend\n-- Upgrade only an unset melee assignment; preserve either explicit role choice.\ndo\n local preferences=_G.UWU_NAURGuiState\n if preferences and preferences.melee==0 then\n  preferences.melee=1\n  local assignment=_G.UWU_NAUR_AnnihilationAssignments\n  if assignment then assignment.melee=1 end\n  preferences.save()\n end\nend\nif data.uwuAutoSim or data.uwuBRDAutoSim or data.uwuBLMAutoSim or data.uwuRPRAutoSim then return false end\nreturn (_G.UWU_NAURGuiState.autoTarget~=false)",
+							name = "Shared targeting enabled / no AutoSim owner",
+							uuid = "e277ff04-382d-c17f-8c26-49b747c0c707",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Filter",
+							filterTargetType = "ContentID",
+							name = "Ultima",
+							partyTargetContentID = 2137,
+							uuid = "54a07148-ba58-2415-8c54-264930bcf0e2",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local t=TensorCore.mGetTarget()\nreturn t==nil or not t.alive or not t.targetable",
+							name = "No living hostile target",
+							uuid = "d7dca45e-4856-824b-907a-113e46fffcdb",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR / Automation",
+				loop = true,
+				mechanicTime = 1000,
+				name = "[NAUR] [Target] Ultima Reacquire",
+				throttleTime = 250,
+				timeRange = true,
+				timelineIndex = 118,
+				timerEndOffset = 650,
+				uuid = "4712a5b6-62cb-dc8f-910b-4db48be39bbb",
+				version = 2,
+			},
+		},
+	},
+	[119] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\mitigation",
+				uuid = "ebc4c64e-fef8-c9fa-e3f8-e2ecaca8b21e",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\mitigation",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ultima",
+				uuid = "2e719c70-f00d-f7a7-9794-85f16f1e1b8c",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player=TensorCore.mGetPlayer()\nif not player or not player.pos then self.used=true return end\nlocal duration=6000\nlocal dest={x=100,y=player.pos.y,z=82}\nlocal distance=TensorCore.getDistance2d(player.pos,dest)\nif distance>0.3 then\n local tip=math.min(1.7,distance*0.35)\n local drawer=TensorCore.getCachedDrawer(0xFF33FF66,0xFF00CC44,0xFFFFFFFF,0xFF000000,4)\n drawer:addTimedArrow(duration,player.pos.x,player.pos.y,player.pos.z,TensorCore.getHeadingToTarget(player.pos,dest),math.max(0.1,distance-tip),1.2,tip,2.5,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nAnyoneCore.addTimedWorldText(duration,\"MT: NORTH / 1\",{x=dest.x,y=dest.y+1.1,z=dest.z},0xFF33FF66,true,1.1)\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"3d92685d-d995-c20d-af2d-398dab76ddb7",
+									true,
+								},
+								
+								{
+									"79807943-bfa4-7622-bae9-2ea9fc0d94d0",
+									true,
+								},
+							},
+							name = "MT North Arrow",
+							uuid = "696c6809-751a-173a-a9aa-57ed2effd9dd",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgType = 2,
+							eventSpellID = 11143,
+							name = "Spell 11143",
+							uuid = "3d92685d-d995-c20d-af2d-398dab76ddb7",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore.Roster\nif not Roster or not Roster.current() or not Roster.isReady() then return false end\nlocal slot = Roster.mySlot()\nif not slot then return false end\nreturn slot == \"T1\"",
+							conditionType = 9,
+							name = "Roster: T1",
+							partyTargetType = "Main Tank",
+							uuid = "79807943-bfa4-7622-bae9-2ea9fc0d94d0",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ultima",
+				eventType = 3,
+				mechanicTime = 1004,
+				name = "[Draw][NAUR][MT] Tank Purge - North",
+				timeRange = true,
+				timelineIndex = 119,
+				timerEndOffset = -1,
+				timerStartOffset = -4.5,
+				uuid = "064ac5b1-9aea-6d15-a113-6a7634cd8f1c",
+				version = 2,
+			},
+		},
+	},
+	[120] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR Guidance",
+				uuid = "e8b12922-da6c-30b5-b175-6585ccf6e41f",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 6000,
+							alertPriority = 3,
+							alertScale = 0.85,
+							alertTTS = true,
+							alertText = "Provoke, then move away from the party",
+							conditions = 
+							{
+								
+								{
+									"8463af01-bf8c-5a7a-934d-568111f8465e",
+									true,
+								},
+								
+								{
+									"87c15053-7724-d2cd-8ead-547687108107",
+									true,
+								},
+								
+								{
+									"e63044bb-8413-e70e-bbb4-1abb4d611f7e",
+									true,
+								},
+							},
+							uuid = "c7055fee-125d-9416-9e52-e05838bd768d",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgType = 2,
+							eventSpellID = 11129,
+							name = "Spell 11129",
+							uuid = "8463af01-bf8c-5a7a-934d-568111f8465e",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore.Roster\nif not Roster or not Roster.current() then return false end\nlocal slot = Roster.mySlot()\nif not slot then return false end\nreturn slot == \"T2\"",
+							conditionType = 9,
+							name = "Roster: T2",
+							partyTargetType = "Off Tank",
+							uuid = "87c15053-7724-d2cd-8ead-547687108107",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore.Roster\nif not Roster or not Roster.current() then return false end\nlocal mtID = Roster.idOf(\"T1\")\nreturn mtID ~= nil and eventArgs.targetID == mtID",
+							conditionType = 10,
+							dequeueIfLuaFalse = true,
+							inGroupTargetType = "Main Tank",
+							name = "Roster: Viscous targets T1",
+							partyTargetType = "Event Target",
+							uuid = "e63044bb-8413-e70e-bbb4-1abb4d611f7e",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance",
+				eventType = 2,
+				mechanicTime = 1006,
+				name = "[NAUR][OT] First Viscous - Provoke and Separate",
+				throttleTime = 5000,
+				timeRange = true,
+				timelineIndex = 120,
+				timerEndOffset = 2,
+				timerStartOffset = -2,
+				uuid = "47d5fef0-dc38-d2e5-9bd2-a010207f9869",
+				version = 2,
+			},
+		},
+	},
+	[123] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Garuda",
+				uuid = "06218b18-4bf4-d9d8-b160-4fb4c2cd393b",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ultima",
+				uuid = "6c52c0d3-b329-37de-ab59-7f243a321302",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Garuda",
+							uuid = "94caf00f-2361-9dd5-bf38-76610df86d4c",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ultima",
+							uuid = "c7b76161-3621-cd78-aa31-a0e9a582d9cd",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local captured=data.uwu_predation_actors\nif not captured then return end\nlocal garuda,ifrit,titan,ultima=captured[1644],captured[1185],captured[1801],captured[2137]\nif not garuda or not ifrit or not titan or not ultima then return end\nlocal player=TensorCore.mGetPlayer()\nif not player then return end\n-- Analytic safe arcs: BossMod's Predation geometry, radius19 and2.5-degree cushion.\nlocal pi=math.pi\nlocal function normal(a)\n while a < -pi do a=a+2*pi end\n while a > pi do a=a-2*pi end\n return a\nend\nlocal function rect(actor,offset,width)\n return {kind=\"rect\",x=actor.x,z=actor.z,h=actor.h+offset,r=width}\nend\nlocal function circle(actor,r)\n return {kind=\"circle\",x=actor.x,z=actor.z,r=r}\nend\nlocal first={rect(titan,0,3),rect(titan,pi/4,3),rect(titan,-pi/4,3),rect(ifrit,0,9),circle(garuda,20)}\nlocal center={x=100,z=100,h=0}\nlocal second={rect(titan,pi/8,3),rect(titan,-pi/8,3),rect(titan,pi/2,3),rect(center,0,5),rect(center,pi/2,5),circle(garuda,20),circle(ultima,14)}\nlocal function safeArcs(shapes)\n local boundaries={-pi,pi}\n local function boundary(a) boundaries[#boundaries+1]=normal(a) end\n for _,shape in ipairs(shapes) do\n  local ox,oz=shape.x-100,shape.z-100\n  if shape.kind==\"circle\" then\n   local distance=math.sqrt(ox*ox+oz*oz)\n   if distance>0.001 then\n    local cosine=(distance*distance+361-shape.r*shape.r)/(38*distance)\n    if cosine>=-1 and cosine<=1 then\n     local h=math.atan2(ox,oz);local half=math.acos(cosine)\n     boundary(h-half);boundary(h+half)\n    end\n   end\n  else\n   local offset=-ox*math.cos(shape.h)+oz*math.sin(shape.h)\n   for _,edge in ipairs({-shape.r,shape.r}) do\n    local sine=(edge-offset)/19\n    if sine>=-1 and sine<=1 then\n     local a=math.asin(sine)\n     boundary(shape.h+a);boundary(shape.h+pi-a)\n    end\n   end\n  end\n end\n table.sort(boundaries)\n local forbidden={}\n for i=1,#boundaries-1 do\n  local lo,hi=boundaries[i],boundaries[i+1]\n  if hi-lo>0.000001 then\n   local angle=(lo+hi)*0.5\n   local x,z=100+19*math.sin(angle),100+19*math.cos(angle)\n   local hit=false\n   for _,shape in ipairs(shapes) do\n    local dx,dz=x-shape.x,z-shape.z\n    if shape.kind==\"circle\" then hit=dx*dx+dz*dz<shape.r*shape.r\n    else hit=math.abs(dx*math.cos(shape.h)-dz*math.sin(shape.h))<shape.r end\n    if hit then break end\n   end\n   if hit then\n    local last=forbidden[#forbidden]\n    if last and math.abs(last[2]-lo)<0.00001 then last[2]=hi\n    else forbidden[#forbidden+1]={lo,hi} end\n   end\n  end\n end\n if #forbidden==0 then return {{-pi,pi}} end\n local allowed={};local cushion=2.5*pi/180\n local function allow(lo,hi)\n  if lo+cushion<hi-cushion then allowed[#allowed+1]={lo+cushion,hi-cushion} end\n end\n local firstForbidden,lastForbidden=forbidden[1],forbidden[#forbidden]\n if firstForbidden[1]>-pi+0.000001 then allow(lastForbidden[2]-2*pi,firstForbidden[1]) end\n for i=2,#forbidden do allow(forbidden[i-1][2],forbidden[i][1]) end\n if lastForbidden[2]<pi-0.000001 then allow(lastForbidden[2],firstForbidden[1]+2*pi) end\n return allowed\nend\nlocal a,b=safeArcs(first),safeArcs(second)\nlocal bestA,bestB,bestDistance=nil,nil,math.huge\nlocal function consider(x,y)\n x,y=normal(x),normal(y)\n local distance=math.abs(x-y)\n if distance>pi then distance=2*pi-distance end\n if distance<bestDistance-0.0000001 then bestA,bestB,bestDistance=x,y,distance end\nend\nfor _,one in ipairs(a) do\n for _,two in ipairs(b) do\n  local lo,hi=math.max(one[1],two[1]),math.min(one[2],two[2])\n  if lo<hi then consider((lo+hi)/2,(lo+hi)/2)\n  else consider(one[2],two[1]);consider(one[1],two[2]) end\n end\nend\nif not bestA then\n TensorCore.timelineLogToFile(\"[UWU Predation] no safe pair from captured boss geometry\\n\")\n self.used=true;return\nend\nlocal firstSpot={x=100+19*math.sin(bestA),y=player.pos.y,z=100+19*math.cos(bestA)}\nlocal secondSpot={x=100+19*math.sin(bestB),y=player.pos.y,z=100+19*math.cos(bestB)}\nlocal state={rune=secondSpot,phase=\"first\",shapes={}}\ndata.uwu_lpdu_predation=state\nstate.arrowDrawer=TensorCore.getCachedDrawer(0xFFB6FFB6,0xFF55FF55,0xFFFFFFFF,0xFF000000,4)\nstate.circleDrawer=TensorCore.getCachedDrawer(0x5533CC66,0x5533CC66,0xAA22FF66,0xFF33FF66,2)\nfunction state.guide(destination,timeout)\n for _,id in ipairs(state.shapes) do Argus.deleteTimedShape(id) end\n state.shapes={};state.destination=destination;state.deadline=Now()+timeout\n local id=state.circleDrawer:addTimedCircle(timeout,destination.x,destination.y,destination.z,0.6,0,false,true,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\n if id then state.shapes[#state.shapes+1]=id end\nend\nstate.guide(firstSpot,10000)\nTensorCore.timelineLogToFile(string.format(\"[UWU Predation] safe pair first=(%.3f,%.3f) second=(%.3f,%.3f) move=%.3fdeg\\n\",firstSpot.x,firstSpot.z,secondSpot.x,secondSpot.z,bestDistance*180/pi))\nself.used=true\n",
+							displayPath = "Draws - Ultima",
+							name = "Solve BossMod safe edge geometry",
+							uuid = "163f8d28-6c36-3c00-b703-942e9d637d52",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "Draws - Ultima",
+				mechanicTime = 1023,
+				name = "[NAUR] Ultima Predation - Safe edge pair",
+				throttleTime = 100,
+				timeRange = true,
+				timelineIndex = 123,
+				timerEndOffset = 20,
+				timerStartOffset = 7,
+				uuid = "76680eda-e0c2-a582-b172-0adaa0be5daf",
+				version = 2,
+			},
+		},
+	},
+	[124] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR Guidance",
+				uuid = "9c5ed885-d4e0-baa4-aeaf-549b1f22ca4e",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local actor=TensorCore.mGetEntity(eventArgs.entityID)\nif not actor then return end\nlocal models={[1644]=8722,[1185]=8730,[1801]=8727,[2137]=8734}\nif Argus.getEntityModel(actor.id)~=models[eventArgs.entityContentID] then self.used=true;return end\nlocal state=data.uwu_predation_actors\nif not state then state={};data.uwu_predation_actors=state end\nstate[eventArgs.entityContentID]={x=actor.pos.x,z=actor.pos.z,h=actor.pos.h}\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"49d0826e-c333-cf80-8e67-92df12ef46ff",
+									true,
+								},
+							},
+							name = "Predation - Capture appearing bosses",
+							uuid = "b75c659a-a188-e904-8f71-1e20769a5b36",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.index==1 and eventArgs.newAnimID==7747 and (eventArgs.entityContentID==1644 or eventArgs.entityContentID==1185 or eventArgs.entityContentID==1801 or eventArgs.entityContentID==2137)",
+							dequeueIfLuaFalse = true,
+							name = "Predation appearance",
+							uuid = "49d0826e-c333-cf80-8e67-92df12ef46ff",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance",
+				eventType = 23,
+				loop = true,
+				mechanicTime = 1026,
+				name = "[NAUR] Predation - Capture appearing bosses",
+				timeRange = true,
+				timelineIndex = 124,
+				timerEndOffset = 9,
+				uuid = "18f3ff08-7a60-0571-82e1-0aaeaffab5be",
+				version = 2,
+			},
+		},
+	},
+	[125] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\optimization",
+				uuid = "4459300f-f329-d5b3-d574-380d52b2b4df",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\optimization",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ifrit",
+				uuid = "c9b80151-2e2d-7ff5-8166-bb8fce98a838",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ultima",
+				uuid = "c09724dd-3055-33a4-bd3d-df097db1b5da",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ultima",
+							uuid = "fe2d189d-39ad-2350-804a-8b9c7ace397f",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local state=data.uwu_lpdu_predation\nif not state or state.phase~=\"first\" then self.used=true;return end\nstate.phase=\"second\"\nstate.guide(state.rune,3500)\nAnyoneCore.addTimedWorldText(6000,\"SAFE EDGE - WAIT FOR FEATHER RAIN\",{x=state.rune.x,y=state.rune.y+1.2,z=state.rune.z},0xFFB6FFB6,true,1.25)\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"2649963c-f010-c286-b8c1-15071ff49673",
+									true,
+								},
+							},
+							displayPath = "Draws - Ultima",
+							name = "Move along edge after Landslide",
+							uuid = "247e11b0-02cf-0f61-921a-9738c4a949c2",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgType = 2,
+							eventSpellID = 11103,
+							name = "First Ifrit dash resolves",
+							uuid = "2649963c-f010-c286-b8c1-15071ff49673",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ultima",
+				eventType = 2,
+				mechanicTime = 1038,
+				name = "[NAUR] Ultima Predation - Second safe edge",
+				timeRange = true,
+				timelineIndex = 125,
+				timerEndOffset = 2,
+				timerStartOffset = -2,
+				uuid = "5506deed-8a61-1692-b3ad-53cff37e55b9",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR ",
+				uuid = "b5baf06b-8fda-0d03-9bde-b9da1ad8b49d",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "NAUR ",
+				name = " Automation",
+				uuid = "4cd4cb7d-13da-674a-87df-be33c921f9d5",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							gVar = "ACR_TensorNuke4_Hotbar_Sprint",
+							name = "Use Sprint",
+							uuid = "473c15cb-0cb8-ad82-a37e-78e5b1b87bdb",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "NAUR / Automation",
+				mechanicTime = 1038,
+				name = "[NAUR] [Utility][Predation] Sprint",
+				timeRange = true,
+				timelineIndex = 125,
+				timerEndOffset = 1,
+				timerStartOffset = -4,
+				uuid = "e7f13d4d-91dd-6329-9620-de5bd83b8d0c",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR Guidance",
+				uuid = "01ecf0cc-b292-390c-bb5a-936e76046607",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+				},
+				conditions = 
+				{
+				},
+				displayPath = "NAUR Guidance",
+				eventType = 12,
+				execute = "local state=data.uwu_lpdu_predation\nif not state or state.phase==\"done\" or not state.destination or Now()>=state.deadline then return end\nlocal player=TensorCore.mGetPlayer()\nif not player then return end\nlocal destination=state.destination\nlocal distance=TensorCore.getDistance2d(player.pos,destination)\nif distance>0.3 then\n local tip=math.min(1.8,distance*0.35)\n state.arrowDrawer:addArrow(player.pos.x,player.pos.y,player.pos.z,TensorCore.getHeadingToTarget(player.pos,destination),math.max(0.1,distance-tip),1.2,tip,2.8,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nself.used=true",
+				executeType = 2,
+				loop = true,
+				mechanicTime = 1038,
+				name = "[NAUR] Predation - Personal safe edge arrow",
+				timeRange = true,
+				timelineIndex = 125,
+				timerEndOffset = 4,
+				timerStartOffset = -9,
+				uuid = "13aa7766-8193-4f31-a443-3b1bb8a548df",
+				version = 2,
+			},
+		},
+	},
+	[127] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "500da917-0da3-bca3-73b4-8c29c703bde7",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+	},
+	[130] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "08906ebb-536d-49df-115a-4ad948ab748b",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ifrit",
+				uuid = "784cfe90-2fc4-6cec-bbf5-409e06ed540a",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertPriority = 2,
+							alertTTS = true,
+							alertText = " Wait for Feather rain",
+							uuid = "88058d5c-aa30-28fa-abe3-32fb67e877ad",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				mechanicTime = 1040,
+				name = "[Raid Call][UWU] Wait for Feather Rain 1041.5",
+				timelineIndex = 130,
+				timerOffset = 1.5,
+				uuid = "dd60ba94-9588-1ecb-ac80-2485505e45ca",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR Guidance",
+				uuid = "ba0b91e0-7111-0dba-894a-48f86163e8ca",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local state=data.uwu_lpdu_predation\nif state then state.phase=\"done\";state.destination=nil;for _,id in ipairs(state.shapes) do Argus.deleteTimedShape(id) end;state.shapes={} end\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"16b71f78-e121-acb5-b9c3-9a285f404045",
+									true,
+								},
+							},
+							name = "Predation - Completed dash cleanup",
+							uuid = "1c815efb-0ab5-61b6-af43-1b58e1ab1fc5",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.spellID==11104",
+							dequeueIfLuaFalse = true,
+							name = "Last dash",
+							uuid = "16b71f78-e121-acb5-b9c3-9a285f404045",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance",
+				eventType = 2,
+				mechanicTime = 1040,
+				name = "[NAUR] Predation - Completed dash cleanup",
+				timeRange = true,
+				timelineIndex = 130,
+				timerEndOffset = 3,
+				timerStartOffset = -2,
+				uuid = "bf179a3e-a6de-9ab2-8106-8891b409b16a",
+				version = 2,
+			},
+		},
+	},
+	[132] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "f57fbc51-a525-4fc5-e392-6a03de8163e1",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Garuda",
+				uuid = "e4aa805e-c073-8bce-aaa0-c6fd4d651462",
+			},
+			objectType = "folder",
+		},
+	},
+	[133] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ultima",
+				uuid = "8880907c-ecc6-efbd-bef1-e3e4e55c5020",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local roster=AnyoneCore.Roster\nif roster.current()==nil or not roster.isReady() then return end\nlocal role=roster.mySlot()\nlocal player = TensorCore.mGetPlayer()\nif not player or not player.pos then self.used = true; return end\nlocal function point(x, z)\n    return { x = x, y = player.pos.y, z = z }\nend\nlocal stack = point(100.0, 90.5)\nlocal flag = Argus2.RenderFlags.FLAG_RENDER_OVERLAY\nlocal duration = (role == \"R1\" or role == \"R2\") and 10000 or 20000\nlocal drawer = TensorCore.getCachedDrawer(0xFF66FF99, 0xFF00AA66, 0xFF006644, 0xFFFFFFFF, 2, nil, flag)\nlocal route\nlocal function keepDraw(drawID)\n    if route and drawID then route.drawIds[#route.drawIds + 1] = drawID end\nend\nlocal function drawTarget(target)\n    local from = { x = player.pos.x, y = player.pos.y, z = player.pos.z }\n    local distance = TensorCore.getDistance2d(from, target)\n    if distance and distance > 0.25 then\n        local tipLength = math.min(1.5, distance * 0.35)\n        keepDraw(drawer:addTimedArrow(duration, from.x, from.y, from.z,\n            TensorCore.getHeadingToTarget(from, target),\n            math.max(0.1, distance - tipLength), 1.0, tipLength, 2.3, 0, false, flag))\n    end\n    keepDraw(drawer:addTimedCircle(duration, target.x, target.y, target.z, 0.9, 0, false, true, flag))\nend\nif role == \"R1\" or role == \"R2\" then\n    route = {\n        role = role, step = 1, drawIds = {}, stack = stack,\n        waypoints = role == \"R2\" and {\n            point(102.8, 116.319), point(108.873, 112.2),\n            point(112.047, 104.112), point(114.885, 93.614)\n        } or {\n            point(99.382, 115.679), point(94.4075, 113.298),\n            point(87.663, 105.455), point(88.0292, 93.4309)\n        }\n    }\n    data.uwu_ultima_eruption_route = route\n    drawTarget(route.waypoints[1])\nelse\n    drawTarget(stack)\nend\nself.used = true",
+							name = "Draw - south baits and north stack",
+							uuid = "b9824083-ecf4-61de-a220-85b7600a4819",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "Draws - Ultima",
+				mechanicTime = 1048,
+				name = "[Draw] Ultima Eruption Bait Starts - R1/R2/Party",
+				timelineIndex = 133,
+				uuid = "db8451b9-a423-3f17-ab0c-86f9058e8b00",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 6000,
+							alertPriority = 2,
+							alertTTS = true,
+							alertText = "Move south for eruption baits",
+							conditions = 
+							{
+								
+								{
+									"01c57ae9-4829-752d-a53f-5b2fdd6c8447",
+									true,
+								},
+							},
+							name = "Move south for eruption baits",
+							uuid = "e170aa51-80af-6179-96c1-a7a3ac1af9bb",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local role = GetCurrentRole()\nreturn role == \"R1\" or role == \"R2\"",
+							name = "R1/R2 only",
+							uuid = "01c57ae9-4829-752d-a53f-5b2fdd6c8447",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ultima",
+				mechanicTime = 1048,
+				name = "[Alert] Move south for eruption baits - R1/R2",
+				timelineIndex = 133,
+				uuid = "c965968e-1c88-7af6-9967-5ddf29a60830",
+				version = 2,
+			},
+		},
+	},
+	[134] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ultima",
+				uuid = "1870e566-b6ad-bb97-988b-e4da5b2a6e84",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local route = data.uwu_ultima_eruption_route\nif not route or route.step >= 5 then self.used = true; return end\nif route.drawIds and Argus and Argus.deleteTimedShape then\n    for _, drawID in ipairs(route.drawIds) do\n        if drawID then pcall(Argus.deleteTimedShape, drawID) end\n    end\nend\nlocal player = TensorCore.mGetPlayer()\nif not player or not player.pos then self.used = true; return end\nlocal nextIndex = route.step + 1\nlocal target = nextIndex <= #route.waypoints and route.waypoints[nextIndex] or route.stack\nif not target then self.used = true; return end\nroute.step = nextIndex\nroute.drawIds = {}\nlocal duration = nextIndex == 5 and 15000 or 5000\nlocal from = { x = player.pos.x, y = player.pos.y, z = player.pos.z }\nlocal flag = Argus2.RenderFlags.FLAG_RENDER_OVERLAY\nlocal drawer = TensorCore.getCachedDrawer(0xFF66FF99, 0xFF00AA66, 0xFF006644, 0xFFFFFFFF, 2, nil, flag)\nlocal function keepDraw(drawID)\n    if drawID then route.drawIds[#route.drawIds + 1] = drawID end\nend\nlocal distance = TensorCore.getDistance2d(from, target)\nif distance and distance > 0.25 then\n    local tipLength = math.min(1.5, distance * 0.35)\n    keepDraw(drawer:addTimedArrow(duration, from.x, from.y, from.z, TensorCore.getHeadingToTarget(from, target),\n        math.max(0.1, distance - tipLength), 1.0, tipLength, 2.3, 0, false, flag))\nend\nkeepDraw(drawer:addTimedCircle(duration, target.x, target.y, target.z, 0.9, 0, false, true, flag))\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"adcd1ffa-2f51-08b5-8f21-c2596be99dcc",
+									true,
+								},
+							},
+							name = "Advance to next eruption position",
+							uuid = "780c04b3-7f1a-6573-a7d4-d7fb5bfd2204",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local route = data.uwu_ultima_eruption_route\nif not route or route.step >= 5 or not eventArgs or eventArgs.aoeID ~= 11098 then return false end\nlocal startTime = eventArgs.startTime\nif not startTime or route.lastAOEStartTime == startTime then return false end\nroute.lastAOEStartTime = startTime\nreturn true",
+							name = "Eruption AOE created",
+							uuid = "adcd1ffa-2f51-08b5-8f21-c2596be99dcc",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ultima",
+				eventType = 18,
+				loop = true,
+				mechanicTime = 1059,
+				name = "[Draw] Advance Ultima Eruption Baits - R1/R2",
+				throttleTime = 150,
+				timeRange = true,
+				timelineIndex = 134,
+				timerEndOffset = 5,
+				timerStartOffset = -4,
+				uuid = "84ee0ba5-9bd4-f0b5-b0af-c17e174ab336",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Movement - Eruption",
+				uuid = "2d8f774c-5e81-ec40-b41f-adaa0e6b8921",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "TensorDrift_SlidecastForceHold = true\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"1fda6efa-5609-e0af-9cf5-77454892b561",
+									true,
+								},
+							},
+							name = "Force Slidecast",
+							uuid = "66662801-fe94-aefa-9862-428ee788937d",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "TensorDrift_SlidecastForceHold = false\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"1fda6efa-5609-e0af-9cf5-77454892b561",
+									true,
+								},
+							},
+							name = "End Slide",
+							uuid = "6d54013e-7b10-27fa-9c5b-e739f5eb665a",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore.Roster\nif not Roster or not Roster.current() then return false end\nlocal slot = Roster.mySlot()\nreturn slot == \"R1\" or slot == \"R2\"",
+							name = "Roster R1/R2",
+							uuid = "1fda6efa-5609-e0af-9cf5-77454892b561",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Movement - Eruption",
+				mechanicTime = 1059,
+				name = "[Drift] Eruption R1/R2 1059",
+				throttleTime = 10500,
+				timeRange = true,
+				timelineIndex = 134,
+				timerEndOffset = 7,
+				timerStartOffset = -4,
+				uuid = "952a58bc-f5af-9d5a-bce0-7521167b7950",
+				version = 2,
+			},
+		},
+	},
+	[136] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "a043be8d-ecaa-2229-bef4-e3cf452f4c9d",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR Guidance",
+				uuid = "625b09f0-6920-530f-8a99-eafeebe94968",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local offsets={{103,105},{97,105},{94,100},{97,95},{103,95},{106,100}}\nlocal state={shapes={}};data.uwu_ultima_middle_bury=state\nlocal player=TensorCore.mGetPlayer()\nif not player then return end\nfor _,pos in ipairs(offsets) do\n local id=TensorCore.getMoogleDrawer():addTimedCircle(20000,pos[1],player.pos.y,pos[2],4.3,0,false,true)\n state.shapes[#state.shapes+1]={id=id,x=pos[1],z=pos[2]}\nend\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"8b091e5b-5f2e-482a-858a-aca1760d90a3",
+									true,
+								},
+							},
+							name = "Ultima 1069 - Early middle rock impacts",
+							uuid = "39ffb7fc-87b2-0201-9747-ad7eaf6d8f4b",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.entityContentID==2137 and eventArgs.spellID==11133",
+							dequeueIfLuaFalse = true,
+							name = "Outer plume cast",
+							uuid = "8b091e5b-5f2e-482a-858a-aca1760d90a3",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance",
+				eventType = 3,
+				mechanicTime = 1069,
+				name = "[NAUR] Ultima 1069 - Early middle rock impacts",
+				timeRange = true,
+				timelineIndex = 136,
+				timerEndOffset = 1,
+				timerStartOffset = -5,
+				uuid = "ec89c137-4159-9562-aabd-efac52a28bed",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local state=data.uwu_ultima_middle_bury\nif not state then self.used=true;return end\nlocal actor=TensorCore.mGetEntity(eventArgs.entityID)\nif not actor then return end\nfor _,shape in ipairs(state.shapes) do\n local dx,dz=actor.pos.x-shape.x,actor.pos.z-shape.z\n if shape.id and dx*dx+dz*dz<1 then Argus.deleteTimedShape(shape.id);shape.id=nil end\nend\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"645780cb-79cf-ec8d-a2a3-83fa8e7c60d6",
+									true,
+								},
+							},
+							name = "Ultima middle rocks - Clear resolved impacts",
+							uuid = "438a3315-6d9f-32af-8b7b-d8ae84098436",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.entityContentID==1803 and eventArgs.spellID==11113",
+							dequeueIfLuaFalse = true,
+							name = "Bury impact",
+							uuid = "645780cb-79cf-ec8d-a2a3-83fa8e7c60d6",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance",
+				eventType = 2,
+				loop = true,
+				mechanicTime = 1069,
+				name = "[NAUR] Ultima middle rocks - Clear resolved impacts",
+				timeRange = true,
+				timelineIndex = 136,
+				timerEndOffset = 13,
+				timerStartOffset = -3,
+				uuid = "7c62f68f-182c-cd87-b10c-40e976ff4671",
+				version = 2,
+			},
+		},
+	},
+	[137] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR Guidance",
+				uuid = "8544a1a1-a841-0d05-883e-2838d648de0c",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 4000,
+							alertPriority = 3,
+							alertScale = 0.85,
+							alertTTS = true,
+							alertText = "Out, dodge landslides",
+							conditions = 
+							{
+								
+								{
+									"3b6a59fb-92a5-703a-94b8-2f7adc029658",
+									true,
+								},
+							},
+							name = "Out, dodge landslides",
+							uuid = "f418b503-cd8b-acf8-8704-d349b2c82717",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							eventArgType = 2,
+							eventSpellID = 11105,
+							name = "Mechanic hit",
+							uuid = "3b6a59fb-92a5-703a-94b8-2f7adc029658",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance",
+				eventType = 2,
+				mechanicTime = 1070,
+				name = "[NAUR] Ultima - Out and Dodge Landslides",
+				timeRange = true,
+				timelineIndex = 137,
+				timerEndOffset = 2,
+				timerStartOffset = -2,
+				uuid = "c1a514f0-7740-578d-b610-c1a8aa3e20f0",
+				version = 2,
+			},
+		},
+	},
+	[138] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Titan NAUR",
+				uuid = "cf51225e-3553-4f5f-baa5-25eaea2e2d02",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ultima",
+				uuid = "31a25731-29c8-7b58-8b2c-86bd9365c337",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ultima",
+							uuid = "a51b0737-5492-2e23-ad0c-c94cbc7ce12e",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player = TensorCore.mGetPlayer()\nif not player or not player.id or not player.pos or not eventArgs then\n    self.used = true\n    return\nend\n\nlocal partnerID\nif eventArgs.sourceEntityID == player.id then\n    partnerID = eventArgs.newTargetID\nelseif eventArgs.newTargetID == player.id then\n    partnerID = eventArgs.sourceEntityID\nelse\n    self.used = true\n    return\nend\n\nif not partnerID or partnerID == player.id then\n    self.used = true\n    return\nend\n\nlocal partner = TensorCore.mGetEntity(partnerID)\nif not partner or not partner.pos then\n    self.used = true\n    return\nend\n\nlocal drawer = TensorCore.getCachedDrawer(\n    0x6633CCFF,\n    0xCC33CCFF,\n    0xFFFFCC33,\n    0xFF000000,\n    3\n)\n\ndrawer:addTimedCircleOnEnt(\n    20000, player.id, 1.5,\n    0, false, true, Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n)\ndrawer:addTimedCircleOnEnt(\n    20000, partner.id, 1.9,\n    0, false, true, Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n)\n\nlocal sourcePos = player.pos\nlocal targetPos = partner.pos\nlocal distance = TensorCore.getDistance2d(sourcePos, targetPos)\nif distance and distance > 0.25 then\n    drawer:addTimedLine(\n        20000,\n        sourcePos.x, sourcePos.y, sourcePos.z,\n        targetPos.x, targetPos.y, targetPos.z,\n        1.0, 2.4, 0\n    )\nend\n\nAnyoneCore.addTimedWorldTextOnEnt(\n    20000,\n    \"FETTER PARTNER\",\n    partner.id,\n    0xFFFFCC33,\n    true,\n    1.2,\n    2.0\n)\n\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"28261216-16d0-6701-bdb7-31c78dd00a85",
+									true,
+								},
+							},
+							displayPath = "Draws - Ultima",
+							name = "Tethered Partner Marker",
+							uuid = "a7ed8ef4-ec58-f7ea-a70b-532c554d202e",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ultima",
+							uuid = "abaa7e04-2933-0eed-9f22-43622ec2a9ca",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.newTetherID == 9 and eventArgs.sourceEntityContentID == 0 and eventArgs.newTargetContentID == 0 and eventArgs.sourceEntityID ~= eventArgs.newTargetID",
+							dequeueIfLuaFalse = true,
+							displayPath = "Draws - Ultima",
+							name = "Player Infernal Fetter",
+							uuid = "28261216-16d0-6701-bdb7-31c78dd00a85",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ultima",
+				eventType = 15,
+				loop = true,
+				mechanicTime = 1073,
+				name = "[Draw][NAUR][Ultima] Infernal Fetters Partner Link",
+				timeRange = true,
+				timelineIndex = 138,
+				timerEndOffset = 15,
+				timerStartOffset = -10,
+				uuid = "4db68ad3-d719-852d-8b9d-f00307551efc",
+				version = 2,
+			},
+		},
+	},
+	[140] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\mitigation",
+				uuid = "5958abec-4e27-2810-8776-021abc1e547c",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\mitigation",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "[Raid calls]",
+				uuid = "fb66c9c8-b9e7-bd3e-a6b3-f522a33470b9",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "[Raid calls]",
+							uuid = "80f944b7-a771-0bbe-8026-148b697bc7d4",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 2500,
+							alertPriority = 3,
+							alertTTS = true,
+							alertText = "Stack together, tanks stay out",
+							displayPath = "[Raid calls]",
+							name = "[Raid Call][Ultima] Party Stack 1077",
+							uuid = "1f2cb66d-5822-e407-9c44-0567ab13329b",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "[Raid calls]",
+				mechanicTime = 1079,
+				name = "[Raid Call][Ultima] Party Stack 1077",
+				timeRange = true,
+				timelineIndex = 140,
+				timerEndOffset = -1,
+				timerStartOffset = -2,
+				uuid = "97a6001e-0631-1534-9c5b-8d501746cca8",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ultima",
+				uuid = "e9467830-9e91-10c4-854b-3969e03a946d",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ultima",
+							uuid = "0e81e168-f083-7173-ab51-3f8dab807a89",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local Roster = AnyoneCore and AnyoneCore.Roster; if not Roster or not Roster.current() or Roster.mySlot() == [=[T1]=] then self.used = true; return end; local alive, ultima = TensorCore.isEntityAlive(2137); if not alive or not ultima or not ultima.id then self.used = true; return end; local drawer = TensorCore.getCachedDrawer(0xCC33CCFF, 0xCC33CCFF, 0xFFFFCC33, 0xFF000000, 3); drawer:addTimedArrowOnEnt(4000, ultima.id, 6, 1.5, 3, 2.5, nil, 0, false, math.pi / 2, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY); self.used = true",
+							conditions = 
+							{
+								
+								{
+									"a153712d-3951-ba75-adc9-6d4401d192f1",
+									true,
+								},
+							},
+							displayPath = "Draws - Ultima",
+							name = "Right side of Ultima",
+							uuid = "99024a78-6f28-848f-8519-812e87a78ab6",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ultima",
+							uuid = "6b61c63f-360e-0624-83fa-57188db271ba",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore and AnyoneCore.Roster; if not Roster or not Roster.current() then return false end; local slot = Roster.mySlot(); return slot ~= nil and slot ~= [=[T1]=]",
+							dequeueIfLuaFalse = true,
+							displayPath = "Draws - Ultima",
+							name = "Non-MT",
+							uuid = "a153712d-3951-ba75-adc9-6d4401d192f1",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ultima",
+				mechanicTime = 1079,
+				name = "[Draw][NAUR][Ultima] Right Side Arrow 1080 - Non-MT",
+				timeRange = true,
+				timelineIndex = 140,
+				timerEndOffset = 1.5,
+				timerStartOffset = 1,
+				uuid = "ab3cb06c-f6e0-bc55-a377-10933c27e43b",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ultima NAUR",
+				uuid = "b1214fab-ae56-61fe-8b9c-0dbdc47ee94f",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+				},
+				conditions = 
+				{
+				},
+				displayPath = "Draws - Ultima NAUR",
+				execute = "local Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current() or Roster.mySlot() ~= 'T1' then return end\nlocal alive, ultima = TensorCore.isEntityAlive(2137)\nif not alive or not ultima or not ultima.id then return end\nlocal drawer = TensorCore.getCachedDrawer(0xCC33FF66, 0xCC33FF66, 0xFF33FF66, 0xFF000000, 3)\ndrawer:addTimedArrowOnEnt(4000, ultima.id, 6, 1.5, 3, 2.5, nil, 0, false, -math.pi / 2, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nTensorCore.addAlertText(3500, 'MT: left of Ultima', 1, 1, true)\nself.used = true",
+				executeType = 2,
+				mechanicTime = 1079,
+				name = "[Draw][NAUR][Post Predation] MT left of Ultima",
+				timeRange = true,
+				timelineIndex = 140,
+				timerEndOffset = 2,
+				uuid = "5e2921d5-efe8-9be4-9345-e18c8d08f3c8",
+				version = 2,
+			},
+		},
+	},
+	[141] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR Guidance",
+				uuid = "8f02c12a-e128-ec49-95d1-2bfbd17e6590",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 6000,
+							alertPriority = 3,
+							alertScale = 0.85,
+							alertTTS = true,
+							alertText = "MT invulnerability ready: Provoke now",
+							conditions = 
+							{
+								
+								{
+									"d2bf7770-72e8-b4a5-81eb-33ebf2c05f52",
+									true,
+								},
+								
+								{
+									"40e867f6-42f8-b42d-adb6-b3e2f6c4d0cf",
+									true,
+								},
+								
+								{
+									"a6b4e289-c3e9-e483-a3bf-9d29d4e2778f",
+									true,
+								},
+								
+								{
+									"c22527c4-e48e-1ce0-b3f0-2d78d679ff35",
+									true,
+								},
+								
+								{
+									"848dcc2c-5134-e9c4-b141-379a5a6aae1f",
+									true,
+								},
+							},
+							endIfUsed = true,
+							uuid = "50fbcdee-5715-7cd3-a2a9-7d1f03ee6139",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player=TensorCore.mGetPlayer()\nif not player or not player.pos then self.used=true return end\nlocal duration=6000\nlocal Roster=AnyoneCore.Roster\nif not Roster or not Roster.isReady() then self.used=true return end\nlocal mt=Roster.entOf(\"T1\")\nif not mt or not mt.pos then self.used=true return end\nlocal dest={x=mt.pos.x,y=mt.pos.y,z=mt.pos.z}\nlocal distance=TensorCore.getDistance2d(player.pos,dest)\nif distance>0.3 then\n local tip=math.min(1.7,distance*0.35)\n local drawer=TensorCore.getCachedDrawer(0xFF33FF66,0xFF00CC44,0xFFFFFFFF,0xFF000000,4)\n drawer:addTimedArrow(duration,player.pos.x,player.pos.y,player.pos.z,TensorCore.getHeadingToTarget(player.pos,dest),math.max(0.1,distance-tip),1.2,tip,2.5,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nAnyoneCore.addTimedWorldText(duration,\"SWAP POSITIONS WITH MT\",{x=dest.x,y=dest.y+1.1,z=dest.z},0xFF33FF66,true,1.1)\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"d2bf7770-72e8-b4a5-81eb-33ebf2c05f52",
+									true,
+								},
+								
+								{
+									"40e867f6-42f8-b42d-adb6-b3e2f6c4d0cf",
+									true,
+								},
+								
+								{
+									"a6b4e289-c3e9-e483-a3bf-9d29d4e2778f",
+									true,
+								},
+								
+								{
+									"c22527c4-e48e-1ce0-b3f0-2d78d679ff35",
+									true,
+								},
+								
+								{
+									"848dcc2c-5134-e9c4-b141-379a5a6aae1f",
+									false,
+								},
+							},
+							endIfUsed = true,
+							name = "Swap Positions - Arrow to MT",
+							uuid = "5231bc07-7e56-935d-8dbb-b439eb708532",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgType = 2,
+							eventSpellID = 11129,
+							name = "Spell 11129",
+							uuid = "d2bf7770-72e8-b4a5-81eb-33ebf2c05f52",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore.Roster\nif not Roster or not Roster.current() then return false end\nlocal slot = Roster.mySlot()\nif not slot then return false end\nreturn slot == \"T2\"",
+							conditionType = 9,
+							name = "Roster: T2",
+							partyTargetType = "Off Tank",
+							uuid = "40e867f6-42f8-b42d-adb6-b3e2f6c4d0cf",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore.Roster\nif not Roster or not Roster.current() then return false end\nlocal mtID = Roster.idOf(\"T1\")\nreturn mtID ~= nil and eventArgs.targetID == mtID",
+							conditionType = 10,
+							dequeueIfLuaFalse = true,
+							inGroupTargetType = "Main Tank",
+							name = "Roster: Viscous targets T1",
+							partyTargetType = "Event Target",
+							uuid = "a6b4e289-c3e9-e483-a3bf-9d29d4e2778f",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Party",
+							conditionType = 7,
+							dequeueIfLuaFalse = true,
+							jobValue = "PALADIN",
+							name = "MT PALADIN",
+							partyTargetType = "Event Target",
+							uuid = "c22527c4-e48e-1ce0-b3f0-2d78d679ff35",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 30,
+							category = "Party",
+							comparator = 2,
+							conditionType = 9,
+							dequeueIfLuaFalse = true,
+							name = "MT invulnerability ready",
+							partyTargetType = "Event Target",
+							uuid = "848dcc2c-5134-e9c4-b141-379a5a6aae1f",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance",
+				eventType = 2,
+				mechanicTime = 1082,
+				name = "[NAUR][OT] Later Viscous - MT PALADIN",
+				timeRange = true,
+				timelineIndex = 141,
+				timerEndOffset = 2,
+				timerStartOffset = -2,
+				uuid = "1dcccf27-21ad-9923-a380-5246be75dac0",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 6000,
+							alertPriority = 3,
+							alertScale = 0.85,
+							alertTTS = true,
+							alertText = "MT invulnerability ready: Provoke now",
+							conditions = 
+							{
+								
+								{
+									"55d1caa4-33f6-07e9-a2fc-1d53fd74984e",
+									true,
+								},
+								
+								{
+									"47b0aa5c-d1d1-8166-a511-24d33bb3d2a7",
+									true,
+								},
+								
+								{
+									"67f20d16-21e8-fd3b-86d5-bd26093233a4",
+									true,
+								},
+								
+								{
+									"ec03cb28-ccda-3714-8c7d-c930b3705896",
+									true,
+								},
+								
+								{
+									"76ef1eb4-3a01-479a-8a93-0ed45377295f",
+									true,
+								},
+							},
+							endIfUsed = true,
+							uuid = "ea5180df-8f22-dd9f-bedb-9377a06abdb7",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player=TensorCore.mGetPlayer()\nif not player or not player.pos then self.used=true return end\nlocal duration=6000\nlocal Roster=AnyoneCore.Roster\nif not Roster or not Roster.isReady() then self.used=true return end\nlocal mt=Roster.entOf(\"T1\")\nif not mt or not mt.pos then self.used=true return end\nlocal dest={x=mt.pos.x,y=mt.pos.y,z=mt.pos.z}\nlocal distance=TensorCore.getDistance2d(player.pos,dest)\nif distance>0.3 then\n local tip=math.min(1.7,distance*0.35)\n local drawer=TensorCore.getCachedDrawer(0xFF33FF66,0xFF00CC44,0xFFFFFFFF,0xFF000000,4)\n drawer:addTimedArrow(duration,player.pos.x,player.pos.y,player.pos.z,TensorCore.getHeadingToTarget(player.pos,dest),math.max(0.1,distance-tip),1.2,tip,2.5,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nAnyoneCore.addTimedWorldText(duration,\"SWAP POSITIONS WITH MT\",{x=dest.x,y=dest.y+1.1,z=dest.z},0xFF33FF66,true,1.1)\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"55d1caa4-33f6-07e9-a2fc-1d53fd74984e",
+									true,
+								},
+								
+								{
+									"47b0aa5c-d1d1-8166-a511-24d33bb3d2a7",
+									true,
+								},
+								
+								{
+									"67f20d16-21e8-fd3b-86d5-bd26093233a4",
+									true,
+								},
+								
+								{
+									"ec03cb28-ccda-3714-8c7d-c930b3705896",
+									true,
+								},
+								
+								{
+									"76ef1eb4-3a01-479a-8a93-0ed45377295f",
+									false,
+								},
+							},
+							endIfUsed = true,
+							name = "Swap Positions - Arrow to MT",
+							uuid = "ffb6069e-8c4a-c6c4-b26f-f98f021925ec",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgType = 2,
+							eventSpellID = 11129,
+							name = "Spell 11129",
+							uuid = "55d1caa4-33f6-07e9-a2fc-1d53fd74984e",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore.Roster\nif not Roster or not Roster.current() then return false end\nlocal slot = Roster.mySlot()\nif not slot then return false end\nreturn slot == \"T2\"",
+							conditionType = 9,
+							name = "Roster: T2",
+							partyTargetType = "Off Tank",
+							uuid = "47b0aa5c-d1d1-8166-a511-24d33bb3d2a7",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore.Roster\nif not Roster or not Roster.current() then return false end\nlocal mtID = Roster.idOf(\"T1\")\nreturn mtID ~= nil and eventArgs.targetID == mtID",
+							conditionType = 10,
+							dequeueIfLuaFalse = true,
+							inGroupTargetType = "Main Tank",
+							name = "Roster: Viscous targets T1",
+							partyTargetType = "Event Target",
+							uuid = "67f20d16-21e8-fd3b-86d5-bd26093233a4",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Party",
+							conditionType = 7,
+							dequeueIfLuaFalse = true,
+							jobValue = "WARRIOR",
+							name = "MT WARRIOR",
+							partyTargetType = "Event Target",
+							uuid = "ec03cb28-ccda-3714-8c7d-c930b3705896",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 43,
+							category = "Party",
+							comparator = 2,
+							conditionType = 9,
+							dequeueIfLuaFalse = true,
+							name = "MT invulnerability ready",
+							partyTargetType = "Event Target",
+							uuid = "76ef1eb4-3a01-479a-8a93-0ed45377295f",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance",
+				eventType = 2,
+				mechanicTime = 1082,
+				name = "[NAUR][OT] Later Viscous - MT WARRIOR",
+				timeRange = true,
+				timelineIndex = 141,
+				timerEndOffset = 2,
+				timerStartOffset = -2,
+				uuid = "0e0e603b-8556-6414-9702-642d44778c91",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 6000,
+							alertPriority = 3,
+							alertScale = 0.85,
+							alertTTS = true,
+							alertText = "MT invulnerability ready: Provoke now",
+							conditions = 
+							{
+								
+								{
+									"7f13415f-6ced-12a0-8e24-80a5859638f7",
+									true,
+								},
+								
+								{
+									"cb762f6b-eded-1726-88a8-a31a3dfa7c72",
+									true,
+								},
+								
+								{
+									"4b5cbf53-8600-2efe-b52e-2edba8fdfb70",
+									true,
+								},
+								
+								{
+									"892f3527-f08d-7971-a428-7c6f5a91714b",
+									true,
+								},
+								
+								{
+									"6cd39966-6994-e2a6-9d38-55880461b1cd",
+									true,
+								},
+							},
+							endIfUsed = true,
+							uuid = "7fa1abdd-5a69-9ebb-82b5-2bf285e54537",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player=TensorCore.mGetPlayer()\nif not player or not player.pos then self.used=true return end\nlocal duration=6000\nlocal Roster=AnyoneCore.Roster\nif not Roster or not Roster.isReady() then self.used=true return end\nlocal mt=Roster.entOf(\"T1\")\nif not mt or not mt.pos then self.used=true return end\nlocal dest={x=mt.pos.x,y=mt.pos.y,z=mt.pos.z}\nlocal distance=TensorCore.getDistance2d(player.pos,dest)\nif distance>0.3 then\n local tip=math.min(1.7,distance*0.35)\n local drawer=TensorCore.getCachedDrawer(0xFF33FF66,0xFF00CC44,0xFFFFFFFF,0xFF000000,4)\n drawer:addTimedArrow(duration,player.pos.x,player.pos.y,player.pos.z,TensorCore.getHeadingToTarget(player.pos,dest),math.max(0.1,distance-tip),1.2,tip,2.5,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nAnyoneCore.addTimedWorldText(duration,\"SWAP POSITIONS WITH MT\",{x=dest.x,y=dest.y+1.1,z=dest.z},0xFF33FF66,true,1.1)\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"7f13415f-6ced-12a0-8e24-80a5859638f7",
+									true,
+								},
+								
+								{
+									"cb762f6b-eded-1726-88a8-a31a3dfa7c72",
+									true,
+								},
+								
+								{
+									"4b5cbf53-8600-2efe-b52e-2edba8fdfb70",
+									true,
+								},
+								
+								{
+									"892f3527-f08d-7971-a428-7c6f5a91714b",
+									true,
+								},
+								
+								{
+									"6cd39966-6994-e2a6-9d38-55880461b1cd",
+									false,
+								},
+							},
+							endIfUsed = true,
+							name = "Swap Positions - Arrow to MT",
+							uuid = "6a8134c2-4ccb-2446-93b4-cb901e57f587",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgType = 2,
+							eventSpellID = 11129,
+							name = "Spell 11129",
+							uuid = "7f13415f-6ced-12a0-8e24-80a5859638f7",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore.Roster\nif not Roster or not Roster.current() then return false end\nlocal slot = Roster.mySlot()\nif not slot then return false end\nreturn slot == \"T2\"",
+							conditionType = 9,
+							name = "Roster: T2",
+							partyTargetType = "Off Tank",
+							uuid = "cb762f6b-eded-1726-88a8-a31a3dfa7c72",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore.Roster\nif not Roster or not Roster.current() then return false end\nlocal mtID = Roster.idOf(\"T1\")\nreturn mtID ~= nil and eventArgs.targetID == mtID",
+							conditionType = 10,
+							dequeueIfLuaFalse = true,
+							inGroupTargetType = "Main Tank",
+							name = "Roster: Viscous targets T1",
+							partyTargetType = "Event Target",
+							uuid = "4b5cbf53-8600-2efe-b52e-2edba8fdfb70",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Party",
+							conditionType = 7,
+							dequeueIfLuaFalse = true,
+							jobValue = "DARKKNIGHT",
+							name = "MT DARKKNIGHT",
+							partyTargetType = "Event Target",
+							uuid = "892f3527-f08d-7971-a428-7c6f5a91714b",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 3638,
+							category = "Party",
+							comparator = 2,
+							conditionType = 9,
+							dequeueIfLuaFalse = true,
+							name = "MT invulnerability ready",
+							partyTargetType = "Event Target",
+							uuid = "6cd39966-6994-e2a6-9d38-55880461b1cd",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance",
+				eventType = 2,
+				mechanicTime = 1082,
+				name = "[NAUR][OT] Later Viscous - MT DARKKNIGHT",
+				timeRange = true,
+				timelineIndex = 141,
+				timerEndOffset = 2,
+				timerStartOffset = -2,
+				uuid = "7e7dc0eb-83a2-cf44-9a4c-e869fcd2aac7",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 6000,
+							alertPriority = 3,
+							alertScale = 0.85,
+							alertTTS = true,
+							alertText = "MT invulnerability ready: Provoke now",
+							conditions = 
+							{
+								
+								{
+									"1dfe63c7-9c4b-2bad-8787-322eb288c40d",
+									true,
+								},
+								
+								{
+									"e8ab81fa-4d83-01bb-adad-954d77d6877b",
+									true,
+								},
+								
+								{
+									"2fcc2c2d-7484-5eb8-903b-9b331ae763b9",
+									true,
+								},
+								
+								{
+									"680d60bb-15e4-29a3-b692-0dc68612cf41",
+									true,
+								},
+								
+								{
+									"e2368c3c-d9e8-3c9c-b328-127e3d104969",
+									true,
+								},
+							},
+							endIfUsed = true,
+							uuid = "e297f08d-24f1-ac83-8c9f-c0e3159f102f",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player=TensorCore.mGetPlayer()\nif not player or not player.pos then self.used=true return end\nlocal duration=6000\nlocal Roster=AnyoneCore.Roster\nif not Roster or not Roster.isReady() then self.used=true return end\nlocal mt=Roster.entOf(\"T1\")\nif not mt or not mt.pos then self.used=true return end\nlocal dest={x=mt.pos.x,y=mt.pos.y,z=mt.pos.z}\nlocal distance=TensorCore.getDistance2d(player.pos,dest)\nif distance>0.3 then\n local tip=math.min(1.7,distance*0.35)\n local drawer=TensorCore.getCachedDrawer(0xFF33FF66,0xFF00CC44,0xFFFFFFFF,0xFF000000,4)\n drawer:addTimedArrow(duration,player.pos.x,player.pos.y,player.pos.z,TensorCore.getHeadingToTarget(player.pos,dest),math.max(0.1,distance-tip),1.2,tip,2.5,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nAnyoneCore.addTimedWorldText(duration,\"SWAP POSITIONS WITH MT\",{x=dest.x,y=dest.y+1.1,z=dest.z},0xFF33FF66,true,1.1)\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"1dfe63c7-9c4b-2bad-8787-322eb288c40d",
+									true,
+								},
+								
+								{
+									"e8ab81fa-4d83-01bb-adad-954d77d6877b",
+									true,
+								},
+								
+								{
+									"2fcc2c2d-7484-5eb8-903b-9b331ae763b9",
+									true,
+								},
+								
+								{
+									"680d60bb-15e4-29a3-b692-0dc68612cf41",
+									true,
+								},
+								
+								{
+									"e2368c3c-d9e8-3c9c-b328-127e3d104969",
+									false,
+								},
+							},
+							endIfUsed = true,
+							name = "Swap Positions - Arrow to MT",
+							uuid = "49a02a3f-9f95-7423-8dbe-25162bad0588",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgType = 2,
+							eventSpellID = 11129,
+							name = "Spell 11129",
+							uuid = "1dfe63c7-9c4b-2bad-8787-322eb288c40d",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore.Roster\nif not Roster or not Roster.current() then return false end\nlocal slot = Roster.mySlot()\nif not slot then return false end\nreturn slot == \"T2\"",
+							conditionType = 9,
+							name = "Roster: T2",
+							partyTargetType = "Off Tank",
+							uuid = "e8ab81fa-4d83-01bb-adad-954d77d6877b",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore.Roster\nif not Roster or not Roster.current() then return false end\nlocal mtID = Roster.idOf(\"T1\")\nreturn mtID ~= nil and eventArgs.targetID == mtID",
+							conditionType = 10,
+							dequeueIfLuaFalse = true,
+							inGroupTargetType = "Main Tank",
+							name = "Roster: Viscous targets T1",
+							partyTargetType = "Event Target",
+							uuid = "2fcc2c2d-7484-5eb8-903b-9b331ae763b9",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Party",
+							conditionType = 7,
+							dequeueIfLuaFalse = true,
+							jobValue = "GUNBREAKER",
+							name = "MT GUNBREAKER",
+							partyTargetType = "Event Target",
+							uuid = "680d60bb-15e4-29a3-b692-0dc68612cf41",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 16152,
+							category = "Party",
+							comparator = 2,
+							conditionType = 9,
+							dequeueIfLuaFalse = true,
+							name = "MT invulnerability ready",
+							partyTargetType = "Event Target",
+							uuid = "e2368c3c-d9e8-3c9c-b328-127e3d104969",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance",
+				eventType = 2,
+				mechanicTime = 1082,
+				name = "[NAUR][OT] Later Viscous - MT GUNBREAKER",
+				timeRange = true,
+				timelineIndex = 141,
+				timerEndOffset = 2,
+				timerStartOffset = -2,
+				uuid = "fda8e372-542e-5232-afb4-f8c917c90143",
+				version = 2,
+			},
+		},
+	},
+	[142] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "[Raid calls]",
+				uuid = "120f70ac-80ab-9e63-935d-f7515fdd8a30",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "[Raid calls]",
+							uuid = "66b3c69c-8314-1568-b55b-d0c291105948",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 2500,
+							alertPriority = 3,
+							alertScale = 0.9,
+							alertTTS = true,
+							alertText = "STACK UNTIL FEATHER RAIN, THEN MOVE",
+							displayPath = "[Raid calls]",
+							name = "Stack until Feather Rain, then move",
+							uuid = "c98c8cd4-daf6-c890-bea0-8691df59cbf2",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "[Raid calls]",
+				mechanicTime = 1086,
+				name = "[Raid Call][Ultima] Stack until Feather Rain then Move 1086",
+				timeRange = true,
+				timelineIndex = 142,
+				timerEndOffset = 0.5,
+				uuid = "0456bf3f-3bdf-f072-ad98-3c7490122bf3",
+				version = 2,
+			},
+		},
+	},
+	[144] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "5dd34a02-6fea-51f6-e07e-026ca492e652",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Garuda",
+				uuid = "ed3f9b49-d5d7-3927-b154-108720887911",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Garuda",
+							uuid = "e7d13c7c-b727-a793-a5f6-cd04383f54ea",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 2500,
+							alertPriority = 3,
+							alertScale = 0.9,
+							alertTTS = true,
+							alertText = "MOVE FOR FEATHER RAIN",
+							conditions = 
+							{
+								
+								{
+									"e4ab4c95-78e2-dff3-bc4d-b46d0f4b1d35",
+									true,
+								},
+							},
+							displayPath = "Draws - Garuda",
+							name = "[Alert] Feather Rain - Move 1091",
+							uuid = "80f72f78-0ca9-104a-a527-5f9967ce0bda",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Garuda",
+							uuid = "cff09bb5-4d69-9e8a-a505-4ada23873a63",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs and eventArgs.aoeID == 11085 and eventArgs.contentID == 1644 and eventArgs.friendly == false",
+							dequeueIfLuaFalse = true,
+							displayPath = "Draws - Garuda",
+							name = "Feather Rain AOE",
+							uuid = "e4ab4c95-78e2-dff3-bc4d-b46d0f4b1d35",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Garuda",
+				eventType = 18,
+				mechanicTime = 1091,
+				name = "[Alert] Feather Rain - Move 1091",
+				throttleTime = 1000,
+				timeRange = true,
+				timelineIndex = 144,
+				timerEndOffset = 2,
+				timerStartOffset = -2,
+				uuid = "2a665ab7-7387-7322-870d-c74df5bf6c28",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR Guidance",
+				uuid = "ab340688-5144-19ab-99a0-430dfa53737d",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "NAUR Guidance",
+							uuid = "938d57e4-14e2-5cb5-a8ff-874af7b3da93",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local Roster = AnyoneCore and AnyoneCore.Roster\nif Roster == nil or Roster.current() == nil or not Roster.isReady() then return end\n\nlocal localSlot = Roster.mySlot()\nif localSlot == nil or localSlot == \"T2\" then return end\n\nlocal otID = Roster.idOf(\"T2\")\nlocal ot = Roster.entOf(\"T2\")\nif not otID or not ot or not ot.pos then return end\n\nlocal pos = ot.pos\nArgus2.addTimedCircleFilled(\n    8000,\n    pos.x, pos.y, pos.z,\n    0.55, 32,\n    0x35FF0000, 0x35FF0000, nil, 0,\n    otID, 0xFFFF0000, 1.5,\n    0, 0.15, 2,\n    false, true, Argus2.RenderFlags.FLAG_RENDER_OVERLAY\n)\nself.used = true",
+							displayPath = "NAUR Guidance",
+							name = "Draw OT circle",
+							uuid = "083f1190-4ed3-bb82-a32f-d778916adc1d",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "NAUR Guidance",
+				mechanicTime = 1091,
+				name = "[Draw][NAUR] OT Circle 1090-1098",
+				throttleTime = 8000,
+				timeRange = true,
+				timelineIndex = 144,
+				timerEndOffset = 7,
+				timerStartOffset = -1,
+				uuid = "0c196adb-7f69-971c-9d67-7a3a5c584678",
+				version = 2,
+			},
+		},
+	},
+	[146] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "[Raid calls]",
+				uuid = "e254a7aa-b227-4293-9684-bbb98c0ee121",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "[Raid calls]",
+							uuid = "49182d09-25e0-9573-8da9-048bba6091b9",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 2500,
+							alertPriority = 3,
+							alertTTS = true,
+							alertText = "Move away from MT",
+							conditions = 
+							{
+								
+								{
+									"6c179ad4-06f5-a030-9f66-c2a73ffb5bc3",
+									true,
+								},
+							},
+							displayPath = "[Raid calls]",
+							name = "[Raid Call][Ultima] Homing Lasers - Move Away from MT",
+							uuid = "955caf81-2ad0-7036-973f-536b07a9253f",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "[Raid calls]",
+							uuid = "a5a622dc-16f1-1c83-b248-8effb7472f21",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore.Roster\nif not Roster or not Roster.current() then return false end\nlocal slot = Roster.mySlot()\nreturn slot ~= nil and slot ~= \"T1\"",
+							conditionType = 9,
+							displayPath = "[Raid calls]",
+							name = "Roster: except T1",
+							partyTargetType = "Off Tank",
+							uuid = "6c179ad4-06f5-a030-9f66-c2a73ffb5bc3",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "[Raid calls]",
+				mechanicTime = 1093,
+				name = "[Raid Call][Ultima] Homing Lasers - Move Away from MT",
+				timeRange = true,
+				timelineIndex = 146,
+				timerStartOffset = -1,
+				uuid = "2aac705d-86e6-7565-a463-75d55a577b5a",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR Guidance",
+				uuid = "8e6fbb9d-b24a-e92e-be0b-c01b62329366",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertPriority = 3,
+							alertScale = 0.85,
+							alertTTS = true,
+							alertText = "Homing Lasers: stay away from the party",
+							conditions = 
+							{
+								
+								{
+									"db92d3c4-b71d-d131-be4a-67c82c7bbf6a",
+									true,
+								},
+							},
+							uuid = "35568883-3951-0294-9fb8-967392f8af77",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore.Roster\nif not Roster or not Roster.current() then return false end\nreturn Roster.mySlot() == \"T1\"",
+							conditionType = 9,
+							name = "Roster: T1",
+							partyTargetType = "Off Tank",
+							uuid = "db92d3c4-b71d-d131-be4a-67c82c7bbf6a",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance",
+				mechanicTime = 1093,
+				name = "[NAUR][MT] Homing Lasers - Stay Away",
+				throttleTime = 5000,
+				timeRange = true,
+				timelineIndex = 146,
+				timerEndOffset = -3.5,
+				timerStartOffset = -4.5,
+				uuid = "ea42f50d-0f90-c859-b10d-a7ef9c58eb26",
+				version = 2,
+			},
+		},
+	},
+	[147] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "135eaf55-bc72-8149-07b0-df037e669365",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Garuda",
+				uuid = "bd494a44-c9fb-8b54-ad0f-b62c2e030aaf",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Garuda",
+							uuid = "5bb34c78-4f57-2058-81c2-dab79f023996",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 2500,
+							alertPriority = 3,
+							alertScale = 0.9,
+							alertTTS = true,
+							alertText = "MOVE FOR FEATHER RAIN",
+							conditions = 
+							{
+								
+								{
+									"3b870e48-d472-1303-95c7-21e22361edee",
+									true,
+								},
+							},
+							displayPath = "Draws - Garuda",
+							name = "[Alert] Feather Rain - Move 1095",
+							uuid = "60dffc0d-8b52-0810-9756-c59cea2099cc",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Garuda",
+							uuid = "9d738aa9-03d3-8e64-bb8c-e74a82c8a465",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs and eventArgs.aoeID == 11085 and eventArgs.contentID == 1644 and eventArgs.friendly == false",
+							dequeueIfLuaFalse = true,
+							displayPath = "Draws - Garuda",
+							name = "Feather Rain AOE",
+							uuid = "3b870e48-d472-1303-95c7-21e22361edee",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Garuda",
+				eventType = 18,
+				mechanicTime = 1095,
+				name = "[Alert] Feather Rain - Move 1095",
+				throttleTime = 1000,
+				timeRange = true,
+				timelineIndex = 147,
+				timerEndOffset = 2,
+				timerStartOffset = -2,
+				uuid = "d30b85b5-e340-3d1e-bd80-5d691f000785",
+				version = 2,
+			},
+		},
+	},
+	[148] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ultima NAUR",
+				uuid = "5813693a-7091-d59e-ba5b-ee8de400f453",
+			},
+			objectType = "folder",
+		},
+	},
+	[149] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ultima",
+				uuid = "3f64f8f1-1b5f-b1d7-af27-56e43c867957",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "[Raid calls]",
+							uuid = "12ae379b-1f48-41a7-918f-6839ff2fdef4",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 2500,
+							alertPriority = 3,
+							alertTTS = true,
+							alertText = "Stack southwest of Ultima",
+							conditions = 
+							{
+								
+								{
+									"ff3df666-fade-605f-8c93-17f371f3e0b2",
+									true,
+								},
+							},
+							displayPath = "[Raid calls]",
+							name = "[Raid Call][Ultima] Stack SW after Teleport",
+							uuid = "4ae0bf0b-4b28-ae0c-9cb9-0e5d44a8c8d7",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ultima",
+							uuid = "193965c9-50a5-9584-a38a-b56baa3e68a9",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local entityID = eventArgs and eventArgs.entityID\nlocal boss = entityID and TensorCore.mGetEntity(entityID)\nif not boss or not boss.pos then\n    self.used = true\n    return\nend\n\nlocal pos = boss.pos\nlocal stackX = pos.x - 4.5\nlocal stackZ = pos.z + 4.5\n\nArgus2.addTimedCircleFilled(\n    8000, stackX, pos.y, stackZ, 2.5, 48,\n    0x6600FF00, 0x6600FF00, nil, 0, nil,\n    0xCC00FF00, 1.5, 0, 0, 0, false, true,\n    Argus2.RenderFlags.FLAG_WARP_TERRAIN, nil, 0, 0\n)\n\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"ff3df666-fade-605f-8c93-17f371f3e0b2",
+									true,
+								},
+							},
+							displayPath = "Draws - Ultima",
+							name = "Dynamic SW stack marker",
+							uuid = "ede7fab1-ff94-03b9-b39c-27bb3a50d3bc",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ultima",
+							uuid = "f2834b69-1ca8-e4fc-a4b7-75e102913b86",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs and eventArgs.entityContentID == 2137 and eventArgs.wasVisible == false and eventArgs.isVisible == true",
+							dequeueIfLuaFalse = true,
+							displayPath = "Draws - Ultima",
+							name = "Ultima reappears",
+							uuid = "ff3df666-fade-605f-8c93-17f371f3e0b2",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ultima",
+				enabled = false,
+				eventType = 22,
+				mechanicTime = 1105,
+				name = "[Draw][NAUR][Ultima] Stack SW after Teleport",
+				timeRange = true,
+				timelineIndex = 149,
+				timerEndOffset = 3,
+				timerStartOffset = 1,
+				uuid = "7ae528c8-a38d-0c99-9e3a-9926bb5ccd6c",
+				version = 2,
+			},
+		},
+	},
+	[150] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR Guidance",
+				uuid = "82d1268c-e716-9a75-ad2e-87b3b60c94a5",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertPriority = 3,
+							alertScale = 0.85,
+							alertTTS = true,
+							alertText = "Go to C and take tether",
+							conditions = 
+							{
+								
+								{
+									"05b6c628-04d9-a6a4-bee2-181f0900275d",
+									true,
+								},
+								
+								{
+									"f171ad90-45b0-2b66-bf0b-9c26bf4605a3",
+									true,
+								},
+								
+								{
+									"f5b16385-d6d2-598c-9135-16b2162a525b",
+									true,
+								},
+							},
+							name = "Go to C and take tether",
+							uuid = "35bfe5d9-6eb4-717e-ba58-44df8c5e09b9",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local r=AnyoneCore.Roster\nlocal p=TensorCore.mGetPlayer()\nif r.current()==nil or not r.isReady() or p==nil then return end\nif r.mySlot()~=\"R1\" then self.used=true;return end\nif data.uwu_r1_mesohigh_shapes then\n for _,id in ipairs(data.uwu_r1_mesohigh_shapes) do Argus.deleteTimedShape(id) end\nend\ndata.uwu_r1_mesohigh_shapes={}\nlocal x,y,z,active=Argus.getWaymarkInfo(3)\nif not active then self.used=true;return end\nlocal target={x=x,y=y,z=z}\nlocal flag=Argus2.RenderFlags.FLAG_RENDER_OVERLAY\nlocal d=TensorCore.getCachedDrawer(0xFF66FF99,0xFF00AA66,0xFF006644,0xFFFFFFFF,2,nil,flag)\nlocal id=d:addTimedCircle(8000,x,y+.05,z,1,0,false,true,flag)\nif id then table.insert(data.uwu_r1_mesohigh_shapes,id) end\nlocal length=TensorCore.getDistance2d(p.pos,target)\nif length>1 then\n id=d:addTimedArrow(8000,p.pos.x,p.pos.y+.05,p.pos.z,TensorCore.getHeadingToTarget(p.pos,target),math.max(.1,length-1),1,1,2.3,0,false,flag)\n if id then table.insert(data.uwu_r1_mesohigh_shapes,id) end\nend\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"05b6c628-04d9-a6a4-bee2-181f0900275d",
+									true,
+								},
+								
+								{
+									"f171ad90-45b0-2b66-bf0b-9c26bf4605a3",
+									true,
+								},
+								
+								{
+									"f5b16385-d6d2-598c-9135-16b2162a525b",
+									true,
+								},
+							},
+							name = "Personal arrow to C",
+							uuid = "6c32ebbf-ec62-310f-9139-bb3a90dc2694",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local r=AnyoneCore.Roster;if r.current()==nil then return false end;local s=r.mySlot();return s==\"R1\"",
+							name = "Party Roster roles",
+							uuid = "05b6c628-04d9-a6a4-bee2-181f0900275d",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.sourceEntityContentID==1644 and eventArgs.newTetherID==4",
+							dequeueIfLuaFalse = true,
+							name = "Garuda Mesohigh appears",
+							uuid = "f171ad90-45b0-2b66-bf0b-9c26bf4605a3",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "if self.claimed then return true end\nlocal p=TensorCore.mGetPlayer()\nif not p or eventArgs.newTargetID==p.id then return false end\nif data.uwu_r1_mesohigh_prompted then return false end\ndata.uwu_r1_mesohigh_prompted=true\nself.claimed=true\nreturn true",
+							dequeueIfLuaFalse = true,
+							name = "Prompt once before R1 takes tether",
+							uuid = "f5b16385-d6d2-598c-9135-16b2162a525b",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance",
+				eventType = 15,
+				mechanicTime = 1109,
+				name = "[NAUR] Ultima Mesohigh - Take Tether near C - R1",
+				timeRange = true,
+				timelineIndex = 150,
+				timerEndOffset = 12,
+				timerStartOffset = -1,
+				uuid = "64fa6591-48cb-1a61-9245-cbbd64a5fa86",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "if data.uwu_r1_mesohigh_shapes then\n for _,id in ipairs(data.uwu_r1_mesohigh_shapes) do Argus.deleteTimedShape(id) end\n data.uwu_r1_mesohigh_shapes=nil\nend\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"6cc5c8ba-0a53-1e96-bb28-0ee326181493",
+									true,
+								},
+								
+								{
+									"472f260a-8c55-f7b4-8d48-e755c2f841bb",
+									true,
+								},
+							},
+							name = "Remove R1 tether arrow",
+							uuid = "4266392a-a25f-25ad-90e4-8e28e3784af1",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local r=AnyoneCore.Roster;if r.current()==nil then return false end;local s=r.mySlot();return s==\"R1\"",
+							name = "Party Roster roles",
+							uuid = "6cc5c8ba-0a53-1e96-bb28-0ee326181493",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local p=TensorCore.mGetPlayer();return eventArgs~=nil and p~=nil and eventArgs.sourceEntityContentID==1644 and eventArgs.newTetherID==4 and eventArgs.newTargetID==p.id",
+							dequeueIfLuaFalse = true,
+							name = "Mesohigh acquired",
+							uuid = "472f260a-8c55-f7b4-8d48-e755c2f841bb",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance",
+				eventType = 15,
+				mechanicTime = 1109,
+				name = "[NAUR] Ultima Mesohigh - R1 Tether Acquired Cleanup",
+				timeRange = true,
+				timelineIndex = 150,
+				timerEndOffset = 12,
+				uuid = "e7703b58-bf7b-1a90-9f83-2b7d5b59e5f8",
+				version = 2,
+			},
+		},
+	},
+	[151] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "08261cd0-d5b9-e38c-c754-7a12657e86a0",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Titan NAUR",
+				uuid = "aec02ddb-19c3-3dfe-9606-4c37d97ec6cf",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Titan NAUR",
+							uuid = "d4156fdb-7aeb-0eec-b2bf-472d0c08c230",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 2500,
+							alertPriority = 3,
+							alertScale = 0.89999997615814,
+							alertTTS = true,
+							alertText = "DODGE WEIGHT OF THE LAND",
+							conditions = 
+							{
+								
+								{
+									"bad1e9a1-cbd0-bb9b-bfe7-1ce8d7bb6de0",
+									true,
+								},
+							},
+							displayPath = "Draws - Titan NAUR",
+							name = "[Alert] Weight of the Land - Dodge 1112",
+							uuid = "2751a225-40dc-7375-953b-90d054133b42",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							displayPath = "Draws - Titan NAUR",
+							name = "[Draw] Titan Weight of the Land - Right",
+							uuid = "80a33fde-d2d2-8f02-97ce-8cc25ef672d0",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Titan NAUR",
+							uuid = "3537d4d3-d96b-23d1-bbf7-4000eaf70de8",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs and eventArgs.aoeID == 11109 and eventArgs.contentID == 1801 and eventArgs.friendly == false",
+							dequeueIfLuaFalse = true,
+							displayPath = "Draws - Titan NAUR",
+							name = "Weight of the Land AOE",
+							uuid = "bad1e9a1-cbd0-bb9b-bfe7-1ce8d7bb6de0",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Titan NAUR",
+				eventType = 18,
+				mechanicTime = 1112,
+				name = "[Alert] Weight of the Land - Dodge 1112",
+				throttleTime = 1000,
+				timeRange = true,
+				timelineIndex = 151,
+				timerEndOffset = -2.5,
+				timerStartOffset = -3.5,
+				uuid = "5f98b4d6-4076-3124-bb9c-355a3d9c15b7",
+				version = 2,
+			},
+		},
+	},
+	[152] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "a7f6e367-e985-47a3-c2cb-b8255c7e08b7",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR Guidance",
+				uuid = "375c4b5d-76ea-34b7-a3e6-8338649f846a",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "AnyoneCore.addWorldTextCountdownOnEnt(5300,eventArgs.entityID,0xFFFFFFFF,true,1.5,2.5,0,\"\")\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"66802e53-59fc-9f33-831d-ba6734bc8562",
+									true,
+								},
+							},
+							name = "Annihilation first stack - Continuous countdown",
+							uuid = "156c6c6f-2822-dcda-9015-eda97ba69e7c",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.markerID==117",
+							dequeueIfLuaFalse = true,
+							name = "Flaming Crush marker",
+							uuid = "66802e53-59fc-9f33-831d-ba6734bc8562",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance",
+				eventType = 4,
+				mechanicTime = 1114,
+				name = "[NAUR] Annihilation first stack - Continuous countdown",
+				timeRange = true,
+				timelineIndex = 152,
+				timerEndOffset = 1,
+				timerStartOffset = -8,
+				uuid = "f4926322-b6bc-ca5e-b7c4-3cb46a49b5ad",
+				version = 2,
+			},
+		},
+	},
+	[153] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Titan NAUR",
+				uuid = "16629fe3-88d0-36a3-9cec-849ee5fe609f",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Titan NAUR",
+							uuid = "b11068e4-cdcf-e94d-bd64-c6b849ddcfd4",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 2500,
+							alertPriority = 3,
+							alertScale = 0.9,
+							alertTTS = true,
+							alertText = "DODGE WEIGHT OF THE LAND",
+							conditions = 
+							{
+								
+								{
+									"002ab395-e34e-467f-854e-cb0754dc00c2",
+									true,
+								},
+							},
+							displayPath = "Draws - Titan NAUR",
+							name = "[Alert] Weight of the Land - Dodge 1115",
+							uuid = "4fef1313-4a70-7681-b617-2bc17b3d85b5",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Titan NAUR",
+							uuid = "0df0df5e-9733-1a7a-9143-d02e7aefd47a",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs and eventArgs.aoeID == 11109 and eventArgs.contentID == 1801 and eventArgs.friendly == false",
+							dequeueIfLuaFalse = true,
+							displayPath = "Draws - Titan NAUR",
+							name = "Weight of the Land AOE",
+							uuid = "002ab395-e34e-467f-854e-cb0754dc00c2",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Titan NAUR",
+				eventType = 18,
+				mechanicTime = 1115,
+				name = "[Alert] Weight of the Land - Dodge 1115",
+				throttleTime = 1000,
+				timeRange = true,
+				timelineIndex = 153,
+				timerEndOffset = -2.5,
+				timerStartOffset = -3.5,
+				uuid = "9b89ba5b-0778-55a8-91d1-7c3ff9ffbe53",
+				version = 2,
+			},
+		},
+	},
+	[155] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ultima NAUR",
+				uuid = "2e2a8032-5ad4-edb8-87e6-3f832a9e9fa6",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "-- Independent UWU settings; available before GUI or targeting reads.\nif not _G.UWU_NAURSettingsIOReady then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UWU-NAUR.lua]]\n local saved={}\n if FileExists(path) then\n  local loaded=FileLoad(path)\n  if type(loaded)==\"table\" then saved=loaded end\n end\n local current=_G.UWU_NAURGuiState\n local old=_G.UWU_NAUR_AnnihilationAssignments or {}\n local defaults={automaticOpen=true,ultimaOpen=true,orbsOpen=true,autoTarget=_G.NAUR_UWU_AutoTarget~=false,melee=(old.melee==2 and 2 or 1),solo=old.solo or 0}\n local keys={\"automaticOpen\",\"ultimaOpen\",\"orbsOpen\",\"autoTarget\",\"melee\",\"solo\"}\n local C={}\n for _,key in ipairs(keys) do\n  local value=current and current[key]\n  if value==nil then value=saved[key] end\n  if type(defaults[key])==\"boolean\" then\n   C[key]=type(value)==\"boolean\" and value or defaults[key]\n   if value==false then C[key]=false end\n  else\n   C[key]=type(value)==\"number\" and value>=0 and value<=2 and value%1==0 and value or defaults[key]\n  end\n end\n if C.melee==0 then C.melee=1 end\n function C.save()\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local values={}\n  for _,key in ipairs(keys) do values[key]=C[key] end\n  FileSave(path,values)\n end\n _G.UWU_NAURGuiState=C\n _G.UWU_NAUR_AnnihilationAssignments={melee=C.melee,solo=C.solo}\n _G.NAUR_UWU_AutoTarget=C.autoTarget\n C.save()\n _G.UWU_NAURSettingsIOReady=true\nend\n-- Upgrade only an unset melee assignment; preserve either explicit role choice.\ndo\n local preferences=_G.UWU_NAURGuiState\n if preferences and preferences.melee==0 then\n  preferences.melee=1\n  local assignment=_G.UWU_NAUR_AnnihilationAssignments\n  if assignment then assignment.melee=1 end\n  preferences.save()\n end\nend\nlocal state=data.uwu_annihilation_orbs\nif not state then state={seen={},count=0};data.uwu_annihilation_orbs=state end\nstate.live=state.live or {}\nif not self.orb then\n if state.seen[eventArgs.entityID] or state.count>=4 then self.used=true;return end\n state.count=state.count+1\n state.seen[eventArgs.entityID]=true\n self.orb=state.count\n self.entry={number=self.orb,draws={},expires=Now()+10000}\n state.live[eventArgs.entityID]=self.entry\nend\nif self.entry.finished then self.used=true;return end\nlocal duration=self.entry.expires-Now()\nif duration<=0 then self.used=true;return end\nlocal orbEntity=TensorCore.mGetEntity(eventArgs.entityID)\nif not orbEntity then\n if not self.reportedMissingActor then TensorCore.timelineLogToFile(string.format(\"[UWU orb] waiting for actor=%d orb=%d\\n\",eventArgs.entityID,self.orb));self.reportedMissingActor=true end\n return\nend\nif not self.entry.highlighted then\n local drawer=TensorCore.getCachedDrawer(0x22FFFF44,0x66FFFF44,0x88FFFF44,0xFF000000,3)\n local id=drawer:addTimedCircleOnEnt(duration,eventArgs.entityID,1,0,false,true,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\n if not id then\n  if not self.reportedDrawWait then TensorCore.timelineLogToFile(\"[UWU orb] waiting for world-highlight submission\\n\");self.reportedDrawWait=true end\n  return\n end\n self.entry.draws[#self.entry.draws+1]=id\n self.entry.highlighted=true\n TensorCore.timelineLogToFile(string.format(\"[UWU orb] highlight orb=%d actor=%d position=(%.2f,%.2f,%.2f) shape=%s\\n\",self.orb,eventArgs.entityID,orbEntity.pos.x,orbEntity.pos.y,orbEntity.pos.z,tostring(id)))\nend\nlocal Roster=AnyoneCore.Roster\nif not Roster or not Roster.current() then return end\nlocal slot=Roster.mySlot()\nif not slot then return end\nlocal cfg=_G.UWU_NAUR_AnnihilationAssignments\nlocal orb=self.orb\nlocal assigned,missing=false,false\nif orb<=2 then\n if slot==\"T1\" or slot==\"T2\" then assigned=true\n elseif slot==\"M1\" or slot==\"M2\" then\n  missing=false\n  assigned=false\n end\nelseif slot==\"T1\" or slot==\"T2\" then\n missing=false\n assigned=(slot==\"T1\")\nend\nif missing then\n TensorCore.addAlertText(3500,\"Orb \"..orb..\": choose your assignment\",1,2,true)\nelseif assigned then\n if not Roster.isReady() then return end\n local player=TensorCore.mGetPlayer()\n if not player then return end\n local drawer=TensorCore.getCachedDrawer(0x4433FF66,0xCC33FF66,0xFF33FF66,0xFF000000,3)\n local id=drawer:addTimedArrowOnEnt(duration,player.id,0,1,1,2.4,eventArgs.entityID,0,false,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\n if id then self.entry.draws[#self.entry.draws+1]=id end\n TensorCore.addAlertText(3500,\"Orb \"..orb..(orb<=2 and \": soak with tanks\" or \": solo tank soak\"),1,1,true)\nelse\n TensorCore.addAlertText(3000,\"Orb \"..orb..\": stay clear\",0.9,2,false)\nend\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"035097d1-5b5e-d444-9e32-868138a27b92",
+									true,
+								},
+							},
+							name = "Mark assigned live orb",
+							uuid = "d9083d4b-c627-5ef8-b16f-8901d8ee6243",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgOptionType = 2,
+							eventEntityContentID = 2138,
+							name = "Annihilation orb",
+							uuid = "035097d1-5b5e-d444-9e32-868138a27b92",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ultima NAUR",
+				eventType = 5,
+				execute = "-- Independent UWU settings; available before GUI or targeting reads.\nif not _G.UWU_NAURSettingsIOReady then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UWU-NAUR.lua]]\n local saved={}\n if FileExists(path) then\n  local loaded=FileLoad(path)\n  if type(loaded)==\"table\" then saved=loaded end\n end\n local current=_G.UWU_NAURGuiState\n local old=_G.UWU_NAUR_AnnihilationAssignments or {}\n local defaults={automaticOpen=true,ultimaOpen=true,orbsOpen=true,autoTarget=_G.NAUR_UWU_AutoTarget~=false,melee=(old.melee==2 and 2 or 1),solo=old.solo or 0}\n local keys={\"automaticOpen\",\"ultimaOpen\",\"orbsOpen\",\"autoTarget\",\"melee\",\"solo\"}\n local C={}\n for _,key in ipairs(keys) do\n  local value=current and current[key]\n  if value==nil then value=saved[key] end\n  if type(defaults[key])==\"boolean\" then\n   C[key]=type(value)==\"boolean\" and value or defaults[key]\n   if value==false then C[key]=false end\n  else\n   C[key]=type(value)==\"number\" and value>=0 and value<=2 and value%1==0 and value or defaults[key]\n  end\n end\n if C.melee==0 then C.melee=1 end\n function C.save()\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local values={}\n  for _,key in ipairs(keys) do values[key]=C[key] end\n  FileSave(path,values)\n end\n _G.UWU_NAURGuiState=C\n _G.UWU_NAUR_AnnihilationAssignments={melee=C.melee,solo=C.solo}\n _G.NAUR_UWU_AutoTarget=C.autoTarget\n C.save()\n _G.UWU_NAURSettingsIOReady=true\nend\n-- Upgrade only an unset melee assignment; preserve either explicit role choice.\ndo\n local preferences=_G.UWU_NAURGuiState\n if preferences and preferences.melee==0 then\n  preferences.melee=1\n  local assignment=_G.UWU_NAUR_AnnihilationAssignments\n  if assignment then assignment.melee=1 end\n  preferences.save()\n end\nend\nif not eventArgs or eventArgs.entityContentID ~= 2138 or not eventArgs.entityID then return end\ndata.uwu_annihilation_orbs = data.uwu_annihilation_orbs or {seen = {}, count = 0}\nlocal state = data.uwu_annihilation_orbs\nif state.seen[eventArgs.entityID] then return end\nif state.count >= 4 then return end\nstate.seen[eventArgs.entityID] = true\nstate.count = state.count + 1\nlocal orb = state.count\nlocal Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current() then self.used = true return end\nlocal slot = Roster.mySlot()\nif not slot then self.used = true return end\nlocal cfg = _G.UWU_NAUR_AnnihilationAssignments or {}\nlocal assigned = false\nlocal missing = false\nif orb <= 2 then\n    if slot == \"T1\" or slot == \"T2\" then\n        assigned = true\n    elseif slot == \"M1\" or slot == \"M2\" then\n        missing=false\n        assigned=false\n    end\nelseif slot == \"T1\" or slot == \"T2\" then\n    missing=false\n    assigned=(slot==\"T1\")\nend\nif missing then\n    TensorCore.addAlertText(3500, \"Orb \" .. orb .. \": choose your assignment\", 1.0, 2, true)\nelseif assigned then\n    if Roster.isReady() then\n        local id = Roster.idOf(slot)\n        if id then\n            local drawer = TensorCore.getCachedDrawer(0x6633FF66, 0xCC33FF66, 0xFF33FF66, 0xFF000000, 3)\n            drawer:addTimedCircleOnEnt(4000, id, 1.2, 0, false, true, Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\n            AnyoneCore.addTimedWorldTextOnEnt(4000, \"SOAK ORB \" .. orb, id, 0xFF33FF66, true, 1.1, 1.5)\n        end\n    end\n    TensorCore.addAlertText(3500, \"Orb \" .. orb .. (orb <= 2 and \": soak with tanks\" or \": solo tank soak\"), 1.0, 1, true)\nelse\n    TensorCore.addAlertText(3000, \"Orb \" .. orb .. \": stay clear\", 0.9, 2, false)\nend\nself.used = true",
+				loop = true,
+				mechanicTime = 1116,
+				name = "[Draw][NAUR][Annihilation] Orb spawn role cues",
+				timeRange = true,
+				timelineIndex = 155,
+				timerEndOffset = 24,
+				timerStartOffset = -3,
+				uuid = "e8276347-36f7-698c-a08c-984954552ebf",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR Guidance",
+				uuid = "173658ce-1c1f-4f42-86da-d0e22cee1d52",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local state=data.uwu_annihilation_orbs\nlocal entry=state and state.live and state.live[eventArgs.entityID]\nif entry then\n entry.finished=true\n for _,id in ipairs(entry.draws) do Argus.deleteTimedShape(id) end\n entry.draws={}\nend\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"41fb1ad1-7917-5510-8b1b-0c2173e395ea",
+									true,
+								},
+							},
+							name = "Clear resolved orb",
+							uuid = "fd50241f-916c-4c0a-b7e4-3c3e7003d01c",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.entityContentID == 2138 and eventArgs.spellID == 11137",
+							dequeueIfLuaFalse = true,
+							name = "Orb explosion",
+							uuid = "41fb1ad1-7917-5510-8b1b-0c2173e395ea",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance",
+				eventType = 2,
+				loop = true,
+				mechanicTime = 1116,
+				name = "[NAUR] Annihilation orb - Resolution cleanup",
+				timeRange = true,
+				timelineIndex = 155,
+				timerEndOffset = 28,
+				timerStartOffset = -4,
+				uuid = "5f012aed-dc34-9e1d-89c9-0cb421913d2f",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local state=data.uwu_annihilation_orbs\nlocal entry=state and state.live and state.live[eventArgs.entityID]\nif entry then\n entry.finished=true\n for _,id in ipairs(entry.draws) do Argus.deleteTimedShape(id) end\n entry.draws={}\nend\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"00b7ab2d-2f90-4b52-b8b5-b6e9ef44eeb3",
+									true,
+								},
+							},
+							name = "Clear removed orb",
+							uuid = "7eb5f529-a0a8-f5b8-89c9-2cff6adfb59b",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local s=data.uwu_annihilation_orbs\nreturn s and s.live and s.live[eventArgs.entityID] ~= nil",
+							dequeueIfLuaFalse = true,
+							name = "Owned orb",
+							uuid = "00b7ab2d-2f90-4b52-b8b5-b6e9ef44eeb3",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance",
+				eventType = 6,
+				loop = true,
+				mechanicTime = 1116,
+				name = "[NAUR] Annihilation orb - Removal cleanup",
+				timeRange = true,
+				timelineIndex = 155,
+				timerEndOffset = 28,
+				timerStartOffset = -4,
+				uuid = "e6f083dd-b73c-290f-9c93-5e5b4e2bf93e",
+				version = 2,
+			},
+		},
+	},
+	[156] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "944ff65b-3c3a-486f-5778-7b89ea5ae8ab",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR Guidance",
+				uuid = "4807115d-5bd3-2ac8-bf8a-55124ffbe78c",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "NAUR Guidance",
+				name = "Mesohigh",
+				uuid = "3169ff9c-a48e-cc2b-8ed3-b7ffbdc72138",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local a = eventArgs\nlocal state = data.uwu_personal_mesohigh_anni1\nif not state then state = {}; data.uwu_personal_mesohigh_anni1 = state end\nlocal tether = state[a.sourceEntityID]\nif not tether then tether = {}; state[a.sourceEntityID] = tether end\nif a.newTetherID == 4 and a.newTargetID and a.newTargetID > 0 then\n tether.target = a.newTargetID\n tether.expires = Now() + 10000\nelse\n tether.target = nil\nend\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"a5abd7f7-78eb-ae15-8d3b-322b8e2f6ba3",
+									true,
+								},
+							},
+							name = "Track source and current holder",
+							uuid = "1977c248-71f5-6738-b171-7c6a3dfaacd0",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.sourceEntityContentID == 1644 and (eventArgs.newTetherID == 4 or eventArgs.oldTetherID == 4)",
+							dequeueIfLuaFalse = true,
+							name = "Mesohigh source / change",
+							uuid = "a5abd7f7-78eb-ae15-8d3b-322b8e2f6ba3",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance/Mesohigh",
+				eventType = 15,
+				loop = true,
+				mechanicTime = 1117,
+				name = "[NAUR] Mesohigh Annihilation first - Capture personal tether",
+				timeRange = true,
+				timelineIndex = 156,
+				timerEndOffset = 4,
+				timerStartOffset = -8,
+				uuid = "d95f60a8-2ebd-8fed-b757-d7e6bcef5f29",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+				},
+				conditions = 
+				{
+				},
+				displayPath = "NAUR Guidance/Mesohigh",
+				eventType = 12,
+				execute = "local state = data.uwu_personal_mesohigh_anni1\nif not state then return end\nlocal Roster = AnyoneCore.Roster\nif not Roster or not Roster.current() or not Roster.isReady() then return end\nlocal slot = Roster.mySlot()\nlocal player = TensorCore.mGetPlayer()\nif not player then return end\nlocal allowed = slot == \"R1\"\nif not allowed then return end\nlocal now = Now()\nfor sourceID,tether in pairs(state) do\n if tether.target and not tether.done and now < tether.expires then\n  local source = TensorCore.mGetEntity(sourceID)\n  local holder = TensorCore.mGetEntity(tether.target)\n  if source and holder then\n  local onSide = true\n   if onSide then\n    if holder.id == player.id then\n     tether.done = true\n    else\n     local drawer = TensorCore.getStaticDrawer(0xFF00FF00,3)\n     local p,q = source.pos,holder.pos\n     drawer:addLine(p.x,p.y+0.8,p.z,q.x,q.y+0.8,q.z,4,6)\n     drawer:addCircle(p.x,p.y+0.05,p.z,2,false)\n    end\n   end\n  end\n end\nend\nself.used = true",
+				executeType = 2,
+				loop = true,
+				mechanicTime = 1117,
+				name = "[NAUR] Mesohigh Annihilation first - Assigned green tether/source",
+				timeRange = true,
+				timelineIndex = 156,
+				timerEndOffset = 4,
+				timerStartOffset = -8,
+				uuid = "530c456f-6bba-f684-a195-a3001c8207b5",
+				version = 2,
+			},
+		},
+	},
+	[157] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Titan NAUR",
+				uuid = "1eb43b72-e27b-2b7b-9b2c-308e57068cfe",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Titan NAUR",
+							uuid = "de673b09-86ca-4578-bb89-73d760f09210",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 2500,
+							alertPriority = 3,
+							alertScale = 0.9,
+							alertTTS = true,
+							alertText = "DODGE WEIGHT OF THE LAND",
+							conditions = 
+							{
+								
+								{
+									"a468b844-de64-f918-9bcb-1dd8c29b0721",
+									true,
+								},
+							},
+							displayPath = "Draws - Titan NAUR",
+							name = "[Alert] Weight of the Land - Dodge 1118",
+							uuid = "e96ce3e6-4eff-f144-b8bf-993904be3e41",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Titan NAUR",
+							uuid = "fbde08c0-21d2-210d-a185-390468aa7d27",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs and eventArgs.aoeID == 11109 and eventArgs.contentID == 1801 and eventArgs.friendly == false",
+							dequeueIfLuaFalse = true,
+							displayPath = "Draws - Titan NAUR",
+							name = "Weight of the Land AOE",
+							uuid = "a468b844-de64-f918-9bcb-1dd8c29b0721",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Titan NAUR",
+				eventType = 18,
+				mechanicTime = 1118,
+				name = "[Alert] Weight of the Land - Dodge 1118",
+				throttleTime = 1000,
+				timeRange = true,
+				timelineIndex = 157,
+				timerEndOffset = -2.5,
+				timerStartOffset = -3.5,
+				uuid = "eedcc1de-c0df-2e1a-a509-3e36ab1ebb39",
+				version = 2,
+			},
+		},
+	},
+	[158] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "67a1f535-6c9c-2d91-6cfd-5c97526b55c5",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+	},
+	[159] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "ba536838-8af5-0f44-688e-0d2a3c697388",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Garuda",
+				uuid = "9914dacb-09af-356f-92e0-f9cff76b2b62",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Garuda",
+							uuid = "b9a10670-9378-67e9-83ae-7b1275e51990",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 2500,
+							alertPriority = 3,
+							alertScale = 0.9,
+							alertTTS = true,
+							alertText = "MOVE FOR FEATHER RAIN",
+							conditions = 
+							{
+								
+								{
+									"b6e2ab00-69ed-f90f-8e18-c7fc1805d114",
+									true,
+								},
+							},
+							displayPath = "Draws - Garuda",
+							name = "[Alert] Feather Rain - Move 1122",
+							uuid = "1423fe9a-763b-967b-a251-edce2f63149d",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Garuda",
+							uuid = "dc9439cc-3dad-6e12-a9d7-1b1b59fff1f5",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs and eventArgs.aoeID == 11085 and eventArgs.contentID == 1644 and eventArgs.friendly == false",
+							dequeueIfLuaFalse = true,
+							displayPath = "Draws - Garuda",
+							name = "Feather Rain AOE",
+							uuid = "b6e2ab00-69ed-f90f-8e18-c7fc1805d114",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Garuda",
+				eventType = 18,
+				mechanicTime = 1122,
+				name = "[Alert] Feather Rain - Move 1122",
+				throttleTime = 1000,
+				timeRange = true,
+				timelineIndex = 159,
+				timerEndOffset = 2,
+				timerStartOffset = -2,
+				uuid = "61bf5409-6d3e-2a0a-b1b9-5b30a2afa081",
+				version = 2,
+			},
+		},
+	},
+	[160] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ultima NAUR",
+				uuid = "bf98cb8d-7eca-9a15-a5b2-b14f4f19cf87",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+				},
+				conditions = 
+				{
+				},
+				displayPath = "Draws - Ultima NAUR",
+				enabled = false,
+				execute = "-- Independent UWU settings; available before GUI or targeting reads.\nif not _G.UWU_NAURSettingsIOReady then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UWU-NAUR.lua]]\n local saved={}\n if FileExists(path) then\n  local loaded=FileLoad(path)\n  if type(loaded)==\"table\" then saved=loaded end\n end\n local current=_G.UWU_NAURGuiState\n local old=_G.UWU_NAUR_AnnihilationAssignments or {}\n local defaults={automaticOpen=true,ultimaOpen=true,orbsOpen=true,autoTarget=_G.NAUR_UWU_AutoTarget~=false,melee=(old.melee==2 and 2 or 1),solo=old.solo or 0}\n local keys={\"automaticOpen\",\"ultimaOpen\",\"orbsOpen\",\"autoTarget\",\"melee\",\"solo\"}\n local C={}\n for _,key in ipairs(keys) do\n  local value=current and current[key]\n  if value==nil then value=saved[key] end\n  if type(defaults[key])==\"boolean\" then\n   C[key]=type(value)==\"boolean\" and value or defaults[key]\n   if value==false then C[key]=false end\n  else\n   C[key]=type(value)==\"number\" and value>=0 and value<=2 and value%1==0 and value or defaults[key]\n  end\n end\n if C.melee==0 then C.melee=1 end\n function C.save()\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local values={}\n  for _,key in ipairs(keys) do values[key]=C[key] end\n  FileSave(path,values)\n end\n _G.UWU_NAURGuiState=C\n _G.UWU_NAUR_AnnihilationAssignments={melee=C.melee,solo=C.solo}\n _G.NAUR_UWU_AutoTarget=C.autoTarget\n C.save()\n _G.UWU_NAURSettingsIOReady=true\nend\n-- Upgrade only an unset melee assignment; preserve either explicit role choice.\ndo\n local preferences=_G.UWU_NAURGuiState\n if preferences and preferences.melee==0 then\n  preferences.melee=1\n  local assignment=_G.UWU_NAUR_AnnihilationAssignments\n  if assignment then assignment.melee=1 end\n  preferences.save()\n end\nend\nlocal Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current() then return end\nlocal slot = Roster.mySlot()\nif not slot then return end\nlocal cfg = _G.UWU_NAUR_AnnihilationAssignments or {}\nlocal assigned\nlocal missing = false\nif true then\n    if slot == \"T1\" or slot == \"T2\" then\n        assigned = true\n    elseif slot == \"M1\" or slot == \"M2\" then\n        missing=false\n        assigned=false\n    end\nelse\n    if slot == \"T1\" or slot == \"T2\" then\n        missing=false\n        assigned=(slot==\"T1\")\n    end\nend\nif missing then\n    TensorCore.addAlertText(3500, \"Orb 2: choose your assignment\", 1.0, 2, true)\nelseif assigned then\n    if Roster.isReady() then\n        local id = Roster.idOf(slot)\n        if id then\n            local drawer = TensorCore.getCachedDrawer(0x6633FF66, 0xCC33FF66, 0xFF33FF66, 0xFF000000, 3)\n            drawer:addTimedCircleOnEnt(4000, id, 1.2, 0, false, true, Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\n            AnyoneCore.addTimedWorldTextOnEnt(4000, \"SOAK ORB 2\", id, 0xFF33FF66, true, 1.1, 1.5)\n        end\n    end\n    TensorCore.addAlertText(3500, \"Orb 2: soak with tanks\", 1.0, 1, true)\nelse\n    TensorCore.addAlertText(3000, \"Orb 2: stay clear\", 0.9, 2, false)\nend\nself.used = true",
+				executeType = 2,
+				mechanicTime = 1123,
+				name = "[Draw][NAUR][Annihilation] Orb 2 role cue",
+				timeRange = true,
+				timelineIndex = 160,
+				timerEndOffset = 2,
+				uuid = "213a082a-f2e6-4b9e-aada-ddd503b473db",
+				version = 2,
+			},
+		},
+	},
+	[161] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ifrit",
+				uuid = "5bb56c1f-6c64-f7e6-94d0-0685e18c287f",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ifrit",
+							uuid = "cab00888-c050-9d0c-84b4-44d89f870870",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player=TensorCore.mGetPlayer()\nif not player or not player.pos then self.used=true return end\nlocal dest={x=100,y=player.pos.y,z=80}\nlocal distance=TensorCore.getDistance2d(player.pos,dest)\nif distance>0.2 then\n local tip=math.min(2.5,distance*0.4)\n local drawer=TensorCore.getCachedDrawer(0xFFFFD080,0xFFFFA000,0xFFFFFFFF,0xFF000000,4)\n drawer:addTimedArrow(7000,player.pos.x,player.pos.y,player.pos.z,TensorCore.getHeadingToTarget(player.pos,dest),math.max(0.1,distance-tip),1.4,tip,3.0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nAnyoneCore.addTimedWorldText(7000,\"SEARING: SOUTH WALL\",{x=dest.x,y=dest.y+1.2,z=dest.z},0xFFFFD080,true,1.15)\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"aa387e83-2ce7-daca-b0e1-a8c6b45cbab4",
+									true,
+								},
+							},
+							displayPath = "Draws - Ifrit",
+							name = "South Wall Arrow",
+							uuid = "93381c1c-c9df-ea41-a936-42bf043b6d7d",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 2500,
+							alertPriority = 3,
+							alertScale = 0.9,
+							alertTTS = true,
+							alertText = "SEARING WIND: SOUTH WALL",
+							conditions = 
+							{
+								
+								{
+									"aa387e83-2ce7-daca-b0e1-a8c6b45cbab4",
+									true,
+								},
+							},
+							name = "sw161al",
+							uuid = "624c37de-914e-8ea5-a12f-1a11f37bc3a1",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local player=TensorCore.mGetPlayer() return eventArgs.buffID==1578 and eventArgs.ownerContentID==1185 and player and player.id==eventArgs.entityID",
+							dequeueIfLuaFalse = true,
+							name = "Late Searing Wind Target",
+							uuid = "aa387e83-2ce7-daca-b0e1-a8c6b45cbab4",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				eventType = 8,
+				mechanicTime = 1124,
+				name = "[Draw][NAUR][Ifrit] Late Searing Wind 1124",
+				timeRange = true,
+				timelineIndex = 161,
+				timerEndOffset = 5,
+				timerStartOffset = -1,
+				uuid = "8a8af8ab-a5fd-85ec-9623-e73e66466502",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ultima",
+				uuid = "2921fa55-ad61-0fe1-86fc-c008547010d8",
+			},
+			objectType = "folder",
+		},
+	},
+	[162] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\core",
+				uuid = "68fdaf7c-ab17-3b70-ae7b-64529824ef6c",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\core",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "921dfd22-98da-6a2e-9b46-2ecca6a1b6f2",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ifrit",
+				uuid = "c8eaa061-e6d5-1b59-ad66-27bea5b2ec07",
+			},
+			objectType = "folder",
+		},
+	},
+	[164] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "d43e362c-873c-c460-4aa7-ee42b92ebffc",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\optimization",
+				uuid = "c7f8cb58-da31-02a4-be66-bf56ff363668",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\optimization",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ifrit",
+				uuid = "c8d41f01-ee1f-e38b-b045-a3f5fd2b906b",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR ",
+				uuid = "a0915422-ac0a-fd5b-8444-aaf3c7949ce6",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "NAUR ",
+				name = " Automation",
+				uuid = "2d0f5d04-c9c8-42f9-8789-a4d11ca84b61",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							gVar = "ACR_TensorNuke4_Hotbar_Sprint",
+							name = "Use Sprint",
+							uuid = "adf58238-d1a5-0228-83f3-341d45337f91",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "NAUR / Automation",
+				mechanicTime = 1128,
+				name = "[NAUR] [Utility][Annihilation] Sprint",
+				timeRandomRange = true,
+				timeRange = true,
+				timelineIndex = 164,
+				timerEndOffset = -3,
+				timerStartOffset = -6,
+				uuid = "5ff93388-35d4-3094-8eab-f251a3ba628e",
+				version = 2,
+			},
+		},
+	},
+	[166] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ifrit",
+				uuid = "a4d743d7-636b-f3e5-b15b-227393047a7a",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ifrit",
+							uuid = "d47c002d-3bc7-b120-b3be-c25db66bd3bf",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player=TensorCore.mGetPlayer()\nif not player or not player.pos then self.used=true return end\nlocal dest={x=100,y=player.pos.y,z=80}\nlocal distance=TensorCore.getDistance2d(player.pos,dest)\nif distance>0.2 then\n local tip=math.min(2.5,distance*0.4)\n local drawer=TensorCore.getCachedDrawer(0xFFFFD080,0xFFFFA000,0xFFFFFFFF,0xFF000000,4)\n drawer:addTimedArrow(7000,player.pos.x,player.pos.y,player.pos.z,TensorCore.getHeadingToTarget(player.pos,dest),math.max(0.1,distance-tip),1.4,tip,3.0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nAnyoneCore.addTimedWorldText(7000,\"SEARING: SOUTH WALL\",{x=dest.x,y=dest.y+1.2,z=dest.z},0xFFFFD080,true,1.15)\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"5235dae1-2fb3-a91c-bb46-5dc6e9d3e8c1",
+									true,
+								},
+							},
+							displayPath = "Draws - Ifrit",
+							name = "South Wall Arrow",
+							uuid = "493b2f83-3ca7-8c4b-b996-de3484b09f52",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 2500,
+							alertPriority = 3,
+							alertScale = 0.9,
+							alertTTS = true,
+							alertText = "South, away from party",
+							conditions = 
+							{
+								
+								{
+									"5235dae1-2fb3-a91c-bb46-5dc6e9d3e8c1",
+									true,
+								},
+							},
+							name = "sw166al",
+							uuid = "f94559a7-de23-b8bf-a5ea-c1a9233e329f",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local player=TensorCore.mGetPlayer() return eventArgs.buffID==1578 and eventArgs.ownerContentID==1185 and player and player.id==eventArgs.entityID",
+							dequeueIfLuaFalse = true,
+							name = "Late Searing Wind Target",
+							uuid = "5235dae1-2fb3-a91c-bb46-5dc6e9d3e8c1",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				eventType = 8,
+				mechanicTime = 1130,
+				name = "[Draw][NAUR][Ifrit] Late Searing Wind 1130",
+				timeRange = true,
+				timelineIndex = 166,
+				timerEndOffset = 5,
+				timerStartOffset = -1,
+				uuid = "2c3c8038-0534-11c6-9b56-4815fcbfa130",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ultima",
+				uuid = "3584684b-1946-909f-8d25-4e8a11fd4be8",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player = TensorCore.mGetPlayer()\nif not player or not player.pos then self.used = true return end\nlocal dest = { x = 93, y = 0, z = 92 }\nlocal distance = TensorCore.getDistance2d(player.pos, dest)\nif type(distance) ~= \"number\" then self.used = true return end\nif distance > 0.2 then\n    local tip = math.min(1.7, distance * 0.35)\n    local drawer = TensorCore.getCachedDrawer(0xFF33FF66, 0xFF00CC44, 0xFFFFFFFF, 0xFF000000, 4)\n    drawer:addTimedArrow(7000, player.pos.x, player.pos.y, player.pos.z, TensorCore.getHeadingToTarget(player.pos, dest), math.max(0.1, distance - tip), 1.2, tip, 2.5, 0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"8098e09f-a665-bb43-874f-ace9cacf6269",
+									true,
+								},
+								
+								{
+									"09544183-074e-1013-b872-5a1e227131d7",
+									true,
+								},
+							},
+							name = "Stack near 93,0,92",
+							uuid = "44bb205c-4657-e079-9710-7810e41bebd8",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs and eventArgs.buffID == 1578 and eventArgs.ownerContentID == 1185",
+							dequeueIfLuaFalse = true,
+							name = "Searing Wind from Ifrit",
+							uuid = "8098e09f-a665-bb43-874f-ace9cacf6269",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local player = TensorCore.mGetPlayer() return player and player.id ~= eventArgs.entityID",
+							dequeueIfLuaFalse = true,
+							name = "Not the Searing Wind target",
+							uuid = "09544183-074e-1013-b872-5a1e227131d7",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ultima",
+				eventType = 8,
+				mechanicTime = 1130,
+				name = "[Draw][NAUR][Ultima] Stack away from Searing Wind at 1130",
+				timeRange = true,
+				timelineIndex = 166,
+				timerEndOffset = 5,
+				timerStartOffset = -1,
+				uuid = "54bfbd0c-1626-4a01-a918-c0ccb0346f88",
+				version = 2,
+			},
+		},
+	},
+	[167] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ultima NAUR",
+				uuid = "a7db96f4-254b-9c74-8669-a6cd4d789590",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+				},
+				conditions = 
+				{
+				},
+				displayPath = "Draws - Ultima NAUR",
+				enabled = false,
+				execute = "-- Independent UWU settings; available before GUI or targeting reads.\nif not _G.UWU_NAURSettingsIOReady then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UWU-NAUR.lua]]\n local saved={}\n if FileExists(path) then\n  local loaded=FileLoad(path)\n  if type(loaded)==\"table\" then saved=loaded end\n end\n local current=_G.UWU_NAURGuiState\n local old=_G.UWU_NAUR_AnnihilationAssignments or {}\n local defaults={automaticOpen=true,ultimaOpen=true,orbsOpen=true,autoTarget=_G.NAUR_UWU_AutoTarget~=false,melee=(old.melee==2 and 2 or 1),solo=old.solo or 0}\n local keys={\"automaticOpen\",\"ultimaOpen\",\"orbsOpen\",\"autoTarget\",\"melee\",\"solo\"}\n local C={}\n for _,key in ipairs(keys) do\n  local value=current and current[key]\n  if value==nil then value=saved[key] end\n  if type(defaults[key])==\"boolean\" then\n   C[key]=type(value)==\"boolean\" and value or defaults[key]\n   if value==false then C[key]=false end\n  else\n   C[key]=type(value)==\"number\" and value>=0 and value<=2 and value%1==0 and value or defaults[key]\n  end\n end\n if C.melee==0 then C.melee=1 end\n function C.save()\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local values={}\n  for _,key in ipairs(keys) do values[key]=C[key] end\n  FileSave(path,values)\n end\n _G.UWU_NAURGuiState=C\n _G.UWU_NAUR_AnnihilationAssignments={melee=C.melee,solo=C.solo}\n _G.NAUR_UWU_AutoTarget=C.autoTarget\n C.save()\n _G.UWU_NAURSettingsIOReady=true\nend\n-- Upgrade only an unset melee assignment; preserve either explicit role choice.\ndo\n local preferences=_G.UWU_NAURGuiState\n if preferences and preferences.melee==0 then\n  preferences.melee=1\n  local assignment=_G.UWU_NAUR_AnnihilationAssignments\n  if assignment then assignment.melee=1 end\n  preferences.save()\n end\nend\nlocal Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current() then return end\nlocal slot = Roster.mySlot()\nif not slot then return end\nlocal cfg = _G.UWU_NAUR_AnnihilationAssignments or {}\nlocal assigned\nlocal missing = false\nif false then\n    if slot == \"T1\" or slot == \"T2\" then\n        assigned = true\n    elseif slot == \"M1\" or slot == \"M2\" then\n        missing=false\n        assigned=false\n    end\nelse\n    if slot == \"T1\" or slot == \"T2\" then\n        missing=false\n        assigned=(slot==\"T1\")\n    end\nend\nif missing then\n    TensorCore.addAlertText(3500, \"Orb 3: choose your assignment\", 1.0, 2, true)\nelseif assigned then\n    if Roster.isReady() then\n        local id = Roster.idOf(slot)\n        if id then\n            local drawer = TensorCore.getCachedDrawer(0x6633FF66, 0xCC33FF66, 0xFF33FF66, 0xFF000000, 3)\n            drawer:addTimedCircleOnEnt(4000, id, 1.2, 0, false, true, Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\n            AnyoneCore.addTimedWorldTextOnEnt(4000, \"SOAK ORB 3\", id, 0xFF33FF66, true, 1.1, 1.5)\n        end\n    end\n    TensorCore.addAlertText(3500, \"Orb 3: solo tank soak\", 1.0, 1, true)\nelse\n    TensorCore.addAlertText(3000, \"Orb 3: stay clear\", 0.9, 2, false)\nend\nself.used = true",
+				executeType = 2,
+				mechanicTime = 1131,
+				name = "[Draw][NAUR][Annihilation] Orb 3 role cue",
+				timeRange = true,
+				timelineIndex = 167,
+				timerEndOffset = 2,
+				uuid = "cf7e9a1a-007e-3924-9cfe-24b53b676d5b",
+				version = 2,
+			},
+		},
+	},
+	[169] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "6528d86d-f017-85e9-2580-223ba2a4e6fd",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR Guidance",
+				uuid = "122f984b-91f3-2390-8b1e-6c66688bc87d",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "NAUR Guidance",
+				name = "Mesohigh",
+				uuid = "baa5d272-bf08-e602-b7e6-5370fbe362de",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local a = eventArgs\nlocal state = data.uwu_personal_mesohigh_anni2\nif not state then state = {}; data.uwu_personal_mesohigh_anni2 = state end\nlocal tether = state[a.sourceEntityID]\nif not tether then tether = {}; state[a.sourceEntityID] = tether end\nif a.newTetherID == 4 and a.newTargetID and a.newTargetID > 0 then\n tether.target = a.newTargetID\n tether.expires = Now() + 10000\nelse\n tether.target = nil\nend\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"2784e2d6-f395-be54-8fd9-e7895faf4310",
+									true,
+								},
+							},
+							name = "Track source and current holder",
+							uuid = "ba055415-413e-0e69-8723-b2edad6b61bd",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.sourceEntityContentID == 1644 and (eventArgs.newTetherID == 4 or eventArgs.oldTetherID == 4)",
+							dequeueIfLuaFalse = true,
+							name = "Mesohigh source / change",
+							uuid = "2784e2d6-f395-be54-8fd9-e7895faf4310",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance/Mesohigh",
+				eventType = 15,
+				loop = true,
+				mechanicTime = 1136,
+				name = "[NAUR] Mesohigh Annihilation second - Capture personal tether",
+				timeRange = true,
+				timelineIndex = 169,
+				timerEndOffset = 4,
+				timerStartOffset = -8,
+				uuid = "abe78394-f446-16e1-8f89-855216067e84",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+				},
+				conditions = 
+				{
+				},
+				displayPath = "NAUR Guidance/Mesohigh",
+				eventType = 12,
+				execute = "local state = data.uwu_personal_mesohigh_anni2\nif not state then return end\nlocal Roster = AnyoneCore.Roster\nif not Roster or not Roster.current() or not Roster.isReady() then return end\nlocal slot = Roster.mySlot()\nlocal player = TensorCore.mGetPlayer()\nif not player then return end\nlocal allowed = (slot == \"H1\" or slot == \"H2\") and TensorCore.hasBuff(player,1578)\nif not allowed then return end\nlocal now = Now()\nfor sourceID,tether in pairs(state) do\n if tether.target and not tether.done and now < tether.expires then\n  local source = TensorCore.mGetEntity(sourceID)\n  local holder = TensorCore.mGetEntity(tether.target)\n  if source and holder then\n  local onSide = true\n   if onSide then\n    if holder.id == player.id then\n     tether.done = true\n    else\n     local drawer = TensorCore.getStaticDrawer(0xFF00FF00,3)\n     local p,q = source.pos,holder.pos\n     drawer:addLine(p.x,p.y+0.8,p.z,q.x,q.y+0.8,q.z,4,6)\n     drawer:addCircle(p.x,p.y+0.05,p.z,2,false)\n    end\n   end\n  end\n end\nend\nself.used = true",
+				executeType = 2,
+				loop = true,
+				mechanicTime = 1136,
+				name = "[NAUR] Mesohigh Annihilation second - Assigned green tether/source",
+				timeRange = true,
+				timelineIndex = 169,
+				timerEndOffset = 4,
+				timerStartOffset = -8,
+				uuid = "ea64dc4c-7750-a606-9427-e98b015ed542",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertPriority = 3,
+							alertScale = 0.85,
+							alertTTS = true,
+							alertText = "Prepare to take the next tether",
+							conditions = 
+							{
+								
+								{
+									"258f5f72-bef2-7eee-a51a-ecdbc04e1465",
+									true,
+								},
+							},
+							name = "Prepare to take the next tether",
+							uuid = "72ed9473-7fd4-600c-8a7c-195f46a13d91",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore.Roster\nif not Roster or not Roster.current() then return false end\nlocal slot = Roster.mySlot()\nlocal player = TensorCore.mGetPlayer()\nreturn player ~= nil and (slot == \"H1\" or slot == \"H2\") and TensorCore.hasBuff(player,1578)",
+							name = "Assigned tether taker",
+							uuid = "258f5f72-bef2-7eee-a51a-ecdbc04e1465",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance/Mesohigh",
+				mechanicTime = 1136,
+				name = "[NAUR] Mesohigh Annihilation Searing Wind healer - Advance call",
+				timeRange = true,
+				timelineIndex = 169,
+				timerEndOffset = -9,
+				timerStartOffset = -10,
+				uuid = "f47b8592-dcc1-e1c7-9819-4992f4a40941",
+				version = 2,
+			},
+		},
+	},
+	[170] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ultima NAUR",
+				uuid = "535684ef-30b1-fe78-b51e-cb43def6da59",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+				},
+				conditions = 
+				{
+				},
+				displayPath = "Draws - Ultima NAUR",
+				enabled = false,
+				execute = "-- Independent UWU settings; available before GUI or targeting reads.\nif not _G.UWU_NAURSettingsIOReady then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UWU-NAUR.lua]]\n local saved={}\n if FileExists(path) then\n  local loaded=FileLoad(path)\n  if type(loaded)==\"table\" then saved=loaded end\n end\n local current=_G.UWU_NAURGuiState\n local old=_G.UWU_NAUR_AnnihilationAssignments or {}\n local defaults={automaticOpen=true,ultimaOpen=true,orbsOpen=true,autoTarget=_G.NAUR_UWU_AutoTarget~=false,melee=(old.melee==2 and 2 or 1),solo=old.solo or 0}\n local keys={\"automaticOpen\",\"ultimaOpen\",\"orbsOpen\",\"autoTarget\",\"melee\",\"solo\"}\n local C={}\n for _,key in ipairs(keys) do\n  local value=current and current[key]\n  if value==nil then value=saved[key] end\n  if type(defaults[key])==\"boolean\" then\n   C[key]=type(value)==\"boolean\" and value or defaults[key]\n   if value==false then C[key]=false end\n  else\n   C[key]=type(value)==\"number\" and value>=0 and value<=2 and value%1==0 and value or defaults[key]\n  end\n end\n if C.melee==0 then C.melee=1 end\n function C.save()\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local values={}\n  for _,key in ipairs(keys) do values[key]=C[key] end\n  FileSave(path,values)\n end\n _G.UWU_NAURGuiState=C\n _G.UWU_NAUR_AnnihilationAssignments={melee=C.melee,solo=C.solo}\n _G.NAUR_UWU_AutoTarget=C.autoTarget\n C.save()\n _G.UWU_NAURSettingsIOReady=true\nend\n-- Upgrade only an unset melee assignment; preserve either explicit role choice.\ndo\n local preferences=_G.UWU_NAURGuiState\n if preferences and preferences.melee==0 then\n  preferences.melee=1\n  local assignment=_G.UWU_NAUR_AnnihilationAssignments\n  if assignment then assignment.melee=1 end\n  preferences.save()\n end\nend\nlocal Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current() then return end\nlocal slot = Roster.mySlot()\nif not slot then return end\nlocal cfg = _G.UWU_NAUR_AnnihilationAssignments or {}\nlocal assigned\nlocal missing = false\nif false then\n    if slot == \"T1\" or slot == \"T2\" then\n        assigned = true\n    elseif slot == \"M1\" or slot == \"M2\" then\n        missing=false\n        assigned=false\n    end\nelse\n    if slot == \"T1\" or slot == \"T2\" then\n        missing=false\n        assigned=(slot==\"T1\")\n    end\nend\nif missing then\n    TensorCore.addAlertText(3500, \"Orb 4: choose your assignment\", 1.0, 2, true)\nelseif assigned then\n    if Roster.isReady() then\n        local id = Roster.idOf(slot)\n        if id then\n            local drawer = TensorCore.getCachedDrawer(0x6633FF66, 0xCC33FF66, 0xFF33FF66, 0xFF000000, 3)\n            drawer:addTimedCircleOnEnt(4000, id, 1.2, 0, false, true, Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\n            AnyoneCore.addTimedWorldTextOnEnt(4000, \"SOAK ORB 4\", id, 0xFF33FF66, true, 1.1, 1.5)\n        end\n    end\n    TensorCore.addAlertText(3500, \"Orb 4: solo tank soak\", 1.0, 1, true)\nelse\n    TensorCore.addAlertText(3000, \"Orb 4: stay clear\", 0.9, 2, false)\nend\nself.used = true",
+				executeType = 2,
+				mechanicTime = 1136,
+				name = "[Draw][NAUR][Annihilation] Orb 4 role cue",
+				timeRange = true,
+				timelineIndex = 170,
+				timerEndOffset = 2,
+				uuid = "29175c26-173d-d62c-9113-c2cf9eea799a",
+				version = 2,
+			},
+		},
+	},
+	[171] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ifrit",
+				uuid = "66cead85-dcde-81ca-957f-9a87c73f2a2d",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ifrit",
+							uuid = "ea7f11c4-f2a5-511d-9243-86b4f08252c4",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 2500,
+							alertPriority = 3,
+							alertScale = 0.9,
+							alertTTS = true,
+							alertText = "SEARING WIND: SOUTH WALL",
+							conditions = 
+							{
+								
+								{
+									"21ab9d50-7d84-0ab2-9943-30fca79d9088",
+									true,
+								},
+							},
+							name = "sw171al",
+							uuid = "69d29a65-df3c-a930-8cf1-587639dec4b8",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player=TensorCore.mGetPlayer()\nif not player or not player.pos or not eventArgs or type(eventArgs.buffDuration)~=\"number\" then self.used=true return end\nlocal edge={x=100,y=player.pos.y,z=114}\nlocal distance=TensorCore.getDistance2d(player.pos,edge)\nif distance>0.2 then\n local tip=math.min(2.0,distance*0.35)\n local duration=math.max(500,math.floor(eventArgs.buffDuration*1000)+250)\n local drawer=TensorCore.getCachedDrawer(0xFF38FF54,0xFF28D940,0xFFFFFFFF,0xFF000000,3)\n drawer:addTimedArrow(duration,player.pos.x,player.pos.y,player.pos.z,TensorCore.getHeadingToTarget(player.pos,edge),math.max(0.1,distance-tip),1.2,tip,2.6,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"21ab9d50-7d84-0ab2-9943-30fca79d9088",
+									true,
+								},
+							},
+							name = "Searing Wind - Hold South Edge",
+							uuid = "91c4c7ef-5c30-671d-9087-c4ed11fbbbf2",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local player=TensorCore.mGetPlayer() return eventArgs.buffID==1578 and eventArgs.ownerContentID==1185 and player and player.id==eventArgs.entityID",
+							dequeueIfLuaFalse = true,
+							name = "Late Searing Wind Target",
+							uuid = "21ab9d50-7d84-0ab2-9943-30fca79d9088",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				eventType = 8,
+				mechanicTime = 1137,
+				name = "[Draw][NAUR][Ifrit] Late Searing Wind 1137",
+				timeRange = true,
+				timelineIndex = 171,
+				timerEndOffset = 5,
+				timerStartOffset = -1,
+				uuid = "21399574-ec91-94e9-a1bc-b04307087212",
+				version = 2,
+			},
+		},
+	},
+	[172] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\mitigation",
+				uuid = "530cb981-fcfb-edb5-2a7d-f2d78c19af51",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\mitigation",
+			objectType = "folder",
+		},
+	},
+	[173] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "359e8b28-3acd-fc64-e2ac-bc7a07a1faf8",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Garuda",
+				uuid = "e3080a67-a0a1-df5b-bcbc-4d56c9adea71",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Garuda",
+							uuid = "859949b9-04c6-19da-9c3d-5a2439528133",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 2500,
+							alertPriority = 3,
+							alertScale = 0.9,
+							alertTTS = true,
+							alertText = "MOVE FOR FEATHER RAIN",
+							conditions = 
+							{
+								
+								{
+									"cd2c4f64-65a8-4bd2-8db3-8be615049d6e",
+									true,
+								},
+							},
+							displayPath = "Draws - Garuda",
+							name = "[Alert] Feather Rain - Move 1141",
+							uuid = "0c968a88-0091-0c10-98be-198853681098",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Garuda",
+							uuid = "3d8b50f6-3fab-3283-9522-dfbf44036a66",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs and eventArgs.aoeID == 11085 and eventArgs.contentID == 1644 and eventArgs.friendly == false",
+							dequeueIfLuaFalse = true,
+							name = "Feather Rain AOE",
+							uuid = "cd2c4f64-65a8-4bd2-8db3-8be615049d6e",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Garuda",
+				eventType = 18,
+				mechanicTime = 1141,
+				name = "[Alert] Feather Rain - Move 1141",
+				throttleTime = 1000,
+				timeRange = true,
+				timelineIndex = 173,
+				timerEndOffset = 2,
+				timerStartOffset = -3,
+				uuid = "8a261bc1-1401-9b35-abd5-d80e9d1bfd1e",
+				version = 2,
+			},
+		},
+	},
+	[175] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ifrit",
+				uuid = "3188baf6-c360-3262-9ed6-03c4b65c942a",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ifrit",
+							uuid = "825a8412-4797-8e5d-b460-8c737782a5bb",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player=TensorCore.mGetPlayer()\nif not player or not player.pos then self.used=true return end\nlocal dest={x=100,y=player.pos.y,z=80}\nlocal distance=TensorCore.getDistance2d(player.pos,dest)\nif distance>0.2 then\n local tip=math.min(2.5,distance*0.4)\n local drawer=TensorCore.getCachedDrawer(0xFFFFD080,0xFFFFA000,0xFFFFFFFF,0xFF000000,4)\n drawer:addTimedArrow(7000,player.pos.x,player.pos.y,player.pos.z,TensorCore.getHeadingToTarget(player.pos,dest),math.max(0.1,distance-tip),1.4,tip,3.0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nAnyoneCore.addTimedWorldText(7000,\"SEARING: SOUTH WALL\",{x=dest.x,y=dest.y+1.2,z=dest.z},0xFFFFD080,true,1.15)\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"5f57b02b-46de-9632-8807-2f49f82181e6",
+									true,
+								},
+							},
+							displayPath = "Draws - Ifrit",
+							name = "South Wall Arrow",
+							uuid = "ca80a556-0f07-9568-8be7-d397515e56fe",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 2500,
+							alertPriority = 3,
+							alertScale = 0.9,
+							alertTTS = true,
+							alertText = "SEARING WIND: SOUTH WALL",
+							conditions = 
+							{
+								
+								{
+									"5f57b02b-46de-9632-8807-2f49f82181e6",
+									true,
+								},
+							},
+							name = "sw175al",
+							uuid = "78049cd5-7a82-7d35-a82b-555cb1f31d62",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local player=TensorCore.mGetPlayer() return eventArgs.buffID==1578 and eventArgs.ownerContentID==1185 and player and player.id==eventArgs.entityID",
+							dequeueIfLuaFalse = true,
+							name = "Late Searing Wind Target",
+							uuid = "5f57b02b-46de-9632-8807-2f49f82181e6",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				eventType = 8,
+				mechanicTime = 1144,
+				name = "[Draw][NAUR][Ifrit] Late Searing Wind 1144",
+				timeRange = true,
+				timelineIndex = 175,
+				timerEndOffset = 5,
+				timerStartOffset = -1,
+				uuid = "0f6cf4f2-a6a9-4e4f-9288-2a226deb3901",
+				version = 2,
+			},
+		},
+	},
+	[177] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ifrit",
+				uuid = "dff598cb-1453-4c48-9eb0-260761835a50",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ifrit",
+							uuid = "b25c9393-c9cf-555a-8a4c-c24bcd12dcd3",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player=TensorCore.mGetPlayer()\nif not player or not player.pos then self.used=true return end\nlocal dest={x=100,y=player.pos.y,z=80}\nlocal distance=TensorCore.getDistance2d(player.pos,dest)\nif distance>0.2 then\n local tip=math.min(2.5,distance*0.4)\n local drawer=TensorCore.getCachedDrawer(0xFFFFD080,0xFFFFA000,0xFFFFFFFF,0xFF000000,4)\n drawer:addTimedArrow(7000,player.pos.x,player.pos.y,player.pos.z,TensorCore.getHeadingToTarget(player.pos,dest),math.max(0.1,distance-tip),1.4,tip,3.0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nAnyoneCore.addTimedWorldText(7000,\"SEARING: SOUTH WALL\",{x=dest.x,y=dest.y+1.2,z=dest.z},0xFFFFD080,true,1.15)\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"99645b55-c5cf-1109-a2f0-05a3dfd7dd1d",
+									true,
+								},
+							},
+							displayPath = "Draws - Ifrit",
+							name = "South Wall Arrow",
+							uuid = "738f1f0c-b718-a2c7-8034-cc0833406c49",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 2500,
+							alertPriority = 3,
+							alertScale = 0.9,
+							alertTTS = true,
+							alertText = "SEARING WIND: SOUTH WALL",
+							conditions = 
+							{
+								
+								{
+									"99645b55-c5cf-1109-a2f0-05a3dfd7dd1d",
+									true,
+								},
+							},
+							name = "sw177al",
+							uuid = "8c0e3de8-9b9c-bd9a-a117-cdfe4eae9db8",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local player=TensorCore.mGetPlayer() return eventArgs.buffID==1578 and eventArgs.ownerContentID==1185 and player and player.id==eventArgs.entityID",
+							dequeueIfLuaFalse = true,
+							name = "Late Searing Wind Target",
+							uuid = "99645b55-c5cf-1109-a2f0-05a3dfd7dd1d",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				eventType = 8,
+				mechanicTime = 1150,
+				name = "[Draw][NAUR][Ifrit] Late Searing Wind 1150",
+				timeRange = true,
+				timelineIndex = 177,
+				timerEndOffset = 5,
+				timerStartOffset = -1,
+				uuid = "d1105d8f-f502-b7b2-ba2b-cbf670836fdf",
+				version = 2,
+			},
+		},
+	},
+	[178] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "e5ace757-c915-30c3-dd04-ff759137f927",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+	},
+	[179] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Raid Calls - Ultima NAUR",
+				uuid = "f3c2137f-9918-fe4d-89f9-d98cc3a4e20c",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+				},
+				conditions = 
+				{
+				},
+				displayPath = "Raid Calls - Ultima NAUR",
+				execute = "local Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current() then return end\nlocal slot = Roster.mySlot()\nif slot == 'T2' then TensorCore.addAlertText(4000,'OT: invuln Homing Laser',1,1,true)\nelseif slot then TensorCore.addAlertText(4000,'OT takes Homing: stay away',1,2,false) end\nself.used = true",
+				executeType = 2,
+				mechanicTime = 1155,
+				name = "[Raid Call][NAUR][Post Annihilation] OT invuln Homing",
+				timeRange = true,
+				timelineIndex = 179,
+				timerEndOffset = 2,
+				uuid = "95d5f605-4beb-b4cb-a9c2-bd40c914cd5d",
+				version = 2,
+			},
+		},
+	},
+	[182] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Raid Calls - Ultima NAUR",
+				uuid = "cb07a58d-5dc8-cf1a-ba60-45c1d94def36",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+				},
+				conditions = 
+				{
+				},
+				displayPath = "Raid Calls - Ultima NAUR",
+				execute = "local Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current() then return end\nlocal slot = Roster.mySlot()\nif slot == 'T1' then TensorCore.addAlertText(4000,'MT: take cleave',1,1,true)\nelseif slot then TensorCore.addAlertText(4000,'Cleave on MT: stay clear',1,2,false) end\nself.used = true",
+				executeType = 2,
+				mechanicTime = 1169,
+				name = "[Raid Call][NAUR][Post Annihilation] MT cleave",
+				timeRange = true,
+				timelineIndex = 182,
+				timerEndOffset = 2,
+				uuid = "2a36eb70-d0af-469a-abdb-6c88fe2d0ce8",
+				version = 2,
+			},
+		},
+	},
+	[183] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\optimization",
+				uuid = "e172453f-fea2-be2b-0d91-2a4d15e2228f",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\optimization",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR ",
+				uuid = "bc3e2e48-7f6e-9d64-ad59-43a9d5d59ea9",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "NAUR ",
+				name = " Automation",
+				uuid = "8cf01c2f-4e4f-14cb-ae1f-5fae946fff39",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"70daa0b3-7303-4e8b-82b4-df8198ed57ad",
+									true,
+								},
+								
+								{
+									"c41c0711-1bd8-1a32-9f7f-e8884a55db30",
+									true,
+								},
+							},
+							gVar = "ACR_TensorNuke4_Hotbar_Surecast",
+							name = "Use Surecast",
+							uuid = "23648414-5022-75a9-b7ff-87f39b9cc461",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"5e0c0d5c-a944-b6cc-983f-55f6c4b3e9ed",
+									true,
+								},
+								
+								{
+									"70daa0b3-7303-4e8b-82b4-df8198ed57ad",
+									true,
+								},
+							},
+							gVar = "ACR_TensorRequiem3_Hotbar_ArmsLength",
+							name = "Arm's Length if shield low",
+							uuid = "18e557cf-06d3-3e9a-a140-cee07a34a90b",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							comparator = 2,
+							conditionType = 11,
+							hpValue = 5,
+							name = "Shield <=5%",
+							uuid = "70daa0b3-7303-4e8b-82b4-df8198ed57ad",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 14,
+							dequeueIfLuaFalse = true,
+							jobIDList = 
+							{
+								19,
+								20,
+								21,
+								22,
+								23,
+								30,
+								31,
+								32,
+								34,
+								37,
+								38,
+								39,
+								41,
+							},
+							name = "Arm's Length jobs",
+							uuid = "5e0c0d5c-a944-b6cc-983f-55f6c4b3e9ed",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 14,
+							dequeueIfLuaFalse = true,
+							jobIDList = 
+							{
+								24,
+								25,
+								27,
+								28,
+								33,
+								35,
+								40,
+								42,
+							},
+							name = "Surecast jobs",
+							uuid = "c41c0711-1bd8-1a32-9f7f-e8884a55db30",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR / Automation",
+				mechanicTime = 1173,
+				name = "[NAUR] [Utility][Annihilation] Vulcan Burst Anti-Knockback 1",
+				timeRange = true,
+				timelineIndex = 183,
+				timerStartOffset = -2.5,
+				uuid = "9b12d2ff-583a-b51f-b27c-2c7a6f4f1baa",
+				version = 2,
+			},
+		},
+	},
+	[186] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\optimization",
+				uuid = "ec9f6d60-aa19-73e4-2ae3-82461b3a32f0",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\optimization",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR ",
+				uuid = "1c5a3f09-6978-49e8-9e4a-572e6c96cbff",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "NAUR ",
+				name = " Automation",
+				uuid = "ab436502-ebfe-a812-828d-ec87a4debff4",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"e87c4df9-a93a-9fd2-9865-5c5351832fe8",
+									true,
+								},
+								
+								{
+									"418452f4-ee6c-99ef-966d-f48b36b409be",
+									true,
+								},
+							},
+							gVar = "ACR_TensorNuke4_Hotbar_Surecast",
+							name = "Use Surecast",
+							uuid = "894acd4f-e2af-0345-8f91-5ded9739444e",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"e87c4df9-a93a-9fd2-9865-5c5351832fe8",
+									true,
+								},
+								
+								{
+									"d3e79f4f-7600-b63e-a7d1-128f5e78c9b3",
+									true,
+								},
+							},
+							gVar = "ACR_TensorRequiem3_Hotbar_ArmsLength",
+							name = "Arm's Length if shield low",
+							uuid = "58a5c70e-8fc3-ef0d-aa7a-99540e58bcf0",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 14,
+							dequeueIfLuaFalse = true,
+							jobIDList = 
+							{
+								19,
+								20,
+								21,
+								22,
+								23,
+								30,
+								31,
+								32,
+								34,
+								37,
+								38,
+								39,
+								41,
+							},
+							name = "Arm's Length jobs",
+							uuid = "d3e79f4f-7600-b63e-a7d1-128f5e78c9b3",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 14,
+							dequeueIfLuaFalse = true,
+							jobIDList = 
+							{
+								24,
+								25,
+								27,
+								28,
+								33,
+								35,
+								40,
+								42,
+							},
+							name = "Surecast jobs",
+							uuid = "418452f4-ee6c-99ef-966d-f48b36b409be",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							comparator = 2,
+							conditionType = 11,
+							hpValue = 5,
+							name = "Shield <=5%",
+							uuid = "e87c4df9-a93a-9fd2-9865-5c5351832fe8",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR / Automation",
+				mechanicTime = 1186,
+				name = "[NAUR] [Utility][Annihilation] Vulcan Burst Anti-Knockback 2",
+				timeRange = true,
+				timelineIndex = 186,
+				timerStartOffset = -2.5,
+				uuid = "c956f92a-d511-e0d0-b130-48632f25e42b",
+				version = 2,
+			},
+		},
+	},
+	[188] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ultima",
+				uuid = "dedfd89d-2315-0b70-b490-b61bf57fa4de",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ultima",
+							uuid = "3cb0de1c-47c7-9e13-bd0f-f2ac94976a16",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player=TensorCore.mGetPlayer()\nif not player or not player.pos then self.used=true return end\nif not AnyoneCore.Roster.current() then self.used=true return end\nlocal slot=AnyoneCore.Roster.mySlot()\nlocal points={T1={95,108},T2={98,110},M1={83,100},M2={82,96},R1={83,91},R2={91,83},H1={96,82},H2={100,83}}\nlocal p=points[slot]\nif not p then self.used=true return end\nlocal dest={x=p[1],y=player.pos.y,z=p[2]}\nlocal distance=TensorCore.getDistance2d(player.pos,dest)\nif distance>0.2 then\n local tip=math.min(2.0,distance*0.35)\n local drawer=TensorCore.getCachedDrawer(0xFFB6E0FF,0xFF55AAFF,0xFFFFFFFF,0xFF000000,4)\n drawer:addTimedArrow(6000,player.pos.x,player.pos.y,player.pos.z,TensorCore.getHeadingToTarget(player.pos,dest),math.max(0.1,distance-tip),1.4,tip,3.0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nlocal label=(slot==\"T1\" or slot==\"T2\") and \"TANK: FRONT OF TITAN\" or \"SPREAD IN FRONT OF GARUDA\"\nAnyoneCore.addTimedWorldText(6000,label,{x=dest.x,y=dest.y+1.2,z=dest.z},0xFFB6E0FF,true,1.1)\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"6f521ab5-8a33-173d-93a0-9880d8cd03de",
+									true,
+								},
+							},
+							displayPath = "Draws - Ultima",
+							name = "Guide to Starting Positions",
+							uuid = "793a0096-ad8e-c0ab-8246-e8df5b37e8e6",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.entityContentID==2137 and eventArgs.spellID==11597",
+							dequeueIfLuaFalse = true,
+							name = "Suppression Channel",
+							uuid = "6f521ab5-8a33-173d-93a0-9880d8cd03de",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ultima",
+				eventType = 3,
+				mechanicTime = 1195,
+				name = "[Draw][NAUR][Ultima] Suppression Opening Positions",
+				timeRange = true,
+				timelineIndex = 188,
+				timerEndOffset = -565,
+				timerStartOffset = -570,
+				uuid = "d7c5a6a9-2aeb-2d55-a3f3-6c833ab256ad",
+				version = 2,
+			},
+		},
+	},
+	[189] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "2e33bc2f-20d6-6693-ec53-6e41dcd9773f",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ultima",
+				uuid = "2a0bf502-ee77-8a59-9b60-23b6817e13e1",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ultima",
+							uuid = "67b9ab47-1c68-b552-a624-6f398221af8d",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "if data.uwu_sup_edge_drawn then self.used=true return end\ndata.uwu_sup_edge_drawn=true\nlocal player=TensorCore.mGetPlayer()\nif not player or not player.pos then self.used=true return end\nlocal dx=player.pos.x-100\nlocal dz=player.pos.z-100\nlocal r=math.sqrt(dx*dx+dz*dz)\nif r<0.1 then dx=0;dz=-1;r=1 end\nlocal dest={x=100+dx/r*17,y=player.pos.y,z=100+dz/r*17}\nlocal distance=TensorCore.getDistance2d(player.pos,dest)\nif distance>0.2 then\n local tip=math.min(2.0,distance*0.35)\n local drawer=TensorCore.getCachedDrawer(0xFFB6E0FF,0xFF55AAFF,0xFFFFFFFF,0xFF000000,4)\n drawer:addTimedArrow(3000,player.pos.x,player.pos.y,player.pos.z,TensorCore.getHeadingToTarget(player.pos,dest),math.max(0.1,distance-tip),1.4,tip,3.0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nAnyoneCore.addTimedWorldText(3000,\"MOVE TO EDGE\",{x=dest.x,y=dest.y+1.2,z=dest.z},0xFFB6E0FF,true,1.1)\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"4ed0554f-7d9b-99f3-86d0-bb91ab9ba704",
+									true,
+								},
+							},
+							displayPath = "Draws - Ultima",
+							name = "Arrow to Arena Edge",
+							uuid = "9b2d8160-5822-ed40-963a-625e1b80e8bc",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local slot=AnyoneCore.Roster.mySlot(); return slot~=\"T1\" and slot~=\"T2\"",
+							dequeueIfLuaFalse = true,
+							name = "Exclude Tanks",
+							uuid = "4ed0554f-7d9b-99f3-86d0-bb91ab9ba704",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ultima",
+				mechanicTime = 1200,
+				name = "[Draw][NAUR][Ultima] Suppression Move to Edge",
+				timeRange = true,
+				timelineIndex = 189,
+				timerEndOffset = 4,
+				uuid = "50baa3ca-77d8-5053-887d-3aeb5339fdc1",
+				version = 2,
+			},
+		},
+	},
+	[190] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\core",
+				uuid = "15ab44c1-c6c5-b9dd-16f9-84cfe21435f1",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\core",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "cf63bac1-fd87-3eb5-d37b-464338ab0bd1",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\optimization",
+				uuid = "9aaffeeb-d527-2917-e573-d4bd6a77673b",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\optimization",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ifrit",
+				uuid = "de76f1a4-3ea2-1e45-b1ca-a4dab79d1a96",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ifrit",
+							uuid = "e6a927e7-41f2-8f38-9e4c-4ee3dd540164",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player=TensorCore.mGetPlayer()\nif not player or not player.pos then self.used=true return end\nlocal center={x=100,y=player.pos.y,z=100}\nlocal target=TensorCore.mGetTarget()\nlocal dx,dz\nif target and target.pos then dx=target.pos.x-center.x dz=target.pos.z-center.z else dx=player.pos.x-center.x dz=player.pos.z-center.z end\nlocal length=math.sqrt(dx*dx+dz*dz)\nif length<0.1 then dx=0 dz=-1 length=1 end\nlocal destination={x=center.x-dx/length*17.5,y=center.y,z=center.z-dz/length*17.5}\nlocal distance=TensorCore.getDistance2d(player.pos,destination)\nif distance>0.2 then\n local tip=math.min(2.8,distance*0.38)\n local drawer=TensorCore.getCachedDrawer(0xFFB6FFB6,0xFF55FF55,0xFFFFFFFF,0xFF000000,5)\n drawer:addTimedArrow(7000,player.pos.x,player.pos.y,player.pos.z,TensorCore.getHeadingToTarget(player.pos,destination),math.max(0.1,distance-tip),1.5,tip,3.2,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nAnyoneCore.addTimedWorldText(7000,\"SAFE SIDE\",{x=destination.x,y=destination.y+1.2,z=destination.z},0xFFB6FFB6,true,1.2)\nself.used=true",
+							displayPath = "Draws - Ifrit",
+							name = "Guide",
+							uuid = "58fc1355-9f28-5586-aa69-746ebca9a503",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "Draws - Ifrit",
+				enabled = false,
+				mechanicTime = 1206,
+				name = "[Draw] Post-Predation - Safe Side Arrow",
+				timeRange = true,
+				timelineIndex = 190,
+				timerEndOffset = 3,
+				timerStartOffset = -5,
+				uuid = "11822bea-810b-5593-ae66-14797e370be1",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Titan NAUR",
+				uuid = "554764fd-05c6-7e60-8cee-35b70a193785",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Titan NAUR",
+							uuid = "d6e45b43-e334-77ce-bbe7-55bda98e49d5",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 4000,
+							alertPriority = 3,
+							alertScale = 0.9,
+							alertTTS = true,
+							alertText = "DPS THE GRANITE GAOL",
+							conditions = 
+							{
+								
+								{
+									"672b6aa6-7860-e530-a2f5-e7c71f35ba66",
+									true,
+								},
+							},
+							displayPath = "Draws - Titan NAUR",
+							name = "DPS Granite Gaol",
+							uuid = "6435297f-c4b8-3b4b-a3f4-d67c77b7678a",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.entityContentID==1804 and eventArgs.isTargetable==true",
+							dequeueIfLuaFalse = true,
+							name = "Granite Gaol becomes targetable",
+							uuid = "672b6aa6-7860-e530-a2f5-e7c71f35ba66",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Titan NAUR",
+				eventType = 26,
+				mechanicTime = 1206,
+				name = "[Alert][NAUR][Titan] DPS Granite Gaol on Targetable",
+				timeRange = true,
+				timelineIndex = 190,
+				timerEndOffset = 14,
+				timerStartOffset = -6,
+				uuid = "bfc241c2-2287-0c28-aa29-cd130813abe0",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ultima",
+				uuid = "fd599669-aee1-59fc-af83-659f6185ef31",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ultima",
+							uuid = "cbe28329-d388-c363-a24f-87a1157787b6",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player=TensorCore.mGetPlayer()\nif not player or not player.pos then self.used=true return end\nlocal dest={x=95,y=player.pos.y,z=111}\nlocal distance=TensorCore.getDistance2d(player.pos,dest)\nif distance>0.2 then\n local tip=math.min(2.0,distance*0.35)\n local drawer=TensorCore.getCachedDrawer(0xFFB6E0FF,0xFF55AAFF,0xFFFFFFFF,0xFF000000,4)\n drawer:addTimedArrow(3500,player.pos.x,player.pos.y,player.pos.z,TensorCore.getHeadingToTarget(player.pos,dest),math.max(0.1,distance-tip),1.4,tip,3.0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nAnyoneCore.addTimedWorldText(3500,\"MISTRAL: MOVE BEHIND TANKS\",{x=dest.x,y=dest.y+1.2,z=dest.z},0xFFB6E0FF,true,1.1)\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"9ddd5a29-d08c-7e33-8131-e5eba0656224",
+									true,
+								},
+							},
+							displayPath = "Draws - Ultima",
+							name = "Move Behind Tanks",
+							uuid = "e45a19e6-94df-7321-a22b-330ba6700c3f",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local player=TensorCore.mGetPlayer(); return player~=nil and eventArgs.markerID==16 and eventArgs.entityID==player.id",
+							dequeueIfLuaFalse = true,
+							name = "Marked Mistral Target",
+							uuid = "9ddd5a29-d08c-7e33-8131-e5eba0656224",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ultima",
+				eventType = 4,
+				mechanicTime = 1206,
+				name = "[Draw][NAUR][Ultima] Suppression Mistral Marker",
+				timeRange = true,
+				timelineIndex = 190,
+				timerEndOffset = 7,
+				timerStartOffset = -6,
+				uuid = "3cb81888-ca79-b686-9da1-17dda5a531b1",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR ",
+				uuid = "4679d595-d22c-7704-968f-c79e52714ae9",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "NAUR ",
+				name = " Automation",
+				uuid = "a91f9d92-cf87-16ac-aaf3-1d90ea218830",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Misc",
+							conditions = 
+							{
+								
+								{
+									"599f01d2-38fd-ef6c-8dda-419d3577debb",
+									true,
+								},
+								
+								{
+									"69d94b68-1ab7-e2e4-8518-e9d7d4776b69",
+									true,
+								},
+								
+								{
+									"ea4282ca-c457-8021-a63f-3c5e686896fb",
+									true,
+								},
+							},
+							name = "Target nearest Granite Gaol",
+							setTarget = true,
+							targetContentID = 1804,
+							targetType = "ContentID",
+							uuid = "9fa4269c-10f9-4c4a-93e3-1854431dec16",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "-- Independent UWU settings; available before GUI or targeting reads.\nif not _G.UWU_NAURSettingsIOReady then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UWU-NAUR.lua]]\n local saved={}\n if FileExists(path) then\n  local loaded=FileLoad(path)\n  if type(loaded)==\"table\" then saved=loaded end\n end\n local current=_G.UWU_NAURGuiState\n local old=_G.UWU_NAUR_AnnihilationAssignments or {}\n local defaults={automaticOpen=true,ultimaOpen=true,orbsOpen=true,autoTarget=_G.NAUR_UWU_AutoTarget~=false,melee=(old.melee==2 and 2 or 1),solo=old.solo or 0}\n local keys={\"automaticOpen\",\"ultimaOpen\",\"orbsOpen\",\"autoTarget\",\"melee\",\"solo\"}\n local C={}\n for _,key in ipairs(keys) do\n  local value=current and current[key]\n  if value==nil then value=saved[key] end\n  if type(defaults[key])==\"boolean\" then\n   C[key]=type(value)==\"boolean\" and value or defaults[key]\n   if value==false then C[key]=false end\n  else\n   C[key]=type(value)==\"number\" and value>=0 and value<=2 and value%1==0 and value or defaults[key]\n  end\n end\n if C.melee==0 then C.melee=1 end\n function C.save()\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local values={}\n  for _,key in ipairs(keys) do values[key]=C[key] end\n  FileSave(path,values)\n end\n _G.UWU_NAURGuiState=C\n _G.UWU_NAUR_AnnihilationAssignments={melee=C.melee,solo=C.solo}\n _G.NAUR_UWU_AutoTarget=C.autoTarget\n C.save()\n _G.UWU_NAURSettingsIOReady=true\nend\n-- Upgrade only an unset melee assignment; preserve either explicit role choice.\ndo\n local preferences=_G.UWU_NAURGuiState\n if preferences and preferences.melee==0 then\n  preferences.melee=1\n  local assignment=_G.UWU_NAUR_AnnihilationAssignments\n  if assignment then assignment.melee=1 end\n  preferences.save()\n end\nend\nif data.uwuAutoSim or data.uwuBRDAutoSim or data.uwuBLMAutoSim or data.uwuRPRAutoSim then return false end\nreturn (_G.UWU_NAURGuiState.autoTarget~=false)",
+							name = "Shared targeting enabled / no AutoSim owner",
+							uuid = "599f01d2-38fd-ef6c-8dda-419d3577debb",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgType = 3,
+							name = "Became targetable",
+							uuid = "ea4282ca-c457-8021-a63f-3c5e686896fb",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgOptionType = 2,
+							eventEntityContentID = 1804,
+							name = "Event entity",
+							uuid = "69d94b68-1ab7-e2e4-8518-e9d7d4776b69",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR / Automation",
+				eventType = 26,
+				loop = true,
+				mechanicTime = 1206,
+				name = "[NAUR] [Target] Suppression Gaol - Acquire",
+				timeRange = true,
+				timelineIndex = 190,
+				timerEndOffset = 12,
+				timerStartOffset = -8,
+				uuid = "940b1d94-73b7-3bf2-8339-ecba912ce133",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Misc",
+							conditions = 
+							{
+								
+								{
+									"a77328a8-05c5-7cc4-b7e0-00ae72ae092d",
+									true,
+								},
+								
+								{
+									"0c15cd42-ffe2-9e7c-b06d-5931a48435ee",
+									true,
+								},
+								
+								{
+									"2ad84284-f006-016f-bdad-3c1beb779ed8",
+									true,
+								},
+								
+								{
+									"b5a69d5e-c38c-0601-8c38-740633568da2",
+									true,
+								},
+							},
+							name = "Target next Granite Gaol",
+							setTarget = true,
+							targetType = "Detection Target",
+							uuid = "8324e059-a451-a813-9ec8-2b48aefffe7e",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "Misc",
+							conditions = 
+							{
+								
+								{
+									"a77328a8-05c5-7cc4-b7e0-00ae72ae092d",
+									true,
+								},
+								
+								{
+									"0c15cd42-ffe2-9e7c-b06d-5931a48435ee",
+									true,
+								},
+								
+								{
+									"2ad84284-f006-016f-bdad-3c1beb779ed8",
+									true,
+								},
+								
+								{
+									"b5a69d5e-c38c-0601-8c38-740633568da2",
+									false,
+								},
+							},
+							name = "Restore Ultima target",
+							setTarget = true,
+							targetContentID = 2137,
+							targetType = "ContentID",
+							uuid = "4ccef651-60c2-d402-bd0c-113eaf71cfc2",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "-- Independent UWU settings; available before GUI or targeting reads.\nif not _G.UWU_NAURSettingsIOReady then\n local folder=GetLuaModsPath()..[[TensorReactions\\Settings\\]]\n local path=folder..[[UWU-NAUR.lua]]\n local saved={}\n if FileExists(path) then\n  local loaded=FileLoad(path)\n  if type(loaded)==\"table\" then saved=loaded end\n end\n local current=_G.UWU_NAURGuiState\n local old=_G.UWU_NAUR_AnnihilationAssignments or {}\n local defaults={automaticOpen=true,ultimaOpen=true,orbsOpen=true,autoTarget=_G.NAUR_UWU_AutoTarget~=false,melee=(old.melee==2 and 2 or 1),solo=old.solo or 0}\n local keys={\"automaticOpen\",\"ultimaOpen\",\"orbsOpen\",\"autoTarget\",\"melee\",\"solo\"}\n local C={}\n for _,key in ipairs(keys) do\n  local value=current and current[key]\n  if value==nil then value=saved[key] end\n  if type(defaults[key])==\"boolean\" then\n   C[key]=type(value)==\"boolean\" and value or defaults[key]\n   if value==false then C[key]=false end\n  else\n   C[key]=type(value)==\"number\" and value>=0 and value<=2 and value%1==0 and value or defaults[key]\n  end\n end\n if C.melee==0 then C.melee=1 end\n function C.save()\n  if not FolderExists(folder) then FolderCreate(folder) end\n  local values={}\n  for _,key in ipairs(keys) do values[key]=C[key] end\n  FileSave(path,values)\n end\n _G.UWU_NAURGuiState=C\n _G.UWU_NAUR_AnnihilationAssignments={melee=C.melee,solo=C.solo}\n _G.NAUR_UWU_AutoTarget=C.autoTarget\n C.save()\n _G.UWU_NAURSettingsIOReady=true\nend\n-- Upgrade only an unset melee assignment; preserve either explicit role choice.\ndo\n local preferences=_G.UWU_NAURGuiState\n if preferences and preferences.melee==0 then\n  preferences.melee=1\n  local assignment=_G.UWU_NAUR_AnnihilationAssignments\n  if assignment then assignment.melee=1 end\n  preferences.save()\n end\nend\nif data.uwuAutoSim or data.uwuBRDAutoSim or data.uwuBLMAutoSim or data.uwuRPRAutoSim then return false end\nreturn (_G.UWU_NAURGuiState.autoTarget~=false)",
+							name = "Shared targeting enabled / no AutoSim owner",
+							uuid = "a77328a8-05c5-7cc4-b7e0-00ae72ae092d",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgOptionType = 2,
+							eventEntityContentID = 1804,
+							name = "Event entity",
+							uuid = "0c15cd42-ffe2-9e7c-b06d-5931a48435ee",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgType = 3,
+							eventBoolValue = 2,
+							name = "Became untargetable",
+							uuid = "2ad84284-f006-016f-bdad-3c1beb779ed8",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Filter",
+							filterTargetType = "ContentID",
+							name = "Targetable gaol remains",
+							partyTargetContentID = 1804,
+							uuid = "b5a69d5e-c38c-0601-8c38-740633568da2",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR / Automation",
+				eventType = 26,
+				loop = true,
+				mechanicTime = 1206,
+				name = "[NAUR] [Target] Suppression Gaol - Advance",
+				timeRange = true,
+				timelineIndex = 190,
+				timerEndOffset = 12,
+				timerStartOffset = -8,
+				uuid = "3917bccb-213e-6d50-95ad-ab1f4649066f",
+				version = 2,
+			},
+		},
+	},
+	[191] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ifrit",
+				uuid = "3fa712f9-66a3-9293-b98a-c3d9eb75abcf",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ultima",
+				uuid = "402018fd-7490-e568-8470-0e22c4708281",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ultima",
+							uuid = "8bcfd0d0-7977-8ddf-b4ed-55e82e407fec",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player=TensorCore.mGetPlayer()\nif not player or not player.pos then self.used=true return end\nlocal stamp=eventArgs.startTime\nif stamp~=nil and data.uwu_suppression_eruption_last_start_time==stamp then self.used=true return end\nif stamp~=nil then data.uwu_suppression_eruption_last_start_time=stamp end\ndata.uwu_suppression_eruption_step=(data.uwu_suppression_eruption_step or 0)+1\nlocal step=data.uwu_suppression_eruption_step\nlocal x,z,label\nif step==1 then\n x=(eventArgs.x+100)*0.5;z=(eventArgs.z+100)*0.5;label=\"ERUPTION 1: MOVE HALFWAY IN\"\nelseif step==2 then\n x=100;z=100;label=\"ERUPTION 2: MOVE TO CENTER\"\nelseif step==3 then\n x=107.3;z=107.3;label=\"ERUPTION 3: MOVE TO SE\"\nelse\n self.used=true\n return\nend\nlocal dest={x=x,y=player.pos.y,z=z}\nlocal distance=TensorCore.getDistance2d(player.pos,dest)\nif distance>0.2 then\n local tip=math.min(2.0,distance*0.35)\n local drawer=TensorCore.getCachedDrawer(0xFFFFC870,0xFFFF9A45,0xFFFFFFFF,0xFF000000,4)\n drawer:addTimedArrow(1800,player.pos.x,player.pos.y,player.pos.z,TensorCore.getHeadingToTarget(player.pos,dest),math.max(0.1,distance-tip),1.4,tip,3.0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nAnyoneCore.addTimedWorldText(1800,label,{x=dest.x,y=dest.y+1.2,z=dest.z},0xFFFFC870,true,1.1)\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"01a48d6f-636c-9be8-b9d5-1ef965670eaf",
+									true,
+								},
+							},
+							displayPath = "Draws - Ultima",
+							name = "Next Eruption Position",
+							uuid = "59a1eb95-3e51-6537-9515-abe56bdb19fb",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local player=TensorCore.mGetPlayer()\nif not player or not player.pos then return false end\nif eventArgs.aoeID~=11098 or eventArgs.contentID~=1185 or eventArgs.aoeName~=\"Eruption\" then return false end\nreturn TensorCore.getDistance2d(player.pos,{x=eventArgs.x,y=eventArgs.y,z=eventArgs.z})<=0.5",
+							dequeueIfLuaFalse = true,
+							name = "Local Eruption Target",
+							uuid = "01a48d6f-636c-9be8-b9d5-1ef965670eaf",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ultima",
+				eventType = 18,
+				mechanicTime = 1207,
+				name = "[Draw][NAUR][Ultima] Suppression Eruption Route",
+				timeRange = true,
+				timelineIndex = 191,
+				timerEndOffset = 6,
+				timerStartOffset = -5,
+				uuid = "77ebc709-8e05-c098-9794-42699c9c0b75",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Movement - Eruption",
+				uuid = "e13168dc-0f6b-6f8f-b7ca-50ed7a34094d",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "TensorDrift_SlidecastForceHold = true\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"88aa2fe3-ea6c-7cfb-af65-da6833388781",
+									true,
+								},
+							},
+							name = "Force Slidecast",
+							uuid = "7bbde9a4-8d82-c935-a331-8b70f4ffcae2",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "TensorDrift_SlidecastForceHold = false\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"88aa2fe3-ea6c-7cfb-af65-da6833388781",
+									true,
+								},
+							},
+							name = "End Slide",
+							uuid = "01e1a7fe-16d9-2ef0-bf1e-3dfac63be1a8",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore.Roster\nif not Roster or not Roster.current() then return false end\nlocal slot = Roster.mySlot()\nreturn slot == \"R1\" or slot == \"R2\"",
+							name = "Roster R1/R2",
+							uuid = "88aa2fe3-ea6c-7cfb-af65-da6833388781",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Movement - Eruption",
+				mechanicTime = 1207,
+				name = "[Drift] Eruption R1/R2 1207",
+				throttleTime = 10500,
+				timeRange = true,
+				timelineIndex = 191,
+				timerEndOffset = 7,
+				timerStartOffset = -4,
+				uuid = "b1bb1dc0-49fe-8daf-8a41-ea7048b5089b",
+				version = 2,
+			},
+		},
+	},
+	[192] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Garuda",
+				uuid = "80788079-2d5a-4a5e-af1e-f10b6a162b1e",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Garuda",
+							uuid = "9299d0d4-d148-d058-96cf-014dac432b1a",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player=TensorCore.mGetPlayer()\nif not player or not player.pos then self.used=true return end\nlocal hit=false\nfor _,id in pairs(eventArgs.hitTargets or {}) do\n if id==player.id then hit=true break end\nend\nif not hit then self.used=true return end\nlocal dest={x=100,y=player.pos.y,z=114}\nlocal distance=TensorCore.getDistance2d(player.pos,dest)\nif distance>0.2 then\n local tip=math.min(2.5,distance*0.35)\n local drawer=TensorCore.getCachedDrawer(0xFFB6E0FF,0xFF55AAFF,0xFFFFFFFF,0xFF000000,4)\n drawer:addTimedArrow(6000,player.pos.x,player.pos.y,player.pos.z,TensorCore.getHeadingToTarget(player.pos,dest),math.max(0.1,distance-tip),1.4,tip,3.0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nAnyoneCore.addTimedWorldText(6000,\"MISTRAL: BEHIND TANKS\",{x=dest.x,y=dest.y+1.2,z=dest.z},0xFFB6E0FF,true,1.1)\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"475e1b23-d512-8066-9f60-9601bf7b919b",
+									true,
+								},
+							},
+							displayPath = "Draws - Garuda",
+							name = "Mistral Role Guide",
+							uuid = "0c71ed8e-6930-bf1d-a08d-22281c26bb71",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return (eventArgs.spellID==11074 or eventArgs.spellID==11083) and (eventArgs.entityContentID==1644 or eventArgs.entityContentID==1645 or eventArgs.entityContentID==1646)",
+							dequeueIfLuaFalse = true,
+							name = "Mistral Song Cast",
+							uuid = "475e1b23-d512-8066-9f60-9601bf7b919b",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Garuda",
+				eventType = 2,
+				mechanicTime = 1210,
+				name = "[Draw][NAUR][Garuda] Mistral Song 1210",
+				timeRange = true,
+				timelineIndex = 192,
+				timerEndOffset = 5,
+				timerStartOffset = -1,
+				uuid = "f9368301-3ca4-ce8e-a6c2-60106ed2083f",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "Argus.deleteTimedShape(data.lpdu_mistral_ot_circle)\ndata.lpdu_mistral_ot_circle=nil\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"3ed769bf-35ea-6ac0-a298-3979b5cdbafb",
+									true,
+								},
+								
+								{
+									"de2e01fd-ce06-6b14-a4d2-98b26416176c",
+									true,
+								},
+							},
+							name = "Clear active OT circle",
+							uuid = "367abc2c-f7b0-c1b4-be62-1ef76c8fad5d",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgOptionType = 3,
+							eventArgType = 2,
+							name = "Mistral damage only",
+							spellIDList = 
+							{
+								11074,
+								11083,
+							},
+							uuid = "3ed769bf-35ea-6ac0-a298-3979b5cdbafb",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return data.lpdu_mistral_ot_circle ~= nil",
+							dequeueIfLuaFalse = true,
+							name = "Owned OT circle exists",
+							uuid = "de2e01fd-ce06-6b14-a4d2-98b26416176c",
+							version = 3,
+						},
+					},
+				},
+				eventType = 2,
+				loop = true,
+				mechanicTime = 1210,
+				name = "[NAUR] Mistral Song - Ultima OT Marker Cleanup",
+				timeRange = true,
+				timelineIndex = 192,
+				timerEndOffset = 15,
+				timerStartOffset = -10,
+				uuid = "f63b697e-e892-bfda-80a4-fa68f32b56c2",
+				version = 2,
+			},
+		},
+	},
+	[193] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Garuda",
+				uuid = "28a385fd-3c90-d6f2-9be8-78e2f068d7e5",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Garuda",
+							uuid = "30d1f0a5-abf6-f0c1-bf69-d4cddd13b827",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player=TensorCore.mGetPlayer()\nif not player or not player.pos then self.used=true return end\nlocal hit=false\nfor _,id in pairs(eventArgs.hitTargets or {}) do\n if id==player.id then hit=true break end\nend\nif not hit then self.used=true return end\nlocal dest={x=100,y=player.pos.y,z=114}\nlocal distance=TensorCore.getDistance2d(player.pos,dest)\nif distance>0.2 then\n local tip=math.min(2.5,distance*0.35)\n local drawer=TensorCore.getCachedDrawer(0xFFB6E0FF,0xFF55AAFF,0xFFFFFFFF,0xFF000000,4)\n drawer:addTimedArrow(6000,player.pos.x,player.pos.y,player.pos.z,TensorCore.getHeadingToTarget(player.pos,dest),math.max(0.1,distance-tip),1.4,tip,3.0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nAnyoneCore.addTimedWorldText(6000,\"MISTRAL: BEHIND TANKS\",{x=dest.x,y=dest.y+1.2,z=dest.z},0xFFB6E0FF,true,1.1)\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"c76708b0-b9fe-edd9-a35f-222944a5aeb8",
+									true,
+								},
+							},
+							displayPath = "Draws - Garuda",
+							name = "Mistral Role Guide",
+							uuid = "b3c7bf1d-8e0a-71f2-98e1-65ee44c54944",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return (eventArgs.spellID==11074 or eventArgs.spellID==11083) and (eventArgs.entityContentID==1644 or eventArgs.entityContentID==1645 or eventArgs.entityContentID==1646)",
+							dequeueIfLuaFalse = true,
+							name = "Mistral Song Cast",
+							uuid = "c76708b0-b9fe-edd9-a35f-222944a5aeb8",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Garuda",
+				eventType = 2,
+				mechanicTime = 1212,
+				name = "[Draw][NAUR][Garuda] Mistral Song 1212",
+				timeRange = true,
+				timelineIndex = 193,
+				timerEndOffset = 5,
+				timerStartOffset = -1,
+				uuid = "4aa8fdd2-7302-2d45-89b5-899a63b270c0",
+				version = 2,
+			},
+		},
+	},
+	[194] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "83980c7d-ae6e-55d9-171f-bb0fe36f0e0d",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Garuda",
+				uuid = "d17f6e6f-1bf0-8ad5-8e21-d311d53d6eb2",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Garuda",
+							uuid = "d9873ec5-5a71-e2f8-90ad-965ec7c985a1",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 2500,
+							alertPriority = 3,
+							alertScale = 0.89999997615814,
+							alertTTS = true,
+							alertText = "MOVE",
+							conditions = 
+							{
+								
+								{
+									"f08dd1d3-c4f8-adda-a645-30c6651f7f70",
+									true,
+								},
+								
+								{
+									"aef26f3f-0ab8-a50b-87a7-6d165b9afdc4",
+									true,
+								},
+							},
+							displayPath = "Draws - Garuda",
+							name = "[Alert] Feather Rain - Move 1215",
+							uuid = "19da62ea-75da-738a-a4a2-6c30cf0a88d0",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Garuda",
+							uuid = "297d3efb-2ffd-d720-ba08-38e7377b74b5",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs and eventArgs.aoeID == 11085 and eventArgs.contentID == 1644 and eventArgs.friendly == false",
+							dequeueIfLuaFalse = true,
+							name = "Feather Rain AOE",
+							uuid = "f08dd1d3-c4f8-adda-a645-30c6651f7f70",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "if self.claimed then return true end\nlocal stamp=eventArgs.startTime\nlocal previous=data.uwu_lpdu_suppression_feather_stamp\n-- A volley creates one AOE per player. Its entries share a start time (or differ\n-- by a few milliseconds); the next volley is a separate cast about 0.85s later.\nif previous and math.abs(stamp-previous)<500 then return false end\ndata.uwu_lpdu_suppression_feather_stamp=stamp\nself.claimed=true\nreturn true",
+							dequeueIfLuaFalse = true,
+							name = "One alert per volley",
+							uuid = "aef26f3f-0ab8-a50b-87a7-6d165b9afdc4",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Garuda",
+				eventType = 18,
+				mechanicTime = 1215,
+				name = "[NAUR] Suppression - Feather Rain Move",
+				throttleTime = 1000,
+				timeRange = true,
+				timelineIndex = 194,
+				timerEndOffset = 2,
+				timerStartOffset = -3,
+				uuid = "a6c44fc1-f001-3d5f-bac1-21e85d44e3cf",
+				version = 2,
+			},
+		},
+	},
+	[196] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "5b49ad77-80a6-7503-3c42-35f5ac7d2bc7",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Garuda",
+				uuid = "14145b3f-1f53-4d76-b8a4-596f4e35a661",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Garuda",
+							uuid = "e3c197bb-27e0-b7c5-8115-2f1c12436f1c",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 2500,
+							alertPriority = 3,
+							alertScale = 0.89999997615814,
+							alertTTS = true,
+							alertText = "MOVE",
+							conditions = 
+							{
+								
+								{
+									"2211817c-b145-4de0-b942-5b7bbf6a7a94",
+									true,
+								},
+							},
+							displayPath = "Draws - Garuda",
+							name = "[Alert] Feather Rain - Move 1216",
+							uuid = "68dd5292-a487-5bf0-9cda-b27182e1a6e5",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Garuda",
+							uuid = "d77d024d-8b28-c58d-bc64-ae7eef52ad03",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs and eventArgs.aoeID == 11085 and eventArgs.contentID == 1644 and eventArgs.friendly == false",
+							dequeueIfLuaFalse = true,
+							name = "Feather Rain AOE",
+							uuid = "2211817c-b145-4de0-b942-5b7bbf6a7a94",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Garuda",
+				enabled = false,
+				eventType = 18,
+				mechanicTime = 1216,
+				name = "[Alert] Feather Rain - Move 1216",
+				throttleTime = 1000,
+				timeRange = true,
+				timelineIndex = 196,
+				timerEndOffset = 2,
+				timerStartOffset = -3,
+				uuid = "c8e88d7a-34a0-70aa-b5fd-ea29ce85ae1f",
+				version = 2,
+			},
+		},
+	},
+	[199] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR Guidance",
+				uuid = "f098f6f2-304c-2b22-b48b-4892fa74ad5d",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 4000,
+							alertPriority = 3,
+							alertScale = 0.85,
+							alertTTS = true,
+							alertText = "Dodge both Landslides",
+							conditions = 
+							{
+								
+								{
+									"a31dc2b5-55c7-be4f-b136-92a89e7b6e35",
+									true,
+								},
+							},
+							uuid = "05241bc4-8276-0d2f-aaac-ca376e835de2",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgType = 2,
+							eventSpellID = 11121,
+							name = "Spell 11121",
+							uuid = "a31dc2b5-55c7-be4f-b136-92a89e7b6e35",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance",
+				eventType = 3,
+				mechanicTime = 1223,
+				name = "[NAUR] Landslides - Dodge Both",
+				throttleTime = 4000,
+				timeRange = true,
+				timelineIndex = 199,
+				timerEndOffset = 0.5,
+				timerStartOffset = -1,
+				uuid = "ce63d5a9-f830-e85b-b478-f795b981a695",
+				version = 2,
+			},
+		},
+	},
+	[201] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR Guidance",
+				uuid = "d449e5a3-4361-7777-a26d-55a5b964333e",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 4000,
+							alertScale = 0.85,
+							alertTTS = true,
+							alertText = "Stack now for Flaming Crush",
+							conditions = 
+							{
+								
+								{
+									"fa9e1b22-105a-338f-ae72-73dbe839fb6c",
+									true,
+								},
+								
+								{
+									"65f7d2b1-9b43-25f3-a9b9-7d8f425f67ce",
+									true,
+								},
+								
+								{
+									"68b43e99-747c-6b84-8606-acc6cb37e866",
+									true,
+								},
+							},
+							uuid = "3daf66ef-4de9-1ea5-99ae-44466e40ff20",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgType = 2,
+							eventSpellID = 11298,
+							name = "Spell 11298",
+							uuid = "fa9e1b22-105a-338f-ae72-73dbe839fb6c",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster=AnyoneCore.Roster\nif Roster.current()==nil then return false end\nlocal slot=Roster.mySlot()\nreturn slot~=nil and slot~=\"T1\"",
+							conditionType = 9,
+							name = "Roster: except MT",
+							partyTargetType = "Off Tank",
+							uuid = "65f7d2b1-9b43-25f3-a9b9-7d8f425f67ce",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "if self.claimed then return true end\nif data.uwu_lpdu_suppression_stack_called then return false end\ndata.uwu_lpdu_suppression_stack_called=true\nself.claimed=true\nreturn true",
+							dequeueIfLuaFalse = true,
+							name = "One stack call",
+							uuid = "68b43e99-747c-6b84-8606-acc6cb37e866",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance",
+				eventType = 2,
+				mechanicTime = 1225,
+				name = "[NAUR] After Landslides - Stack",
+				throttleTime = 4000,
+				timeRange = true,
+				timelineIndex = 201,
+				timerEndOffset = 1.5,
+				timerStartOffset = -1.5,
+				uuid = "49526bdb-e3bb-1fc8-884b-8e53d0a378c3",
+				version = 2,
+			},
+		},
+	},
+	[202] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "2264f077-c72c-f95b-2e68-f55973986ec7",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR Guidance",
+				uuid = "8df09589-e5cc-de5c-991d-f9a118c66576",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "NAUR Guidance",
+				name = "Mesohigh",
+				uuid = "1884d259-c4a3-a81d-b0b5-7ddc8eeaa6a3",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local a = eventArgs\nlocal state = data.uwu_personal_mesohigh_supp\nif not state then state = {}; data.uwu_personal_mesohigh_supp = state end\nlocal tether = state[a.sourceEntityID]\nif not tether then tether = {}; state[a.sourceEntityID] = tether end\nif a.newTetherID == 4 and a.newTargetID and a.newTargetID > 0 then\n tether.target = a.newTargetID\n tether.expires = Now() + 10000\nelse\n tether.target = nil\nend\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"8013c2f6-2f16-b127-8284-3b4dfd5102ea",
+									true,
+								},
+							},
+							name = "Track source and current holder",
+							uuid = "fcbf49b6-7793-39e2-8e86-2a4ba9a2ef5f",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.sourceEntityContentID == 1644 and (eventArgs.newTetherID == 4 or eventArgs.oldTetherID == 4)",
+							dequeueIfLuaFalse = true,
+							name = "Mesohigh source / change",
+							uuid = "8013c2f6-2f16-b127-8284-3b4dfd5102ea",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance/Mesohigh",
+				eventType = 15,
+				loop = true,
+				mechanicTime = 1226,
+				name = "[NAUR] Mesohigh Suppression - Capture personal tether",
+				timeRange = true,
+				timelineIndex = 202,
+				timerEndOffset = 4,
+				timerStartOffset = -8,
+				uuid = "b7474158-5a2c-be8b-a70f-4b3fa6cab58c",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+				},
+				conditions = 
+				{
+				},
+				displayPath = "NAUR Guidance/Mesohigh",
+				eventType = 12,
+				execute = "local state = data.uwu_personal_mesohigh_supp\nif not state then return end\nlocal Roster = AnyoneCore.Roster\nif not Roster or not Roster.current() or not Roster.isReady() then return end\nlocal slot = Roster.mySlot()\nlocal player = TensorCore.mGetPlayer()\nif not player then return end\nlocal allowed = slot == \"T1\"\nif not allowed then return end\nlocal now = Now()\nfor sourceID,tether in pairs(state) do\n if tether.target and not tether.done and now < tether.expires then\n  local source = TensorCore.mGetEntity(sourceID)\n  local holder = TensorCore.mGetEntity(tether.target)\n  if source and holder then\n  local onSide = true\n   if onSide then\n    if holder.id == player.id then\n     tether.done = true\n    else\n     local drawer = TensorCore.getStaticDrawer(0xFF00FF00,3)\n     local p,q = source.pos,holder.pos\n     drawer:addLine(p.x,p.y+0.8,p.z,q.x,q.y+0.8,q.z,4,6)\n     drawer:addCircle(p.x,p.y+0.05,p.z,2,false)\n    end\n   end\n  end\n end\nend\nself.used = true",
+				executeType = 2,
+				loop = true,
+				mechanicTime = 1226,
+				name = "[NAUR] Mesohigh Suppression - Assigned green tether/source",
+				timeRange = true,
+				timelineIndex = 202,
+				timerEndOffset = 4,
+				timerStartOffset = -8,
+				uuid = "ffe583c5-2753-b002-87fe-b252c0aa5abd",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertPriority = 3,
+							alertScale = 0.85,
+							alertTTS = true,
+							alertText = "Prepare to take Garuda tether",
+							conditions = 
+							{
+								
+								{
+									"e1db8988-20c1-2560-a5e4-a483f447e56f",
+									true,
+								},
+							},
+							name = "Prepare to take Garuda tether",
+							uuid = "9bad6ca1-654e-b8c7-aef9-842555389964",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore.Roster\nif not Roster or not Roster.current() then return false end\nlocal slot = Roster.mySlot()\nreturn slot == \"T1\"",
+							name = "Assigned tether taker",
+							uuid = "e1db8988-20c1-2560-a5e4-a483f447e56f",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance/Mesohigh",
+				mechanicTime = 1226,
+				name = "[NAUR] Mesohigh Suppression MT - Advance call",
+				timeRange = true,
+				timelineIndex = 202,
+				timerEndOffset = -5,
+				timerStartOffset = -6,
+				uuid = "3eaf97c1-8958-6e6b-a599-8b685a5eef39",
+				version = 2,
+			},
+		},
+	},
+	[203] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "[Raid calls]",
+				uuid = "8549af16-527a-72aa-a563-682a8039ed63",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "[Raid calls]",
+							uuid = "c840bd79-0a04-4764-a44e-cd62456670d8",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 3500,
+							alertPriority = 2,
+							alertScale = 0.85000002384186,
+							alertTTS = true,
+							alertText = "Wait for Feather Rain, then move",
+							displayPath = "[Raid calls]",
+							name = "Wait for Feather Rain then move",
+							uuid = "2c717b78-dced-8656-8f29-0f714d170ec7",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "[Raid calls]",
+				mechanicTime = 1227,
+				name = "[Raid Call][UWU] Wait for Feather Rain then Move 1227",
+				timelineIndex = 203,
+				uuid = "0444dc24-ca71-d804-aa25-d7884ee2e1d0",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR Guidance",
+				uuid = "aa2743a7-aec0-e738-a26d-6b687e2d22a5",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "AnyoneCore.addWorldTextCountdownOnEnt(5300,eventArgs.entityID,0xFFFFFFFF,true,1.5,2.5,0,\"\")\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"0f732fe3-b247-6ff4-88f3-63621a038409",
+									true,
+								},
+							},
+							name = "Following stack countdown",
+							uuid = "80d03ff3-a412-37bf-ac25-c4b04ac486f5",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgType = 2,
+							eventMarkerID = 117,
+							name = "Flaming Crush marker",
+							uuid = "0f732fe3-b247-6ff4-88f3-63621a038409",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "NAUR Guidance",
+				eventType = 4,
+				mechanicTime = 1227,
+				name = "[NAUR] Suppression stack - Following countdown",
+				timeRange = true,
+				timelineIndex = 203,
+				timerEndOffset = 1,
+				timerStartOffset = -10,
+				uuid = "19b4fd72-d5f7-3af0-8280-5da1a0a6ab82",
+				version = 2,
+			},
+		},
+	},
+	[204] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "967efdc1-5682-642d-dc03-8e4fffc64ed1",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Garuda",
+				uuid = "148d2bac-870a-80c2-b046-7be807243acb",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Garuda",
+							uuid = "12e6d78a-73cc-2bb6-9b60-19d126e61969",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 2500,
+							alertPriority = 3,
+							alertScale = 0.9,
+							alertTTS = true,
+							alertText = "MOVE FOR FEATHER RAIN",
+							conditions = 
+							{
+								
+								{
+									"798a0977-02bd-9d0d-95ab-b01d7415ee4f",
+									true,
+								},
+								
+								{
+									"ed9a85dc-e51c-332b-81e4-b2fb8fd92693",
+									true,
+								},
+							},
+							displayPath = "Draws - Garuda",
+							name = "Feather Rain Move",
+							uuid = "4d68f5fe-35f8-618b-9a7a-5b4250216c46",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Garuda",
+							uuid = "30603478-875a-cedf-bb2e-8cee352bb2a9",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs and eventArgs.aoeID == 11085 and eventArgs.contentID == 1644 and eventArgs.friendly == false",
+							dequeueIfLuaFalse = true,
+							name = "Feather Rain AOE",
+							uuid = "798a0977-02bd-9d0d-95ab-b01d7415ee4f",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "if self.claimed then return true end\nlocal stamp=eventArgs.startTime\nlocal previous=data.uwu_lpdu_suppression_feather_stamp\n-- A volley creates one AOE per player. Its entries share a start time (or differ\n-- by a few milliseconds); the next volley is a separate cast about 0.85s later.\nif previous and math.abs(stamp-previous)<500 then return false end\ndata.uwu_lpdu_suppression_feather_stamp=stamp\nself.claimed=true\nreturn true",
+							dequeueIfLuaFalse = true,
+							name = "One alert per volley",
+							uuid = "ed9a85dc-e51c-332b-81e4-b2fb8fd92693",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Garuda",
+				eventType = 18,
+				mechanicTime = 1232,
+				name = "[NAUR] Suppression - Final Feather Rain Move",
+				throttleTime = 1000,
+				timeRange = true,
+				timelineIndex = 204,
+				timerEndOffset = 2,
+				timerStartOffset = -3,
+				uuid = "8b6f637e-4b16-650d-bdef-cb0500535b05",
+				version = 2,
+			},
+		},
+	},
+	[206] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\mitigation",
+				uuid = "943cee23-27d3-4397-e62c-17910f1696f3",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\mitigation",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\optimization",
+				uuid = "250286b5-0368-3f49-56b3-8b9738029b05",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\optimization",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ultima",
+				uuid = "77ff624a-c520-0611-8b86-0893661a8d17",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player=TensorCore.mGetPlayer()\nif not player or not player.pos then self.used=true return end\nlocal duration=4500\nlocal dest={x=104,y=player.pos.y,z=104}\nlocal distance=TensorCore.getDistance2d(player.pos,dest)\nif distance>0.3 then\n local tip=math.min(1.7,distance*0.35)\n local drawer=TensorCore.getCachedDrawer(0xFF33FF66,0xFF00CC44,0xFFFFFFFF,0xFF000000,4)\n drawer:addTimedArrow(duration,player.pos.x,player.pos.y,player.pos.z,TensorCore.getHeadingToTarget(player.pos,dest),math.max(0.1,distance-tip),1.2,tip,2.5,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nAnyoneCore.addTimedWorldText(duration,\"ULTIMA: SOUTHEAST\",{x=dest.x,y=dest.y+1.1,z=dest.z},0xFF33FF66,true,1.1)\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"a3bd3a4a-cb29-f6aa-9327-de5baef8422a",
+									true,
+								},
+							},
+							name = "Ultima DPS/Healers Southeast Arrow",
+							uuid = "c66ef83d-05d4-73d7-8553-a912b797eb8d",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore.Roster\nif not Roster or not Roster.current() or not Roster.isReady() then return false end\nlocal slot = Roster.mySlot()\nif not slot then return false end\nreturn slot == \"H1\" or slot == \"H2\" or slot == \"M1\" or slot == \"M2\" or slot == \"R1\" or slot == \"R2\"",
+							conditionType = 9,
+							name = "Roster: DPS/healers",
+							partyTargetType = "Tank",
+							uuid = "a3bd3a4a-cb29-f6aa-9327-de5baef8422a",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ultima",
+				mechanicTime = 1243,
+				name = "[Draw][NAUR] Ultima - DPS/Healers Southeast",
+				timeRange = true,
+				timelineIndex = 206,
+				timerEndOffset = -2,
+				timerStartOffset = -3,
+				uuid = "d8909561-90fc-80f4-b9b0-45fcef7b2a98",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player=TensorCore.mGetPlayer()\nif not player or not player.pos then self.used=true return end\nlocal duration=4500\nlocal dest={x=96,y=player.pos.y,z=104}\nlocal distance=TensorCore.getDistance2d(player.pos,dest)\nif distance>0.3 then\n local tip=math.min(1.7,distance*0.35)\n local drawer=TensorCore.getCachedDrawer(0xFF33FF66,0xFF00CC44,0xFFFFFFFF,0xFF000000,4)\n drawer:addTimedArrow(duration,player.pos.x,player.pos.y,player.pos.z,TensorCore.getHeadingToTarget(player.pos,dest),math.max(0.1,distance-tip),1.2,tip,2.5,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nAnyoneCore.addTimedWorldText(duration,\"ULTIMA: SOUTHWEST\",{x=dest.x,y=dest.y+1.1,z=dest.z},0xFF33FF66,true,1.1)\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"5a8943b8-de15-1a6e-a5ec-ae2fd1b4210e",
+									true,
+								},
+							},
+							name = "Ultima Tanks Southwest Arrow",
+							uuid = "afe3bc55-44db-dfce-8966-cd3b56fb615d",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore.Roster\nif not Roster or not Roster.current() or not Roster.isReady() then return false end\nlocal slot = Roster.mySlot()\nif not slot then return false end\nreturn slot == \"T1\" or slot == \"T2\"",
+							conditionType = 9,
+							name = "Roster: tanks",
+							partyTargetType = "Tank",
+							uuid = "5a8943b8-de15-1a6e-a5ec-ae2fd1b4210e",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ultima",
+				mechanicTime = 1243,
+				name = "[Draw][NAUR] Ultima - Tanks Southwest",
+				timeRange = true,
+				timelineIndex = 206,
+				timerEndOffset = -2,
+				timerStartOffset = -3,
+				uuid = "2a6481bd-bb4f-75a9-8219-a7a31c53b604",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "NAUR ",
+				uuid = "72cdc4de-0562-34ce-b433-c4e553a76128",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "NAUR ",
+				name = " Automation",
+				uuid = "b13a2c82-d9c8-9ced-a695-59d8a3c2c9d3",
+			},
+			objectType = "folder",
+		},
+	},
+	[207] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "4d6c0f2e-c110-073a-d033-5138beeba03e",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\mitigation",
+				uuid = "0616fe64-0f40-1408-abc5-429ab01956b4",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\mitigation",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ultima",
+				uuid = "45fc0272-6f51-df20-8ba2-4123b52c7a48",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ultima",
+							uuid = "7cb78d49-be39-a2e5-ad25-e081b8a103d5",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							actionID = 7548,
+							atomicPriority = true,
+							displayPath = "Draws - Ultima",
+							ignoreWeaveRules = true,
+							name = "Arm's Length",
+							uuid = "a49e3fc8-81a3-ff1c-8d8c-3ddb4766e872",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 7559,
+							atomicPriority = true,
+							displayPath = "Draws - Ultima",
+							ignoreWeaveRules = true,
+							name = "Surecast",
+							uuid = "919c15f0-f852-4af9-b32a-92cf2aff6ed3",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "Draws - Ultima",
+				mechanicTime = 1253,
+				name = "[Knockback Utility]",
+				timeRange = true,
+				timelineIndex = 207,
+				timerEndOffset = 2,
+				timerStartOffset = -2,
+				uuid = "dd445d82-c1c3-b264-995f-5ef82742bdd3",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ultima",
+							uuid = "75da29fa-a405-dda1-8169-995155c124f1",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local state = data.uwu_aether_guidance\nif not state then\n    state = { southDone=false, phase=nil, runPhase=nil }\n    data.uwu_aether_guidance = state\nend\nif not state.phase or state.runPhase==state.phase then return end\n\nlocal roster = AnyoneCore.Roster\n-- Identity needs a resolved roster. Do not require all eight entities to be live:\n-- someone outside this player's group must not block their readiness alert.\nif roster.current()==nil then return end\nlocal slot = roster.mySlot()\nif not slot then return end\nif not self.slots then\n    if slot==\"T1\" or slot==\"T2\" then\n        self.slots={\"T1\",\"T2\"}\n    else\n        self.slots={\"H1\",\"H2\",\"M1\",\"M2\",\"R1\",\"R2\"}\n    end\nend\nfor _, groupSlot in ipairs(self.slots) do\n    local member = roster.entOf(groupSlot)\n    if not member or not member.alive or not member.hp or member.hp.percent<80 then return end\nend\nTensorCore.addAlertText(4000,\"RUN INTO ORB\",1.1,2,false)\nstate.runPhase=state.phase\nif state.phase==\"north\" then self.used=true end\n",
+							displayPath = "Draws - Ultima",
+							name = "Soak group readiness",
+							uuid = "3edff3de-a032-9482-b16e-1d6eb2312139",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "Draws - Ultima",
+				loop = true,
+				mechanicTime = 1253,
+				name = "[Draw][NAUR][Ultima] Aetheroplasm South Soak",
+				throttleTime = 250,
+				timeRange = true,
+				timelineIndex = 207,
+				timerEndOffset = 20,
+				timerStartOffset = 1,
+				uuid = "ea730cc3-994c-fe3e-82d8-c09ca5377103",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ultima",
+							uuid = "f22111c9-d7e4-4e1d-a7bd-8910d86ae103",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local state = data.uwu_aether_guidance\nif not state or state.northArrowDone then self.used = true return end\nlocal Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current() or not Roster.isReady() then return end\nlocal slot = Roster.mySlot()\nlocal isTank = slot == \"T1\" or slot == \"T2\"\nlocal knownSlot = isTank or slot == \"H1\" or slot == \"H2\" or slot == \"M1\" or slot == \"M2\" or slot == \"R1\" or slot == \"R2\"\nif not knownSlot then self.used = true return end\nlocal player = Roster.entOf(slot)\nif not player or not player.pos then return end\nlocal side = state.orbs and state.orbs.north\nlocal candidates = side and side[isTank and \"left\" or \"right\"]\nif not candidates then return end\nlocal target\nfor i = 1, #candidates do local orb = TensorCore.mGetEntity(candidates[i]); if orb and orb.pos then target = orb break end end\nif not target then return end\nlocal distance = TensorCore.getDistance2d(player.pos, target.pos)\nif not distance then return end\nif distance > 0.2 then local tip = math.min(2.0, distance * 0.35); local drawer = TensorCore.getCachedDrawer(0xFFB6E0FF, 0xFF55AAFF, 0xFFFFFFFF, 0xFF000000, 4); drawer:addTimedArrow(5000, player.pos.x, player.pos.y, player.pos.z, TensorCore.getHeadingToTarget(player.pos, target.pos), math.max(0.1, distance - tip), 1.4, tip, 3.0, 0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY) end\nstate.northArrowDone = true\nstate.phase = \"north\"\nstate.runPhase = nil\ndata.uwu_suppression_aether_north_done = true\nAnyoneCore.addTimedWorldText(10000, \"GO NEAR ORB\", {x=target.pos.x, y=target.pos.y+1.2, z=target.pos.z}, 0xFFB6E0FF, true, 1.1)\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"fd84096f-ed8a-14d3-a876-cc9bf8e76d1c",
+									true,
+								},
+							},
+							displayPath = "Draws - Ultima",
+							name = "North Soak Assignment",
+							uuid = "37c28863-be25-6541-b9ee-226803e4ee40",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "if not eventArgs or eventArgs.entityContentID ~= 2324 or eventArgs.newAnimID ~= 3 then return false end\nlocal orb = TensorCore.mGetEntity(eventArgs.entityID)\nreturn orb ~= nil and orb.pos ~= nil and orb.pos.z > 100",
+							dequeueIfLuaFalse = true,
+							name = "South Orb Detonated",
+							uuid = "fd84096f-ed8a-14d3-a876-cc9bf8e76d1c",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ultima",
+				eventType = 23,
+				loop = true,
+				mechanicTime = 1253,
+				name = "[Draw][NAUR][Ultima] Aetheroplasm North Soak",
+				throttleTime = 250,
+				timeRange = true,
+				timelineIndex = 207,
+				timerEndOffset = 8,
+				timerStartOffset = 1,
+				uuid = "2f3c07a2-b585-0422-b1c1-8c2ece283c50",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "data.uwu_post_orb_north = { seen = {}, count = 0, done = false }\ndata.uwu_aether_guidance = { southDone = false, phase = nil, runPhase = nil }\ndata.uwu_suppression_aether_south_done = false\ndata.uwu_suppression_aether_north_done = false\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"2be96e2c-aff2-7550-91c7-1dac3651a864",
+									true,
+								},
+								
+								{
+									"f69ec9ea-f618-a280-af62-f83a35a0184f",
+									true,
+								},
+							},
+							name = "[State] Aetheric Boom - Reset Orb Soaks",
+							uuid = "36b82fe3-a491-74e5-bc71-25a1e73a03a3",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgType = 2,
+							eventSpellID = 11144,
+							name = "Cast ID 11144",
+							uuid = "2be96e2c-aff2-7550-91c7-1dac3651a864",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgOptionType = 2,
+							eventEntityContentID = 2137,
+							name = "Source 2137",
+							uuid = "f69ec9ea-f618-a280-af62-f83a35a0184f",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ultima",
+				eventType = 2,
+				mechanicTime = 1253,
+				name = "[State] Aetheric Boom - Reset Orb Soaks",
+				timeRange = true,
+				timelineIndex = 207,
+				timerEndOffset = 20,
+				timerStartOffset = -2,
+				uuid = "ec23feb8-d2e3-9250-8d03-620190826953",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local state = data.uwu_post_orb_north\nif not state or state.done or state.seen[eventArgs.entityID] then self.used = true return end\nstate.seen[eventArgs.entityID] = true\nstate.count = state.count + 1\nif state.count < 4 then self.used = true return end\nstate.done = true\nlocal player = TensorCore.mGetPlayer()\nif not player or not player.pos then self.used = true return end\nlocal duration = 6000\nlocal dest = {x=100,y=player.pos.y,z=82}\nlocal distance = TensorCore.getDistance2d(player.pos,dest)\nif distance > 0.3 then\n local tip = math.min(1.7,distance*0.35)\n local drawer = TensorCore.getCachedDrawer(0xFF33FF66,0xFF00CC44,0xFFFFFFFF,0xFF000000,4)\n drawer:addTimedArrow(duration,player.pos.x,player.pos.y,player.pos.z,TensorCore.getHeadingToTarget(player.pos,dest),math.max(0.1,distance-tip),1.2,tip,2.5,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nAnyoneCore.addTimedWorldText(duration,\"NORTH / 1\",{x=dest.x,y=dest.y+1.1,z=dest.z},0xFF33FF66,true,1.1)\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"ae8d4f7f-412b-9db0-8b6a-8a209e6f11b8",
+									true,
+								},
+								
+								{
+									"a9f143c8-afda-aa78-b58e-6645b3c0e2ed",
+									true,
+								},
+							},
+							name = "[Draw] After Four Orb Soaks - North / 1",
+							uuid = "5ea7ea55-544e-695f-843a-75bbe09d24e8",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgType = 2,
+							eventSpellID = 11145,
+							name = "Cast ID 11145",
+							uuid = "ae8d4f7f-412b-9db0-8b6a-8a209e6f11b8",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgOptionType = 2,
+							eventEntityContentID = 2324,
+							name = "Source 2324",
+							uuid = "a9f143c8-afda-aa78-b58e-6645b3c0e2ed",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ultima",
+				eventType = 2,
+				loop = true,
+				mechanicTime = 1253,
+				name = "[Draw] After Four Orb Soaks - North / 1",
+				timeRange = true,
+				timelineIndex = 207,
+				timerEndOffset = 20,
+				timerStartOffset = -2,
+				uuid = "dbd21720-3c58-886c-a8b1-84628313a71d",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ultima",
+							uuid = "9e8d00af-de66-c0e3-a9cf-96c083bfca8a",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local orb = TensorCore.mGetEntity(eventArgs.entityID)\nif not orb or not orb.pos then return end\n\nlocal state = data.uwu_aether_guidance\nif not state then\n    state = { southDone = false, phase = nil, runPhase = nil }\n    data.uwu_aether_guidance = state\nend\nif not state.orbs then\n    state.orbs = {\n        north = { left = {}, right = {} },\n        south = { left = {}, right = {} },\n        seen = {}\n    }\nend\n\nlocal orbID = eventArgs.entityID\nif not state.orbs.seen[orbID] then\n    state.orbs.seen[orbID] = true\n    local vertical = orb.pos.z > 100 and \"south\" or \"north\"\n    local horizontal = orb.pos.x < 100 and \"left\" or \"right\"\n    local bucket = state.orbs[vertical][horizontal]\n    bucket[#bucket + 1] = orbID\nend\n\nlocal Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current() or not Roster.isReady() then return end\n\nlocal slot = Roster.mySlot()\nlocal isTank = slot == \"T1\" or slot == \"T2\"\nlocal knownSlot = isTank or slot == \"H1\" or slot == \"H2\" or slot == \"M1\" or slot == \"M2\" or slot == \"R1\" or slot == \"R2\"\nif not knownSlot then\n    self.used = true\n    return\nend\n\nif orb.pos.z > 100 and (orb.pos.x < 100) == isTank and not state.southArrowDone then\n    local player = Roster.entOf(slot)\n    if not player or not player.pos then return end\n\n    local distance = TensorCore.getDistance2d(player.pos, orb.pos)\n    if not distance then return end\n    if distance > 0.2 then\n        local tip = math.min(2.0, distance * 0.35)\n        local drawer = TensorCore.getCachedDrawer(0xFFB6E0FF, 0xFF55AAFF, 0xFFFFFFFF, 0xFF000000, 4)\n        drawer:addTimedArrow(3000, player.pos.x, player.pos.y, player.pos.z, TensorCore.getHeadingToTarget(player.pos, orb.pos), math.max(0.1, distance - tip), 1.4, tip, 3.0, 0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\n    end\n\n    state.southDone = true\n    state.southArrowDone = true\n    state.phase = \"south\"\n    state.runPhase = nil\n    data.uwu_suppression_aether_south_done = true\n    TensorCore.addAlertText(10000, \"GO NEAR ORB\", 1.1, 2, false)\nend\n\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"6b7ceb5c-546b-8ac6-9e37-91ba5b1d5b73",
+									true,
+								},
+							},
+							displayPath = "Draws - Ultima",
+							name = "South Live Orb Assignment",
+							uuid = "04a9872b-dcb4-d991-9036-d2b68df7f216",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs ~= nil and eventArgs.entityContentID == 2324 and eventArgs.isVisible == true",
+							dequeueIfLuaFalse = true,
+							name = "Aetheroplasm Orb Added",
+							uuid = "6b7ceb5c-546b-8ac6-9e37-91ba5b1d5b73",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ultima",
+				eventType = 22,
+				loop = true,
+				mechanicTime = 1253,
+				name = "[Draw][NAUR][Ultima] Aetheroplasm South Live Orb Arrow",
+				timeRange = true,
+				timelineIndex = 207,
+				timerEndOffset = 4,
+				timerStartOffset = 2,
+				uuid = "7ec69532-6b5a-5d24-9964-74a77d2290cf",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ultima",
+							uuid = "8f2e84d1-45be-74a6-a58a-82046ee97f45",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "if data.uwu_suppression_aether_north_done then\n    self.used = true\n    return\nend\n\nlocal Roster = AnyoneCore and AnyoneCore.Roster\nif not Roster or not Roster.current() or not Roster.isReady() then return end\n\nlocal slot = Roster.mySlot()\nlocal isTank = slot == \"T1\" or slot == \"T2\"\nlocal knownSlot = isTank or slot == \"H1\" or slot == \"H2\" or slot == \"M1\" or slot == \"M2\" or slot == \"R1\" or slot == \"R2\"\nif not knownSlot then return end\n\nlocal player = Roster.entOf(slot)\nif not player or not player.pos then return end\n\nlocal orbs = TensorCore.getEntityGroupList(\"ContentID\", { contentid = 2324, subgroup = \"Number\", noAliveCheck = true }) or {}\nlocal target\nfor _, orb in pairs(orbs) do\n    if orb and orb.pos and (orb.pos.x < 100) == isTank and orb.pos.z < 100 then\n        target = orb\n        break\n    end\nend\nif not target then return end\n\nlocal distance = TensorCore.getDistance2d(player.pos, target.pos)\nif distance > 0.2 then\n    local tip = math.min(2.0, distance * 0.35)\n    local drawer = TensorCore.getCachedDrawer(0xFFB6E0FF, 0xFF55AAFF, 0xFFFFFFFF, 0xFF000000, 4)\n    drawer:addTimedArrow(5000, player.pos.x, player.pos.y, player.pos.z, TensorCore.getHeadingToTarget(player.pos, target.pos), math.max(0.1, distance - tip), 1.4, tip, 3.0, 0, false, Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\n\nlocal state = data.uwu_aether_guidance\nif not state then\n    state = { southDone = false, phase = nil, runPhase = nil }\n    data.uwu_aether_guidance = state\nend\nstate.phase = \"north\"\nstate.runPhase = nil\ndata.uwu_suppression_aether_north_done = true\nTensorCore.addAlertText(10000, \"GO NEAR ORB\", 1.1, 2, false)\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"393c56e2-9a9c-88e8-ace6-563e21467c43",
+									true,
+								},
+							},
+							displayPath = "Draws - Ultima",
+							name = "North Live Orb Assignment",
+							uuid = "0bea956a-cd1b-3ce6-86bc-6e2af2f0a337",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "if not eventArgs or eventArgs.entityContentID ~= 2324 or eventArgs.spellID ~= 11145 then return false end\nif data.uwu_suppression_aether_north_done then return false end\nlocal orb = TensorCore.mGetEntity(eventArgs.entityID)\nreturn orb ~= nil and orb.pos ~= nil and orb.pos.z > 100",
+							name = "South Orb Aetheroplasm Cast",
+							uuid = "393c56e2-9a9c-88e8-ace6-563e21467c43",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ultima",
+				enabled = false,
+				eventType = 2,
+				loop = true,
+				mechanicTime = 1253,
+				name = "[Draw][NAUR][Ultima] Aetheroplasm North Live Orb Arrow",
+				timeRange = true,
+				timelineIndex = 207,
+				timerEndOffset = 8,
+				timerStartOffset = 3,
+				uuid = "1b67dcfc-cbc1-6831-b29c-09360ceb91c8",
+				version = 2,
+			},
+		},
+	},
+	[211] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\core",
+				uuid = "d217c7df-f560-857b-e0bb-3fe9eca14c0f",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\core",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "50195873-704e-3137-90c3-36a930267f83",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\mitigation",
+				uuid = "c5950dfb-5a83-ee27-969d-7edd765fc04b",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\mitigation",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Garuda",
+				uuid = "634a1373-5c8f-30d3-ac1f-292a63c8519f",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Garuda",
+							uuid = "ebe89120-15e2-5d2c-9bb5-876ca6a0113f",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player=TensorCore.mGetPlayer()\nlocal boss=TensorCore.mGetEntity(eventArgs.entityID)\nif not player or not player.pos or not boss or not boss.pos then self.used=true return end\nlocal dx=player.pos.x-boss.pos.x\nlocal dz=player.pos.z-boss.pos.z\nlocal length=math.sqrt(dx*dx+dz*dz)\nif length<0.1 then dx=0 dz=1 length=1 end\nlocal radius=9.5\nlocal duration=math.floor(((eventArgs.channelTimeMax or 2.7)*1000)+500)\nlocal dest={x=boss.pos.x+dx/length*radius,y=player.pos.y,z=boss.pos.z+dz/length*radius}\nlocal distance=TensorCore.getDistance2d(player.pos,dest)\nif distance>0.2 then\n local tip=math.min(2.0,distance*0.35)\n local drawer=TensorCore.getCachedDrawer(0xFF33FF66,0xFF00CC44,0xFFFFFFFF,0xFF000000,4)\n drawer:addTimedArrow(duration,player.pos.x,player.pos.y,player.pos.z,TensorCore.getHeadingToTarget(player.pos,dest),math.max(0.1,distance-tip),1.4,tip,3.0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nAnyoneCore.addTimedWorldText(duration,\"PREPOSITION: INNER RING EDGE\",{x=dest.x,y=dest.y+1.2,z=dest.z},0xFF33FF66,true,1.1)\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"26431ccb-3ecc-7821-9958-7627bb554270",
+									true,
+								},
+							},
+							displayPath = "Draws - Garuda",
+							name = "Preposition at Inner Ring",
+							uuid = "edaa5567-0f2c-d771-be30-05db46404a07",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.spellID==11086 and eventArgs.entityContentID==1644",
+							dequeueIfLuaFalse = true,
+							name = "Wicked Wheel Cast",
+							uuid = "26431ccb-3ecc-7821-9958-7627bb554270",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Garuda",
+				eventType = 3,
+				mechanicTime = 1307,
+				name = "[Draw][NAUR][Garuda] Wicked Wheel Preposition",
+				timeRange = true,
+				timelineIndex = 211,
+				timerEndOffset = 5,
+				timerStartOffset = -4,
+				uuid = "0a8c3ec3-0ae1-4d7c-8896-04fb9ea55d47",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Garuda",
+							uuid = "e69c58a1-918a-b4af-a26b-4e332d8e5243",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player=TensorCore.mGetPlayer()\nif not player or not player.pos then self.used=true return end\nlocal duration=3500\nlocal dest={x=100,y=player.pos.y,z=100}\nlocal distance=TensorCore.getDistance2d(player.pos,dest)\nif distance>0.2 then\n local tip=math.min(2.0,distance*0.35)\n local drawer=TensorCore.getCachedDrawer(0xFFB6E0FF,0xFF55AAFF,0xFFFFFFFF,0xFF000000,4)\n drawer:addTimedArrow(duration,player.pos.x,player.pos.y,player.pos.z,TensorCore.getHeadingToTarget(player.pos,dest),math.max(0.1,distance-tip),1.4,tip,3.0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nAnyoneCore.addTimedWorldText(duration,\"WICKED WHEEL: CENTER\",{x=dest.x,y=dest.y+1.2,z=dest.z},0xFFB6E0FF,true,1.1)\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"cd3addfc-a27c-b032-b712-e6ca263f3403",
+									true,
+								},
+							},
+							displayPath = "Draws - Garuda",
+							name = "Arrow to Center",
+							uuid = "c2ee5c15-50e5-e42c-9451-b42a5c8dab4e",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.spellID==11086 and eventArgs.entityContentID==1644",
+							dequeueIfLuaFalse = true,
+							name = "Wicked Wheel Resolve",
+							uuid = "cd3addfc-a27c-b032-b712-e6ca263f3403",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Garuda",
+				eventType = 2,
+				mechanicTime = 1307,
+				name = "[Draw][NAUR][Garuda] Wicked Wheel Return to Center",
+				timeRange = true,
+				timelineIndex = 211,
+				timerEndOffset = 2,
+				timerStartOffset = -0.5,
+				uuid = "169a7ebc-b1ae-cb8e-a8f7-56c6d45c9575",
+				version = 2,
+			},
+		},
+	},
+	[212] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ultima",
+				uuid = "3e2106da-a245-b3b7-8cb4-d2d61ed52d21",
+			},
+			objectType = "folder",
+		},
+	},
+	[213] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ultima",
+				uuid = "f2d11996-0e00-2260-b63c-2503f6988b18",
+			},
+			objectType = "folder",
+		},
+	},
+	[214] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ultima",
+				uuid = "c3ca5332-22e2-3142-99ca-c0aa4dc0d126",
+			},
+			objectType = "folder",
+		},
+	},
+	[216] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "b0e64c68-6653-8534-0995-b232ffb8bc38",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Garuda",
+				uuid = "43958ee1-6523-8ee7-a5d7-f4c68c982b68",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Garuda",
+							uuid = "0a1b3292-aaea-0f3e-a1bf-d6abcc241fc9",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 2500,
+							alertPriority = 3,
+							alertScale = 0.89999997615814,
+							alertTTS = true,
+							alertText = "MOVE FOR FEATHER RAIN",
+							conditions = 
+							{
+								
+								{
+									"9e963fe3-622e-3f1f-9bec-ee5ccb1ced8f",
+									true,
+								},
+							},
+							displayPath = "Draws - Garuda",
+							name = "Feather Rain Move",
+							uuid = "4e70df8a-1710-cdd3-b0be-5244a1fe5bd7",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Garuda",
+							uuid = "7118022b-3e89-f96e-92a5-1ae682bdab11",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs and eventArgs.aoeID == 11085 and eventArgs.contentID == 1644 and eventArgs.friendly == false",
+							dequeueIfLuaFalse = true,
+							name = "Feather Rain AOE",
+							uuid = "9e963fe3-622e-3f1f-9bec-ee5ccb1ced8f",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Garuda",
+				eventType = 18,
+				mechanicTime = 1322,
+				name = "[Alert] Feather Rain - Move 1322",
+				throttleTime = 1000,
+				timeRange = true,
+				timelineIndex = 216,
+				timerEndOffset = 2,
+				timerStartOffset = -3,
+				uuid = "314bc72d-7951-fe06-88ef-989656d9da93",
+				version = 2,
+			},
+		},
+	},
+	[218] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\core",
+				uuid = "59b6ee90-4e3c-35ac-8f18-c4facd3dbe00",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\core",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\mitigation",
+				uuid = "f2339c84-134b-16f0-e98e-065e936bf0d4",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\mitigation",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ifrit",
+				uuid = "588eccf0-a34c-d6db-b04e-5d0f048300d2",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Movement - Eruption",
+				uuid = "892589e9-b272-fd8d-90dc-d4a3b2f241b2",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "TensorDrift_SlidecastForceHold = true\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"d50adb6c-2845-213a-bda9-093cac010d41",
+									true,
+								},
+							},
+							name = "Force Slidecast",
+							uuid = "f2cebd0e-24ed-19cc-8716-a23648c286b9",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "TensorDrift_SlidecastForceHold = false\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"d50adb6c-2845-213a-bda9-093cac010d41",
+									true,
+								},
+							},
+							name = "End Slide",
+							uuid = "c10ef772-5acc-897f-84fc-72879ba8ffa9",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local Roster = AnyoneCore.Roster\nif not Roster or not Roster.current() then return false end\nlocal slot = Roster.mySlot()\nreturn slot == \"R1\" or slot == \"R2\"",
+							name = "Roster R1/R2",
+							uuid = "d50adb6c-2845-213a-bda9-093cac010d41",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Movement - Eruption",
+				mechanicTime = 1408,
+				name = "[Drift] Eruption R1/R2 1408",
+				throttleTime = 10500,
+				timeRange = true,
+				timelineIndex = 218,
+				timerEndOffset = 7,
+				timerStartOffset = -4,
+				uuid = "17641cee-c463-fa9f-b60f-42cedde5b26e",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "[Raid calls]",
+				uuid = "28899742-07f1-5032-855a-fea505a2129f",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertTTS = true,
+							alertText = "Bait eruptions then move",
+							uuid = "ea15e3a5-556b-c9d3-a895-9d8ca071e664",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				displayPath = "[Raid calls]",
+				mechanicTime = 1408,
+				name = "[Raid Call][UWU] Bait Eruptions then Move 1406",
+				timelineIndex = 218,
+				timerOffset = -4,
+				uuid = "0db4b121-7170-aa03-8c5b-b0e2362051bc",
+				version = 2,
+			},
+		},
+	},
+	[219] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ifrit",
+				uuid = "528ec0c2-a2ad-d3f8-802c-c736ec932f48",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Ifrit",
+							uuid = "f67ee4eb-df84-e542-85e0-c370d2c62511",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local player=TensorCore.mGetPlayer()\nlocal boss=TensorCore.mGetEntity(eventArgs.entityID)\nif not player or not player.pos or not boss or not boss.pos then self.used=true return end\nlocal h=eventArgs.heading or boss.pos.h or 0\nlocal sx=math.cos(h)\nlocal sz=-math.sin(h)\nlocal right={x=boss.pos.x+sx*18,y=player.pos.y,z=boss.pos.z+sz*18}\nlocal left={x=boss.pos.x-sx*18,y=player.pos.y,z=boss.pos.z-sz*18}\nlocal dest=right\nif TensorCore.getDistance2d(player.pos,left)<TensorCore.getDistance2d(player.pos,right) then dest=left end\nlocal distance=TensorCore.getDistance2d(player.pos,dest)\nif distance>0.2 then\n local tip=math.min(2.5,distance*0.35)\n local drawer=TensorCore.getCachedDrawer(0xFFFFD080,0xFFFFA000,0xFFFFFFFF,0xFF000000,4)\n drawer:addTimedArrow(7000,player.pos.x,player.pos.y,player.pos.z,TensorCore.getHeadingToTarget(player.pos,dest),math.max(0.1,distance-tip),1.4,tip,3.0,0,false,Argus2.RenderFlags.FLAG_RENDER_OVERLAY)\nend\nAnyoneCore.addTimedWorldText(7000,\"CRIMSON: SAFE SIDE\",{x=dest.x,y=dest.y+1.2,z=dest.z},0xFFFFD080,true,1.1)\nself.used=true",
+							conditions = 
+							{
+								
+								{
+									"00d8311c-c4b4-6f87-90e3-b2192f11475b",
+									true,
+								},
+							},
+							displayPath = "Draws - Ifrit",
+							name = "Crimson Safe Side",
+							uuid = "0ed833c0-c802-cb93-ac21-d7811dce7569",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.spellID==11103 and eventArgs.entityContentID==1185",
+							dequeueIfLuaFalse = true,
+							name = "Crimson Cyclone Cast",
+							uuid = "00d8311c-c4b4-6f87-90e3-b2192f11475b",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Ifrit",
+				eventType = 3,
+				mechanicTime = 1408,
+				name = "[Draw][NAUR][Ifrit] Crimson Cyclone Safe Side",
+				timeRange = true,
+				timelineIndex = 219,
+				timerEndOffset = 5,
+				timerStartOffset = -1,
+				uuid = "d6ff1be8-34a2-a743-96f2-74b76e1433b9",
+				version = 2,
+			},
+		},
+	},
+	[220] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ultima",
+				uuid = "bfb26bf5-f924-325b-9d3b-8e91c0569ea0",
+			},
+			objectType = "folder",
+		},
+	},
+	[221] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ultima",
+				uuid = "a16cf4a1-88a5-96cd-8917-2a908c33b7c3",
+			},
+			objectType = "folder",
+		},
+	},
+	[224] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\core",
+				uuid = "0fcf008f-d936-7943-9536-baa5d0a75aff",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\core",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\draws",
+				uuid = "1119a503-43ed-21ff-3a3a-befdd0567113",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\draws",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "store\\anyone\\uwu\\modules\\mitigation",
+				uuid = "b57bd0cb-baa6-e5ff-a20b-fba97d5a8d1b",
+			},
+			inheritanceRoot = "store\\anyone\\uwu\\modules\\mitigation",
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Titan NAUR",
+				uuid = "d5159590-258f-8e4a-af32-ba7163119b23",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Titan NAUR",
+							uuid = "85176514-929d-1b17-acf5-267b8a5107cd",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 2500,
+							alertPriority = 3,
+							alertScale = 0.9,
+							alertTTS = true,
+							alertText = "DODGE WEIGHT OF THE LAND",
+							conditions = 
+							{
+								
+								{
+									"29a7aab0-f0d1-cf67-b1b9-1e6927326b81",
+									true,
+								},
+							},
+							displayPath = "Draws - Titan NAUR",
+							name = "[Alert] Weight of the Land - Dodge 1505",
+							uuid = "8e20cfcd-b083-127b-bdcc-41777603d3ac",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs and eventArgs.aoeID == 11109 and eventArgs.contentID == 1801 and eventArgs.friendly == false",
+							dequeueIfLuaFalse = true,
+							name = "Weight of the Land AOE",
+							uuid = "29a7aab0-f0d1-cf67-b1b9-1e6927326b81",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Titan NAUR",
+				eventType = 18,
+				mechanicTime = 1505,
+				name = "[Alert] Weight of the Land - Dodge 1505",
+				timeRange = true,
+				timelineIndex = 224,
+				timerEndOffset = -2.5,
+				timerStartOffset = -3.2000000476837,
+				uuid = "dad11a84-d526-74a8-a17f-29e15d7ece43",
+				version = 2,
+			},
+		},
+	},
+	[225] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Titan NAUR",
+				uuid = "fb2b1a52-c627-2052-91af-9ec5cd4510cd",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Titan NAUR",
+							uuid = "d3939649-e41c-f707-bc76-1538d86cc30c",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 2500,
+							alertPriority = 3,
+							alertScale = 0.9,
+							alertTTS = true,
+							alertText = "DODGE WEIGHT OF THE LAND",
+							conditions = 
+							{
+								
+								{
+									"71501620-6a79-9255-a42a-56bd67b25560",
+									true,
+								},
+							},
+							displayPath = "Draws - Titan NAUR",
+							name = "[Alert] Weight of the Land - Dodge 1508",
+							uuid = "39f250e5-2538-ad44-a0dc-675af027814d",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs and eventArgs.aoeID == 11109 and eventArgs.contentID == 1801 and eventArgs.friendly == false",
+							dequeueIfLuaFalse = true,
+							name = "Weight of the Land AOE",
+							uuid = "71501620-6a79-9255-a42a-56bd67b25560",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Titan NAUR",
+				eventType = 18,
+				mechanicTime = 1508,
+				name = "[Alert] Weight of the Land - Dodge 1508",
+				timeRange = true,
+				timelineIndex = 225,
+				timerEndOffset = -2.5,
+				timerStartOffset = -3.2,
+				uuid = "c175fc00-c7c9-cde4-bbc3-1ae624b03e76",
+				version = 2,
+			},
+		},
+	},
+	[226] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Ultima",
+				uuid = "fb91044c-fa98-6678-b4eb-804ab457be0d",
+			},
+			objectType = "folder",
+		},
+	},
+	[227] = 
+	{
+		
+		{
+			data = 
+			{
+				displayPath = "",
+				name = "Draws - Titan NAUR",
+				uuid = "cce35ce0-e6a3-8cd5-a9e1-8ab31285ab0a",
+			},
+			objectType = "folder",
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							displayPath = "",
+							name = "Draws - Titan NAUR",
+							uuid = "a67ee7ea-8e0c-b6b8-9c15-46f7ca30a006",
+						},
+						objectType = "folder",
+					},
+					
+					{
+						data = 
+						{
+							aType = "Alert",
+							alertDuration = 2500,
+							alertPriority = 3,
+							alertScale = 0.9,
+							alertTTS = true,
+							alertText = "DODGE WEIGHT OF THE LAND",
+							conditions = 
+							{
+								
+								{
+									"37897aa4-0385-033a-8b83-cf58b7adf953",
+									true,
+								},
+							},
+							displayPath = "Draws - Titan NAUR",
+							name = "[Alert] Weight of the Land - Dodge 1511",
+							uuid = "9e1e8a32-f421-8497-8d1f-6784cb5ff987",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs and eventArgs.aoeID == 11109 and eventArgs.contentID == 1801 and eventArgs.friendly == false",
+							dequeueIfLuaFalse = true,
+							name = "Weight of the Land AOE",
+							uuid = "37897aa4-0385-033a-8b83-cf58b7adf953",
+							version = 3,
+						},
+					},
+				},
+				displayPath = "Draws - Titan NAUR",
+				eventType = 18,
+				mechanicTime = 1511,
+				name = "[Alert] Weight of the Land - Dodge 1511",
+				timeRange = true,
+				timelineIndex = 227,
+				timerEndOffset = -2.5,
+				timerStartOffset = -3.2,
+				uuid = "dd4e44ac-9e56-e7d4-a6a1-e41d0d189efc",
+				version = 2,
+			},
+		},
+	},
+	inheritedProfiles = 
+	{
+		"store\\anyone\\uwu\\modules\\core",
+		"store\\anyone\\uwu\\modules\\draws",
+		"store\\anyone\\uwu\\modules\\mitigation",
+		"store\\anyone\\uwu\\modules\\optimization",
+	},
+	timelineName = "uwu",
+	version = "1.0.2",
+}
+
+
+
+return tbl

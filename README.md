@@ -1,6 +1,6 @@
 # TensorReactions draws and mitigation
 
-My own TensorReactions timeline profiles: a full set of solver draws for The Omega Protocol (TOP), and NAUR DPS mitigation for The Epic of Alexander (TEA). Both profiles are standalone: they inherit nothing, and store modules and other authors' profiles are not included.
+My own TensorReactions timeline profiles: a full set of solver draws for The Omega Protocol (TOP), NAUR DPS mitigation for The Epic of Alexander (TEA), and NAUR draws for TEA and The Weapon's Refrain (UWU), adapted from [Jacob5800/UltimateDraws](https://github.com/Jacob5800/UltimateDraws). Every profile is standalone: they inherit nothing, and store modules and other authors' profiles are not included.
 
 > **Disclaimer:** these reactions use Anyone's Party Roster function (AnyoneCore), so AnyoneCore with a filled-in Party Roster is needed for them to work.
 
@@ -10,12 +10,14 @@ My own TensorReactions timeline profiles: a full set of solver draws for The Ome
 | --- | --- | --- |
 | `TimelineReactions/Masado1170/TOP Draws.lua` | TOP (`top` 1.0.3) | Solver draws for every phase plus `[Mit]` DPS mitigation, with an in-game options window |
 | `TimelineReactions/Masado1170/TEA NAUR DPS Mitigation.lua` | TEA (`tea` 1.0.2) | 96 `[Mit]` DPS mitigation reactions from the NAUR TEA Mit+Heal sheet |
+| `TimelineReactions/Masado1170/TEA NAUR Draws.lua` | TEA (`tea` 1.0.2) | NAUR solver draws for every phase (untested, see below) |
+| `TimelineReactions/Masado1170/UWU NAUR Draws.lua` | UWU (`uwu` 1.0.2) | NAUR solver draws for Garuda, Ifrit, Titan and Ultima (untested, see below) |
 
 Each file is a live profile in TensorReactions' own save format.
 
 ### TOP Draws
 
-Solvers draw your own spot (Lj-style red arrows with a white outline) and the boss's attacks for each mechanic:
+Solvers draw your own spot and the boss's attacks for each mechanic:
 
 | Tag | Phase / mechanic |
 | --- | --- |
@@ -36,6 +38,22 @@ Solvers draw your own spot (Lj-style red arrows with a white outline) and the bo
 
 DPS mitigation following the NAUR TEA Mit+Heal sheet: Feint, Addle, party mitigation, Dismantle, Troubadour/Minne and Mantra, by party slot (M1, M2, phys ranged, caster). Each row has a use reaction and a `(reset)` reaction.
 
+### TEA and UWU NAUR Draws
+
+Adapted from [Jacob5800/UltimateDraws](https://github.com/Jacob5800/UltimateDraws) (their LPDU draws for TEA and UWU) and converted to the NAUR strat. Big thanks to them for the original work.
+
+> **Untested:** these draws have not been checked in real pulls yet. If you run them, please send me your Duty Recorder replay (the `.dat` file from `Documents\My Games\FINAL FANTASY XIV - A Realm Reborn\replay`) by [opening a GitHub issue](https://github.com/masado1170/masados-draws/issues) on this repo. Attach the file or a link to it, and say your role/slot and which phase looked wrong.
+
+What changed from the LPDU versions:
+- **TEA:** spots and assignments for each phase follow NAUR's toolboxes (P1, Limit Cut, BJCC, Stasis/Inception, Wormhole, Perfect Alexander).
+- **UWU:**
+  - Garuda: the OT takes the Spiny Plume west of D. For the double Mistral Song, the MT takes the first sister clockwise from north and the OT takes the other.
+  - Ifrit: after the nails, the MT pulls to the intercardinal where the last nail died. The Searing Wind healer goes to the intercardinal counter-clockwise of the party. The second eruptions end on the cardinal clockwise of the party.
+  - Titan: Gaols 1 line-up on the line from Titan to the Upheaval safe spot, Attack 1 nearest Titan. Mario Kart uses the uptime dodges: ranged go clockwise three times; melee go counter-clockwise, back, counter-clockwise.
+  - Ultima: Annihilation orbs are soaked 2-2-1-1 (MT and OT for orbs 1 and 2, MT alone for orbs 3 and 4).
+
+The LPDU UWU profile also inherited Anyone's `store\anyone\uwu` modules. They are not included here, so inherit them from your own profile if you want them.
+
 ## Requirements
 
 - TensorReactions and TensorCore.
@@ -49,7 +67,7 @@ DPS mitigation following the NAUR TEA Mit+Heal sheet: Feint, Addle, party mitiga
 1. In game, open AnyoneCore and go to the Third Party screen.
 2. Add this repository's URL as a source (branch `main`).
 3. AnyoneCore copies the `TimelineReactions/Masado1170` folder into your TensorReactions folder and checks GitHub for new commits itself.
-4. In TensorReactions, select the profile for the fight, e.g. `Masado1170\TOP Draws` or `Masado1170\TEA NAUR DPS Mitigation`.
+4. In TensorReactions, select the profile for the fight, e.g. `Masado1170\TOP Draws`, `Masado1170\TEA NAUR Draws`, `Masado1170\UWU NAUR Draws` or `Masado1170\TEA NAUR DPS Mitigation`.
 
 Updates replace files in the `Masado1170` folder. To customise a profile, copy it outside that folder first.
 
