@@ -2,7 +2,7 @@
 
 ## 2026-11-11
 
-- minor bugfix
+- Added UCOB draws + minor bugfix
 
 New profiles:
 - `TEA NAUR Draws` and `UWU NAUR Draws`, adapted from [Jacob5800/UltimateDraws](https://github.com/Jacob5800/UltimateDraws) (LPDU) to the NAUR strat. Thanks to them for the original draws. Both are untested, so replays are welcome through GitHub issues.
