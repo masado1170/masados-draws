@@ -1,5 +1,33 @@
 # Changelog
 
+## 2026-11-12
+
+TEA NAUR Draws:
+
+New
+- P2 Enumeration: live "x / 3 in" count on each Enumeration marker (green = 3, yellow = short, red = too many).
+- P2 Hidden Minefield: each mine drawn as a normal telegraph at its real 5y size until the OT pops it (hidden for the OT).
+- P3 Wormhole: faint slash cones and dash lanes for every other number's Cruise Chaser attack.
+- P3 Wormhole: "MOVE" callout (text + voice) the moment Cruise Chaser's Alpha Sword / Super Blassty Charge hits you.
+- P3 Wormhole: Incinerating Heat stack circle with a live "x / y in" count and a late "Get in the stack" call.
+
+Fixed
+- P3 Inception Flarethrower: spots follow NAUR "Alex = North" - MT on BJ's side away from Alex, OT on D, party on the NW/NE red dot.
+- P4/P5 Final Word: the 2nd Ordained word (~926) was read wrong - auto Motion/Stillness and the callout now use the correct word.
+- P4/P5 Fate Alpha: the 2nd Motion/Stillness is now detected for everyone, not just players whose clone showed it.
+- P4/P5 Fate Beta: Light + Restraining Order goes to the north wall and Dark + House Arrest to the north group (were swapped); each role has its own lineup spot.
+- P4/P5 Almighty Judgment: trine arrow follows NAUR "1/3/4/Center, no diagonals" (start on 4, step to 1 after the first explosion).
+- Stillness: your rotation now always resumes after the check.
+
+Changed
+- P4/P5 auto Motion/Stillness is back (settings: "Ordained Motion" / "Ordained Stillness"): jumps for Motion; pauses the rotation and stops your character for Stillness.
+- P4/P5 guide spots show only your own assignment, at the NAUR toolbox board positions.
+- Fate Beta lineup callouts name the exact role and corner of the 2 marker.
+
+Notes
+- Final Word Light Beacon stays at the north wall ("as far north as possible") rather than the diagram's spot, which puts followers in Divine Retribution range.
+- Not yet verified in a live pull: P5 Ordained automation, Fate Alpha/Beta spots, Judgment trines, Flarethrower spots, Wormhole MOVE call, mine telegraphs.
+
 ## 2026-11-11
 
 - TEA, UCOB and UWU: "Voice callouts (TTS)" toggle and an "Open Party Roster" button in the settings window + minor bugfixes
