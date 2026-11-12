@@ -39,6 +39,8 @@ Solvers draw your own spot and the boss's attacks for each mechanic:
 
 DPS mitigation following the NAUR TEA Mit+Heal sheet: Feint, Addle, party mitigation, Dismantle, Troubadour/Minne and Mantra, by party slot (M1, M2, phys ranged, caster). Each row has a use reaction and a `(reset)` reaction.
 
+> **Reminder:** if you use these mitigations, disable all of Anyone's mitigation reactions for TEA first. Otherwise both sets fire and your mitigation gets used twice or at the wrong time.
+
 ### TEA, UCOB and UWU NAUR Draws
 
 Adapted from [Jacob5800/UltimateDraws](https://github.com/Jacob5800/UltimateDraws) (their LPDU draws for TEA, UCOB and UWU) and converted to the NAUR strat. Big thanks to them for the original work.
