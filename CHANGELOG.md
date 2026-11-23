@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-11-23 (2)
+
+TOP Draws:
+- Minor bugfixes.
+
 ## 2026-11-23
 
 TOP Draws:
