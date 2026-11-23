@@ -1,5 +1,26 @@
 # Changelog
 
+## 2026-11-23
+
+TOP Draws:
+
+New
+- Tank mitigation (On/Off in Masado's draws): Warrior, Dark Knight and Gunbreaker sets from TOP Mitty, timed to real hits, with prepull presses.
+- Automarkers (in Masado's draws, off by default): P3 Transition/Monitors and P5 Delta/Sigma/Omega, marking by party slot without targeting.
+- Boss ground AOEs drawn from the game's own data for all phases; P5 Solar Ray tankbuster ring that follows the boss's target until the second hit.
+- Spread/stack rings (P2 Fire III, P3 Intermission), P6 tank auto rings, Hello World Defamation ring while soaking.
+- P2 Limitless: tank wall spot avoids the Sagittarius Arrow and keeps the cleave off non-tanks; follows the clone whose tether you actually hold.
+- LB3: caster LB3 waits until out of the Cosmo Meteor ground AOE; phys ranged LB3 follows the caster's LB3 at once.
+- Sigma arm tether holder ring; tether reads logged for checking.
+
+Fixed
+- P4 Blue Screen spread spots match where the party stands; NA monitor spots match real positions.
+- Hello World tower outlines are thicker and the right size; soaker spots use waymarks.
+- Program Loop tether handoffs no longer flicker.
+
+Notes
+- Not yet verified in a live pull: most of the above.
+
 ## 2026-11-12
 
 TEA NAUR Draws:
