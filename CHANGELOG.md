@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-11-23 (3)
+
+TOP Draws:
+- LPDU: Delta blue baiters fixed (inner blues bait the middle, outer blues the Beetle-side arms).
+- LPDU: P3 Monitor line-up fixed (R1 M1 T1 H1 H2 T2 M2 R2).
+- Party Roster: the Region now follows the Preset automatically (NA caster R1, others phys ranged R1).
+
 ## 2026-11-23 (2)
 
 TOP Draws:
