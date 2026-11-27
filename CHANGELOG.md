@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-11-27
+
+TOP Draws:
+- Updated profile. Adds Warrior tank mitigation for P1 and P2 and a Warrior/Paladin Provoke before P5 Sigma's Solar Ray, plus clearing automarkers on wipe and new world hit and jump entries.
+
+New_Universal (new):
+- Added a TOP profile that combines Anyone's universal TOP profile with TOP Draws. It needs Anyone's `store\anyone\top\universal`.
+
 ## 2026-11-23 (3)
 
 TOP Draws:

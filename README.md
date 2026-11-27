@@ -1,6 +1,6 @@
 # TensorReactions draws and mitigation
 
-My own TensorReactions timeline profiles: a full set of solver draws for The Omega Protocol (TOP), NAUR DPS mitigation for The Epic of Alexander (TEA), and NAUR draws for TEA, The Unending Coil of Bahamut (UCOB) and The Weapon's Refrain (UWU), adapted from [Jacob5800/UltimateDraws](https://github.com/Jacob5800/UltimateDraws). Every profile is standalone: they inherit nothing, and store modules and other authors' profiles are not included.
+My own TensorReactions timeline profiles: a full set of solver draws for The Omega Protocol (TOP), NAUR DPS mitigation for The Epic of Alexander (TEA), and NAUR draws for TEA, The Unending Coil of Bahamut (UCOB) and The Weapon's Refrain (UWU), adapted from [Jacob5800/UltimateDraws](https://github.com/Jacob5800/UltimateDraws). Every profile is standalone except `New_Universal` (see Files): they inherit nothing, and store modules and other authors' profiles are not included.
 
 > **Disclaimer:** these reactions use Anyone's Party Roster function (AnyoneCore), so AnyoneCore with a filled-in Party Roster is needed for them to work.
 
@@ -9,6 +9,7 @@ My own TensorReactions timeline profiles: a full set of solver draws for The Ome
 | File | Fight / timeline | Contents |
 | --- | --- | --- |
 | `TimelineReactions/Masado1170/TOP Draws.lua` | TOP (`top` 1.0.3) | Solver draws for every phase plus `[Mit]` DPS mitigation, with an in-game options window |
+| `TimelineReactions/Masado1170/New_Universal.lua` | TOP (`top` 1.0.3) | Combined profile that inherits Anyone's `store\anyone\top\universal` and `TOP Draws`; you need Anyone's universal profile for its parts to work |
 | `TimelineReactions/Masado1170/TEA NAUR DPS Mitigation.lua` | TEA (`tea` 1.0.2) | 96 `[Mit]` DPS mitigation reactions from the NAUR TEA Mit+Heal sheet |
 | `TimelineReactions/Masado1170/TEA NAUR Draws.lua` | TEA (`tea` 1.0.2) | NAUR solver draws for every phase (untested, see below) |
 | `TimelineReactions/Masado1170/UCOB NAUR Draws.lua` | UCOB (`ucob` 1.0.3) | NAUR solver draws (untested, see below) |
